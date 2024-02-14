@@ -1,29 +1,35 @@
 package com.backend;
 
-import lombok.Cleanup;
+import com.backend.entity.Board;
+import com.backend.repository.BoardRepository;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 @Log4j2
 public class DataSourceTest {
+
 	@Autowired
-	private DataSource dataSource;
+	private BoardRepository boardRepository;
+
 
 	@Test
-	public void testConnection() throws SQLException {
+	public void testInsert(){
+		IntStream.range(1,100).forEach(i->{
+			Board board = Board.builder()
+					.bno((long) i)
+					.title("title..."+i)
+					.content("content..."+i)
+					.writer("user"+(i%10))
+					.build();
 
-		@Cleanup
-		Connection con = dataSource.getConnection();
-
-		log.info(con);
-		Assertions.assertNotNull(con);
+			log.info(board.toString());
+			Board result = boardRepository.save((board));
+            log.info("bno:"+result.getBno());
+		});
 	}
 }
