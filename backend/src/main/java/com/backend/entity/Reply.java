@@ -1,4 +1,32 @@
 package com.backend.entity;
 
-public class Reply {
+
+import com.backend.domain.BaseEntity;
+import lombok.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Reply", indexes = {@Index(name = "idx_reply_board_bno", columnList = "board_bno")})
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(exclude = "board") // 필요할 때까지 board를 호출하지 않는다. 자원을 아끼기 위한 방법.
+public class Reply extends BaseEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long rno;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Board board;
+
+	private String replyText;
+
+	private String replyer;
+
+	public void changeText(String text){
+		this.replyText = text;
+	}
 }

@@ -6,8 +6,8 @@
 
 <script>
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 import Home from "@/pages/Home";
 
 export default {

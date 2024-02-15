@@ -1,0 +1,152 @@
+package com.backend.controller;
+
+import com.backend.dto.BoardDTO;
+import com.backend.dto.BoardListReplyCountDTO;
+import com.backend.dto.PageRequestDTO;
+import com.backend.dto.PageResponseDTO;
+import com.backend.service.BoardService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/board")
+@Log4j2
+@RequiredArgsConstructor
+public class BoardController {
+
+	@Value("${junghun.workbook.upload.path}")// import 시에 springframework으로 시작하는 Value
+	private String uploadPath;
+
+	private final BoardService boardService;
+
+	@GetMapping("/list")
+	public PageResponseDTO<BoardListReplyCountDTO> list(PageRequestDTO pageRequestDTO, Model model) {
+
+
+		PageResponseDTO<BoardListReplyCountDTO> responseDTO =
+				boardService.listWithReplyCount(pageRequestDTO); // dto를 entity로 변환
+
+
+		model.addAttribute("responseDTO", responseDTO);
+
+		return responseDTO;
+	}
+
+	//@Valid -> DTO에서 설정한 제약을 검증하는 어노테이션
+	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
+	//RedirectAttributes -> 리다이렉트 할때 파라미터를 던지기 위한 클래스
+	@PostMapping("/register")
+	public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+		log.info("board POST register.......");
+
+		if (bindingResult.hasErrors()) {
+			log.info("게시물 등록 에러...");
+			redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+			return "redirect:/board/register";
+		}
+
+		log.info(boardDTO);
+
+		Long bno = boardService.register(boardDTO);
+
+		redirectAttributes.addFlashAttribute("result", bno);
+
+		return "redirect:/board/list";
+	}
+
+	@GetMapping({"/read", "/modify"})
+	public void read(Long bno, PageRequestDTO pageRequestDTO, Model model) {
+
+		BoardDTO boardDTO = boardService.readOne(bno);
+
+		model.addAttribute("dto", boardDTO);
+
+	}
+
+	@PostMapping("/modify")
+	public String modify(@Valid BoardDTO boardDTO,
+	                     BindingResult bindingResult,
+	                     PageRequestDTO pageRequestDTO,
+	                     RedirectAttributes redirectAttributes) {
+
+		if (bindingResult.hasErrors()) {
+			log.info("has errors.......");
+
+			String link = pageRequestDTO.getLink();
+
+			redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+
+			redirectAttributes.addAttribute("bno", boardDTO.getBno());
+
+			return "redirect:/board/modify?" + link;
+		}
+
+		boardService.modify(boardDTO);
+
+		redirectAttributes.addFlashAttribute("result", "modified");
+
+		redirectAttributes.addAttribute("bno", boardDTO.getBno());
+
+		return "redirect:/board/read";
+	}
+
+	@PostMapping("/remove")
+	public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
+
+		Long bno = boardDTO.getBno();
+		log.info("remove post.. " + bno);
+
+		boardService.remove(bno);
+
+		//게시물이 삭제되었다면 첨부 파일 삭제
+		log.info(boardDTO.getFileNames());
+		List<String> fileNames = boardDTO.getFileNames();
+//		if (fileNames != null && fileNames.size() > 0) {
+//			removeFiles(fileNames);
+//		}
+
+		redirectAttributes.addFlashAttribute("result", "removed");
+
+		return "redirect:/board/list";
+
+	}
+
+//	public void removeFiles(List<String> files) {
+//
+//		for (String fileName : files) {
+//
+//			Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+//			String resourceName = resource.getFilename();
+//
+//
+//			try {
+//				String contentType = Files.probeContentType(resource.getFile().toPath());
+//				resource.getFile().delete();
+//
+//				//섬네일이 존재한다면
+//				if (contentType.startsWith("image")) {
+//					File thumbnailFile = new File(uploadPath + File.separator + "s_" + fileName);
+//					thumbnailFile.delete();
+//				}
+//
+//			} catch (Exception e) {
+//				log.error(e.getMessage());
+//			}
+//
+//		}//end for
+//	}
+
+
+}

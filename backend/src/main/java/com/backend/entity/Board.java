@@ -26,6 +26,11 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
+	private int category;
+
+	private int viewCount;
+
+
 	public void change(String title, String content) {
 		this.title = title;
 		this.content = content;
