@@ -5,6 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * 게시글 entity 클래스
+ */
 @Entity
 @Getter
 @Builder
@@ -26,14 +29,27 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-	private int category;
+	private Long category;
 
 	private int viewCount;
 
 
+	/**
+	 * 변경이 가능한 컬럼을 메소드로 처리해 영속성을 관리한다.
+	 * @param title
+	 * @param content
+	 */
 	public void change(String title, String content) {
 		this.title = title;
 		this.content = content;
+	}
+
+	/**
+	 * 클릭시 조회수를 추가하기 위한 메소드
+	 * @param viewCount
+	 */
+	public void updateViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}
 
 }

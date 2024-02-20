@@ -3,6 +3,7 @@ package com.backend.repository.search;
 import com.backend.dto.BoardListReplyCountDTO;
 import com.backend.entity.Board;
 import com.backend.entity.QBoard;
+import com.backend.entity.QCategory;
 import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -14,9 +15,10 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 
+/**
+ * 게시물 리스트 검색을 위한 클래스
+ */
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
-
-
 	public BoardSearchImpl() {
 		super(Board.class);
 	}
@@ -26,15 +28,17 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		QBoard board = QBoard.board;
 		QReply reply = QReply.reply;
+		QCategory category = QCategory.category;
 
 		JPQLQuery<Board> query = from(board);
+		query.leftJoin(category).on(category.cno.eq(board.category));
 		query.leftJoin(reply).on(reply.board.eq(board));
 
 		query.groupBy(board);
 
 		if( (types != null && types.length > 0) && keyword != null ){
 
-			BooleanBuilder booleanBuilder = new BooleanBuilder(); // (
+			BooleanBuilder booleanBuilder = new BooleanBuilder(); 
 
 			for(String type: types){
 
@@ -58,16 +62,18 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		JPQLQuery<BoardListReplyCountDTO> dtoQuery = query.select(Projections.bean(BoardListReplyCountDTO.class,
 				board.bno,
+				category.content,
 				board.title,
 				board.writer,
 				board.regDate,
+				board.modDate,
 				reply.count().as("replyCount")
 		));
 
 		this.getQuerydsl().applyPagination(pageable,dtoQuery);
 
 		List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch();
-
+		
 		long count = dtoQuery.fetchCount();
 
 		return new PageImpl<>(dtoList, pageable, count);

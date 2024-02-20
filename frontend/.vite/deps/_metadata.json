@@ -1,0 +1,25 @@
+{
+  "hash": "a0d36fb8",
+  "configHash": "d3c54c42",
+  "lockfileHash": "173f0855",
+  "browserHash": "540d23ff",
+  "optimized": {
+    "vue": {
+      "src": "../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "56804782",
+      "needsInterop": false
+    },
+    "bootstrap/dist/js/bootstrap.js": {
+      "src": "../../node_modules/bootstrap/dist/js/bootstrap.js",
+      "file": "bootstrap_dist_js_bootstrap__js.js",
+      "fileHash": "3c59fc74",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-NIBQISYW": {
+      "file": "chunk-NIBQISYW.js"
+    }
+  }
+}

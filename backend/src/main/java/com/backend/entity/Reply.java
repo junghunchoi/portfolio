@@ -6,6 +6,10 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * 댓글 entity 클래스
+ * 추후 구현 예정
+ */
 @Entity
 @Table(name = "Reply", indexes = {@Index(name = "idx_reply_board_bno", columnList = "board_bno")})
 @Getter

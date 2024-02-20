@@ -27,20 +27,23 @@ public class BoardServiceImpl implements BoardService {
 	public Long register(BoardDTO boardDTO) {
 		Board board = dtoToEntity(boardDTO);
 
-		Long bno = boardRepository.save(board)
-				.getBno();
+		Long bno = boardRepository.save(board).getBno();
 
 		return bno;
 	}
 
 	@Override
 	public BoardDTO readOne(Long bno) {
-//		Optional<Board> result = boardRepository.findByIdWithImages(bno);
 		Optional<Board> result = boardRepository.findById(bno);
 
 		Board board = result.orElseThrow();
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
+
+		// 조회수 증가 로직
+		board.updateViewCount(board.getViewCount() + 1);
+
+		boardRepository.save(board);
 
 		return boardDTO;
 	}
@@ -69,7 +72,6 @@ public class BoardServiceImpl implements BoardService {
 		Pageable pageable = pageRequestDTO.getPageable("bno");
 
 		Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types, keyword, pageable);
-
 		return PageResponseDTO.<BoardListReplyCountDTO>withAll()
 				.pageRequestDTO(pageRequestDTO)
 				.dtoList(result.getContent())

@@ -29,7 +29,7 @@ public class BoardDTO {
 	@NotEmpty
 	private String writer;
 
-
+	private Long category;
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 

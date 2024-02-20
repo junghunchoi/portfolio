@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.validation.*;
 
+
+/**
+ * 에러처리 및 @Valid 어노테이션 검증을 위한 클래스
+ */
 @RestControllerAdvice
 @Log4j2
 public class CustomRestAdvice {
-	 /*
-        rest방식의 컨트롤러는 어디서 문제가 발생하는지 알 수 없다.
-        따라서 @Valid 과정에서 문제가 발생하면 처리할 수 있도록 @RestControllerAdvice 를 설계한다.
-     */
 
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
@@ -48,7 +48,7 @@ public class CustomRestAdvice {
 
 	}
 
-	// 서비스계층에서 에러가 났을 경우 컨트롤러에 전해지기전에 return되도록
+	// 서비스계층에서 에러가 났을 경우 컨트롤러에 전해지기전에 return되도록 하는 메소드
 	@ExceptionHandler({NoSuchElementException.class})
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 	public ResponseEntity<Map<String,String>> handleNosuchElement(Exception e) {

@@ -19,9 +19,20 @@ public interface BoardService {
 
 	void remove(Long bno);
 
+	/**
+	 * 게시물별 댓글의 갯수를 함께 반환
+	 * 추후 썸네일, 파일여부 등 추가시 변경해야함
+	 * @param pageRequestDTO
+	 * @return PageResponseDTO
+	 */
 	PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO);
 
-	//다양한 처리를 하기 위해선 entity로 처리하는것이 좋다.
+
+	/**
+	 * dto -> entity로 변환하는 메소드
+	 * @param boardDTO
+	 * @return Board
+	 */
 	default Board dtoToEntity(BoardDTO boardDTO){
 
 		Board board = Board.builder()
@@ -29,18 +40,22 @@ public interface BoardService {
 				.title(boardDTO.getTitle())
 				.content(boardDTO.getContent())
 				.writer(boardDTO.getWriter())
+				.category(boardDTO.getCategory())
 				.build();
 
 		if(boardDTO.getFileNames() != null){
 			boardDTO.getFileNames().forEach(fileName -> {
 				String[] arr = fileName.split("_");
-//				board.addImage(arr[0], arr[1]);
 			});
 		}
 		return board;
 	}
 
-	//board 엔티티 객체를 boarddto로 변환처리
+	/**
+	 * entity -> dto 변환 메소드
+	 * @param board
+	 * @return BoardDTO
+	 */
 	default BoardDTO entityToDTO(Board board) {
 
 		BoardDTO boardDTO = BoardDTO.builder()
@@ -51,12 +66,6 @@ public interface BoardService {
 				.regDate(board.getRegDate())
 				.modDate(board.getModDate())
 				.build();
-
-//		List<String> fileNames =
-//				board.getImageSet().stream().sorted().map(boardImage ->
-//						boardImage.getUuid()+"_"+boardImage.getFileName()).collect(Collectors.toList());
-//
-//		boardDTO.setFileNames(fileNames);
 
 		return boardDTO;
 	}

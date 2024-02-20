@@ -7,6 +7,7 @@ import com.backend.dto.PageResponseDTO;
 import com.backend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,32 +26,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
 
-	@Value("${junghun.workbook.upload.path}")// import 시에 springframework으로 시작하는 Value
+	@Value("${junghun.workbook.upload.path}")
 	private String uploadPath;
 
 	private final BoardService boardService;
 
+	//GET /boards
 	@GetMapping("/list")
-	public PageResponseDTO<BoardListReplyCountDTO> list(PageRequestDTO pageRequestDTO, Model model) {
-
+	public ResponseEntity<PageResponseDTO<BoardListReplyCountDTO>> list(PageRequestDTO pageRequestDTO) {
 
 		PageResponseDTO<BoardListReplyCountDTO> responseDTO =
-				boardService.listWithReplyCount(pageRequestDTO); // dto를 entity로 변환
+				boardService.listWithReplyCount(pageRequestDTO);
 
-
-		model.addAttribute("responseDTO", responseDTO);
-
-		return responseDTO;
+		return ResponseEntity.ok(responseDTO);
 	}
 
+	//POST /boards
 	//@Valid -> DTO에서 설정한 제약을 검증하는 어노테이션
 	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
 	//RedirectAttributes -> 리다이렉트 할때 파라미터를 던지기 위한 클래스
 	@PostMapping("/register")
 	public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
-		log.info("board POST register.......");
-
 		if (bindingResult.hasErrors()) {
 			log.info("게시물 등록 에러...");
 			redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -66,15 +62,18 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
+	//GET /boards/{pk}
 	@GetMapping({"/read", "/modify"})
-	public void read(Long bno, PageRequestDTO pageRequestDTO, Model model) {
+	public ResponseEntity<BoardDTO> read(Long bno, PageRequestDTO pageRequestDTO, Model model) {
 
 		BoardDTO boardDTO = boardService.readOne(bno);
 
-		model.addAttribute("dto", boardDTO);
+//		model.addAttribute("dto", boardDTO);
 
+		return ResponseEntity.ok(boardDTO);
 	}
 
+	//PUT /boards/{pk}
 	@PostMapping("/modify")
 	public String modify(@Valid BoardDTO boardDTO,
 	                     BindingResult bindingResult,
@@ -110,43 +109,10 @@ public class BoardController {
 
 		boardService.remove(bno);
 
-		//게시물이 삭제되었다면 첨부 파일 삭제
-		log.info(boardDTO.getFileNames());
-		List<String> fileNames = boardDTO.getFileNames();
-//		if (fileNames != null && fileNames.size() > 0) {
-//			removeFiles(fileNames);
-//		}
-
 		redirectAttributes.addFlashAttribute("result", "removed");
 
 		return "redirect:/board/list";
 
 	}
-
-//	public void removeFiles(List<String> files) {
-//
-//		for (String fileName : files) {
-//
-//			Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
-//			String resourceName = resource.getFilename();
-//
-//
-//			try {
-//				String contentType = Files.probeContentType(resource.getFile().toPath());
-//				resource.getFile().delete();
-//
-//				//섬네일이 존재한다면
-//				if (contentType.startsWith("image")) {
-//					File thumbnailFile = new File(uploadPath + File.separator + "s_" + fileName);
-//					thumbnailFile.delete();
-//				}
-//
-//			} catch (Exception e) {
-//				log.error(e.getMessage());
-//			}
-//
-//		}//end for
-//	}
-
 
 }
