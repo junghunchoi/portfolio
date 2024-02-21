@@ -65,6 +65,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import BoardRead from '@/views/board/BoardRead.vue';
+import {}
 import axios from "axios";
 import { useRouter } from 'vue-router';
 

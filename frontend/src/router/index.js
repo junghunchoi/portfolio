@@ -11,8 +11,9 @@ import NestedOneView from '@/views/nested/NestedOneView.vue';
 import NestedTwoView from '@/views/nested/NestedTwoView.vue';
 import NestedHomeView from '@/views/nested/NestedHomeView.vue';
 import BoardList from '@/views/board/BoardList.vue';
-// import BoardRead from "@/views/board/BoardRead.vue";
-// import BoardRegister from '@/views/board/BoardRegister.vue';
+import BoardRead from "@/views/board/BoardRead.vue";
+import BoardRegister from '@/views/board/BoardRegister.vue';
+import BoardModify from '@/views/board/BoardModify.vue';
 const routes = [
 	{
 		path: '/',
@@ -80,21 +81,21 @@ const routes = [
 		name: 'BoardList',
 		component: BoardList,
 	},
-	// {
-	// 	path: '/boards/register',
-	// 	name: 'PostList',
-	// 	component: BoardRegister,
-	// },
-	// {
-	// 	path: '/boards/:bno',
-	// 	name: 'PostList',
-	// 	component: BoardRead,
-	// },
-	// {
-	//     path: '/boards/modify',
-	//     name: 'PostList',
-	//     component: BoardModify,
-	// },
+	{
+		path: '/boards/register',
+		name: 'BoardRegister',
+		component: BoardRegister,
+	},
+	{
+		path: '/boards/:bno',
+		name: 'BoardRead',
+		component: BoardRead,
+	},
+	{
+	    path: '/boards/modify',
+	    name: 'BoardModify',
+	    component: BoardModify,
+	},
 ];
 const router = createRouter({
 	history: createWebHistory(),
