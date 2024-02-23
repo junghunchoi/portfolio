@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "com.backend.upload.path",
+      "type": "java.lang.String",
+      "description": "Description for com.backend.upload.path."
+    }
+  ] }

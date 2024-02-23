@@ -1,32 +1,81 @@
+<script setup>
+import {computed, ref, watchEffect} from 'vue';
+import {useRouter} from 'vue-router';
+import {getBoards} from "@/api/board";
+import ThePagination from "@/components/common/ThePagination.vue";
+import BoardFilter from "@/components/board/BoardFilter.vue";
+
+defineProps({
+  limit: Number,
+});
+
+const router = useRouter();
+const responseDTO = ref({});
+
+const pageRequestDTO = ref({
+  _limit: 3, // 총 몇개 불러올건지 request header에 "x-total-count" 를 만들어준다.
+  page: 1, // 현재 페이지
+  size: null,
+  type: null,
+  keyword: null
+});
+
+const totalCount = ref(0);
+const pageCount = computed(() =>
+    Math.ceil(totalCount.value / params.value._limit)
+);
+
+const goRegisterPage = () => {
+  router.push('/boards/register');
+};
+
+const fetchData = async () => {
+  try {
+    console.log(pageRequestDTO.value);
+    const {data, headers} = await getBoards(pageRequestDTO.value);
+    responseDTO.value = data;
+    totalCount.value = headers["x-total-count"];
+    console.log(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+watchEffect(()=>{
+  fetchData();
+  console.log(pageRequestDTO);
+});
+
+const searchBoard = (searchCondition) => {
+  console.log("searchCondition.type" + searchCondition.type);
+  console.log("searchCondition.keyword" + searchCondition.keyword);
+  console.log(pageRequestDTO);
+  pageRequestDTO.type = searchCondition.type;
+  pageRequestDTO.keyword = searchCondition.keyword;
+}
+
+</script>
+
 <template>
   <div class="row mt-3">
-    <form @submit.prevent="submitForm">
-      <div class="col">
-<!--        <input type="hidden" name="size" :value="pageRequestDTO.size">-->
-        <div class="input-group">
-          <div class="input-group-prepend">
-<!--            <select class="form-select" v-model="pageRequestDTO.type">-->
-<!--              <option value="">-&#45;&#45;</option>-->
-<!--              <option value="t">제목</option>-->
-<!--              <option value="c">내용</option>-->
-<!--              <option value="w">작성자</option>-->
-<!--              <option value="tc">제목+내용</option>-->
-<!--              <option value="tcw">제목+내용+작성자</option>-->
-<!--            </select>-->
-          </div>
-<!--          <input type="text" class="form-control" v-model="pageRequestDTO.keyword">-->
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit">Search</button>
-            <button class="btn btn-outline-secondary" @click="clearSearch">Clear</button>
-          </div>
-        </div>
-      </div>
-    </form>
+    <BoardFilter
+        @search="searchBoard"/>
   </div>
   <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
   <div class="row mt-3">
     <div class="col">
       <div class="card">
+        <div class="col-3">
+          <select
+              :value="limit"
+              @input="$emit('update:limit', $event.target.value)"
+              class="form-select"
+          >
+            <option value="3">3개씩 보기</option>
+            <option value="6">6개씩 보기</option>
+            <option value="9">9개씩 보기</option>
+          </select>
+        </div>
         <div class="card-header"></div>
         <div class="card-body">
           <h5 class="card-title">게시물</h5>
@@ -36,25 +85,40 @@
               <th scope="col">카테고리</th>
               <th scope="col">제목</th>
               <th scope="col">작성자</th>
-              <th scope="col">조회수</th>
               <th scope="col">등록일시</th>
               <th scope="col">수정일시</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="dto in responseDTO.dtoList" :key="dto.bno">
-              <td>{{ dto.category }}</td>
-              <td>
-                <router-link :to="{ name: 'BoardRead', params: { id: dto.bno }}">{{ dto.title }}</router-link>
-                <span class="progress-bar-striped" style="background-color: gray">{{ dto.replyCount }}</span>
+            <tr v-for="dto in responseDTO.dtoList">
+              <td>{{
+                  dto.category
+                }}
               </td>
-              <td>{{ dto.writer }}</td>
-              <td>{{ dto.regDate }}</td>
-              <td>{{ dto.modDate }}</td>
+              <td>
+                <router-link :to="{ name: 'BoardRead', params: { bno: dto.bno }}">{{
+                    dto.title
+                  }}
+                </router-link>
+                <span class="progress-bar-striped" style="background-color: gray">{{
+                    dto.viewCount
+                  }}</span>
+              </td>
+              <td>{{
+                  dto.writer
+                }}
+              </td>
+              <td>{{
+                  dto.regDate
+                }}
+              </td>
+              <td>{{
+                  dto.modDate
+                }}
+              </td>
             </tr>
             </tbody>
           </table>
-          <ThePagination :responseDTO="responseDTO" @page-changed="changePage"/>
         </div>
       </div>
     </div>
@@ -63,42 +127,6 @@
 
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import BoardRead from '@/views/board/BoardRead.vue';
-import {}
-import axios from "axios";
-import { useRouter } from 'vue-router';
-
-// import ThePagination from "@/components/common/ThePagination";
-
-const router = useRouter();
-const responseDTO = ref({
-  dtoList: []
-});
-
-// 페이지 이동 함수는 그대로 유지됩니다.
-const goRegisterPage = () => {
-  router.push('/boards/register');
-};
-
-// fetchData 함수를 Composition API 스타일로 정의합니다.
-const fetchData = () => {
-  axios.get('/api/board/list')
-      .then(response => {
-        responseDTO.value = response.data;
-        console.log(responseDTO.value);
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
-};
-
-// onMounted 훅을 사용하여 컴포넌트가 마운트 되었을 때 fetchData 함수를 호출합니다.
-onMounted(() => {
-  fetchData();
-});
-</script>
 
 <style scoped>
 

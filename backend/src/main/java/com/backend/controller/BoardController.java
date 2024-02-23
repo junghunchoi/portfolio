@@ -10,10 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,23 +18,21 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/boards")
 @Log4j2
 @RequiredArgsConstructor
 public class BoardController {
 
-	@Value("${junghun.workbook.upload.path}")
-	private String uploadPath;
-
 	private final BoardService boardService;
 
 	//GET /boards
-	@GetMapping("/list")
+	@GetMapping()
 	public ResponseEntity<PageResponseDTO<BoardListReplyCountDTO>> list(PageRequestDTO pageRequestDTO) {
 
 		PageResponseDTO<BoardListReplyCountDTO> responseDTO =
 				boardService.listWithReplyCount(pageRequestDTO);
 
+		log.info(pageRequestDTO);
 		return ResponseEntity.ok(responseDTO);
 	}
 
@@ -45,7 +40,7 @@ public class BoardController {
 	//@Valid -> DTO에서 설정한 제약을 검증하는 어노테이션
 	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
 	//RedirectAttributes -> 리다이렉트 할때 파라미터를 던지기 위한 클래스
-	@PostMapping("/register")
+	@PostMapping()
 	public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			log.info("게시물 등록 에러...");
@@ -74,7 +69,7 @@ public class BoardController {
 	}
 
 	//PUT /boards/{pk}
-	@PostMapping("/modify")
+	@PutMapping()
 	public String modify(@Valid BoardDTO boardDTO,
 	                     BindingResult bindingResult,
 	                     PageRequestDTO pageRequestDTO,
@@ -101,7 +96,7 @@ public class BoardController {
 		return "redirect:/board/read";
 	}
 
-	@PostMapping("/remove")
+	@DeleteMapping()
 	public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 
 		Long bno = boardDTO.getBno();

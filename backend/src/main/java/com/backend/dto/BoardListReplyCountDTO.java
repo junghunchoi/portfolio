@@ -10,8 +10,7 @@ public class BoardListReplyCountDTO {
 	private String category;
 	private String title;
 	private String writer;
-	private int viewCount;
+	private Long viewCount;
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
-	private Long replyCount;
 }

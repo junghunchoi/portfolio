@@ -1,10 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
-import PostCreateView from '@/views/posts/PostCreateView.vue';
-import PostDetailView from '@/views/posts/PostDetailView.vue';
-import PostListView from '@/views/posts/PostListView.vue';
-import PostEditView from '@/views/posts/PostEditView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import NestedView from '@/views/nested/NestedView.vue';
 import NestedOneView from '@/views/nested/NestedOneView.vue';
@@ -24,28 +20,6 @@ const routes = [
 		path: '/about',
 		name: 'About',
 		component: AboutView,
-	},
-	{
-		path: '/posts',
-		name: 'PostList',
-		component: PostListView,
-	},
-	{
-		path: '/posts/create',
-		name: 'PostCreate',
-		component: PostCreateView,
-	},
-	{
-		path: '/posts/:id',
-		name: 'PostDetail',
-		component: PostDetailView,
-		// props: true,
-		props: route => ({ id: parseInt(route.params.id) }),
-	},
-	{
-		path: '/posts/:id/edit',
-		name: 'PostEdit',
-		component: PostEditView,
 	},
 	{
 		path: '/:pathMatch(.*)*',
@@ -90,6 +64,7 @@ const routes = [
 		path: '/boards/:bno',
 		name: 'BoardRead',
 		component: BoardRead,
+		props: route => ({ bno: parseInt(route.params.bno) }),
 	},
 	{
 	    path: '/boards/modify',
@@ -99,7 +74,6 @@ const routes = [
 ];
 const router = createRouter({
 	history: createWebHistory(),
-	// history: createWebHashHistory(),
 	routes,
 });
 

@@ -8,6 +8,7 @@ import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.List;
 /**
  * 게시물 리스트 검색을 위한 클래스
  */
+@Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
 	public BoardSearchImpl() {
 		super(Board.class);
@@ -62,18 +64,19 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		JPQLQuery<BoardListReplyCountDTO> dtoQuery = query.select(Projections.bean(BoardListReplyCountDTO.class,
 				board.bno,
-				category.content,
+				category.content.as("category"),
 				board.title,
 				board.writer,
 				board.regDate,
 				board.modDate,
-				reply.count().as("replyCount")
+				reply.count().as("viewCount")
 		));
 
 		this.getQuerydsl().applyPagination(pageable,dtoQuery);
 
 		List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch();
-		
+
+		log.info(dtoList);
 		long count = dtoQuery.fetchCount();
 
 		return new PageImpl<>(dtoList, pageable, count);
