@@ -20,14 +20,6 @@ public class FilesDTO {
 
 	private String fileName;
 
-	private boolean img;
+//	private boolean img;
 
-	public String getLink() {
-
-		if (img) {
-			return "s_" + uuid + "_" + fileName;
-		} else {
-			return uuid + "_" + fileName;
-		}
-	}
 }

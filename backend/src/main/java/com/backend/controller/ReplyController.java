@@ -41,7 +41,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value="Replies of Board", notes = "GET 방식으로 특정 게시물 댓글목록")
-	@GetMapping(value="/list/{bno}")
+	@GetMapping(value="/{rno}")
 	public PageResponseDTO<ReplyDTO> getList(@PathVariable("bno") Long bno, PageRequestDTO pageRequestDTO    ) {
 		PageResponseDTO<ReplyDTO> requestDTO = replyService.getListOfBoard(bno, pageRequestDTO);
 
@@ -50,14 +50,14 @@ public class ReplyController {
 
 	}
 
-	@ApiOperation(value = "Read Only", notes = "GET 방식으로 특정 댓글조회")
-	@GetMapping("/{rno}")
-	public ReplyDTO getReplyDTO(@PathVariable("rno") Long rno) {
-
-		ReplyDTO replyDTO = replyService.read(rno);
-
-		return replyDTO;
-	}
+//	@ApiOperation(value = "Read Only", notes = "GET 방식으로 특정 댓글조회")
+//	@GetMapping("/{rno}")
+//	public ReplyDTO getReplyDTO(@PathVariable("rno") Long rno) {
+//
+//		ReplyDTO replyDTO = replyService.read(rno);
+//
+//		return replyDTO;
+//	}
 
 	@DeleteMapping("/{rno}")
 	public Map<String,Long> remove (@PathVariable("rno") Long rno) {

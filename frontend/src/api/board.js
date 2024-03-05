@@ -12,8 +12,8 @@ export function createBoard(data) {
     return axios.post('http://localhost:1541/api/boards', data);
 }
 
-export function updateBoard(bno, data) {
-    return axios.put(`http://localhost:1541/api/boards/${bno}`, data);
+export function updateBoard(data) {
+    return axios.put('http://localhost:1541/api/boards', data);
 }
 
 export function deleteBoard(bno) {

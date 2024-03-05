@@ -67,7 +67,7 @@ const routes = [
 		props: route => ({ bno: parseInt(route.params.bno) }),
 	},
 	{
-	    path: '/boards/modify',
+	    path: '/boards/modify/:bno',
 	    name: 'BoardModify',
 	    component: BoardModify,
 	},

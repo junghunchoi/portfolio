@@ -7,6 +7,8 @@ import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
 
+import com.backend.entity.Category;
+import com.backend.repository.CategoryRepository;
 import java.util.stream.Collectors;
 
 public interface BoardService {
@@ -36,12 +38,12 @@ public interface BoardService {
 	default Board dtoToEntity(BoardDTO boardDTO){
 
 		Board board = Board.builder()
-				.bno(boardDTO.getBno())
-				.title(boardDTO.getTitle())
-				.content(boardDTO.getContent())
-				.writer(boardDTO.getWriter())
-				.category(boardDTO.getCategory())
-				.build();
+		                   .bno(boardDTO.getBno())
+		                   .title(boardDTO.getTitle())
+		                   .content(boardDTO.getContent())
+		                   .writer(boardDTO.getWriter())
+		                   .category(boardDTO.getCategoryObj())
+		                   .build();
 
 		if(boardDTO.getFileNames() != null){
 			boardDTO.getFileNames().forEach(fileName -> {

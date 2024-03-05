@@ -32,7 +32,6 @@ public class FilesController {
 	@ApiOperation(value = "uploads post", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/uploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String upload(FilesDTO filesDTO) {
-		log.info(filesDTO);
 
 		if (filesDTO.getFiles() != null) {
 
@@ -50,13 +49,6 @@ public class FilesController {
 				try {
 					multipartFile.transferTo(savePath);
 
-					//이미지 파일의 종류라면
-					if (Files.probeContentType(savePath).startsWith("image")) {
-						image = true;
-						File thumbFile = new File(uploadPath, "s_" + uuid + "_" + originalName);
-//						Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
-					}
-
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -64,7 +56,7 @@ public class FilesController {
 				list.add(filesDTO.builder()
 						.uuid(uuid)
 						.fileName(originalName)
-						.img(image).build()
+						.build()
 				);
 			});//end each
 			return "ok";

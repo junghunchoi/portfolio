@@ -32,7 +32,6 @@ public class QuerydslTest {
 		List<Board> b = jpaQueryFactory.select(board)
 				.from(board).fetch();
 
-
 		System.out.println(b.toString());
 	}
 

@@ -1,6 +1,6 @@
 package com.backend;
 
-import com.backend.entity.Files;
+import com.backend.entity.File;
 import com.backend.repository.FilesRepository;
 import com.backend.service.FilesServiceImpl;
 import lombok.extern.log4j.Log4j2;
@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,7 @@ public class FilesServiceTest {
 		Long bno = 54L;
 
 		// when
-		List<Files> result = filesService.getFilesListByBno(bno);
+		List<File> result = filesService.getFilesListByBno(bno);
 
 		// then
 		log.info(result);

@@ -10,8 +10,8 @@
           </div>
           <div class="my-4">
             <div class="float-end">
-              <button type="button" class="btn btn-primary" @click="goToList">List</button>
-              <button type="button" class="btn btn-secondary" v-if="isOwner" @click="modifyBoard">Modify</button>
+              <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
+              <button type="button" class="btn btn-secondary"  @click="modifyBoard">Modify</button>
             </div>
           </div>
         </div>
@@ -20,35 +20,47 @@
   </div>
 </template>
 
-<script>
-import { ref, watchEffect } from 'vue';
-import { useRouter,useRoute } from 'vue-router';
+<script setup>
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import {getBoardBybno} from "@/api/board";
 
-// const router = useRouter();
-// const route = useRoute();
-// const board = ref({});
-// const bno = ref(route);
-//
-//
-// watch(() => route.params.bno, (newBno) => {
-//   bno.value = newBno;
-// });
+const route = useRoute();
+const router = useRouter();
+const bno = ref(route.params.bno);
+
+const board = ref({
+  bno: '',
+  title: '',
+  category:'',
+  content: '',
+  writer: '',
+  regDate: new Date(),
+  modDate: new Date(),
+
+});
 
 
-// console.log("bno: " + bno);
+const fetchData = async (bno) => {
+  try{
+    const {data} = await getBoardBybno(bno);
+    board.value = data;
+    console.log("board " + data.value);
+  }catch (e) {
+    console.error(e);
+  }
+};
 
-// const fetchData = async () => {
-//   try{
-//     const {data} = await getBoardBybno(bno);
-//     board.value = data;
-//     console.log(data);
-//   }catch (e) {
-//     console.error(e);
-//   }
-// };
-//
-// fetchData();
+fetchData(bno.value)
+
+const goBoardPage = () => {
+  router.push('/boards');
+};
+
+const modifyBoard = () => {
+  router.push({ name: 'BoardModify', params: { bno: bno.value} }); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+}
+
 </script>
 
 <style scoped>

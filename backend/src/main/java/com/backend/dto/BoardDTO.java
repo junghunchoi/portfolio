@@ -1,5 +1,7 @@
 package com.backend.dto;
 
+import com.backend.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +31,10 @@ public class BoardDTO {
 	@NotEmpty
 	private String writer;
 
-	private Long category;
+	private Category categoryObj;
+	private String category;
+	private Long cno;
+
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 

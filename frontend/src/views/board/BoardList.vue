@@ -47,8 +47,6 @@ watchEffect(()=>{
 });
 
 const searchBoard = (searchCondition) => {
-  console.log("searchCondition.type" + searchCondition.type);
-  console.log("searchCondition.keyword" + searchCondition.keyword);
   console.log(pageRequestDTO);
   pageRequestDTO.type = searchCondition.type;
   pageRequestDTO.keyword = searchCondition.keyword;
@@ -121,6 +119,7 @@ const searchBoard = (searchCondition) => {
           </table>
         </div>
       </div>
+      <ThePagination/>
     </div>
   </div>
 

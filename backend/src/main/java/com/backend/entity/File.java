@@ -10,13 +10,13 @@ import javax.persistence.*;
  * 추후 구현 예정
  */
 @Entity
-@Table(name="Files")
+@Table(name="File")
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "board")
-public class Files extends BaseEntity {
+public class File extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

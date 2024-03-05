@@ -1,8 +1,7 @@
 package com.backend.repository;
 
-import com.backend.entity.Board;
-import com.backend.entity.Files;
+import com.backend.entity.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FilesRepository extends JpaRepository<Files, Long> {
+public interface FilesRepository extends JpaRepository<File, Long> {
 }

@@ -33,7 +33,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		QCategory category = QCategory.category;
 
 		JPQLQuery<Board> query = from(board);
-		query.leftJoin(category).on(category.cno.eq(board.category));
+		query.leftJoin(board.category, category);
 		query.leftJoin(reply).on(reply.board.eq(board));
 
 		query.groupBy(board);

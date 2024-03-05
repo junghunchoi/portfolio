@@ -1,6 +1,7 @@
 package com.backend.entity;
 
 import com.backend.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,7 +30,10 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-	private Long category;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cno")
+	private Category category;
 
 	private int viewCount;
 
@@ -39,9 +43,10 @@ public class Board extends BaseEntity {
 	 * @param title
 	 * @param content
 	 */
-	public void change(String title, String content) {
+	public void change(String title, String content, Category category) {
 		this.title = title;
 		this.content = content;
+		this.category = category;
 	}
 
 	/**

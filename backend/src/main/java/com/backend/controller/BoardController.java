@@ -4,10 +4,14 @@ import com.backend.dto.BoardDTO;
 import com.backend.dto.BoardListReplyCountDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
+import com.backend.entity.Board;
 import com.backend.service.BoardService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +29,7 @@ public class BoardController {
 
 	private final BoardService boardService;
 
-	//GET /boards
+	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<PageResponseDTO<BoardListReplyCountDTO>> list(PageRequestDTO pageRequestDTO) {
 
@@ -40,73 +44,59 @@ public class BoardController {
 	//@Valid -> DTO에서 설정한 제약을 검증하는 어노테이션
 	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
 	//RedirectAttributes -> 리다이렉트 할때 파라미터를 던지기 위한 클래스
-	@PostMapping()
-	public String registerPost(@Valid BoardDTO boardDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-		if (bindingResult.hasErrors()) {
-			log.info("게시물 등록 에러...");
-			redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-			return "redirect:/board/register";
-		}
+	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
+	@PostMapping("")
+	public ResponseEntity<?> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult) {
 
 		log.info(boardDTO);
+		if (bindingResult.hasErrors()) {
+			log.info("게시물 등록 에러...");
+		}
+
 
 		Long bno = boardService.register(boardDTO);
 
-		redirectAttributes.addFlashAttribute("result", bno);
 
-		return "redirect:/board/list";
+		return ResponseEntity.ok(bno);
 	}
 
-	//GET /boards/{pk}
-	@GetMapping({"/read", "/modify"})
-	public ResponseEntity<BoardDTO> read(Long bno, PageRequestDTO pageRequestDTO, Model model) {
+	@ApiOperation(value = "get board by bno", notes = "특정 게시물 조회")
+	@GetMapping("/{bno}")
+	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
 
 		BoardDTO boardDTO = boardService.readOne(bno);
 
-//		model.addAttribute("dto", boardDTO);
+		log.info("readcontroller"
+			+ boardDTO);
 
 		return ResponseEntity.ok(boardDTO);
 	}
 
-	//PUT /boards/{pk}
+	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PutMapping()
-	public String modify(@Valid BoardDTO boardDTO,
-	                     BindingResult bindingResult,
-	                     PageRequestDTO pageRequestDTO,
-	                     RedirectAttributes redirectAttributes) {
+	public ResponseEntity<?> modify(@RequestBody BoardDTO boardDTO,
+	                     BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
 			log.info("has errors.......");
 
-			String link = pageRequestDTO.getLink();
-
-			redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-
-			redirectAttributes.addAttribute("bno", boardDTO.getBno());
-
-			return "redirect:/board/modify?" + link;
+			return ResponseEntity.badRequest().body("잘못된 요청입니다");
 		}
-
+		log.info(boardDTO);
 		boardService.modify(boardDTO);
 
-		redirectAttributes.addFlashAttribute("result", "modified");
-
-		redirectAttributes.addAttribute("bno", boardDTO.getBno());
-
-		return "redirect:/board/read";
+		return ResponseEntity.ok(boardDTO);
 	}
 
-	@DeleteMapping()
-	public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
+	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
+	@DeleteMapping("/{bno}")
+	public ResponseEntity<?> remove(@PathVariable("bno") Long bno) {
 
-		Long bno = boardDTO.getBno();
 		log.info("remove post.. " + bno);
 
 		boardService.remove(bno);
 
-		redirectAttributes.addFlashAttribute("result", "removed");
-
-		return "redirect:/board/list";
+		return ResponseEntity.ok(bno);
 
 	}
 
