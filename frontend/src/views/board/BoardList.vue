@@ -41,7 +41,7 @@ const fetchData = async () => {
   }
 };
 
-watchEffect(()=>{
+watchEffect(() => {
   fetchData();
   console.log(pageRequestDTO);
 });
@@ -85,6 +85,7 @@ const searchBoard = (searchCondition) => {
               <th scope="col">카테고리</th>
               <th scope="col">제목</th>
               <th scope="col">작성자</th>
+              <th scope="col">조회수</th>
               <th scope="col">등록일시</th>
               <th scope="col">수정일시</th>
             </tr>
@@ -103,6 +104,11 @@ const searchBoard = (searchCondition) => {
                 <span class="progress-bar-striped" style="background-color: gray">{{
                     dto.viewCount
                   }}</span>
+              </td>
+              <td>
+                {{
+                  dto.viewCount
+                }}
               </td>
               <td>{{
                   dto.writer
