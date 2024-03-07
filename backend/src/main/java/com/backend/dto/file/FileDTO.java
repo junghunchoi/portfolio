@@ -1,4 +1,4 @@
-package com.backend.dto;
+package com.backend.dto.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FilesDTO {
+public class FileDTO {
 
 	private List<MultipartFile> files;
 

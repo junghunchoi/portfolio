@@ -1,15 +1,10 @@
 package com.backend.service;
 
-import antlr.collections.List;
-import com.backend.dto.BoardDTO;
-import com.backend.dto.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardDTO;
+import com.backend.dto.board.BoardListReplyCountDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
-
-import com.backend.entity.Category;
-import com.backend.repository.CategoryRepository;
-import java.util.stream.Collectors;
 
 public interface BoardService {
 

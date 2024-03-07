@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,9 +50,10 @@ public class CustomRestAdvice {
 	}
 
 	// 서비스계층에서 에러가 났을 경우 컨트롤러에 전해지기전에 return되도록 하는 메소드
-	@ExceptionHandler({NoSuchElementException.class})
+	@ExceptionHandler({NoSuchElementException.class, EmptyResultDataAccessException.class})
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-	public ResponseEntity<Map<String,String>> handleNosuchElement(Exception e) {
+	public ResponseEntity<Map<String, String>> handleNosuchElement(Exception e) {
+		log.error(e);
 		Map<String, String> errorMap = new HashMap<>();
 
 		errorMap.put("time", "" + System.currentTimeMillis());

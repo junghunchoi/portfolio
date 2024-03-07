@@ -13,7 +13,7 @@ const router = useRouter();
 const responseDTO = ref({});
 
 const pageRequestDTO = ref({
-  _limit: 3, // 총 몇개 불러올건지 request header에 "x-total-count" 를 만들어준다.
+  _limit: 10, // 총 몇개 불러올건지 request header에 "x-total-count" 를 만들어준다.
   page: 1, // 현재 페이지
   size: null,
   type: null,
@@ -59,24 +59,26 @@ const searchBoard = (searchCondition) => {
     <BoardFilter
         @search="searchBoard"/>
   </div>
-  <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
+
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-        <div class="col-3">
+        <div class="col-3 ">
           <select
               :value="limit"
               @input="$emit('update:limit', $event.target.value)"
               class="form-select"
           >
-            <option value="3">3개씩 보기</option>
-            <option value="6">6개씩 보기</option>
-            <option value="9">9개씩 보기</option>
+            <option value="10">10개씩 보기</option>
+            <option value="25">25개씩 보기</option>
+            <option value="50">50개씩 보기</option>
           </select>
+
         </div>
         <div class="card-header"></div>
         <div class="card-body">
           <h5 class="card-title">게시물</h5>
+          <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
           <table class="table">
             <thead>
             <tr>

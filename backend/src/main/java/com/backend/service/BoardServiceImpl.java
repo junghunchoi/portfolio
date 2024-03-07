@@ -1,7 +1,7 @@
 package com.backend.service;
 
-import com.backend.dto.BoardDTO;
-import com.backend.dto.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardDTO;
+import com.backend.dto.board.BoardListReplyCountDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
@@ -52,7 +52,7 @@ public class BoardServiceImpl implements BoardService {
 			category = (String) result[1];
 		}
 
-		Category categoryObj = new Category(board.getCategory().getCno(),board,category);
+		Category categoryObj = new Category(board.getCategory().getCno(),category);
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 		boardDTO.setCategory(category);

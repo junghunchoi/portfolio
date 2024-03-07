@@ -1,6 +1,6 @@
 package com.backend.repository.search;
 
-import com.backend.dto.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardListReplyCountDTO;
 import com.backend.entity.Board;
 import com.backend.entity.QBoard;
 import com.backend.entity.QCategory;

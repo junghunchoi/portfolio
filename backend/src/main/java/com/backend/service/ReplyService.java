@@ -2,7 +2,7 @@ package com.backend.service;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ReplyDTO;
+import com.backend.dto.reply.ReplyDTO;
 
 public interface ReplyService {
 	Long Register(ReplyDTO replyDTO);

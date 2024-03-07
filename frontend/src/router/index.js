@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '@/views/HomeView.vue';
-import AboutView from '@/views/AboutView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
 import NestedView from '@/views/nested/NestedView.vue';
 import NestedOneView from '@/views/nested/NestedOneView.vue';
@@ -11,16 +9,6 @@ import BoardRead from "@/views/board/BoardRead.vue";
 import BoardRegister from '@/views/board/BoardRegister.vue';
 import BoardModify from '@/views/board/BoardModify.vue';
 const routes = [
-	{
-		path: '/',
-		name: 'Home',
-		component: HomeView,
-	},
-	{
-		path: '/about',
-		name: 'About',
-		component: AboutView,
-	},
 	{
 		path: '/:pathMatch(.*)*',
 		name: 'NotFound',
@@ -51,7 +39,7 @@ const routes = [
 
 	// board router 시작
 	{
-		path: '/boards',
+		path: '/',
 		name: 'BoardList',
 		component: BoardList,
 	},

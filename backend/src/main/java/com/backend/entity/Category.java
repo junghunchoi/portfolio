@@ -20,9 +20,6 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cno;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Board board;
-
 	@Column(length = 500, nullable = false)
 	private String content;
 

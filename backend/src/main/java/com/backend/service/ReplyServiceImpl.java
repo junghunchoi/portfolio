@@ -2,7 +2,7 @@ package com.backend.service;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ReplyDTO;
+import com.backend.dto.reply.ReplyDTO;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 @Service
 @RequiredArgsConstructor

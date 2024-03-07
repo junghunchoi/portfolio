@@ -2,6 +2,8 @@ package com.backend.entity;
 
 import com.backend.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,9 +39,15 @@ public class Board extends BaseEntity {
 
 	private int viewCount;
 
+	@OneToMany(mappedBy = "board", cascade = {
+		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@Builder.Default
+	private Set<BoardImage> imageSet = new HashSet<>();
+
 
 	/**
 	 * 변경이 가능한 컬럼을 메소드로 처리해 영속성을 관리한다.
+	 *
 	 * @param title
 	 * @param content
 	 */
@@ -51,6 +59,7 @@ public class Board extends BaseEntity {
 
 	/**
 	 * 클릭시 조회수를 추가하기 위한 메소드
+	 *
 	 * @param viewCount
 	 */
 	public void updateViewCount(int viewCount) {

@@ -1,7 +1,6 @@
 package com.backend.repository.search;
 
-import com.backend.dto.BoardListReplyCountDTO;
-import com.backend.entity.Board;
+import com.backend.dto.board.BoardListReplyCountDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

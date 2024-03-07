@@ -1,25 +1,16 @@
 package com.backend.controller;
 
-import com.backend.dto.BoardDTO;
-import com.backend.dto.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardDTO;
+import com.backend.dto.board.BoardListReplyCountDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.entity.Board;
 import com.backend.service.BoardService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")

@@ -1,4 +1,4 @@
-package com.backend.dto;
+package com.backend.dto.board;
 
 import com.backend.entity.Category;
 import com.fasterxml.jackson.annotation.JsonIgnore;

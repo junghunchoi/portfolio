@@ -2,7 +2,7 @@ package com.backend.controller;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ReplyDTO;
+import com.backend.dto.reply.ReplyDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.service.ReplyService;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +44,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value="Replies of Board", notes = "GET 방식으로 특정 게시물 댓글목록")
-	@GetMapping(value="/{rno}")
+	@GetMapping(value="/{bno}")
 	public PageResponseDTO<ReplyDTO> getList(@PathVariable("bno") Long bno, PageRequestDTO pageRequestDTO    ) {
 		PageResponseDTO<ReplyDTO> requestDTO = replyService.getListOfBoard(bno, pageRequestDTO);
 
