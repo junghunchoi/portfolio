@@ -46,10 +46,17 @@ watchEffect(() => {
   console.log(pageRequestDTO);
 });
 
-const searchBoard = (searchCondition) => {
-  console.log(pageRequestDTO);
-  pageRequestDTO.type = searchCondition.type;
-  pageRequestDTO.keyword = searchCondition.keyword;
+const searchBoard = async (searchCondition) => {
+  try{
+    console.log(pageRequestDTO);
+    pageRequestDTO.value.type = searchCondition.type;
+    pageRequestDTO.value.keyword = searchCondition.keyword;
+
+    const {data} = await getBoards(pageRequestDTO.value);
+    console.log(data)
+  }catch (e) {
+    console.log(e);
+  }
 }
 
 </script>

@@ -24,10 +24,10 @@ public class BoardController {
 	@GetMapping()
 	public ResponseEntity<PageResponseDTO<BoardListReplyCountDTO>> list(PageRequestDTO pageRequestDTO) {
 
+		log.info("board controller list");
 		PageResponseDTO<BoardListReplyCountDTO> responseDTO =
 				boardService.listWithReplyCount(pageRequestDTO);
 
-		log.info(pageRequestDTO);
 		return ResponseEntity.ok(responseDTO);
 	}
 
