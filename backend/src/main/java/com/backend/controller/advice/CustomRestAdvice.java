@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.validation.*;
 
-
+//https://github.com/merge-simpson/demo-exception-handler/blob/main/src/main/java/com/example/demo/web/exception/GlobalExceptionHandler.java
+//https://velog.io/@letsdev/Spring-%EC%98%88%EC%99%B8-%EC%B2%98%EB%A6%AC-%EC%89%BD%EA%B2%8C-%EA%B4%80%EC%8B%AC%EC%82%AC-%EB%82%98%EB%88%84%EA%B8%B0-Global-Exception-HandlerController-Advice
 /**
  * 에러처리 및 @Valid 어노테이션 검증을 위한 클래스
  */

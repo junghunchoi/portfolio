@@ -12,8 +12,8 @@
               <span class="input-group-text">Title</span>
               <input type="text" class="form-control" v-model="board.title">
             </div>
-            <div class="mb-3">
-              <label  class="form-label">카테고리</label>
+            <div class="input-group mb-3">
+              <span  class="input-group-text">카테고리</span>
               <select v-model="board.categoryObj.cno" class="form-control">
                 <option value="1">java</option>
                 <option value="2">javascript</option>
@@ -22,7 +22,7 @@
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Content</span>
-              <textarea class="form-control col-sm-5" rows="5" v-model="board.content"></textarea>
+              <textarea class="form-control "  v-model="board.content"></textarea>
             </div>
 
             <div class="input-group mb-3">
@@ -34,11 +34,11 @@
 
             <div class="input-group mb-3">
               <span class="input-group-text">RegDate</span>
-              <input type="text" class="form-control" :value="board.regDate" readonly>
+              <input type="text" class="" :value="board.regDate" readonly>
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">ModDate</span>
-              <input type="text" class="form-control" :value="board.modDate" readonly>
+              <input type="text" class="" :value="board.modDate" readonly>
             </div>
 <!--            <div class="input-group mb-3">-->
 <!--              <span class="input-group-text">file</span>-->

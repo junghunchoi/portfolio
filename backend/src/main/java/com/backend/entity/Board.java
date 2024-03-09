@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.*;
 
 import javax.persistence.*;
+import org.hibernate.annotations.BatchSize;
 
 /**
  * 게시글 entity 클래스
@@ -32,7 +33,7 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cno")
 	private Category category;
@@ -42,6 +43,7 @@ public class Board extends BaseEntity {
 	@OneToMany(mappedBy = "board", cascade = {
 		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	@Builder.Default
+	@BatchSize(size = 20)
 	private Set<BoardImage> imageSet = new HashSet<>();
 
 

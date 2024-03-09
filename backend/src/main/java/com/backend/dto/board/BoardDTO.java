@@ -31,9 +31,7 @@ public class BoardDTO {
 	@NotEmpty
 	private String writer;
 
-	private Category categoryObj;
-	private String category;
-	private Long cno;
+	private Category category;
 
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;

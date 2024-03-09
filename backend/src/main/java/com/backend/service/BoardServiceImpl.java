@@ -30,13 +30,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Long register(BoardDTO boardDTO) {
-		Optional<Category> categoryResult = categoryRepository.findById(boardDTO.getCno());
-		Category categoryObj = categoryResult.orElseThrow();
-		boardDTO.setCategoryObj(categoryObj);
+		Optional<Category> categoryResult = categoryRepository.findById(boardDTO.getCategory().getCno());
+		Category category = categoryResult.orElseThrow();
+		boardDTO.setCategory(category);
 
 		Board board = dtoToEntity(boardDTO);
 		Long bno = boardRepository.save(board).getBno();
-
 		return bno;
 	}
 
@@ -45,18 +44,17 @@ public class BoardServiceImpl implements BoardService {
 		List<Object[]> results = boardRepository.findBoardWithCategoryNameById(bno);
 
 		Board board = null;
-		String category = null;
+		Category category = null;
 
 		for (Object[] result : results) {
 			board = (Board) result[0];
-			category = (String) result[1];
+			category = (Category) result[1];
 		}
 
-		Category categoryObj = new Category(board.getCategory().getCno(),category);
+//		Category category = new Category(board.getCategory().getCno(),board.getCategory().getContent());
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 		boardDTO.setCategory(category);
-		boardDTO.setCategoryObj(categoryObj);
 		// 조회수 증가 로직
 		board.updateViewCount(board.getViewCount() + 1);
 
@@ -71,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
 
 		Board board = result.orElseThrow();
 
-		board.change(boardDTO.getTitle(), boardDTO.getContent(),boardDTO.getCategoryObj());
+		board.change(boardDTO.getTitle(), boardDTO.getContent(),boardDTO.getCategory());
 
 		boardRepository.save(board);
 	}

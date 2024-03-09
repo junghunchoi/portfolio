@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/files")
@@ -41,8 +42,10 @@ public class FileController {
 
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<FileResultDTO> upload(FileDTO fileDTO) {
-		log.info(fileDTO);
+	public List<FileResultDTO> upload( FileDTO fileDTO) {
+
+		//@RequestPart(value = "files", required = false) List<MultipartFile> files,
+//		log.info("upload method : " + files.toString());
 
 		if (fileDTO.getFiles() != null) {
 

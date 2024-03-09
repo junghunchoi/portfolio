@@ -37,7 +37,7 @@ public interface BoardService {
 		                   .title(boardDTO.getTitle())
 		                   .content(boardDTO.getContent())
 		                   .writer(boardDTO.getWriter())
-		                   .category(boardDTO.getCategoryObj())
+		                   .category(boardDTO.getCategory())
 		                   .build();
 
 		if(boardDTO.getFileNames() != null){

@@ -70,18 +70,18 @@ const searchBoard = async (searchCondition) => {
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-        <div class="col-3 ">
-          <select
-              :value="limit"
-              @input="$emit('update:limit', $event.target.value)"
-              class="form-select"
-          >
-            <option value="10">10개씩 보기</option>
-            <option value="25">25개씩 보기</option>
-            <option value="50">50개씩 보기</option>
-          </select>
+<!--        <div class="col-3 ">-->
+<!--          <select-->
+<!--              :value="limit"-->
+<!--              @input="$emit('update:limit', $event.target.value)"-->
+<!--              class="form-select"-->
+<!--          >-->
+<!--            <option value="10">10개씩 보기</option>-->
+<!--            <option value="25">25개씩 보기</option>-->
+<!--            <option value="50">50개씩 보기</option>-->
+<!--          </select>-->
 
-        </div>
+<!--        </div>-->
         <div class="card-header"></div>
         <div class="card-body">
           <h5 class="card-title">게시물</h5>

@@ -4,10 +4,35 @@
       <div class="card">
         <div class="card-header">Board Read</div>
         <div class="card-body">
-          <div class="input-group mb-3" v-for="(value, key) in board" :key="key">
-            <span class="input-group-text">{{ key }}</span>
-            <input type="text" class="form-control" :value="value" readonly>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">제목</span>
+            <input type="text" class="form-control" :value="board.bno" readonly>
           </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">내용</span>
+            <input type="text" class="form-control" :value="board.content" readonly>
+          </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">작성자</span>
+            <input type="text" class="form-control" :value="board.writer" readonly>
+          </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">카테고리</span>
+            <input type="text" class="form-control" :value="board.category.content" readonly>
+          </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">등록일</span>
+            <input type="text" class="form-control" :value="board.regDate" readonly>
+          </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">수정일</span>
+            <input type="text" class="form-control" :value="board.modDate" readonly>
+          </div>
+          <div class="input-group mb-3" >
+            <span class="input-group-text">파일명</span>
+            <input type="text" class="form-control"  readonly>
+          </div>
+
           <div class="my-4">
             <div class="float-end">
               <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
@@ -18,12 +43,14 @@
       </div>
     </div>
   </div>
+  <ReplyArea/>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {getBoardBybno} from "@/api/board";
+import ReplyArea from "@/components/reply/ReplyArea.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -32,7 +59,7 @@ const bno = ref(route.params.bno);
 const board = ref({
   bno: '',
   title: '',
-  category:'',
+  category: {cno:null, content:null},
   content: '',
   writer: '',
   regDate: new Date(),
@@ -45,7 +72,6 @@ const fetchData = async (bno) => {
   try{
     const {data} = await getBoardBybno(bno);
     board.value = data;
-    console.log("board " + data.value);
   }catch (e) {
     console.error(e);
   }
