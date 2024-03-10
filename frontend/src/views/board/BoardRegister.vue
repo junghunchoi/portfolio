@@ -91,7 +91,6 @@ const save = async () => {
     await createBoard({
       ...form.value,
     });
-
     await uploadFile(formData);
 
     router.push({name: 'BoardList'});

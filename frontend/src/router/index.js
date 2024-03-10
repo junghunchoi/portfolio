@@ -4,6 +4,7 @@ import BoardList from '@/views/board/BoardList.vue';
 import BoardRead from "@/views/board/BoardRead.vue";
 import BoardRegister from '@/views/board/BoardRegister.vue';
 import BoardModify from '@/views/board/BoardModify.vue';
+
 const routes = [
 	{
 		path: '/:pathMatch(.*)*',

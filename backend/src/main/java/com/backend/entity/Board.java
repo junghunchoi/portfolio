@@ -33,7 +33,6 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-//	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cno")
 	private Category category;

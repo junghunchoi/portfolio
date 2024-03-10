@@ -1,4 +1,4 @@
-package com.backend.controller.advice;
+package com.backend.exception;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,4 +63,14 @@ public class CustomRestAdvice {
 		return ResponseEntity.badRequest().body(errorMap);
 
 	}
+
+	// 따로 더 구체적인 선언이 없다면, CustomException을 상속받은 모든 예외가 이곳으로 온다. 따라서 이 양식을 따르는 한 따로 더 만들 익셉션 핸들러 메서드가 없다.
+//	@ExceptionHandler(CustomException.class)
+//	public ResponseEntity<ApiError> handleMemberException(CustomException exception) {
+//		ErrorCode errorCode = exception.getErrorCode();
+//		HttpStatus httpStatus = errorCode.defaultHttpStatus();
+//		ApiError response = ApiError.of(errorCode, getPlattedApiSubErrors(exception.getCause()));
+//
+//		return new ResponseEntity<>(response, httpStatus);
+//	}
 }

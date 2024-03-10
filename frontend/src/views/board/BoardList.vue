@@ -43,7 +43,6 @@ const fetchData = async () => {
 
 watchEffect(() => {
   fetchData();
-  console.log(pageRequestDTO);
 });
 
 const searchBoard = async (searchCondition) => {
