@@ -43,20 +43,22 @@
       </div>
     </div>
   </div>
-  <ReplyArea/>
+  <ReplyArea :reply-list="replies.list" v-model="replyText"/>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted,reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {getBoardBybno} from "@/api/board";
-import ReplyArea from "@/components/reply/ReplyArea.vue";
+import ReplyArea from "@/views/reply/ReplyArea.vue";
+import {getReplies, registerReply} from "@/api/reply";
 
 const route = useRoute();
 const router = useRouter();
 const bno = ref(route.params.bno);
+const replyText = ref('');
 
-const board = ref({
+const board = reactive({
   bno: '',
   title: '',
   category: {cno:null, content:null},
@@ -66,18 +68,17 @@ const board = ref({
   modDate: new Date(),
 
 });
+const replies = reactive({ list: [] });
 
 
-const fetchData = async (bno) => {
-  try{
-    const {data} = await getBoardBybno(bno);
-    board.value = data;
-  }catch (e) {
+const fetchData = async () => {
+  try {
+    const { data } = await getBoardBybno(bno.value);
+    Object.assign(board, data); // board 객체에 데이터 할당
+  } catch (e) {
     console.error(e);
   }
 };
-
-fetchData(bno.value)
 
 const goBoardPage = () => {
   router.push('/boards');
@@ -86,6 +87,22 @@ const goBoardPage = () => {
 const modifyBoard = () => {
   router.push({ name: 'BoardModify', params: { bno: bno.value} }); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
 }
+
+onMounted(async () => {
+  await fetchData();
+  const response = await getReplies(bno.value); // getReplies 호출 시 bno 값 전달 수정
+  replies.list = response.data.dtoList;
+  console.log("reply" + replies.list);
+});
+
+watch(replyText, (newValue)=> {
+  const data = {
+    bno: this.bno.value,
+    writer: '임시',
+    replyText: newValue,
+  }
+  registerReply(data)
+});
 
 </script>
 

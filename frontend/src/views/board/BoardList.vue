@@ -4,6 +4,7 @@ import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
+import {formatYYYYMMDD} from "@/common/dateUtils"
 
 defineProps({
   limit: Number,
@@ -35,7 +36,6 @@ const fetchData = async () => {
     const {data, headers} = await getBoards(pageRequestDTO.value);
     responseDTO.value = data;
     totalCount.value = headers["x-total-count"];
-    console.log(data);
   } catch (e) {
     console.error(e);
   }
@@ -121,11 +121,11 @@ const searchBoard = async (searchCondition) => {
                 }}
               </td>
               <td>{{
-                  dto.regDate
+                  formatYYYYMMDD(dto.regDate)
                 }}
               </td>
               <td>{{
-                  dto.modDate
+                  formatYYYYMMDD(dto.modDate)
                 }}
               </td>
             </tr>

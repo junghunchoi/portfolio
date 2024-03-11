@@ -22,10 +22,13 @@
 							</RouterLink>
             </li>
 					</ul>
-					<div class="d-flex">
-						<button class="btn btn-outline-light" type="button" @click="goPage">
+					<div class="d-flex mg">
+						<button class="btn btn-light ms-1" type="button" @click="goPage">
 							로그인
 						</button>
+            <button class="btn btn-secondary" type="button" @click="goPage">
+              회원가입
+            </button>
 					</div>
 				</div>
 			</div>

@@ -54,7 +54,7 @@ dependencies {
 
 
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-//	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	implementation 'net.coobird:thumbnailator:0.4.16'
 
@@ -65,11 +65,9 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//
-//	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	annotationProcessor(
 
