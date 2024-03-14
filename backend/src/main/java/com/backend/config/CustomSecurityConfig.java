@@ -28,31 +28,31 @@ import javax.sql.DataSource;
 public class CustomSecurityConfig {
 
 	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
-	private final CustomUserDetailService userDetailService;
+//	private final CustomUserDetailService userDetailService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		log.info("---- security config ---");
 
-		http.formLogin().loginPage("/member/login");
+//		http.formLogin().loginPage("/member/login");
 
 		http.csrf().disable();
 
-		http.rememberMe()
-		    .key("12345678")
-		    .tokenRepository(persistentTokenRepository())
-		    .userDetailsService(userDetailService)
-		    .tokenValiditySeconds(60 * 60 * 24 * 30);
+//		http.rememberMe()
+//		    .key("12345678")
+//		    .tokenRepository(persistentTokenRepository())
+////		    .userDetailsService(userDetailService)
+//		    .tokenValiditySeconds(60 * 60 * 24 * 30);
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 
 		http.cors()
 		    .and()
-		    .csrf()
-		    .disable()
+		    .csrf().disable()
+			.formLogin().disable()
 		    .authorizeRequests()
-		    .antMatchers("/api/auth/**")
+		    .antMatchers("/api/auth/**","/login/**","/oauth/**")
 		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
 		    .anyRequest()
 		    .authenticated(); // 그 외 모든 요청은 인증 필요

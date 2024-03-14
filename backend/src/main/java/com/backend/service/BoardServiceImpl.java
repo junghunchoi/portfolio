@@ -1,11 +1,13 @@
 package com.backend.service;
 
+import com.backend.common.codes.ErrorCode;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListReplyCountDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Category;
+import com.backend.exception.BusinessExceptionHandler;
 import com.backend.repository.BoardRepository;
 import com.backend.repository.CategoryRepository;
 import java.util.List;
@@ -30,9 +32,18 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Long register(BoardDTO boardDTO) {
-		Optional<Category> categoryResult = categoryRepository.findById(boardDTO.getCategory().getCno());
-		Category category = categoryResult.orElseThrow();
-		boardDTO.setCategory(category);
+		try {
+
+			Optional<Category> categoryResult = categoryRepository.findById(
+				boardDTO.getCategory().getCno());
+			Category category = categoryResult.orElseThrow();
+			boardDTO.setCategory(category);
+
+			throw new BusinessExceptionHandler(ErrorCode.INSERT_ERROR.getMessage(),
+				ErrorCode.INSERT_ERROR);
+		} catch (Exception e) {
+			e.getMessage();
+		}
 
 		Board board = dtoToEntity(boardDTO);
 		Long bno = boardRepository.save(board).getBno();

@@ -1,5 +1,9 @@
 package com.backend.security;
 
+import com.backend.entity.Member;
+import com.backend.entity.MemberRole;
+import com.backend.repository.MemberRepository;
+import com.backend.security.dto.MemberSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,10 +56,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 				break;
 		}
 
-		return generateDTO(email,paramMap);
+		return generateDTO(email, paramMap);
 	}
 
-	// 이미 회원가입이 된 회원에 대해서는 기존 정보를 반환하고 새롭게 소셜 로그인한 사용자는 자동으로 회원 가입을 처리한다.
+	//	 이미 회원가입이 된 회원에 대해서는 기존 정보를 반환하고 새롭게 소셜 로그인한 사용자는 자동으로 회원 가입을 처리한다.
 	private MemberSecurityDTO generateDTO(String email, Map<String, Object> params) {
 
 		Optional<Member> result = memberRepository.findByEmail(email);
@@ -73,21 +77,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			memberRepository.save(member);
 
 			//MemberSecurityDTO 구성 및 반환
-			MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(email, "1111", email, false, true, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+			MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(email, "1111", email, false,
+				true, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 			memberSecurityDTO.setProps(params);
 
 			return memberSecurityDTO;
 		} else {
 			Member member = result.get();
-			MemberSecurityDTO memberSecurityDTO =
-				new MemberSecurityDTO(
-					member.getMid(),
-					member.getMpw(),
-					member.getEmail(),
-					member.isDel(),
-					member.isSocial(),
-					member.getRoleSet().stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_"+memberRole.name())).collect(Collectors.toList())
-				);
+			MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(member.getMid(),
+				member.getMpw(), member.getEmail(), member.isDel(), member.isSocial(),
+				member.getRoleSet()
+				      .stream()
+				      .map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name()))
+				      .collect(Collectors.toList()));
 			return memberSecurityDTO;
 		}
 	}

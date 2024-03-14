@@ -33,7 +33,6 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 		this.email = email;
 		this.del = del;
 		this.social = social;
-
 	}
 
 

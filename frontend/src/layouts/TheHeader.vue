@@ -23,10 +23,10 @@
             </li>
 					</ul>
 					<div class="d-flex mg">
-						<button class="btn btn-light ms-1" type="button" @click="goPage">
+						<button class="btn btn-light ms-1" type="button" @click="goLogin">
 							로그인
 						</button>
-            <button class="btn btn-secondary" type="button" @click="goPage">
+            <button class="btn btn-secondary" type="button" @click="goMemberRegister">
               회원가입
             </button>
 					</div>
@@ -40,10 +40,23 @@
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
 const goPage = () => {
 	router.push({
 		name: 'PostCreate',
 	});
+};
+
+const goMemberRegister = () => {
+  router.push({
+    name: 'MemberRegister',
+  });
+};
+
+const goLogin = () => {
+  router.push({
+    name: 'Login',
+  });
 };
 </script>
 

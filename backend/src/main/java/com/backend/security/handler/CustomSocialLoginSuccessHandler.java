@@ -15,15 +15,18 @@ import java.io.IOException;
 @Log4j2
 @RequiredArgsConstructor
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
+
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+		Authentication authentication) throws IOException, ServletException {
 		MemberSecurityDTO memberSecurityDTO = (MemberSecurityDTO) authentication.getPrincipal();
 
 		String encodePw = memberSecurityDTO.getMpw();
 
-		if (memberSecurityDTO.isSocial() && (memberSecurityDTO.getMpw().equals("1111")) || passwordEncoder.matches("1111", memberSecurityDTO.getMpw())) {
+		if (memberSecurityDTO.isSocial() && (memberSecurityDTO.getMpw().equals("1111"))
+			|| passwordEncoder.matches("1111", memberSecurityDTO.getMpw())) {
 			log.info("social user should change password");
 			response.sendRedirect("/member/modify");
 			return;
