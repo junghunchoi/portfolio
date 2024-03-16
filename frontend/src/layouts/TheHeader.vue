@@ -23,9 +23,8 @@
             </li>
 					</ul>
 					<div class="d-flex mg">
-						<button class="btn btn-light ms-1" type="button" @click="goLogin">
-							로그인
-						</button>
+            <router-link v-if="!loginSuccess" to="/login" class="btn btn-outline-light me-2">Login</router-link>
+            <button v-if="loginSuccess" @click="logoutHandler" class="btn btn-outline-light me-2">Logout</button>
             <button class="btn btn-secondary" type="button" @click="goMemberRegister">
               회원가입
             </button>
@@ -38,6 +37,12 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import {useAuthStore} from "@/store/loginStore.js";
+import { storeToRefs } from 'pinia'
+
+const authStore = useAuthStore();
+const {loginSuccess} = storeToRefs(authStore);
+
 
 const router = useRouter();
 
@@ -58,6 +63,10 @@ const goLogin = () => {
     name: 'Login',
   });
 };
+
+const logoutHandler = () =>{
+  authStore.logout();
+}
 </script>
 
 <style lang="scss" scoped></style>

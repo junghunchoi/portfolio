@@ -1,8 +1,9 @@
 package com.backend.config;
 
 
+import com.backend.security.CustomUserDetailService;
 import com.backend.security.handler.Custom403Handler;
-import com.backend.security.handler.CustomSocialLoginSuccessHandler;
+//import com.backend.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,16 +30,14 @@ import javax.sql.DataSource;
 public class CustomSecurityConfig {
 
 	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
-//	private final CustomUserDetailService userDetailService;
+	private final CustomUserDetailService userDetailService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		log.info("---- security config ---");
 
-//		http.formLogin().loginPage("/member/login");
 
-		http.csrf().disable();
 
 //		http.rememberMe()
 //		    .key("12345678")
@@ -46,20 +46,24 @@ public class CustomSecurityConfig {
 //		    .tokenValiditySeconds(60 * 60 * 24 * 30);
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
+		http.userDetailsService(userDetailService);
 
 		http.cors()
 		    .and()
 		    .csrf().disable()
+		    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
 			.formLogin().disable()
+			.httpBasic().disable()
 		    .authorizeRequests()
-		    .antMatchers("/api/auth/**","/login/**","/oauth/**")
+		    .antMatchers("/api/auth/**","/api/login","/oauth/**","api/boards")
 		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
 		    .anyRequest()
 		    .authenticated(); // 그 외 모든 요청은 인증 필요
 
-		http.oauth2Login()
-		    .loginPage("/member/login")
-		    .successHandler(authenticationSuccessHandler());
+//		http.oauth2Login()
+//		    .loginPage("/member/login")
+//		    .successHandler(authenticationSuccessHandler());
 
 		return http.build();
 	}
@@ -95,9 +99,9 @@ public class CustomSecurityConfig {
 		return new Custom403Handler();
 	}
 
-	@Bean
-	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		return new CustomSocialLoginSuccessHandler(passwordEncoder());
-	}
+//	@Bean
+//	public AuthenticationSuccessHandler authenticationSuccessHandler() {
+//		return new CustomSocialLoginSuccessHandler(passwordEncoder());
+//	}
 
 }

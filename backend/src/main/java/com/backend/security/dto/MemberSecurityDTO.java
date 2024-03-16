@@ -1,6 +1,7 @@
 package com.backend.security.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,25 +12,27 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
+
 @Getter
 @Setter
 @ToString
 public class MemberSecurityDTO extends User implements OAuth2User {
 
-	private String mid;
-	private String mpw;
+	private String username;
+	private String password;
 	private String email;
-	private boolean del;
-	private boolean social;
+	private boolean del = false;
+	private boolean social = false;
 
 	private Map<String, Object> props;
 
-	public MemberSecurityDTO(String username, String password, String email, boolean del, boolean social,
+	public MemberSecurityDTO(@JsonProperty("username") String username,
+		@JsonProperty("password") String password, String email, boolean del, boolean social,
 		Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
 
-		this.mid = username;
-		this.mpw = password;
+		this.username = username;
+		this.password = password;
 		this.email = email;
 		this.del = del;
 		this.social = social;
@@ -43,6 +46,8 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 
 	@Override
 	public String getName() {
-		return this.mid;
+		return this.username;
 	}
+
+
 }

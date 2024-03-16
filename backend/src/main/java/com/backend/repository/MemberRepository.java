@@ -13,14 +13,14 @@ import org.springframework.data.repository.query.Param;
 public interface MemberRepository extends JpaRepository<Member, String> {
 
 	@EntityGraph(attributePaths = "roleSet")
-	@Query("select m from Member m where m.mid = :mid and m.social = false")
-	Optional<Member> getWithRoles(String mid);
+	@Query("select m from Member m where m.username = :username and m.social = false")
+	Optional<Member> getWithRoles(String username);
 
 	@EntityGraph(attributePaths = "roleSet")
 	Optional<Member> findByEmail(String email);
 
 	@Modifying
 	@Transactional
-	@Query("update Member m set m.mpw = :mpw where m.mid = :mid")
-	void updatePassword(@Param("mpw") String password, @Param("mid") String mid);
+	@Query("update Member m set m.password = :password where m.username = :username")
+	void updatePassword(@Param("password") String password, @Param("username") String username);
 }

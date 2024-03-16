@@ -67,8 +67,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		//데이터베이스에 해당 이메일을 가진 사용자가 없다면
 		if (result.isEmpty()) {
 			Member member = Member.builder()
-			                      .mid(email)
-			                      .mpw(passwordEncoder.encode("1111"))
+			                      .username(email)
+			                      .password(passwordEncoder.encode("1111"))
 			                      .email(email)
 			                      .social(true)
 			                      .build();
@@ -84,8 +84,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			return memberSecurityDTO;
 		} else {
 			Member member = result.get();
-			MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(member.getMid(),
-				member.getMpw(), member.getEmail(), member.isDel(), member.isSocial(),
+			MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(member.getUsername(),
+				member.getPassword(), member.getEmail(), member.isDel(), member.isSocial(),
 				member.getRoleSet()
 				      .stream()
 				      .map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name()))

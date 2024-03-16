@@ -1,30 +1,30 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import axios from 'axios';
-import { useStorage } from '@vueuse/core';
-import {computed} from 'vue';
+import {ref, computed} from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
-  const loginSuccess = useStorage('loginSuccess', false);
-  const loginError = useStorage('loginError', false);
-  const userName = useStorage('userName', null);
-  const password = useStorage('password', null);
+  const loginSuccess = ref(false);
+  const loginError = ref(false);
+  const userName = ref(null);
+  const password = ref(null);
 
-  async function login(user, password) {
+  async function login(username, password) {
     try {
-      const result = await axios.get('/api/login', {
-        auth: {
-          username: user,
-          password: password,
-        },
+      const result = await axios.post('http://localhost:1541/api/login', {
+
+        username: username,
+        password: password,
+
       });
+
       if (result.status === 200) {
         loginSuccess.value = true;
-        userName.value = user;
+        userName.value = username;
         password.value = password;
       }
     } catch (err) {
       loginError.value = true;
-      userName.value = user;
+      userName.value = username;
       password.value = password;
       throw new Error(err);
     }

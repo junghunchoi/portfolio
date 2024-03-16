@@ -5,6 +5,9 @@ package com.backend.entity;
  * 추후 구현 예정
  */
 import com.backend.domain.BaseEntity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import lombok.*;
 
 import javax.persistence.ElementCollection;
@@ -23,9 +26,11 @@ import java.util.Set;
 public class Member extends BaseEntity {
 
 	@Id
-	private String mid;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	private String mpw;
+	private String username;
+	private String password;
 	private String email;
 	private boolean del;
 
@@ -36,7 +41,7 @@ public class Member extends BaseEntity {
 	private Set<MemberRole> roleSet = new HashSet<>();
 
 	public void changePassword(String mpw ){
-		this.mpw = mpw;
+		this.password = password;
 	}
 
 	public void changeEmail(String email){
