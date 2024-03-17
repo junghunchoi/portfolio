@@ -1,14 +1,13 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import NotFoundView from '@/views/NotFoundView.vue';
-import BoardList from '@/views/board/BoardList.vue';
-import BoardRead from "@/views/board/BoardRead.vue";
-import BoardRegister from '@/views/board/BoardRegister.vue';
-import BoardModify from '@/views/board/BoardModify.vue';
+import BoardList from '@/views/free/BoardList.vue';
+import BoardRead from "@/views/free/BoardRead.vue";
+import BoardRegister from '@/views/free/BoardRegister.vue';
+import BoardModify from '@/views/free/BoardModify.vue';
 import MemberRegister from '@/views/member/MemberRegister.vue';
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/TheMain.vue'
 import {useAuthStore} from '@/store/loginStore.js'
-
 
 const routes = [
   /*
@@ -21,8 +20,8 @@ const routes = [
   },
 
   /*
-    [board 라우터]
-     */
+    [freeBoard router ]
+  */
   {
     path: '/',
     name: 'TheMain',
@@ -50,6 +49,16 @@ const routes = [
     component: BoardModify,
   },
   /*
+  [noticeBoard router ]
+*/
+  /*
+  [galleryBoard router ]
+*/
+  /*
+  [helpBoard router ]
+*/
+
+  /*
   [member 및 로그인 라우터]
    */
   {
@@ -70,8 +79,6 @@ const router = createRouter({
   routes,
 });
 
-
-
 // router.beforeEach((to, from, next) => {
 //     if (!useAuthStore.isLoggedIn) {
 //       next({
@@ -81,6 +88,5 @@ const router = createRouter({
 //       next()
 //     }
 // })
-
 
 export default router;

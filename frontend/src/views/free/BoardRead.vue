@@ -66,12 +66,12 @@ const board = reactive({
   writer: '',
   regDate: new Date(),
   modDate: new Date(),
-
 });
+
 const replies = reactive({ list: [] });
 
 
-const fetchData = async () => {
+const loadBoardData = async () => {
   try {
     const { data } = await getBoardBybno(bno.value);
     Object.assign(board, data); // board 객체에 데이터 할당
@@ -89,7 +89,7 @@ const modifyBoard = () => {
 }
 
 onMounted(async () => {
-  await fetchData();
+  await loadBoardData();
   const response = await getReplies(bno.value); // getReplies 호출 시 bno 값 전달 수정
   replies.list = response.data.dtoList;
   console.log("reply" + replies.list);

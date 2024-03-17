@@ -1,10 +1,11 @@
 <template>
   <div class="card">
-    <div v-if="$slots.header" class="card-header">
-      <slot name="header"></slot>
+    <div class="header">
+      <div>{{title}}</div>
       <router-link :to="destination">더보기+</router-link>
+      <hr/>
     </div>
-    <div v-if="$slots.default" class="card-body">
+    <div  class="card-body">
       <div v-for = "item in items" :key = "item.num">
         <div>{{item.num}}</div>
         <div>{{item.category}}</div>
@@ -20,7 +21,9 @@
 <script setup>
 defineProps({
   destination: {String, required: true},
-  items :{Array, required:true}
+  items :{Array, required:true},
+  title: String,
+
 });
 </script>
 

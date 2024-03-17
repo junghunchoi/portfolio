@@ -33,6 +33,9 @@
         </div>
         <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in
         </button>
+        <button class="w-100 btn btn-secondary" type="button" @click="goMemberRegister">
+          회원가입
+        </button>
       </form>
       <a href="/oauth2/authorization/kakao">KAKAO</a>
     </div>
@@ -68,6 +71,13 @@ const login = async () =>{
     throw new Error(err)
   }
 }
+
+const goMemberRegister = () => {
+  router.push({
+    name: 'MemberRegister',
+  });
+};
+
 
 </script>
 
