@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import {ref, defineEmits} from 'vue';
+import {ref} from 'vue';
 
 const isVisible = ref(false);
 const emits = defineEmits(['update:modelValue', 'confirm']);

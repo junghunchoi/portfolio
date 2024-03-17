@@ -21,14 +21,32 @@
 								게시글
 							</RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" active-class="active" to="/boards">
+                자유게시판
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" active-class="active" to="/boards">
+                갤러리
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" active-class="active" to="/boards">
+                문의 게시판
+              </RouterLink>
+            </li>
 					</ul>
-					<div class="d-flex mg">
+					<div v-if="!loginSuccess" class="d-flex mg">
             <router-link v-if="!loginSuccess" to="/login" class="btn btn-outline-light me-2">Login</router-link>
-            <button v-if="loginSuccess" @click="logoutHandler" class="btn btn-outline-light me-2">Logout</button>
             <button class="btn btn-secondary" type="button" @click="goMemberRegister">
               회원가입
             </button>
 					</div>
+          <div v-else>
+            <div> {{userName}}님 안녕하세요 !</div>
+            <div><button @click="logoutHandler">로그아웃</button></div>
+          </div>
 				</div>
 			</div>
 		</nav>
@@ -41,7 +59,7 @@ import {useAuthStore} from "@/store/loginStore.js";
 import { storeToRefs } from 'pinia'
 
 const authStore = useAuthStore();
-const {loginSuccess} = storeToRefs(authStore);
+const { userName, loginSuccess} = storeToRefs(authStore);
 
 
 const router = useRouter();

@@ -5,6 +5,7 @@ import {ref, computed} from 'vue';
 export const useAuthStore = defineStore('auth', () => {
   const loginSuccess = ref(false);
   const loginError = ref(false);
+  const userId = ref('');
   const userName = ref(null);
   const password = ref(null);
 

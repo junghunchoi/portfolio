@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import {ref,defineEmits,defineProps} from 'vue';
+import {ref,defineProps} from 'vue';
 
 
 

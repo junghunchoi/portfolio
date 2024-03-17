@@ -6,7 +6,9 @@ import BoardRegister from '@/views/board/BoardRegister.vue';
 import BoardModify from '@/views/board/BoardModify.vue';
 import MemberRegister from '@/views/member/MemberRegister.vue';
 import Login from '@/views/member/Login.vue';
+import TheMain from '@/views/TheMain.vue'
 import {useAuthStore} from '@/store/loginStore.js'
+
 
 const routes = [
   /*
@@ -23,6 +25,11 @@ const routes = [
      */
   {
     path: '/',
+    name: 'TheMain',
+    component: TheMain,
+  },
+  {
+    path: '/boards',
     name: 'BoardList',
     component: BoardList,
   },
