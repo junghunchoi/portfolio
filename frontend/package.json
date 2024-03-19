@@ -17,6 +17,7 @@
     "dayjs": "^1.11.10",
     "npm": "^10.4.0",
     "pinia": "^2.1.7",
+    "unplugin-vue-components": "^0.26.0",
     "vue": "^3.2.33",
     "vue-router": "^4.0.15"
   },

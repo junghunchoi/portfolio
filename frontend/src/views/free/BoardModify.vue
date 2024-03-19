@@ -13,7 +13,7 @@
               <input type="text" class="form-control" v-model="board.title">
             </div>
             <div class="input-group mb-3">
-              <span  class="input-group-text">카테고리</span>
+              <span class="input-group-text">카테고리</span>
               <select v-model="board.categoryObj.cno" class="form-control">
                 <option value="1">java</option>
                 <option value="2">javascript</option>
@@ -22,16 +22,13 @@
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Content</span>
-              <textarea class="form-control "  v-model="board.content"></textarea>
+              <textarea class="form-control " v-model="board.content"></textarea>
             </div>
 
             <div class="input-group mb-3">
               <span class="input-group-text">Writer</span>
               <input type="text" class="form-control" v-model="board.writer" readonly>
             </div>
-
-            <!-- 이미지 추가 및 기타 입력 필드 처리는 해당 비즈니스 로직에 따라 달라질 수 있습니다 -->
-
             <div class="input-group mb-3">
               <span class="input-group-text">RegDate</span>
               <input type="text" class="" :value="board.regDate" readonly>
@@ -40,24 +37,15 @@
               <span class="input-group-text">ModDate</span>
               <input type="text" class="" :value="board.modDate" readonly>
             </div>
-<!--            <div class="input-group mb-3">-->
-<!--              <span class="input-group-text">file</span>-->
-<!--              <input type="text" class="form-control" :value="board.modDate" readonly>-->
-<!--            </div>-->
-<!--            <div class="input-group mb-3">-->
-<!--              <span class="input-group-text">file</span>-->
-<!--              <input type="text" class="form-control" :value="board.modDate" readonly>-->
-<!--            </div>-->
-<!--            <div class="input-group mb-3">-->
-<!--              <span class="input-group-text">file</span>-->
-<!--              <input type="text" class="form-control" :value="board.modDate" readonly>-->
-<!--            </div>-->
-
             <div class="my-4">
               <div class="float-end">
                 <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
-                <button type="submit" class="btn btn-secondary" @click="openModal">Modify</button>
-                <button type="button" class="btn btn-danger" @click="clickRemoveHandler">Remove</button>
+                <button type="submit" class="btn btn-secondary" @click="openModal">
+                  Modify
+                </button>
+                <!--                <button type="submit" class="btn btn-secondary" @click="openModal">Modify</button>-->
+                <button type="button" class="btn btn-danger" @click="clickRemoveHandler">Remove
+                </button>
               </div>
             </div>
           </form>
@@ -65,18 +53,28 @@
       </div><!--end card-->
     </div><!-- end col-->
   </div><!-- end row-->
-  <div>
-    <TheModal ref="modalRef" @confirm="onConfirm">
-      <p>모달창입니다.</p>
-    </TheModal>
-  </div>
+  <Teleport to="#modal">
+    <CommonModal
+        v-model="show"
+        :title="'확인'"
+    >
+      <template #default>
+        정말로 수정하시겠습니까?
+      </template>
+     <template #actions>
+       <button class="btn btn-secondary" @click="updateDateAndGolist">열기</button>
+       <button class="btn btn-light" @click="closeModal">닫기</button>
+     </template>
+    </CommonModal>
+  </Teleport>
 </template>
 
 <script setup>
 import {ref} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board";
 import TheModal from "@/components/common/TheModal.vue";
+import CommonModal from "@/components/common/CommonModal.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -84,9 +82,10 @@ const router = useRouter();
 const bno = ref(route.params.bno);
 const modalRef = ref(null);
 
-function openModal() {
-  modalRef.value.openModal();
-}
+// function openModal() {
+//   modalRef.value.openModal();
+// }
+
 function onConfirm() {
   updateDateAndGolist();
 }
@@ -94,12 +93,12 @@ function onConfirm() {
 const board = ref({
   bno: '',
   title: '',
-  cno:'',
-  categoryObj:{
-    cno:'',
-    content:''
+  cno: '',
+  categoryObj: {
+    cno: '',
+    content: ''
   },
-  category:'',
+  category: '',
   content: '',
   writer: '',
   modDate: new Date(),
@@ -123,23 +122,33 @@ const goBoardPage = () => {
 };
 
 async function updateDateAndGolist() {
-  try{
+  try {
     await updateBoard({
       ...board.value,
     })
-    router.push({name: 'BoardRead', params:{bno : bno.value}});
-  }catch (e) {
+    router.push({name: 'BoardRead', params: {bno: bno.value}});
+  } catch (e) {
     console.log(e)
   }
 }
 
-
-const clickRemoveHandler = () =>{
+const clickRemoveHandler = () => {
   deleteAndGolist();
 }
 
 async function deleteAndGolist() {
   await deleteBoard(bno.value);
-  router.push({ name: 'BoardList'}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+  router.push({name: 'BoardList'}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+}
+
+// modal
+const show = ref(false);
+
+const openModal = () => {
+  show.value = true;
+};
+
+const closeModal = () =>{
+  show.value = false;
 }
 </script>
