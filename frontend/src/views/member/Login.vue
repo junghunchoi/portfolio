@@ -21,7 +21,7 @@
       </form>
     </div>
     <div v-else>
-      <form @submit.prevent="login()">
+      <form @submit.prevent>
         <div class="form-floating">
           <input v-model="user" type="text" class="form-control" placeholder="ID">
           <label for="floatingInput">ID</label>
@@ -31,7 +31,7 @@
                  placeholder="Password">
           <label for="floatingPassword">Password</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in
+        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit" @click="login">Sign in
         </button>
         <button class="w-100 btn btn-secondary" type="button" @click="goMemberRegister">
           회원가입

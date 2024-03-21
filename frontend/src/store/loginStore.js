@@ -8,14 +8,13 @@ export const useAuthStore = defineStore('auth', () => {
   const userId = ref('');
   const userName = ref(null);
   const password = ref(null);
+  const authorities = ref('USERS');
 
   async function login(username, password) {
     try {
-      const result = await axios.post('http://localhost:1541/api/login', {
-
+      const result = await axios.post('http://localhost:1541/generateToken', {
         username: username,
         password: password,
-
       });
 
       if (result.status === 200) {

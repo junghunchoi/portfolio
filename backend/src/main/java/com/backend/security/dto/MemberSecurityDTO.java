@@ -29,6 +29,8 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 	public MemberSecurityDTO(@JsonProperty("username") String username,
 		@JsonProperty("password") String password, String email, boolean del, boolean social,
 		Collection<? extends GrantedAuthority> authorities) {
+
+
 		super(username, password, authorities);
 
 		this.username = username;

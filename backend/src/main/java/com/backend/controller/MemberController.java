@@ -24,12 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
+//	@PostMapping("/login")
+//	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
+//
+//
+//		log.info("---- membercontroller login ----");
+//		log.info(memberSecurityDTO.toString());
+//		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
+//	}
+
 	@PostMapping("/login")
-	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
+	public ResponseEntity<ResultDTO> login(@RequestBody Object obj) {
 
 
 		log.info("---- membercontroller login ----");
-		log.info(memberSecurityDTO.toString());
+		log.info(obj.toString());
 		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
 	}
 }

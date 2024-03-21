@@ -121,13 +121,11 @@ const searchBoard = async (searchCondition) => {
                   dto.writer
                 }}
               </td>
-              <td>{{
-                  formatYYYYMMDD(dto.regDate)
-                }}
+              <td>
+                {{ $dayjs(dto.regDate).format('YYYY. MM. DD HH:mm:ss') }}
               </td>
-              <td>{{
-                  formatYYYYMMDD(dto.modDate)
-                }}
+              <td>
+                {{ dto(dto.modDate).format('YYYY. MM. DD HH:mm:ss') }}
               </td>
             </tr>
             </tbody>
