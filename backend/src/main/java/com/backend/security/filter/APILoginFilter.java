@@ -1,4 +1,4 @@
-package com.backend.config;
+package com.backend.security.filter;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -17,9 +17,10 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 @Log4j2
 public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	protected APILoginFilter(String defaultFilterProcessesUrl) {
+	public APILoginFilter(String defaultFilterProcessesUrl) {
 		super(defaultFilterProcessesUrl);
 	}
+
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,

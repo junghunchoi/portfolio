@@ -2,12 +2,15 @@ package com.backend.config;
 
 
 import com.backend.security.CustomUserDetailsService;
+import com.backend.security.filter.APILoginFilter;
+import com.backend.security.filter.RefreshTokenFilter;
+import com.backend.security.filter.TokenCheckFilter;
 import com.backend.security.handler.ApiLoginSuccessHandler;
 import com.backend.security.handler.Custom403Handler;
 //import com.backend.security.handler.CustomSocialLoginSuccessHandler;
+import com.backend.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -36,14 +38,15 @@ public class CustomSecurityConfig {
 
 	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
 	private final CustomUserDetailsService userDetailsService;
+	private final JWTUtil jwtUtil;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		log.info("---- security config ---");
 
-		AuthenticationManagerBuilder authenticationManagerBuilder =
-			http.getSharedObject(AuthenticationManagerBuilder.class);
+		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
+			AuthenticationManagerBuilder.class);
 
 		authenticationManagerBuilder.userDetailsService(userDetailsService)
 		                            .passwordEncoder(passwordEncoder());
@@ -58,18 +61,30 @@ public class CustomSecurityConfig {
 		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
 		//ApiLoginSuccessHandler
-		ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler();
+		ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
 		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
+
+		//api로 시작하는 모든 경로는 tokenfilterchain 동작
+		http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+		//refreshtoken 호출처리
+		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil), TokenCheckFilter.class);
+
+		/////////
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 
 		http.cors()
 		    .and()
-		    .csrf().disable()
-		    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		    .csrf()
+		    .disable()
+		    .sessionManagement()
+		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		    .and()
-		    .formLogin().disable()
-		    .httpBasic().disable()
+		    .formLogin()
+		    .disable()
+		    .httpBasic()
+		    .disable()
 		    .authorizeRequests()
 		    .antMatchers("/api/auth/**", "/api/login", "/oauth/**", "api/boards")
 		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
@@ -114,7 +129,9 @@ public class CustomSecurityConfig {
 		return new Custom403Handler();
 	}
 
-
+	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil) {
+		return new TokenCheckFilter(jwtUtil);
+	}
 
 //	@Bean
 //	public AuthenticationSuccessHandler authenticationSuccessHandler() {

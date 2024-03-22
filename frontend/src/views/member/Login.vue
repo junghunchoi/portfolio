@@ -1,29 +1,8 @@
 <template>
   <main class="form-signin w-100 m-auto">
-    <div v-if="loginError">
-      <h5>
-        <span class="badge text-bg-danger">
-          아이디 비밀번호를 확인해주세요.
-        </span>
-      </h5>
-      <form @submit.prevent="login()">
-        <div class="form-floating">
-          <input v-model="user" type="text" class="form-control" placeholder="ID">
-          <label for="floatingInput">ID</label>
-        </div>
-        <div class="form-floating">
-          <input v-model="password" type="password" class="form-control" id="password"
-                 placeholder="Password">
-          <label for="floatingPassword">Password</label>
-        </div>
-        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit">Sign in
-        </button>
-      </form>
-    </div>
-    <div v-else>
       <form @submit.prevent>
         <div class="form-floating">
-          <input v-model="user" type="text" class="form-control" placeholder="ID">
+          <input v-model="username" type="text" class="form-control" placeholder="ID">
           <label for="floatingInput">ID</label>
         </div>
         <div class="form-floating">
@@ -38,7 +17,6 @@
         </button>
       </form>
       <a href="/oauth2/authorization/kakao">KAKAO</a>
-    </div>
   </main>
 </template>
 
@@ -51,24 +29,19 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 
-const loginSuccess = ref(false);
-const loginError = ref(false);
-const user = ref('');
+const username = ref('');
 const password = ref('');
 const error = ref(false);
+const loginError  = ref(false);
 
 const login = async () =>{
   try {
-    await authStore.login(user.value, password.value);
-
-    await router.push({
-      name: '/',
-    });
+    await authStore.login(username.value, password.value);
+    await router.push('/');
 
   } catch (err) {
-    this.loginError = true
-    this.error = true
-    throw new Error(err)
+    loginError.value = true;
+    console.log(err);
   }
 }
 
