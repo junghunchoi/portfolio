@@ -65,7 +65,7 @@ public class CustomSecurityConfig {
 		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
 
 		//api로 시작하는 모든 경로는 tokenfilterchain 동작
-		http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
 		//refreshtoken 호출처리
 		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil), TokenCheckFilter.class);
@@ -86,7 +86,7 @@ public class CustomSecurityConfig {
 		    .httpBasic()
 		    .disable()
 		    .authorizeRequests()
-		    .antMatchers("/api/auth/**", "/api/login", "/oauth/**", "api/boards")
+		    .antMatchers("/swagger-ui/**", "/api/auth/**", "/api/login", "/oauth/**", "api/boards")
 		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
 		    .anyRequest()
 		    .authenticated(); // 그 외 모든 요청은 인증 필요
@@ -129,8 +129,8 @@ public class CustomSecurityConfig {
 		return new Custom403Handler();
 	}
 
-	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil) {
-		return new TokenCheckFilter(jwtUtil);
+	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+		return new TokenCheckFilter(userDetailsService, jwtUtil);
 	}
 
 //	@Bean

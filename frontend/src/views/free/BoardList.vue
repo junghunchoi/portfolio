@@ -1,19 +1,27 @@
 <script setup>
-import {computed, ref, watchEffect} from 'vue';
+import {computed, ref, watchEffect, reactive, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
-import {formatYYYYMMDD} from "@/common/dateUtils"
 
 defineProps({
   limit: Number,
 });
 
 const router = useRouter();
-const responseDTO = ref({});
+const response = reactive({
+  dtoList: [],
+  end: 0,
+  next: null,
+  page: 0,
+  prev: null,
+  size: 0,
+  start: 0,
+  total: 0
+});
 
-const pageRequestDTO = ref({
+const params = ref({
   _limit: 10, // 총 몇개 불러올건지 request header에 "x-total-count" 를 만들어준다.
   page: 1, // 현재 페이지
   size: null,
@@ -21,10 +29,10 @@ const pageRequestDTO = ref({
   keyword: null
 });
 
-const totalCount = ref(0);
+// const totalCount = ref(0);
 
 const pageCount = computed(() =>
-    Math.ceil(totalCount.value / params.value._limit)
+    Math.ceil(response.total / params.value._limit)
 );
 
 const goRegisterPage = () => {
@@ -33,10 +41,11 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-    console.log(pageRequestDTO.value);
-    const {data, headers} = await getBoards(pageRequestDTO.value);
-    responseDTO.value = data;
-    totalCount.value = headers["x-total-count"];
+
+    const {data, headers} = await getBoards(params.value);
+    Object.assign(response, data);
+    // totalCount.value = headers["x-total-count"];
+    // console.log(headers["x-total-count"]);
   } catch (e) {
     console.error(e);
   }
@@ -46,19 +55,18 @@ watchEffect(() => {
   fetchData();
 });
 
+
+
 const searchBoard = async (searchCondition) => {
   try{
-    console.log(pageRequestDTO);
-    pageRequestDTO.value.type = searchCondition.type;
-    pageRequestDTO.value.keyword = searchCondition.keyword;
+    params.value.type = searchCondition.type;
+    params.value.keyword = searchCondition.keyword;
 
-    const {data} = await getBoards(pageRequestDTO.value);
-    console.log(data)
+    const {data} = await getBoards(params.value);
   }catch (e) {
     console.log(e);
   }
 }
-
 </script>
 
 <template>
@@ -98,7 +106,7 @@ const searchBoard = async (searchCondition) => {
             </tr>
             </thead>
             <tbody>
-            <tr v-for="dto in responseDTO.dtoList">
+            <tr v-for="dto in response.dtoList">
               <td>{{
                   dto.category
                 }}
@@ -125,14 +133,14 @@ const searchBoard = async (searchCondition) => {
                 {{ $dayjs(dto.regDate).format('YYYY. MM. DD HH:mm:ss') }}
               </td>
               <td>
-                {{ dto(dto.modDate).format('YYYY. MM. DD HH:mm:ss') }}
+                {{ $dayjs(dto.modDate).format('YYYY. MM. DD HH:mm:ss') }}
               </td>
             </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <ThePagination/>
+      <ThePagination :current-page="response.page" :pageCount="pageCount" @page="page => (params.page = page)"/>
     </div>
   </div>
 

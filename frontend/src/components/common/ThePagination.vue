@@ -1,5 +1,5 @@
 <template>
-  <nav class="mt-5" aria-label="Page navigation example">
+  <nav class="mt-5" aria-label="Page navigation">
     <ul class="pagination justify-content-center">
       <li class="page-item" :class="isPrevPage">
         <a
@@ -49,6 +49,7 @@ const props = defineProps({
   },
 });
 defineEmits(["page"]);
+
 const isPrevPage = computed(() => ({ disabled: !(props.currentPage > 1) }));
 const isNextPage = computed(() => ({
   disabled: !(props.currentPage < props.pageCount),

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export function getBoards(params) {
-    return axios.get('http://localhost:1541/api/boards',{params:params});
+    return axios.get('http://localhost:1541/api/boards',{params:params},{headers:{
+        Authorization:`${localStorage.getItem('accessToken')}`
+        }});
 }
 
 export function getBoardBybno(bno) {

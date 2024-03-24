@@ -52,4 +52,5 @@ public class SwaggerConfig {
 		return List.of(
 			new SecurityReference("Authorization", new AuthorizationScope[]{authorizationScope}));
 	}
+
 }

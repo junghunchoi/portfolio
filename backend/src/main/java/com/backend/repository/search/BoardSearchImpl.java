@@ -76,7 +76,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch();
 
-		log.info(dtoList);
+
 		long count = dtoQuery.fetchCount();
 
 		return new PageImpl<>(dtoList, pageable, count);
