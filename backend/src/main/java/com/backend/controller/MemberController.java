@@ -2,9 +2,12 @@ package com.backend.controller;
 
 import com.backend.dto.ResultDTO;
 import com.backend.dto.member.MemberJoinDTO;
+import com.backend.entity.Member;
+import com.backend.repository.MemberRepository;
 import com.backend.security.dto.MemberSecurityDTO;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -24,21 +27,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-//	@PostMapping("/login")
-//	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
-//
-//
-//		log.info("---- membercontroller login ----");
-//		log.info(memberSecurityDTO.toString());
-//		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
-//	}
+	private final MemberRepository memberRepository;
 
 	@PostMapping("/login")
-	public ResponseEntity<ResultDTO> login(@RequestBody Object obj) {
-
+	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
 
 		log.info("---- membercontroller login ----");
-		log.info(obj.toString());
 		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
+	}
+
+	@PostMapping("/member")
+	public ResponseEntity<ResultDTO> registerMember(@RequestBody MemberSecurityDTO memberSecurityDTO){
+		log.info("memberController - registerMember");
+
+		String userName = memberSecurityDTO.getUsername();
+
+		Optional<Member> member = memberRepository.findById(userName);
+
+		if (member.isEmpty()) {
+			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "validate userName"));
+		} else {
+			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "isn't validate userName"));
+		}
+	}
+
+	@PostMapping("/member")
+	public ResponseEntity<ResultDTO> checkUserName(@RequestBody MemberSecurityDTO memberSecurityDTO){
+		log.info("memberController - checkUserName");
+
+		String userName = memberSecurityDTO.getUsername();
+
+		Optional<Member> member = memberRepository.findById(userName);
+
+		if (member.isEmpty()) {
+			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "validate userName"));
+		} else {
+			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "isn't validate userName"));
+		}
 	}
 }

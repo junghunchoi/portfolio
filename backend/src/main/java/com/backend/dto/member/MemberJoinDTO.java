@@ -13,6 +13,7 @@ public class MemberJoinDTO {
 	private String username;
 	private String password;
 	private String email;
+	private String userRealName;
 	private boolean del;
 	private boolean social;
 

@@ -43,6 +43,9 @@ export const useAuthStore = defineStore('auth', () => {
     loginError.value = false;
     userName.value = null;
     password.value = null;
+
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   }
 
   const checkAccessToken = async () => {

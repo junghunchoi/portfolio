@@ -9,8 +9,8 @@
           <form @submit.prevent="submitForm">
             <div class="input-group mb-3">
               <span class="input-group-text">아이디</span>
-              <input v-model="form.userId" type="text" name="mid" class="form-control">
-              <button class="w-25 btn-check btn-danger" @click="checkValidateId">중복확인</button>
+              <input v-model="form.userName" type="text" name="mid" class="form-control">
+              <button class="btn btn-check btn-danger" @click="checkValidateId">중복확인</button>
             </div>
 
             <div class="input-group mb-3">
@@ -23,7 +23,7 @@
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">이름</span>
-              <input v-model="form.userName" type="password" name="mpw" class="form-control">
+              <input v-model="form.userRealName" type="password" name="mpw" class="form-control">
             </div>
 
             <div class="input-group mb-3">
@@ -52,6 +52,7 @@ const form = reactive({
   userId: '',
   password: '',
   userName: '',
+  userRealName:'',
   email: '',
 });
 
@@ -62,9 +63,6 @@ const submitForm = () => {
   if(checkPassword !== '') {
     return checkPassword;
   }
-
-
-  console.log(form.value);
 };
 
 
@@ -76,13 +74,12 @@ const resetForm = () => {
   };
 };
 
-const checkValidateId = async (userId) =>{
-  const res = await  axios.post(`http://localhost:1541/api/members/check`, userId);
+const checkValidateId = async (userName) =>{
+  const res = await  axios.post(`http://localhost:1541/api/members/check`, userName);
 
   if (res.status !== 200) {
     return '중복된 아이디입니다.';
   }
-
 }
 
 

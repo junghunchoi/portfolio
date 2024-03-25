@@ -139,8 +139,11 @@ const searchBoard = async (searchCondition) => {
             </tbody>
           </table>
         </div>
-      </div>
-      <ThePagination :current-page="response.page" :pageCount="pageCount" @page="page => (params.page = page)"/>
+      </div >
+      <ThePagination :current-page="response.page"
+                     :pageCount="pageCount"
+                     @page="page => (params.page = page)"
+      class="flex-md-grow-0"/>
     </div>
   </div>
 
