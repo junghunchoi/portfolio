@@ -90,6 +90,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(
 		PageRequestDTO pageRequestDTO) {
+		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
 		Pageable pageable = pageRequestDTO.getPageable("bno");

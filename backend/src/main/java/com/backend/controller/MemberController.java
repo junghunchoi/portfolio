@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final MemberRepository memberRepository;
 
 	@PostMapping("/login")
 	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
@@ -39,18 +38,24 @@ public class MemberController {
 		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
 	}
 
-	@PostMapping(value="/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultDTO> registerMember(@RequestBody MemberJoinDTO memberSecurityDTO){
+	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultDTO> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
 		log.info("memberController - registerMember");
-		log.info(memberSecurityDTO);
+		log.info(memberJoinDTO);
+		try {
+			memberService.register(memberJoinDTO);
+			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "member register success"));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(ResultDTO.res(HttpStatus.BAD_REQUEST, e.getMessage()));
+		}
 
-		memberService.register(memberSecurityDTO);
 
-		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "member register success"));
+
+
 	}
 
 	@PostMapping("/check")
-	public ResponseEntity<ResultDTO> checkUserName(@RequestBody String userName){
+	public ResponseEntity<ResultDTO> checkUserName(@RequestBody String userName) {
 		log.info("memberController - checkUserName");
 		log.info(userName);
 		Optional<Member> member = memberService.readOne(userName);
@@ -58,7 +63,8 @@ public class MemberController {
 		if (member.isEmpty()) {
 			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "validate userName"));
 		} else {
-			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "isn't validate userName"));
+			return ResponseEntity.ok()
+			                     .body(ResultDTO.res(HttpStatus.OK, "isn't validate userName"));
 		}
 	}
 }

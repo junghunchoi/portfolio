@@ -38,7 +38,7 @@
           <div class="my-4">
             <div class="float-end">
               <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
-              <button type="button" class="btn btn-secondary" @click="modifyBoard">Modify</button>
+              <button v-if="board.writer === userName" type="button" class="btn btn-secondary" @click="modifyBoard">Modify</button>
             </div>
           </div>
         </div>

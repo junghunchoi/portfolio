@@ -40,19 +40,20 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		if( (types != null && types.length > 0) && keyword != null ){
 
-			BooleanBuilder booleanBuilder = new BooleanBuilder(); 
+			BooleanBuilder booleanBuilder = new BooleanBuilder();
+			String convertString = '%' + keyword + '%';
 
 			for(String type: types){
 
 				switch (type){
 					case "t":
-						booleanBuilder.or(board.title.contains(keyword));
+						booleanBuilder.or(board.title.contains(convertString));
 						break;
 					case "c":
-						booleanBuilder.or(board.content.contains(keyword));
+						booleanBuilder.or(board.content.contains(convertString));
 						break;
 					case "w":
-						booleanBuilder.or(board.writer.contains(keyword));
+						booleanBuilder.or(board.writer.contains(convertString));
 						break;
 				}
 			}//end for

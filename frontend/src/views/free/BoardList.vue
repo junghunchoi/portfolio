@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref, watchEffect, reactive, onMounted} from 'vue';
+import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
@@ -22,18 +22,17 @@ const response = reactive({
   total: 0
 });
 
-const params = ref({
-  _limit: 10, // 총 몇개 불러올건지 request header에 "x-total-count" 를 만들어준다.
+const params = reactive({
+  _order:"regDate",
+  _sort:"desc",
   page: 1, // 현재 페이지
   size: null,
   type: null,
   keyword: null
 });
 
-// const totalCount = ref(0);
-
 const pageCount = computed(() =>
-    Math.ceil(response.total / params.value._limit)
+    Math.ceil(response.total / params.size)
 );
 
 const goRegisterPage = () => {
@@ -43,7 +42,7 @@ const goRegisterPage = () => {
 const fetchData = async () => {
   try {
 
-    const {data, headers} = await getBoards(params.value);
+    const {data} = await getBoards(params);
     Object.assign(response, data);
     // totalCount.value = headers["x-total-count"];
     // console.log(headers["x-total-count"]);
@@ -52,45 +51,51 @@ const fetchData = async () => {
   }
 };
 
-watchEffect(() => {
-  fetchData();
-});
+fetchData();
 
+watch( params, async (newVal, oldVal)=>{
+  await fetchData(params)
+})
 
 
 const searchBoard = async (searchCondition) => {
   try{
-    params.value.type = searchCondition.type;
-    params.value.keyword = searchCondition.keyword;
+    params.type = searchCondition.type;
+    params.keyword = searchCondition.keyword;
 
-    const {data} = await getBoards(params.value);
+    const {data} = await getBoards(params);
   }catch (e) {
     console.log(e);
   }
 }
+
+const handleUpdateSize = (value) => {
+  params.size = value;
+}
+
+const handleUpdateOrder = (value) => {
+  params._order = value;
+}
+
+const handleUpdateSort = (value) => {
+  params._sort = value;
+}
+
 </script>
 
 <template>
   <div class="row mt-3">
     <BoardFilter
-        @search="searchBoard"/>
+        @search="searchBoard"
+        @update:size="handleUpdateSize"
+        @update:order="handleUpdateOrder"
+        @update:sort="handleUpdateSort"
+    />
   </div>
 
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-<!--        <div class="col-3 ">-->
-<!--          <select-->
-<!--              :value="limit"-->
-<!--              @input="$emit('update:limit', $event.target.value)"-->
-<!--              class="form-select"-->
-<!--          >-->
-<!--            <option value="10">10개씩 보기</option>-->
-<!--            <option value="25">25개씩 보기</option>-->
-<!--            <option value="50">50개씩 보기</option>-->
-<!--          </select>-->
-
-<!--        </div>-->
         <div class="card-header"></div>
         <div class="card-body">
           <h5 class="card-title">게시물</h5>

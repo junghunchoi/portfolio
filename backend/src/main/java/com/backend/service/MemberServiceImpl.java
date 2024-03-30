@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public Long register(MemberJoinDTO memberJoinDTO) {
 		Member member = Member.builder()
-		                      .username(memberJoinDTO.getUsername())
+		                      .username(memberJoinDTO.getUserName())
 		                      .password(passwordEncoder.encode(memberJoinDTO.getPassword()))
 		                      .email(memberJoinDTO.getEmail())
 		                      .userRealName(memberJoinDTO.getUserRealName())

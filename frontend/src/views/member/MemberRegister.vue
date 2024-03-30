@@ -67,7 +67,6 @@ const memberInform = reactive({
 const registerMemberHandler = async () => {
   const checkPassword = validatePassword(memberInform.password);
 
-  console.log(isValidateUserName.value)
   if (!isValidateUserName.value) {
     vAlert("아이디를 중복확인해주세요.");
     return;
@@ -77,9 +76,7 @@ const registerMemberHandler = async () => {
     return;
   }
 
-  console.log(memberInform)
   const res = await registerMember(memberInform);
-  console.log(res)
   if (res.status === 200) {
     await router.push('/');
   } else {
@@ -96,11 +93,9 @@ const checkValidateId = async () => {
       vAlert("사용가능합니다", "success")
       isValidateUserName.value = true;
     } else {
-      // 중복된 아이디가 있을 경우 에러 메시지 설정
       vAlert("중복된 아이디입니다.")
     }
   } catch (error) {
-    // API 호출 실패 시 에러 처리
     vAlert("중복 확인 중 오류가 발생했습니다.")
   }
 };
