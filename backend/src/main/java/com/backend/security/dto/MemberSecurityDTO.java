@@ -21,23 +21,23 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 	private String username;
 	private String password;
 	private String email;
-	private boolean del = false;
-	private boolean social = false;
+	private String userRealName;
+//	private boolean del = false;
+//	private boolean social = false;
 
 	private Map<String, Object> props;
 
 	public MemberSecurityDTO(@JsonProperty("username") String username,
-		@JsonProperty("password") String password, String email, boolean del, boolean social,
+		@JsonProperty("password") String password, String email,
 		Collection<? extends GrantedAuthority> authorities) {
-
 
 		super(username, password, authorities);
 
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.del = del;
-		this.social = social;
+//		this.del = del;
+//		this.social = social;
 	}
 
 

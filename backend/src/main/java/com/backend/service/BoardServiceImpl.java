@@ -33,14 +33,10 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Long register(BoardDTO boardDTO) {
 		try {
-
 			Optional<Category> categoryResult = categoryRepository.findById(
 				boardDTO.getCategory().getCno());
 			Category category = categoryResult.orElseThrow();
 			boardDTO.setCategory(category);
-
-			throw new BusinessExceptionHandler(ErrorCode.INSERT_ERROR.getMessage(),
-				ErrorCode.INSERT_ERROR);
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -80,7 +76,7 @@ public class BoardServiceImpl implements BoardService {
 
 		Board board = result.orElseThrow();
 
-		board.change(boardDTO.getTitle(), boardDTO.getContent(),boardDTO.getCategory());
+		board.change(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
 
 		boardRepository.save(board);
 	}

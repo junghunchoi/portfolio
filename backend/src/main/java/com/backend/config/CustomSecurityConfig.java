@@ -72,8 +72,6 @@ public class CustomSecurityConfig {
 
 		/////////
 
-		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
-
 		http.cors()
 		    .and()
 		    .csrf()
@@ -86,10 +84,12 @@ public class CustomSecurityConfig {
 		    .httpBasic()
 		    .disable()
 		    .authorizeRequests()
-		    .antMatchers("/swagger-ui/**", "/api/auth/**", "/api/login", "/oauth/**", "api/boards")
+		    .antMatchers( "/api/**","/api/auth/**", "/api/members/**", "/oauth/**", "/api/boards/**")
 		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
 		    .anyRequest()
 		    .authenticated(); // 그 외 모든 요청은 인증 필요
+
+		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 
 //		http.oauth2Login()
 //		    .loginPage("/member/login")

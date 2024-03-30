@@ -18,7 +18,7 @@
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
 							<RouterLink class="nav-link" active-class="active" to="/boards">
-								게시글
+								공지
 							</RouterLink>
             </li>
             <li class="nav-item">
@@ -57,7 +57,6 @@
 import { useRouter } from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import { storeToRefs } from 'pinia'
-
 const authStore = useAuthStore();
 const { userName, loginSuccess} = storeToRefs(authStore);
 

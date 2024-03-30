@@ -33,7 +33,7 @@ public class BoardController {
 	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
@@ -63,7 +63,7 @@ public class BoardController {
 			return ResponseEntity.badRequest().body("wrong parameter");
 		}
 
-		Long bno = boardService.register(boardDTO);
+		boardService.register(boardDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Insert Board SuccessFully"));
 	}

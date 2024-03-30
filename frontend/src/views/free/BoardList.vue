@@ -5,6 +5,7 @@ import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
 
+
 defineProps({
   limit: Number,
 });
@@ -120,13 +121,13 @@ const searchBoard = async (searchCondition) => {
                     dto.viewCount
                   }}</span>
               </td>
+              <td>{{
+                  dto.writer
+                }}
+              </td>
               <td>
                 {{
                   dto.viewCount
-                }}
-              </td>
-              <td>{{
-                  dto.writer
                 }}
               </td>
               <td>
