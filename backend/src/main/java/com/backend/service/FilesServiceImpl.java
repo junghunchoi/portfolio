@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.dto.file.FileDTO;
 import com.backend.entity.File;
 import com.backend.entity.QBoard;
 //import com.backend.entity.QFiles;
@@ -40,7 +41,7 @@ public class FilesServiceImpl implements FilesService{
 	}
 
 	@Override
-	public String registerFiles(List<MultipartFile> files) {
+	public String registerFiles(MultipartFile files) {
 
 //		for (MultipartFile file : files) {
 //
@@ -52,6 +53,11 @@ public class FilesServiceImpl implements FilesService{
 //			filesRepository.save(fileEntity);
 //		}
 
+		return null;
+	}
+
+	@Override
+	public String uploadFiles(FileDTO fileDTO) {
 		return null;
 	}
 }

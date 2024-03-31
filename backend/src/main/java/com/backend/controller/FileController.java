@@ -43,6 +43,8 @@ public class FileController {
 	@Value("${com.backend.upload.path}")
 	private String uploadPath;
 
+	private final FilesService filesService;
+
 	/**
 	 * MultipartFile 리스트를 받아 파일을 저장하고, 저장 결과를 반환합니다.
 	 *
@@ -69,6 +71,7 @@ public class FileController {
 
 				try {
 					multipartFile.transferTo(savePath);
+					filesService.registerFiles(multipartFile);
 
 					//이미지 파일의 종류라면
 					if (Files.probeContentType(savePath).startsWith("image")) {
