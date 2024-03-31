@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.validation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
@@ -234,6 +235,11 @@ public class CustomRestAdvice {
 
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR, ex.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("파일 사이즈가 너무 큽니다.");
 	}
 
 	// ==================================================================================================================

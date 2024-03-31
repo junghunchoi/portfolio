@@ -6,7 +6,7 @@
         <div class="card-body">
           <div class="input-group mb-3">
             <span class="input-group-text">제목</span>
-            <input type="text" class="form-control" :value="board.bno" readonly>
+            <input type="text" class="form-control" :value="board.title" readonly>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">내용</span>

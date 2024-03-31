@@ -10,7 +10,8 @@
             type="text"
             class="form-control"
             id="writer"
-        />
+            readonly
+        >
       </div>
       <div class="mb-3">
         <label for="title" class="form-label">제목</label>
@@ -72,6 +73,11 @@ import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {createBoard} from '@/api/board';
 import {uploadFile} from "@/api/file";
+import {useAuthStore} from "@/store/loginStore.js";
+import {storeToRefs} from 'pinia'
+
+const authStore = useAuthStore();
+const {userName} = storeToRefs(authStore);
 
 const router = useRouter();
 const form = ref({
@@ -79,18 +85,19 @@ const form = ref({
   category:{cno: null, content: null},
   content: null,
   cno: null,
-  writer: null
+  writer: userName
 });
-
 const files = ref([null, null, null]);
 const formData = new FormData();
 
 const save = async () => {
   try {
-    console.log(form.value);
-    await createBoard({
+
+    const boardRes = await createBoard({
       ...form.value,
     });
+
+
     await uploadFile(formData);
 
     router.push({name: 'BoardList'});

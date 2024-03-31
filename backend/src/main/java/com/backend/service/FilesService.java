@@ -11,5 +11,5 @@ public interface FilesService {
 
 	List<File> getFilesListByBno(Long bno);
 
-	String saveFiles(List<MultipartFile> files);
+	String registerFiles(List<MultipartFile> files);
 }

@@ -52,6 +52,9 @@ public class FileController {
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public List<FileResultDTO> upload(FileDTO fileDTO) {
+		log.info("FileController upload ....");
+		log.info(fileDTO);
+
 		if (fileDTO.getFiles() != null) {
 
 			final List<FileResultDTO> list = new ArrayList<>();
@@ -78,8 +81,7 @@ public class FileController {
 					e.printStackTrace();
 				}
 
-				list.add(
-					FileResultDTO.builder().uuid(uuid).fileName(originalName).img(image).build());
+				list.add(FileResultDTO.builder().uuid(uuid).fileName(originalName).img(image).build());
 			});
 			return list;
 		}

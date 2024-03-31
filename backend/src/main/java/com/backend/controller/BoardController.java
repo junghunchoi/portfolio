@@ -63,9 +63,10 @@ public class BoardController {
 			return ResponseEntity.badRequest().body("wrong parameter");
 		}
 
-		boardService.register(boardDTO);
+		Long bno = boardService.register(boardDTO);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Insert Board SuccessFully"));
+
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), bno));
 	}
 
 	/**
