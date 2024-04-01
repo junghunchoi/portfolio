@@ -1,7 +1,7 @@
 package com.backend.service;
 
 import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
@@ -22,7 +22,7 @@ public interface BoardService {
 	 * @param pageRequestDTO
 	 * @return PageResponseDTO
 	 */
-	PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO);
+	PageResponseDTO<BoardListDTO> listWithReplyCount(PageRequestDTO pageRequestDTO);
 
 
 	/**

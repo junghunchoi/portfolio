@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.dto.file.FileDTO;
+import com.backend.dto.file.FileResultDTO;
 import com.backend.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ public interface FilesService {
 
 	List<File> getFilesListByBno(Long bno);
 
-	String registerFiles(MultipartFile file);
+	String registerFiles(FileDTO fileDTO);
 
-	String uploadFiles(FileDTO fileDTO);
+	List<FileResultDTO> uploadFiles(FileDTO fileDTO);
 }

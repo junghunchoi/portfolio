@@ -37,7 +37,7 @@ public class Board extends BaseEntity {
 	@JoinColumn(name = "cno")
 	private Category category;
 
-	private int viewCount;
+	private long viewCount;
 
 	@OneToMany(mappedBy = "board", cascade = {
 		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -63,7 +63,7 @@ public class Board extends BaseEntity {
 	 *
 	 * @param viewCount
 	 */
-	public void updateViewCount(int viewCount) {
+	public void updateViewCount(long viewCount) {
 		this.viewCount = viewCount;
 	}
 

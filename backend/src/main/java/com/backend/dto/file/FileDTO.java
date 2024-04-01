@@ -1,5 +1,6 @@
 package com.backend.dto.file;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +17,17 @@ public class FileDTO {
 
 	private List<MultipartFile> files;
 
-	private String uuid;
+	private Long bno;
 
 	private String fileName;
+
+	private String uploadedFileName;
+
+	private String fileType;
+
+	private long fileSize;
+
+	private String filePath;
 
 //	private boolean img;
 

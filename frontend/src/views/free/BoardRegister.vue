@@ -90,20 +90,24 @@ const form = ref({
 const files = ref([null, null, null]);
 const formData = new FormData();
 
-const save = async () => {
-  try {
+const save = () => {
+  createBoard({
+    ...form.value,
+  })
+  .then(res => {
+    formData.append('bno', Number(res.data.resultData));
 
-    const boardRes = await createBoard({
-      ...form.value,
+    uploadFile(formData)
+    .then(() => {
+      router.push({name: 'BoardList'});
+    })
+    .catch(error => {
+      console.error(error);
     });
-
-
-    await uploadFile(formData);
-
-    router.push({name: 'BoardList'});
-  } catch (error) {
+  })
+  .catch(error => {
     console.error(error);
-  }
+  });
 };
 
 const goBoardPage = () => {

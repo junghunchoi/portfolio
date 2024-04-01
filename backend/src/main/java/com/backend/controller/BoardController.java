@@ -2,7 +2,7 @@ package com.backend.controller;
 
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.service.BoardService;
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +39,7 @@ public class BoardController {
 	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
 
-		PageResponseDTO<BoardListReplyCountDTO> responseDTO =
+		PageResponseDTO<BoardListDTO> responseDTO =
 			boardService.listWithReplyCount(pageRequestDTO);
 
 		return ResponseEntity.ok(responseDTO);
@@ -56,11 +56,11 @@ public class BoardController {
 	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
-	public ResponseEntity<?> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult) {
+	public ResponseEntity<ResultDTO> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult)
+		throws BindException {
 		log.info(" --- board register --- ");
 		if (bindingResult.hasErrors()) {
-			log.info("게시물 등록 에러...");
-			return ResponseEntity.badRequest().body("wrong parameter");
+			throw new BindException(bindingResult);
 		}
 
 		Long bno = boardService.register(boardDTO);

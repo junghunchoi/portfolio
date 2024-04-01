@@ -1,9 +1,11 @@
 package com.backend.controller;
 
+import com.backend.dto.ResultDTO;
 import com.backend.dto.file.FileDTO;
 import com.backend.dto.file.FileResultDTO;
 import com.backend.service.FilesService;
 import io.swagger.annotations.ApiOperation;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,42 +56,17 @@ public class FileController {
 	 */
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<FileResultDTO> upload(FileDTO fileDTO) {
+	public ResponseEntity<ResultDTO> upload(FileDTO fileDTO) {
 		log.info("FileController upload ....");
 		log.info(fileDTO);
 
 		if (fileDTO.getFiles() != null) {
+			filesService.uploadFiles(fileDTO);
 
-			final List<FileResultDTO> list = new ArrayList<>();
-
-			fileDTO.getFiles().forEach(multipartFile -> {
-				String originalName = multipartFile.getOriginalFilename();
-				log.info(originalName);
-
-				String uuid = UUID.randomUUID().toString();
-				Path savePath = Paths.get(uploadPath, uuid + "_" + originalName);
-				boolean image = false;
-
-				try {
-					multipartFile.transferTo(savePath);
-					filesService.registerFiles(multipartFile);
-
-					//이미지 파일의 종류라면
-					if (Files.probeContentType(savePath).startsWith("image")) {
-						image = true;
-						File thumbFile = new File(uploadPath, "s_" + uuid + "_" + originalName);
-						Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
-					}
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				list.add(FileResultDTO.builder().uuid(uuid).fileName(originalName).img(image).build());
-			});
-			return list;
+			return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "upload Success"));
 		}
-		return null;
+
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "skip this api"));
 	}
 
 	/**

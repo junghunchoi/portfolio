@@ -1,13 +1,11 @@
 package com.backend.service;
 
-import com.backend.common.codes.ErrorCode;
 import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Category;
-import com.backend.exception.BusinessExceptionHandler;
 import com.backend.repository.BoardRepository;
 import com.backend.repository.CategoryRepository;
 import java.util.List;
@@ -88,16 +86,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(
+	public PageResponseDTO<BoardListDTO> listWithReplyCount(
 		PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
 		Pageable pageable = pageRequestDTO.getPageable("bno");
 
-		Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types, keyword,
+		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,
 			pageable);
-		return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+		return PageResponseDTO.<BoardListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)
 		                      .dtoList(result.getContent())
 		                      .total((int) result.getTotalElements())

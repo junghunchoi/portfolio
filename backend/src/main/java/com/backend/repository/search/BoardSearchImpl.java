@@ -1,9 +1,10 @@
 package com.backend.repository.search;
 
-import com.backend.dto.board.BoardListReplyCountDTO;
+import com.backend.dto.board.BoardListDTO;
 import com.backend.entity.Board;
 import com.backend.entity.QBoard;
 import com.backend.entity.QCategory;
+import com.backend.entity.QFile;
 import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -26,15 +27,17 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 	}
 
 	@Override
-	public Page<BoardListReplyCountDTO> searchWithReplyCount(String[] types, String keyword, Pageable pageable) {
+	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword, Pageable pageable) {
 
 		QBoard board = QBoard.board;
 		QReply reply = QReply.reply;
+		QFile file = QFile.file;
 		QCategory category = QCategory.category;
 
 		JPQLQuery<Board> query = from(board);
 		query.leftJoin(board.category, category);
 		query.leftJoin(reply).on(reply.board.eq(board));
+		query.leftJoin(file).on(file.board.eq(board));
 
 		query.groupBy(board);
 
@@ -63,19 +66,23 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		//bno > 0
 		query.where(board.bno.gt(0L));
 
-		JPQLQuery<BoardListReplyCountDTO> dtoQuery = query.select(Projections.bean(BoardListReplyCountDTO.class,
+		JPQLQuery<BoardListDTO> dtoQuery = query.select(Projections.bean(BoardListDTO.class,
 				board.bno,
 				category.content.as("category"),
 				board.title,
 				board.writer,
+				board.viewCount,
 				board.regDate,
 				board.modDate,
-				reply.count().as("viewCount")
+				reply.count().as("replyCount"),
+				file.count().as("fileCount")
 		));
+
+		log.info(dtoQuery);
 
 		this.getQuerydsl().applyPagination(pageable,dtoQuery);
 
-		List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch();
+		List<BoardListDTO> dtoList = dtoQuery.fetch();
 
 
 		long count = dtoQuery.fetchCount();

@@ -1,88 +1,3 @@
-<script setup>
-import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
-import {useRouter} from 'vue-router';
-import {getBoards} from "@/api/board";
-import ThePagination from "@/components/common/ThePagination.vue";
-import BoardFilter from "@/components/board/BoardFilter.vue";
-
-
-defineProps({
-  limit: Number,
-});
-
-const router = useRouter();
-const response = reactive({
-  dtoList: [],
-  end: 0,
-  next: null,
-  page: 0,
-  prev: null,
-  size: 0,
-  start: 0,
-  total: 0
-});
-
-const params = reactive({
-  _order:"regDate",
-  _sort:"desc",
-  page: 1, // 현재 페이지
-  size: null,
-  type: null,
-  keyword: null
-});
-
-const pageCount = computed(() =>
-    Math.ceil(response.total / params.size)
-);
-
-const goRegisterPage = () => {
-  router.push('/boards/register');
-};
-
-const fetchData = async () => {
-  try {
-
-    const {data} = await getBoards(params);
-    Object.assign(response, data);
-    // totalCount.value = headers["x-total-count"];
-    // console.log(headers["x-total-count"]);
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-fetchData();
-
-watch( params, async (newVal, oldVal)=>{
-  await fetchData(params)
-})
-
-
-const searchBoard = async (searchCondition) => {
-  try{
-    params.type = searchCondition.type;
-    params.keyword = searchCondition.keyword;
-
-    const {data} = await getBoards(params);
-  }catch (e) {
-    console.log(e);
-  }
-}
-
-const handleUpdateSize = (value) => {
-  params.size = value;
-}
-
-const handleUpdateOrder = (value) => {
-  params._order = value;
-}
-
-const handleUpdateSort = (value) => {
-  params._sort = value;
-}
-
-</script>
-
 <template>
   <div class="row mt-3">
     <BoardFilter
@@ -155,7 +70,89 @@ const handleUpdateSort = (value) => {
 
 
 </template>
+<script setup>
+import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
+import {useRouter} from 'vue-router';
+import {getBoards} from "@/api/board";
+import ThePagination from "@/components/common/ThePagination.vue";
+import BoardFilter from "@/components/board/BoardFilter.vue";
 
+
+defineProps({
+  limit: Number,
+});
+
+const router = useRouter();
+const response = reactive({
+  dtoList: [],
+  end: 0,
+  next: null,
+  page: 0,
+  prev: null,
+  size: 0,
+  start: 0,
+  total: 0
+});
+
+const params = reactive({
+  _order:"regDate",
+  _sort:"desc",
+  page: 1, // 현재 페이지
+  size: null,
+  type: null,
+  keyword: null
+});
+
+const pageCount = computed(() =>
+    Math.ceil(response.total / params.size)
+);
+
+const goRegisterPage = () => {
+  router.push('/boards/register');
+};
+
+const fetchData = async () => {
+  try {
+
+    const {data} = await getBoards(params);
+    Object.assign(response, data);
+    console.log(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+fetchData();
+
+watch( params, async (newVal, oldVal)=>{
+  await fetchData(params)
+})
+
+
+const searchBoard = async (searchCondition) => {
+  try{
+    params.type = searchCondition.type;
+    params.keyword = searchCondition.keyword;
+
+    const {data} = await getBoards(params);
+  }catch (e) {
+    console.log(e);
+  }
+}
+
+const handleUpdateSize = (value) => {
+  params.size = value;
+}
+
+const handleUpdateOrder = (value) => {
+  params._order = value;
+}
+
+const handleUpdateSort = (value) => {
+  params._sort = value;
+}
+
+</script>
 
 <style scoped>
 
