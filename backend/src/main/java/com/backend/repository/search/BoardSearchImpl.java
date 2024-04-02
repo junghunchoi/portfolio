@@ -27,7 +27,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 	}
 
 	@Override
-	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword, Pageable pageable) {
+	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,String sort, String order, Pageable pageable) {
 
 		QBoard board = QBoard.board;
 		QReply reply = QReply.reply;
@@ -66,6 +66,26 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		//bno > 0
 		query.where(board.bno.gt(0L));
 
+		if (sort == "asc") {
+			switch (order) {
+				case "regDate":
+					query.orderBy(board.regDate.asc());
+				case "title":
+					query.orderBy(board.title.asc());
+				case "viewCount":
+					query.orderBy(board.viewCount.asc());
+			}
+		}else{
+			switch (order) {
+				case "regDate":
+					query.orderBy(board.regDate.desc());
+				case "title":
+					query.orderBy(board.title.desc());
+				case "viewCount":
+					query.orderBy(board.viewCount.desc());
+			}
+		}
+
 		JPQLQuery<BoardListDTO> dtoQuery = query.select(Projections.bean(BoardListDTO.class,
 				board.bno,
 				category.content.as("category"),
@@ -77,8 +97,6 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 				reply.count().as("replyCount"),
 				file.count().as("fileCount")
 		));
-
-		log.info(dtoQuery);
 
 		this.getQuerydsl().applyPagination(pageable,dtoQuery);
 

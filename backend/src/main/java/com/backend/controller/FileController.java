@@ -4,6 +4,7 @@ import com.backend.dto.ResultDTO;
 import com.backend.dto.file.FileDTO;
 import com.backend.dto.file.FileResultDTO;
 import com.backend.service.FilesService;
+import com.backend.utils.FileUtils;
 import io.swagger.annotations.ApiOperation;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class FileController {
 	private String uploadPath;
 
 	private final FilesService filesService;
+	private final FileUtils fileUtils;
 
 	/**
 	 * MultipartFile 리스트를 받아 파일을 저장하고, 저장 결과를 반환합니다.
@@ -67,6 +69,31 @@ public class FileController {
 		}
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "skip this api"));
+	}
+
+	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
+	@PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?>  download(@RequestBody FileDTO fileDTO) {
+		log.info("FileController download ....");
+		log.info(fileDTO);
+		String contentType = "application/octet-stream";
+
+		String uploadFileName = filesService.uploadFileNameByBnoAndOriginalFileName(fileDTO);
+		Resource resource = fileUtils.readFileAsResource(uploadFileName);
+
+					return ResponseEntity.ok()
+			                     .contentType(MediaType.parseMediaType(contentType))
+			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+			                     .body(resource);
+//		if(resource.exists() && resource.isReadable()) {
+//
+//			return ResponseEntity.ok()
+//			                     .contentType(MediaType.parseMediaType(contentType))
+//			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//			                     .body(resource);
+//		}else{
+//			return ResponseEntity.ok().body("file not exists");
+//		}
 	}
 
 	/**

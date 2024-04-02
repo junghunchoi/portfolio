@@ -6,6 +6,7 @@ import com.backend.entity.Member;
 import com.backend.repository.MemberRepository;
 import com.backend.security.dto.MemberSecurityDTO;
 import com.backend.service.MemberService;
+import com.backend.utils.FileUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

@@ -37,16 +37,16 @@ public class FilesServiceImpl implements FilesService{
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<File> getFilesListByBno(Long bno) {
-		log.info("getFilesListByBno");
+	public List<String> getFilesListByBno(Long bno) {
 		QFile files = QFile.file;
 		QBoard board = QBoard.board;
 
-		List<File> results = queryFactory
-				.selectFrom(files)
-				.join(files.board, board)
-				.where(board.bno.eq(bno))
-				.fetch();
+		List<String> results = queryFactory
+			.select(files.fileName)
+			.from(files)
+			.join(files.board, board)
+			.where(board.bno.eq(bno))
+			.fetch();
 
 		return results;
 	}
@@ -104,5 +104,19 @@ public class FilesServiceImpl implements FilesService{
 		});
 		return list;
 
+	}
+
+	@Override
+	public String uploadFileNameByBnoAndOriginalFileName(FileDTO fileDTO) {
+		QFile file = QFile.file;
+		String originalFileName = fileDTO.getFileName();
+
+		String uploadFileName = queryFactory
+			.select(file.uploadedFileName)
+			.from(file)
+			.where(file.fileName.eq(originalFileName))
+			.fetchOne();
+
+		return uploadFileName;
 	}
 }

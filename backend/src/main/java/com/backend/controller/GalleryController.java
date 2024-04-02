@@ -1,11 +1,11 @@
 package com.backend.controller;
 
+import com.backend.dto.PageRequestDTO;
+import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
-import com.backend.dto.PageRequestDTO;
-import com.backend.dto.PageResponseDTO;
-import com.backend.service.BoardService;
+import com.backend.service.GalleryService;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,18 +14,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST API 컨트롤러 클래스로 게시판 관련 HTTP 요청을 처리합니다.
- */
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api/galleries")
 @Log4j2
 @RequiredArgsConstructor
-public class BoardController {
+public class GalleryController {
 
-	private final BoardService boardService;
+	private final GalleryService galleryService;
 
 	/**
 	 * 페이지 요청 정보를 기반으로 게시물 목록과 각 게시물의 댓글 수를 조회합니다.
@@ -34,12 +38,12 @@ public class BoardController {
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
 //	@PreAuthorize("hasRole('ROLE_USER')")
-	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
+	@ApiOperation(value = "get galleryList", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
-		PageResponseDTO<BoardListDTO> responseDTO =
-			boardService.listWithReplyCount(pageRequestDTO);
+//		PageResponseDTO<BoardListDTO> responseDTO =
+//			galleryService.listWithReplyCount(pageRequestDTO);
 
 		return ResponseEntity.ok(responseDTO);
 	}
@@ -63,7 +67,7 @@ public class BoardController {
 			throw new BindException(bindingResult);
 		}
 
-		Long bno = boardService.register(boardDTO);
+		Long bno = galleryService.register(boardDTO);
 
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), bno));
@@ -79,7 +83,7 @@ public class BoardController {
 	@GetMapping("/{bno}")
 	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
 		log.info(" --- board read --- ");
-		BoardDTO boardDTO = boardService.readOne(bno);
+		BoardDTO boardDTO = galleryService.readOne(bno);
 
 		return ResponseEntity.ok(boardDTO);
 	}
@@ -103,7 +107,7 @@ public class BoardController {
 			return ResponseEntity.badRequest().body("wrong parameter");
 		}
 		log.info(boardDTO);
-		boardService.modify(boardDTO);
+		galleryService.modify(boardDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Modify Board SuccessFully"));
 	}
@@ -119,7 +123,7 @@ public class BoardController {
 	public ResponseEntity<?> remove(@PathVariable("bno") Long bno) {
 		log.info("--- board delete ---");
 		try {
-			boardService.remove(bno);
+			galleryService.remove(bno);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("fail remove board : " + bno + " check log");
 		}

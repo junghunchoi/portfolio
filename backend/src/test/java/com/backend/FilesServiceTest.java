@@ -24,15 +24,4 @@ public class FilesServiceTest {
 	@InjectMocks
 	private FilesServiceImpl filesService; // FilesServiceImpl은 FilesService의 구현체
 
-	@Test
-	public void testGetFilesListByBno() {
-		// given
-		Long bno = 54L;
-
-		// when
-		List<File> result = filesService.getFilesListByBno(bno);
-
-		// then
-		log.info(result);
-	}
 }

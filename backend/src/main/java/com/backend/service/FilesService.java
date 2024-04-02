@@ -11,9 +11,11 @@ import java.util.List;
 public interface FilesService {
 
 
-	List<File> getFilesListByBno(Long bno);
+	List<String> getFilesListByBno(Long bno);
 
 	String registerFiles(FileDTO fileDTO);
 
 	List<FileResultDTO> uploadFiles(FileDTO fileDTO);
+
+	String uploadFileNameByBnoAndOriginalFileName(FileDTO fileDTO);
 }

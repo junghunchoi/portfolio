@@ -40,8 +40,8 @@ public interface BoardService {
 		                   .category(boardDTO.getCategory())
 		                   .build();
 
-		if(boardDTO.getFileNames() != null){
-			boardDTO.getFileNames().forEach(fileName -> {
+		if(boardDTO.getFiles() != null){
+			boardDTO.getFiles().forEach(fileName -> {
 				String[] arr = fileName.split("_");
 			});
 		}

@@ -65,8 +65,8 @@ const searchCondition = reactive({
   type: '',
   keyword: '',
   size:10,
-  _sort:'',
-  _order:'',
+  sort:'',
+  order:'',
 })
 
 </script>

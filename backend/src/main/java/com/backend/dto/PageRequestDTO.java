@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,7 @@ import java.net.URLEncoder;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Log4j2
 public class PageRequestDTO {
 
 	@Builder.Default
@@ -42,7 +44,11 @@ public class PageRequestDTO {
 
 	//사용하는 pageable 타입을 반환하는 기능도 필요하다.
 	public Pageable getPageable(String...props) {
-		return PageRequest.of(this.page - 1, this.size, Sort.by(props).descending());
+		if (this.sort.equals("asc") ) {
+			return PageRequest.of(this.page - 1, this.size, Sort.by(props).ascending());
+		}else {
+			return PageRequest.of(this.page - 1, this.size, Sort.by(props).descending());
+		}
 	}
 
 

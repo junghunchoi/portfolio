@@ -10,5 +10,5 @@ import org.springframework.data.repository.query.Param;
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch {
 
 	@Query("SELECT b, c FROM Board b JOIN b.category c WHERE b.bno = :bno")
-	List<Object[]> findBoardWithCategoryNameById(@Param("bno") Long bno);
+	List<Object[]> findBoardWithCategoryById(@Param("bno") Long bno);
 }

@@ -5,6 +5,10 @@ import BoardRead from "@/views/free/BoardRead.vue";
 import BoardRegister from '@/views/free/BoardRegister.vue';
 import BoardModify from '@/views/free/BoardModify.vue';
 import MemberRegister from '@/views/member/MemberRegister.vue';
+import GalleryList from '@/views/gallery/GalleryBoardList.vue'
+import GalleryRegister from '@/views/gallery/GalleryBoardRegister.vue'
+import GalleryRead from '@/views/gallery/GalleryBoardDetail.vue'
+import GalleryModify from '@/views/gallery/GalleryBoardModify.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/TheMain.vue'
 import {useAuthStore} from '@/store/loginStore.js'
@@ -51,9 +55,31 @@ const routes = [
   /*
   [noticeBoard router ]
 */
+
   /*
   [galleryBoard router ]
 */
+  {
+    path: '/galleries',
+    name: 'GalleryList',
+    component: GalleryList,
+  },
+  {
+    path: '/galleries/register',
+    name: 'GalleryRegister',
+    component: GalleryRegister,
+  },
+  {
+    path: '/galleries/:bno',
+    name: 'GalleryRead',
+    component: GalleryRead,
+    props: route => ({bno: parseInt(route.params.bno)}),
+  },
+  {
+    path: '/galleries/modify/:bno',
+    name: 'GalleryModify',
+    component: GalleryModify,
+  },
   /*
   [helpBoard router ]
 */

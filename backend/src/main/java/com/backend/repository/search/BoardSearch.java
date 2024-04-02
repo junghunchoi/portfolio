@@ -7,5 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface BoardSearch {
 	Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types,
 	                                                  String keyword,
+													  String order,
+													  String sort,
 	                                                  Pageable pageable);
 }

@@ -6,6 +6,7 @@ import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Category;
+import com.backend.entity.File;
 import com.backend.repository.BoardRepository;
 import com.backend.repository.CategoryRepository;
 import java.util.List;
@@ -27,6 +28,7 @@ public class BoardServiceImpl implements BoardService {
 	private final ModelMapper modelMapper;
 	private final BoardRepository boardRepository;
 	private final CategoryRepository categoryRepository;
+	private final FilesService filesService;
 
 	@Override
 	public Long register(BoardDTO boardDTO) {
@@ -41,13 +43,14 @@ public class BoardServiceImpl implements BoardService {
 
 		Board board = dtoToEntity(boardDTO);
 		Long bno = boardRepository.save(board).getBno();
+
 		return bno;
 	}
 
 	@Override
 	public BoardDTO readOne(Long bno) {
-		List<Object[]> results = boardRepository.findBoardWithCategoryNameById(bno);
-
+		List<Object[]> results = boardRepository.findBoardWithCategoryById(bno);
+		List<String> fileList = filesService.getFilesListByBno(bno);
 		Board board = null;
 		Category category = null;
 
@@ -56,10 +59,9 @@ public class BoardServiceImpl implements BoardService {
 			category = (Category) result[1];
 		}
 
-//		Category category = new Category(board.getCategory().getCno(),board.getCategory().getContent());
-
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 		boardDTO.setCategory(category);
+		boardDTO.setFiles(fileList);
 		// 조회수 증가 로직
 		board.updateViewCount(board.getViewCount() + 1);
 
@@ -91,9 +93,11 @@ public class BoardServiceImpl implements BoardService {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
-		Pageable pageable = pageRequestDTO.getPageable("bno");
+		String order = pageRequestDTO.getOrder();
+		String sort = pageRequestDTO.getSort();
+		Pageable pageable = pageRequestDTO.getPageable(order);
 
-		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,
+		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,order,sort,
 			pageable);
 		return PageResponseDTO.<BoardListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)

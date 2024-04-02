@@ -30,9 +30,12 @@
             <input type="text" class="form-control"
                    :value="$dayjs(board.modDate).format('YYYY.MM.DD HH:mm:ss')" readonly>
           </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">파일명</span>
-            <input type="text" class="form-control" readonly>
+
+          <div>
+            <i class="fas fa-paperclip m-2"></i>
+            <span  v-for="file in board.files" @click="downloadFileHandler(file)" >
+              {{file}}
+            </span>
           </div>
 
           <div class="my-4">
@@ -54,6 +57,7 @@ import {ref, watch, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {getBoardBybno} from "@/api/board";
 import ReplyArea from "@/views/reply/ReplyArea.vue";
+import {downloadFile} from "@/api/file"
 import {getReplies, registerReply} from "@/api/reply";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
@@ -72,6 +76,7 @@ const board = reactive({
   category: {cno: null, content: null},
   content: '',
   writer: '',
+  files:[],
   regDate: new Date(),
   modDate: new Date(),
 });
@@ -82,6 +87,7 @@ const loadBoardData = async () => {
   try {
     const {data} = await getBoardBybno(bno.value);
     Object.assign(board, data); // board 객체에 데이터 할당
+    console.log(data)
   } catch (e) {
     console.error(e);
   }
@@ -109,6 +115,24 @@ const goBoardPage = () => {
 
 const modifyBoard = () => {
   router.push({name: 'BoardModify', params: {bno: bno.value}}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+}
+
+const downloadFileHandler = async (file) =>{
+  const fileInform = {
+    bno: bno.value,
+    fileName: file
+  }
+  const res = await downloadFile(fileInform);
+  console.log(res)
+  const name = file
+  const url = window.URL.createObjectURL(new Blob([res.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", name);
+  link.style.cssText = "display:none";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 }
 
 </script>

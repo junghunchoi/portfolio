@@ -24,6 +24,9 @@ public class Board extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long bno;
 
+	@Column(nullable = false)
+	private int boardType;
+
 	@Column(length = 500, nullable = false)
 	private String title;
 
@@ -36,6 +39,10 @@ public class Board extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cno")
 	private Category category;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "cno")
+	private File file;
 
 	private long viewCount;
 

@@ -36,6 +36,6 @@ public class BoardDTO {
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 
-	private List<String> fileNames;
+	private List<String> files;
 
 }

@@ -11,9 +11,7 @@
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-        <div class="card-header"></div>
         <div class="card-body">
-          <h5 class="card-title">게시물</h5>
           <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
           <table class="table">
             <thead>
@@ -37,9 +35,12 @@
                     dto.title
                   }}
                 </router-link>
-                <span class="progress-bar-striped" style="background-color: gray">{{
-                    dto.viewCount
-                  }}</span>
+                <span>[{{
+                    dto.replyCount
+                  }}]</span>
+                <span v-if="dto.fileCount>=1" class="attachment-icon show">
+                  <i class="fas fa-paperclip"></i>
+                </span>
               </td>
               <td>{{
                   dto.writer
@@ -51,20 +52,20 @@
                 }}
               </td>
               <td>
-                {{ $dayjs(dto.regDate).format('YYYY. MM. DD HH:mm:ss') }}
+                {{ $dayjs(dto.regDate).format('YYYY.MM.DD') }}
               </td>
               <td>
-                {{ $dayjs(dto.modDate).format('YYYY. MM. DD HH:mm:ss') }}
+                {{ $dayjs(dto.modDate).format('YYYY.MM.DD') }}
               </td>
             </tr>
             </tbody>
           </table>
         </div>
-      </div >
+      </div>
       <ThePagination :current-page="response.page"
                      :pageCount="pageCount"
                      @page="page => (params.page = page)"
-      class="flex-md-grow-0"/>
+                     class="flex-md-grow-0"/>
     </div>
   </div>
 
@@ -76,7 +77,6 @@ import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
-
 
 defineProps({
   limit: Number,
@@ -95,8 +95,8 @@ const response = reactive({
 });
 
 const params = reactive({
-  _order:"regDate",
-  _sort:"desc",
+  order: "regDate",
+  sort: "asc",
   page: 1, // 현재 페이지
   size: null,
   type: null,
@@ -124,18 +124,18 @@ const fetchData = async () => {
 
 fetchData();
 
-watch( params, async (newVal, oldVal)=>{
+watch(params, async (newVal, oldVal) => {
+  console.log(params)
   await fetchData(params)
 })
 
-
 const searchBoard = async (searchCondition) => {
-  try{
+  try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
 
     const {data} = await getBoards(params);
-  }catch (e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -145,15 +145,23 @@ const handleUpdateSize = (value) => {
 }
 
 const handleUpdateOrder = (value) => {
-  params._order = value;
+  params.order = value;
 }
 
 const handleUpdateSort = (value) => {
-  params._sort = value;
+  params.sort = value;
 }
 
 </script>
 
 <style scoped>
+.attachment-icon {
+  display: none; /* 기본적으로는 아이콘을 숨깁니다 */
+}
 
+.attachment-icon.show {
+  display: inline-block; /* 첨부파일이 있는 경우 아이콘을 표시합니다 */
+  font-family: 'Font Awesome 5 Free'; /* Font Awesome 아이콘 사용 */
+  content: '\f0c6'; /* 클립 아이콘 */
+}
 </style>

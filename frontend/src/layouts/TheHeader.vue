@@ -27,7 +27,7 @@
               </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" active-class="active" to="/boards">
+              <RouterLink class="nav-link" active-class="active" to="/galleries">
                 갤러리
               </RouterLink>
             </li>
