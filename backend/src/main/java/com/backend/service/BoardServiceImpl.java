@@ -4,6 +4,7 @@ import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
+import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Category;
 import com.backend.entity.File;
@@ -88,8 +89,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public PageResponseDTO<BoardListDTO> listWithReplyCount(
-		PageRequestDTO pageRequestDTO) {
+	public PageResponseDTO<BoardListDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
@@ -97,8 +97,9 @@ public class BoardServiceImpl implements BoardService {
 		String sort = pageRequestDTO.getSort();
 		Pageable pageable = pageRequestDTO.getPageable(order);
 
-		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,order,sort,
-			pageable);
+		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,
+			order, sort, pageable);
+
 		return PageResponseDTO.<BoardListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)
 		                      .dtoList(result.getContent())

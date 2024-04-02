@@ -1,6 +1,7 @@
 package com.backend.repository.search;
 
 import com.backend.dto.board.BoardListDTO;
+import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
 import com.backend.entity.QBoard;
 import com.backend.entity.QCategory;
@@ -96,6 +97,81 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 				board.modDate,
 				reply.count().as("replyCount"),
 				file.count().as("fileCount")
+		));
+
+		this.getQuerydsl().applyPagination(pageable,dtoQuery);
+
+		List<BoardListDTO> dtoList = dtoQuery.fetch();
+
+
+		long count = dtoQuery.fetchCount();
+
+		return new PageImpl<>(dtoList, pageable, count);
+	}
+
+	@Override
+	public Page<GalleryListDTO> searchGalleryList(String[] types, String keyword, String order,
+		String sort, Pageable pageable) {
+
+		QBoard board = QBoard.board;
+		QFile file = QFile.file;
+
+		JPQLQuery<Board> query = from(board);
+		query.leftJoin(file).on(file.board.eq(board));
+
+		query.groupBy(board);
+
+		if( (types != null && types.length > 0) && keyword != null ){
+
+			BooleanBuilder booleanBuilder = new BooleanBuilder();
+			String convertString = '%' + keyword + '%';
+
+			for(String type: types){
+
+				switch (type){
+					case "t":
+						booleanBuilder.or(board.title.contains(convertString));
+						break;
+					case "c":
+						booleanBuilder.or(board.content.contains(convertString));
+						break;
+					case "w":
+						booleanBuilder.or(board.writer.contains(convertString));
+						break;
+				}
+			}//end for
+			query.where(booleanBuilder);
+		}
+
+		//bno > 0
+		query.where(board.bno.gt(0L));
+
+		if (sort.equals("asc")) {
+			switch (order) {
+				case "regDate":
+					query.orderBy(board.regDate.asc());
+				case "title":
+					query.orderBy(board.title.asc());
+				case "viewCount":
+					query.orderBy(board.viewCount.asc());
+			}
+		}else{
+			switch (order) {
+				case "regDate":
+					query.orderBy(board.regDate.desc());
+				case "title":
+					query.orderBy(board.title.desc());
+				case "viewCount":
+					query.orderBy(board.viewCount.desc());
+			}
+		}
+
+		JPQLQuery<BoardListDTO> dtoQuery = query.select(Projections.bean(BoardListDTO.class,
+			board.bno,
+			board.title,
+			board.regDate,
+			board.modDate,
+			file.fileName
 		));
 
 		this.getQuerydsl().applyPagination(pageable,dtoQuery);

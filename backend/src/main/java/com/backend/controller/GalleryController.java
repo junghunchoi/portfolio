@@ -5,6 +5,7 @@ import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
+import com.backend.dto.board.GalleryListDTO;
 import com.backend.service.GalleryService;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
@@ -42,8 +43,8 @@ public class GalleryController {
 	@GetMapping()
 	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
-//		PageResponseDTO<BoardListDTO> responseDTO =
-//			galleryService.listWithReplyCount(pageRequestDTO);
+		PageResponseDTO<GalleryListDTO> responseDTO =
+			galleryService.list(pageRequestDTO);
 
 		return ResponseEntity.ok(responseDTO);
 	}

@@ -1,11 +1,13 @@
 package com.backend.service;
 
+import com.backend.dto.PageRequestDTO;
 import com.backend.dto.board.BoardDTO;
-import org.springframework.data.domain.Pageable;
+import com.backend.dto.board.GalleryListDTO;
+import org.springframework.data.domain.Page;
 
 public interface GalleryService {
 
-	Long getGalleryList(String[] types, String keyword,String sort, String order, Pageable pageable)
+	Page<GalleryListDTO> list(PageRequestDTO pageRequestDTO);
 
 	Long register(BoardDTO boardDTO);
 
