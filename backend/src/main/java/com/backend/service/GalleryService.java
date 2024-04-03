@@ -1,13 +1,14 @@
 package com.backend.service;
 
 import com.backend.dto.PageRequestDTO;
+import com.backend.dto.PageResponseDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.GalleryListDTO;
 import org.springframework.data.domain.Page;
 
 public interface GalleryService {
 
-	Page<GalleryListDTO> list(PageRequestDTO pageRequestDTO);
+	PageResponseDTO<GalleryListDTO> list(PageRequestDTO pageRequestDTO);
 
 	Long register(BoardDTO boardDTO);
 

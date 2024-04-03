@@ -1,7 +1,6 @@
 package com.backend.service;
 
 import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.entity.Board;
@@ -22,7 +21,7 @@ public interface BoardService {
 	 * @param pageRequestDTO
 	 * @return PageResponseDTO
 	 */
-	PageResponseDTO<BoardListDTO> listWithReplyCount(PageRequestDTO pageRequestDTO);
+	PageResponseDTO<?> list(PageRequestDTO pageRequestDTO);
 
 
 	/**
@@ -32,20 +31,13 @@ public interface BoardService {
 	 */
 	default Board dtoToEntity(BoardDTO boardDTO){
 
-		Board board = Board.builder()
+		return Board.builder()
 		                   .bno(boardDTO.getBno())
 		                   .title(boardDTO.getTitle())
 		                   .content(boardDTO.getContent())
 		                   .writer(boardDTO.getWriter())
 		                   .category(boardDTO.getCategory())
 		                   .build();
-
-		if(boardDTO.getFiles() != null){
-			boardDTO.getFiles().forEach(fileName -> {
-				String[] arr = fileName.split("_");
-			});
-		}
-		return board;
 	}
 
 	/**

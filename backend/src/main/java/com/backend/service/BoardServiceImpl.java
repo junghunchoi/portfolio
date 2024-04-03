@@ -89,7 +89,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public PageResponseDTO<BoardListDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+	public PageResponseDTO<?> list(PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
@@ -102,7 +102,7 @@ public class BoardServiceImpl implements BoardService {
 
 		return PageResponseDTO.<BoardListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)
-		                      .dtoList(result.getContent())
+		                      .items(result.getContent())
 		                      .total((int) result.getTotalElements())
 		                      .build();
 	}

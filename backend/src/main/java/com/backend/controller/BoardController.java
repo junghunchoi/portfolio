@@ -39,7 +39,7 @@ public class BoardController {
 	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
 		PageResponseDTO<BoardListDTO> responseDTO =
-			boardService.listWithReplyCount(pageRequestDTO);
+			(PageResponseDTO<BoardListDTO>) boardService.list(pageRequestDTO);
 
 		return ResponseEntity.ok(responseDTO);
 	}

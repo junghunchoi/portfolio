@@ -29,6 +29,9 @@ public class BoardDTO {
 	private String content;
 
 	@NotEmpty
+	private int boardType;
+
+	@NotEmpty
 	private String writer;
 
 	private Category category;

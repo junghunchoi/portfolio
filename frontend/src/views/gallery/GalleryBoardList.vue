@@ -14,14 +14,14 @@
         <div class="card-body">
           <button class="btn btn-primary" @click="goRegisterPage">갤러리 등록</button>
           <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
+            <div v-for="gallery in response.galleryList" class="row g-0">
               <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
+                <img src="..." class="img-fluid rounded-start">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <h5 class="card-title">{{gallery.title}}</h5>
+                  <p class="card-text">{{gallery.content}}</p>
                   <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
               </div>
@@ -51,7 +51,7 @@ defineProps({
 
 const router = useRouter();
 const response = reactive({
-  dtoList: [],
+  galleryList: [],
   end: 0,
   next: null,
   page: 0,

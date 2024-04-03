@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="dto in response.dtoList">
+            <tr v-for="dto in response.items">
               <td>{{
                   dto.category
                 }}
@@ -84,7 +84,7 @@ defineProps({
 
 const router = useRouter();
 const response = reactive({
-  dtoList: [],
+  items: [],
   end: 0,
   next: null,
   page: 0,

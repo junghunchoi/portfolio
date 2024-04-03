@@ -1,6 +1,5 @@
 package com.backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -25,14 +24,14 @@ public class PageResponseDTO<E> {
 
 	private boolean next;
 
-	private List<E> dtoList;
+	private List<E> items;
 
 	private String order;
 
 	private String sort;
 
 	@Builder(builderMethodName = "withAll")
-	public PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> dtoList, int total) {
+	public PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> items, int total) {
 
 		if (total < 0) {
 			return;
@@ -41,7 +40,7 @@ public class PageResponseDTO<E> {
 		this.page = pageRequestDTO.getPage();
 		this.size = pageRequestDTO.getSize();
 		this.total = total;
-		this.dtoList = dtoList;
+		this.items = items;
 
 		//화면에서의 마지막 번호
 		this.end =   (int)(Math.ceil(this.page / 10.0 )) *  10;

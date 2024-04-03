@@ -18,4 +18,7 @@ public class GalleryListDTO {
 
 	@NotEmpty
 	private Resource file;
+
+	private LocalDateTime regDate;
+	private LocalDateTime modDate;
 }

@@ -11,8 +11,6 @@
 </template>
 
 <script setup>
-import Test1 from "@/views/test/test1.vue";
-import Test2 from "@/views/test/test2.vue";
 </script>
 
 <style lang="scss" scoped></style>
