@@ -8,6 +8,7 @@ import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
 import com.backend.repository.BoardRepository;
+import com.backend.utils.FileUtils;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -27,6 +28,7 @@ public class GalleryServiceImpl implements GalleryService {
 	private final ModelMapper modelMapper;
 	private final BoardRepository boardRepository;
 	private final FilesService filesService;
+	private final FileUtils fileUtils;
 
 	@Override
 	public PageResponseDTO<GalleryListDTO> list(PageRequestDTO pageRequestDTO) {
@@ -39,6 +41,10 @@ public class GalleryServiceImpl implements GalleryService {
 
 		Page<GalleryListDTO> result = boardRepository.searchGalleryList(types, keyword,
 			order, sort, pageable);
+
+		for (GalleryListDTO galleryListDTO : result.getContent()) {
+
+		}
 
 		return PageResponseDTO.<GalleryListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)
