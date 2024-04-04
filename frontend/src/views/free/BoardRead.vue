@@ -95,7 +95,7 @@ const loadBoardData = async () => {
 
 const loadReplyDate = async () => {
   const response = await getReplies(bno.value); // getReplies 호출 시 bno 값 전달 수정
-  const replyList = response.data.dtoList.map(reply => ({
+  const replyList = response.data.items.map(reply => ({
     ...reply,
     bno: bno.value
   }));

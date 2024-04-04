@@ -23,6 +23,7 @@ public class File extends BaseEntity {
 	private int fno;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "board_bno")
 	private Board board;
 
 	private String fileName;

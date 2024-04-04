@@ -1,6 +1,9 @@
 package com.backend.dto.board;
 
 import com.backend.entity.Category;
+import com.backend.utils.ResourceSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -24,7 +27,9 @@ public class GalleryListDTO {
 	@NotEmpty
 	private String content;
 
-	@NotEmpty
+	private String fileName;
+
+	@JsonSerialize(using = ResourceSerializer.class)
 	private Resource file;
 
 	private LocalDateTime regDate;

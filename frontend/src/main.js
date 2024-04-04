@@ -7,6 +7,8 @@ import 'bootstrap/dist/js/bootstrap.js';
 import dayjs from "@/plugins/dayjs";
 import {createPinia} from "pinia";
 import { createPersistedState } from 'pinia-plugin-persistedstate'
+
+
 const pinia = createPinia()
 pinia.use(createPersistedState({
   storage: localStorage,

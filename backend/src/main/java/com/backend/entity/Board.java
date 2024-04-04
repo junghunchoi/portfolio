@@ -3,6 +3,7 @@ package com.backend.entity;
 import com.backend.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.*;
 
@@ -36,13 +37,12 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cno")
 	private Category category;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "cno")
-	private File file;
+	@OneToMany(mappedBy = "board")
+	private List<File> files;
 
 	private long viewCount;
 

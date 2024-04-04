@@ -41,7 +41,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  pageCount: {
+  total: {
     type: Number,
     required: true,
   },
@@ -50,17 +50,20 @@ defineEmits(["page"]);
 
 const isPrevPage = computed(() => ({ disabled: !(props.currentPage > 1) }));
 const isNextPage = computed(() => ({
-  disabled: !(props.currentPage < props.pageCount),
+  disabled: !(props.currentPage < props.total),
 }));
 
 const visiblePages = computed(() => {
-  const startPage = Math.floor((props.currentPage - 1) / 10) * 10 + 1;
+  const correctedCurrentPage = Math.max(props.currentPage, 1);
+
+  const startPage = Math.floor((correctedCurrentPage - 1) / 10) * 10 + 1;
   let endPage = startPage + 9;
-  if (endPage > props.pageCount) {
-    endPage = props.pageCount;
+  if (endPage > props.total) {
+    endPage = props.total;
   }
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 });
+console.log(props.total)
 </script>
 
 <style lang="scss" scoped></style>

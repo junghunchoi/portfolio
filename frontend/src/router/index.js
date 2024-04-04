@@ -7,7 +7,7 @@ import BoardModify from '@/views/free/BoardModify.vue';
 import MemberRegister from '@/views/member/MemberRegister.vue';
 import GalleryList from '@/views/gallery/GalleryBoardList.vue'
 import GalleryRegister from '@/views/gallery/GalleryBoardRegister.vue'
-import GalleryRead from '@/views/gallery/GalleryBoardDetail.vue'
+import GalleryRead from '@/views/gallery/GalleryBoardRead.vue'
 import GalleryModify from '@/views/gallery/GalleryBoardModify.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/TheMain.vue'

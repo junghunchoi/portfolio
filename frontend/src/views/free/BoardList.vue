@@ -63,7 +63,7 @@
         </div>
       </div>
       <ThePagination :current-page="response.page"
-                     :pageCount="pageCount"
+                     :total="response.total"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
     </div>

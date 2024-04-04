@@ -1,9 +1,13 @@
 package com.backend.utils;
 
-import com.backend.dto.file.FileDTO;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -27,6 +31,17 @@ public class FileUtils {
 			return resource;
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("file not found : " + filePath.toString());
+		}
+	}
+
+	public String encodeResourceToBase64(Resource resource) {
+		try {
+			// Read all bytes from the resource
+			byte[] data = resource.getInputStream().readAllBytes();
+			// Encode bytes to Base64
+			return Base64.getEncoder().encodeToString(data);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to read the file", e);
 		}
 	}
 }

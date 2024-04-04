@@ -1,7 +1,9 @@
 package com.backend.dto.board;
 
 import com.backend.entity.Category;
+import com.backend.utils.ResourceSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +41,6 @@ public class BoardDTO {
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 
-	private List<String> files;
+	private List<?> files;
 
 }

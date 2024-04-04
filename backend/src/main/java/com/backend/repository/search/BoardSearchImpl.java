@@ -180,7 +180,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 			board.content,
 			board.regDate,
 			board.modDate,
-			file.fileName
+			file.uploadedFileName.as("fileName")
 		));
 
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
