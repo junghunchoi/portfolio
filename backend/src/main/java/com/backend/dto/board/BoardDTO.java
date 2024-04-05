@@ -38,6 +38,8 @@ public class BoardDTO {
 
 	private Category category;
 
+	private long viewCount;
+
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 

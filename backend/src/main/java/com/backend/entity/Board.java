@@ -41,7 +41,7 @@ public class Board extends BaseEntity {
 	@JoinColumn(name = "cno")
 	private Category category;
 
-	@OneToMany(mappedBy = "board")
+	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private List<File> files;
 
 	private long viewCount;

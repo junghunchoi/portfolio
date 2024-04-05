@@ -43,8 +43,8 @@
             class="form-select"
             @input="$emit('update:sort', $event.target.value)"
         >
-          <option selected value="asc">오름차순</option>
-          <option value="desc">내림차순</option>
+          <option selected value="desc">내림차순</option>
+          <option value="asc">오름차순</option>
         </select>
       </div>
     </div>

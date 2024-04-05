@@ -1,6 +1,6 @@
 <template>
   <Transition>
-    <div v-if="modelValue">
+    <div v-if="isPopup">
       <div class="modal-backdrop fade show"></div>
       <div
           class="modal fade show d-block"
@@ -36,7 +36,7 @@
 
 <script setup>
 defineProps({
-  modelValue: Boolean,
+  isPopup: Boolean,
   title: String,
 });
 defineEmits(['close', 'update:modelValue']);

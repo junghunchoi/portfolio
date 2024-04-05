@@ -14,7 +14,7 @@
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">카테고리</span>
-              <select v-model="board.categoryObj.cno" class="form-control">
+              <select v-model="board.category.cno" class="form-control">
                 <option value="1">java</option>
                 <option value="2">javascript</option>
                 <option value="3">sql</option>
@@ -39,32 +39,31 @@
             </div>
             <div class="my-4">
               <div class="float-end">
-                <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
+                <button type="button" class="btn btn-primary" @click="goBoardPage">목록</button>
                 <button type="submit" class="btn btn-secondary" @click="openModal">
-                  Modify
+                  수정
                 </button>
-                <!--                <button type="submit" class="btn btn-secondary" @click="openModal">Modify</button>-->
-                <button type="button" class="btn btn-danger" @click="clickRemoveHandler">Remove
+                <button type="button" class="btn btn-danger" @click="clickRemoveHandler">삭제
                 </button>
               </div>
             </div>
           </form>
-        </div><!--end card body-->
-      </div><!--end card-->
-    </div><!-- end col-->
-  </div><!-- end row-->
+        </div>
+      </div>
+    </div>
+  </div>
   <Teleport to="#modal">
     <CommonModal
-        v-model="show"
+        :isPopup="show"
         :title="'확인'"
     >
       <template #default>
         정말로 수정하시겠습니까?
       </template>
-     <template #actions>
-       <button class="btn btn-secondary" @click="updateDateAndGolist">열기</button>
-       <button class="btn btn-light" @click="closeModal">닫기</button>
-     </template>
+      <template #actions>
+        <button class="btn btn-secondary" @click="updateDateAndGolist">수정</button>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
     </CommonModal>
   </Teleport>
 </template>
@@ -73,32 +72,21 @@
 import {ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board";
-import TheModal from "@/components/common/TheModal.vue";
 import CommonModal from "@/components/common/CommonModal.vue";
 
 const route = useRoute();
 const router = useRouter();
 
 const bno = ref(route.params.bno);
-const modalRef = ref(null);
-
-// function openModal() {
-//   modalRef.value.openModal();
-// }
-
-function onConfirm() {
-  updateDateAndGolist();
-}
 
 const board = ref({
   bno: '',
   title: '',
   cno: '',
-  categoryObj: {
+  category: {
     cno: '',
     content: ''
   },
-  category: '',
   content: '',
   writer: '',
   modDate: new Date(),
@@ -148,7 +136,7 @@ const openModal = () => {
   show.value = true;
 };
 
-const closeModal = () =>{
+const closeModal = () => {
   show.value = false;
 }
 </script>

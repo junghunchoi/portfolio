@@ -20,7 +20,7 @@ public class File extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int fno;
+	private long fno;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_bno")
