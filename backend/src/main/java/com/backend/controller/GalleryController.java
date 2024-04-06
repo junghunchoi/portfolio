@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -51,11 +52,12 @@ public class GalleryController {
 
 
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
-	@PostMapping("")
-	public ResponseEntity<ResultDTO> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultDTO> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
 		throws BindException {
 		log.info(" --- gallery register --- ");
 		log.info(boardDTO);
+
 		if (bindingResult.hasErrors()) {
 			throw new BindException(bindingResult);
 		}

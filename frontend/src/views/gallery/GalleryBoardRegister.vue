@@ -35,11 +35,11 @@
         <label class="form-label">첨부파일</label>
         <div>jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.</div>
         <div>1번째 이미지는 썸네일로 활용됩니다.</div>
-        <div v-for="(input, index) in fileInputs" :key="index" style="padding:30px;">
+        <div v-for="(input, index) in files" :key="input.id" style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, index)"/>
-          <button class="btn btn-light" ><i class="bi bi-x"></i></button>
+          <button class="btn btn-light" @click="removefiles(index)"><i class="bi bi-x"></i>
+          </button>
         </div>
-
       </div>
       <div class="pt-4">
         <button
@@ -49,10 +49,21 @@
         >
           목록
         </button>
-        <button class="btn btn-primary" @click="save">저장</button>
+        <button class="btn btn-primary" @click="registerGalleryHandler">저장</button>
       </div>
     </form>
   </div>
+  <TheModal :is-popup="show"
+            :title="'확인'"
+  >
+    <template #default>
+      jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.
+    </template>
+    <template #actions>
+      <button class="btn btn-light" @click="closeModal">닫기</button>
+    </template>
+
+  </TheModal>
 </template>
 
 <script setup>
@@ -62,29 +73,29 @@ import {createGallery} from '@/api/gallery';
 import {uploadFile} from "@/api/file";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheModal from "@/components/common/TheModal.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
+const show = ref(false);
 const router = useRouter();
 const form = ref({
   title: null,
-  category:{cno: null, content: null},
+  category: {cno: null, content: null},
   content: null,
   cno: null,
   writer: userName
 });
-const files = ref([null, null, null]);
-const fileInputs = ref([{ id: 0 }]);
+const files = ref([{id: 0}]);
 const formData = new FormData();
 
-const save = () => {
+const registerGalleryHandler = () => {
   createGallery({
     ...form.value,
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));
-
     uploadFile(formData)
     .then(() => {
       router.push({name: 'GalleryList'});
@@ -103,15 +114,41 @@ const goGalleryPage = () => {
 };
 
 const handleFileUpload = (event, index) => {
-  // const selectedFile = event.target.fileInputs[0];
-  // if (selectedFile) {
-  //   fileInputs.value[index] = selectedFile;
-  // }
-  // formData.append('files', files.value[index]);
+  const selectedFile = event.target.files[0];
 
-  const newInputId = fileInputs.value.length; // 새 입력 필드의 고유 ID 생성
-  fileInputs.value.push({ id: newInputId }); // 배열에 새 입력 필드 정보 추가
+  if (!isValidateFile(selectedFile)) {
+    show.value = true;
+    return;
+  }
+
+  files.value[index].file = selectedFile;
+  formData.append('files', selectedFile);
+
+  if (index + 1 === files.value.length) {
+    const newInputId = files.value.length; // 새 입력 필드의 고유 ID 생성
+    files.value.push({id: newInputId}); // 배열에 새 입력 필드 정보 추가
+  }
+  console.log(files);
 };
+
+const removefiles = (index) => {
+  files.value.splice(index, 1);
+}
+
+const isValidateFile = (file) => {
+  if (file.size > 1048576) { // 1mb까지 업로드가능
+    return false;
+  }
+  if (!(file.type === "image/gif" || file.type === "image/jpeg" || file.type === "image/png")) {
+    return false;
+  }
+  return true;
+}
+
+const closeModal = () => {
+  show.value = false;
+}
+
 </script>
 
 <style scoped>

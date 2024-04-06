@@ -2,6 +2,7 @@ package com.backend.service;
 
 import com.backend.dto.file.FileDTO;
 import com.backend.dto.file.FileResultDTO;
+import com.backend.entity.Board;
 import com.backend.entity.File;
 import com.backend.entity.QBoard;
 //import com.backend.entity.QFiles;
@@ -55,12 +56,25 @@ public class FilesServiceImpl implements FilesService{
 	public String registerFiles(FileDTO fileDTO) {
 
 		try {
-			File file = modelMapper.map(fileDTO, File.class);
+			log.info(fileDTO);
+			log.info(fileDTO.getFileType());
+
+			File file = File.builder()
+			                .fileSize(fileDTO.getFileSize())
+			                .board(Board.builder().bno(fileDTO.getBno()).build())
+			                .fileName(fileDTO.getFileName())
+			                .fileType(fileDTO.getFileType())
+			                .uploadedFileName(fileDTO.getUploadedFileName())
+			                .filePath(fileDTO.getFilePath())
+			                .build();
+
+
+
 			filesRepository.save(file);
 
 			return "ok";
 		} catch (Exception e) {
-			log.error(e.getStackTrace());
+			log.error(e.getMessage());
 
 			return "error";
 		}
@@ -70,6 +84,7 @@ public class FilesServiceImpl implements FilesService{
 	public List<FileResultDTO> uploadFiles(FileDTO fileDTO) {
 
 		final List<FileResultDTO> list = new ArrayList<>();
+
 		fileDTO.getFiles().forEach(multipartFile -> {
 			String originalName = multipartFile.getOriginalFilename();
 

@@ -68,7 +68,7 @@
     <button v-if="gallery.writer === userName" type="button" class="btn btn-danger" @click="openModal">삭제</button>
   </div>
   <Teleport to="#modal">
-    <CommonModal
+    <TheModal
         :is-popup="show"
         :title="'확인'"
     >
@@ -79,7 +79,7 @@
         <button class="btn btn-danger" @click="clickRemoveHandler">삭제</button>
         <button class="btn btn-light" @click="closeModal">닫기</button>
       </template>
-    </CommonModal>
+    </TheModal>
   </Teleport>
 </template>
 
@@ -91,7 +91,7 @@ import {getReplies, registerReply} from "@/api/reply";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery";
-import CommonModal from "@/components/common/CommonModal.vue";
+import TheModal from "@/components/common/TheModal.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

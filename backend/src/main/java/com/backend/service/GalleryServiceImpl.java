@@ -48,7 +48,11 @@ public class GalleryServiceImpl implements GalleryService {
 			order, sort, pageable);
 
 		for (GalleryListDTO galleryListDTO : result.getContent()) {
-			galleryListDTO.setFile(fileUtils.readFileAsResource(galleryListDTO.getFileName()));
+			String fileName = galleryListDTO.getFileName();
+			if (fileName == null) {
+				continue;
+			}
+			galleryListDTO.setFile(fileUtils.readFileAsResource(fileName));
 		}
 
 		return PageResponseDTO.<GalleryListDTO>withAll()
@@ -60,6 +64,9 @@ public class GalleryServiceImpl implements GalleryService {
 
 	@Override
 	public Long register(BoardDTO boardDTO) {
+
+		boardDTO.setCategory(null);
+		boardDTO.setBoardType(2); // gallery 타입
 		Board board = modelMapper.map(boardDTO, Board.class);
 		Long bno = boardRepository.save(board).getBno();
 

@@ -32,7 +32,7 @@ public class File extends BaseEntity {
 
 	private String fileType;
 
-	private int fileSize;
+	private long fileSize;
 
 	private String filePath;
 

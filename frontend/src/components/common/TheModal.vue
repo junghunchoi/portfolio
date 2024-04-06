@@ -1,51 +1,58 @@
 <template>
-  <div class="modal-overlay" v-if="isVisible" @click="close">
-    <div class="modal-content" @click.stop>
-      <slot></slot>
-      <button @click="closeModal(true)">예</button>
-      <button @click="closeModal(false)">아니오</button>
+  <Transition>
+    <div v-if="isPopup">
+      <div class="modal-backdrop fade show"></div>
+      <div
+          class="modal fade show d-block"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <slot name="header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    @click="$emit('update:modelValue', false)"
+                ></button>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot></slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="actions"></slot>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
-import {ref} from 'vue';
-
-const isVisible = ref(false);
-const emits = defineEmits(['update:modelValue', 'confirm']);
-
-function openModal() {
-  isVisible.value = true;
-}
-
-function closeModal(confirmed) {
-  isVisible.value = false;
-  if (confirmed) {
-    emits('confirm');
-  } else {
-    emits('update:modelValue', false);
-  }
-}
-
-defineExpose({openModal, closeModal});
+defineProps({
+  isPopup: Boolean,
+  title: String,
+});
+defineEmits(['close', 'update:modelValue']);
 </script>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease;
+}
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
 }
 </style>

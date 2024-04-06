@@ -186,7 +186,6 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<GalleryListDTO> items = dtoQuery.fetch();
-
 		long count = dtoQuery.fetchCount();
 
 		return new PageImpl<>(items, pageable, count);

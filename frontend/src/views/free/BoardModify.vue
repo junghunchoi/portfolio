@@ -53,7 +53,7 @@
     </div>
   </div>
   <Teleport to="#modal">
-    <CommonModal
+    <TheModal
         :isPopup="show"
         :title="'확인'"
     >
@@ -64,7 +64,7 @@
         <button class="btn btn-secondary" @click="updateDateAndGolist">수정</button>
         <button class="btn btn-light" @click="closeModal">닫기</button>
       </template>
-    </CommonModal>
+    </TheModal>
   </Teleport>
 </template>
 
@@ -72,7 +72,7 @@
 import {ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board";
-import CommonModal from "@/components/common/CommonModal.vue";
+import TheModal from "@/components/common/TheModal.vue";
 
 const route = useRoute();
 const router = useRouter();

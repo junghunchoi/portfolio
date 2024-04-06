@@ -58,7 +58,7 @@ public class FileController {
 	 */
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ResultDTO> upload(FileDTO fileDTO) {
+	public ResponseEntity<ResultDTO> upload( FileDTO fileDTO) {
 		log.info("FileController upload ....");
 		log.info(fileDTO);
 
