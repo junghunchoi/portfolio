@@ -58,9 +58,7 @@ public class GalleryController {
 		log.info(" --- gallery register --- ");
 		log.info(boardDTO);
 
-		if (bindingResult.hasErrors()) {
-			throw new BindException(bindingResult);
-		}
+
 
 		Long bno = galleryService.register(boardDTO);
 

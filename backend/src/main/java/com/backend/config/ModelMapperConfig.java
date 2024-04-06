@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RootConfig {
-
-/*
+public class ModelMapperConfig {
+	/*
        ModelMapper bean 설정
-
      */
 	@Bean
 	public ModelMapper getMapper() {

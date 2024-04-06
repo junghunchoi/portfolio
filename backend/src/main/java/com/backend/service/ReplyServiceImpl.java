@@ -3,6 +3,7 @@ package com.backend.service;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.reply.ReplyDTO;
+import com.backend.entity.Board;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,16 +23,22 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class ReplyServiceImpl implements ReplyService{
+public class ReplyServiceImpl implements ReplyService {
+
 	private final ReplyRepository replyRepository;
 	private final ModelMapper modelMapper;
 
 	@Override
 	public Long Register(ReplyDTO replyDTO) {
+		try {
+			log.info("-- ReplyServiceImpl Register -- ");
+			Reply reply = modelMapper.map(replyDTO, Reply.class);
 
-		Reply reply = modelMapper.map(replyDTO, Reply.class);
-		Long rno = replyRepository.save(reply).getRno();
-		return rno;
+			return replyRepository.save(reply).getRno();
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return null;
 	}
 
 	@Override
@@ -65,21 +72,22 @@ public class ReplyServiceImpl implements ReplyService{
 	@Override
 	public PageResponseDTO<ReplyDTO> getListOfBoard(Long bno, PageRequestDTO pageRequestDTO) {
 
-		Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <=0? 0: pageRequestDTO.getPage() -1,
-				pageRequestDTO.getSize(),
-				Sort.by("rno").ascending());
+		Pageable pageable = PageRequest.of(
+			pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1,
+			pageRequestDTO.getSize(),
+			Sort.by("rno").ascending());
 
 		Page<Reply> result = replyRepository.listOfBoard(bno, pageable);
 
 		List<ReplyDTO> dtoList =
-				result.getContent().stream().map(reply -> modelMapper.map(reply, ReplyDTO.class))
-						.collect(Collectors.toList());
+			result.getContent().stream().map(reply -> modelMapper.map(reply, ReplyDTO.class))
+			      .collect(Collectors.toList());
 
 		return PageResponseDTO.<ReplyDTO>withAll()
-				.pageRequestDTO(pageRequestDTO)
-				.items(dtoList)
-				.total((int)result.getTotalElements())
-				.build();
+		                      .pageRequestDTO(pageRequestDTO)
+		                      .items(dtoList)
+		                      .total((int) result.getTotalElements())
+		                      .build();
 	}
 
 }

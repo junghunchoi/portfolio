@@ -34,26 +34,17 @@ public class ReplyController {
 	 * 새 댓글을 등록하는 메서드.
 	 *
 	 * @param replyDTO      등록할 댓글 정보를 담은 DTO
-	 * @param bindingResult DTO 검증 결과
 	 * @return 등록된 댓글의 식별자를 포함하는 ResponseEntity
-	 * @throws BindException 입력 값 검증 실패시 발생
 	 */
 	@ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글등록")
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> register(@Valid @RequestBody ReplyDTO replyDTO,
-		BindingResult bindingResult) throws BindException {
+	public ResponseEntity<ResultDTO> register(@Valid @RequestBody ReplyDTO replyDTO) {
 		log.info("replyController register...");
 		log.info(replyDTO);
-		if (bindingResult.hasErrors()) {
-			throw new BindException(bindingResult);
-		}
-		Map<String, Long> resultMap = new HashMap<>();
 
 		Long rno = replyService.Register(replyDTO);
 
-		resultMap.put("rno", rno);
-
-		return ResponseEntity.ok(rno);
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "register reply success : " + rno));
 	}
 
 	/**

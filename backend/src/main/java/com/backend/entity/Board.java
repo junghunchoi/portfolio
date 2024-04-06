@@ -37,7 +37,7 @@ public class Board extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String writer;
 
-	@ManyToOne(optional = true)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cno")
 	private Category category;
 
@@ -46,11 +46,11 @@ public class Board extends BaseEntity {
 
 	private long viewCount;
 
-	@OneToMany(mappedBy = "board", cascade = {
-		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-	@Builder.Default
-	@BatchSize(size = 20)
-	private Set<BoardImage> imageSet = new HashSet<>();
+//	@OneToMany(mappedBy = "board", cascade = {
+//		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+//	@Builder.Default
+//	@BatchSize(size = 20)
+//	private Set<BoardImage> imageSet = new HashSet<>();
 
 
 	/**
@@ -58,6 +58,7 @@ public class Board extends BaseEntity {
 	 *
 	 * @param title
 	 * @param content
+	 * @Param category
 	 */
 	public void change(String title, String content, Category category) {
 		this.title = title;

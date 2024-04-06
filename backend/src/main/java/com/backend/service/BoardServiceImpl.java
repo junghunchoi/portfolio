@@ -39,13 +39,11 @@ public class BoardServiceImpl implements BoardService {
 			Category category = categoryResult.orElseThrow();
 			boardDTO.setCategory(category);
 		} catch (Exception e) {
-			e.getMessage();
+			log.info(e.getMessage());
 		}
 
 		Board board = dtoToEntity(boardDTO);
-		Long bno = boardRepository.save(board).getBno();
-
-		return bno;
+		return boardRepository.save(board).getBno();
 	}
 
 	@Override
