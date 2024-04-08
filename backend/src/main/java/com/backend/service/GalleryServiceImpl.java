@@ -1,21 +1,16 @@
 package com.backend.service;
 
-import static com.backend.entity.QBoard.board;
-
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
-import com.backend.entity.Category;
 import com.backend.entity.File;
-import com.backend.repository.BoardRepository;
+import com.backend.repository.board.BoardRepository;
 import com.backend.utils.FileUtils;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

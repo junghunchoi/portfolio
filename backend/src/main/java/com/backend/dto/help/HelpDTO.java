@@ -18,5 +18,7 @@ public class HelpDTO {
 
 	private String answer;
 
+	private int isSecret;
+
 	private long viewCount;
 }

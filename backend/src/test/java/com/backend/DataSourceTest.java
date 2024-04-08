@@ -2,10 +2,9 @@ package com.backend;
 
 import com.backend.entity.Board;
 import com.backend.entity.Reply;
-import com.backend.repository.BoardRepository;
+import com.backend.repository.board.BoardRepository;
 import com.backend.repository.ReplyRepository;
 import com.backend.service.FilesService;
-import com.backend.service.ReplyService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

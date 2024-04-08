@@ -39,8 +39,6 @@
                      class="flex-md-grow-0"/>
     </div>
   </div>
-
-
 </template>
 <script setup>
 import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';

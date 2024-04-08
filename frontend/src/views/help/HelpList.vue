@@ -1,7 +1,7 @@
 <template>
   <div class="row mt-3">
     <BoardFilter
-        @search="searchBoard"
+        @search="searchHelp"
         @update:size="handleUpdateSize"
         @update:order="handleUpdateOrder"
         @update:sort="handleUpdateSort"
@@ -11,50 +11,41 @@
     <div class="col">
       <div class="card">
         <div class="card-body">
-          <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
+          <button class="btn btn-primary" @click="goRegisterPage">문의 등록</button>
           <table class="table">
             <thead>
             <tr>
-              <th scope="col">카테고리</th>
               <th scope="col">제목</th>
               <th scope="col">작성자</th>
               <th scope="col">조회수</th>
               <th scope="col">등록일시</th>
-              <th scope="col">수정일시</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="board in response.items">
-              <td>{{
-                  board.category
-                }}
-              </td>
+            <tr v-for="help in response.items">
               <td>
-                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">{{
-                    board.title
+                <router-link :to="{ name: 'HelpRead', params: { hno: help.hno }}">{{
+                    help.title
                   }}
                 </router-link>
-                <span>[{{
-                    board.replyCount
-                  }}]</span>
-                <span v-if="board.fileCount>=1" class="attachment-icon show">
-                  <i class="fas fa-paperclip"></i>
+                <span v-if="help.answer">(답변완료)</span>
+                <span v-else>(미답변)</span>
+                <span  v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
+                <span v-if="help.isSecret===1" class="attachment-icon show">
+                  <i class="bi bi-lock"></i>
                 </span>
               </td>
               <td>{{
-                  board.writer
+                  help.writer
                 }}
               </td>
               <td>
                 {{
-                  board.viewCount
+                  help.viewCount
                 }}
               </td>
               <td>
-                {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
-              </td>
-              <td>
-                {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
+                {{ $dayjs(help.regDate).format('YYYY.MM.DD') }}
               </td>
             </tr>
             </tbody>
@@ -68,12 +59,14 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
+import {computed, reactive, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {getBoards} from "@/api/board";
+import {getHelps} from "@/api/help";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
+import {isCreatedWithin7Days} from "@/common/dateUtils"
 
 defineProps({
   limit: Number,
@@ -93,7 +86,7 @@ const response = reactive({
 
 const params = reactive({
   order: "regDate",
-  sort: "desc",
+  sort: "asc",
   page: 1, // 현재 페이지
   size: null,
   type: null,
@@ -105,15 +98,14 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
-  router.push('/boards/register');
+  router.push({name: 'HelpRegister'});
 };
 
 const fetchData = async () => {
   try {
-
-    const {data} = await getBoards(params);
-    Object.assign(response, data);
+    const {data} = await getHelps(params);
     console.log(data);
+    Object.assign(response, data);
   } catch (e) {
     console.error(e);
   }
@@ -122,16 +114,15 @@ const fetchData = async () => {
 fetchData();
 
 watch(params, async (newVal, oldVal) => {
-  console.log(params)
   await fetchData(params)
 })
 
-const searchBoard = async (searchCondition) => {
+const searchHelp = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
 
-    const {data} = await getBoards(params);
+    const {data} = await getHelps(params);
   } catch (e) {
     console.log(e);
   }
@@ -152,13 +143,5 @@ const handleUpdateSort = (value) => {
 </script>
 
 <style scoped>
-.attachment-icon {
-  display: none; /* 기본적으로는 아이콘을 숨깁니다 */
-}
 
-.attachment-icon.show {
-  display: inline-block; /* 첨부파일이 있는 경우 아이콘을 표시합니다 */
-  font-family: 'Font Awesome 5 Free'; /* Font Awesome 아이콘 사용 */
-  content: '\f0c6'; /* 클립 아이콘 */
-}
 </style>

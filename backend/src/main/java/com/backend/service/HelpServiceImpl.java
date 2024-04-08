@@ -2,12 +2,11 @@ package com.backend.service;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
-import com.backend.entity.Board;
 import com.backend.entity.Help;
-import com.backend.repository.HelpRepository;
+import com.backend.repository.help.HelpRepository;
+import com.backend.repository.help.search.HelpSearch;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @RequiredArgsConstructor
 public class HelpServiceImpl implements HelpService {
+
 	private final ModelMapper modelMapper;
 	private final HelpRepository helpRepository;
 
@@ -82,11 +82,11 @@ public class HelpServiceImpl implements HelpService {
 		Page<HelpListDTO> result = helpRepository.searchHelpList(types, keyword,
 			order, sort, pageable);
 
-		return PageResponseDTO.<BoardListDTO>withAll()
+		return PageResponseDTO.<HelpListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)
 		                      .items(result.getContent())
 		                      .total((int) result.getTotalElements())
 		                      .build();
 	}
-	}
 }
+

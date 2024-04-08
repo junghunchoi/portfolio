@@ -3,11 +3,9 @@ package com.backend.controller;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
-import com.backend.dto.board.helpDTO;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.help.HelpDTO;
 import com.backend.service.HelpService;
-import com.backend.service.helpService;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,16 +62,16 @@ public class HelpController {
 
 
 	@GetMapping("/{bno}")
-	public ResponseEntity<helpDTO> read(@PathVariable("bno") Long bno) {
+	public ResponseEntity<HelpDTO> read(@PathVariable("bno") Long bno) {
 		log.info(" --- board read --- ");
-		helpDTO helpDTO = helpService.readOne(bno);
+		HelpDTO helpDTO = helpService.readOne(bno);
 
 		return ResponseEntity.ok(helpDTO);
 	}
 
 
 	@PutMapping()
-	public ResponseEntity<?> modify(@RequestBody @Valid helpDTO helpDTO,
+	public ResponseEntity<?> modify(@RequestBody @Valid HelpDTO helpDTO,
 		BindingResult bindingResult) {
 		log.info(" --- board modify --- ");
 

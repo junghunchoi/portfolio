@@ -17,7 +17,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
-							<RouterLink class="nav-link" active-class="active" to="/boards">
+							<RouterLink class="nav-link" active-class="active" to="/notices">
 								공지
 							</RouterLink>
             </li>
@@ -32,7 +32,7 @@
               </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" active-class="active" to="/boards">
+              <RouterLink class="nav-link" active-class="active" to="/helps">
                 문의 게시판
               </RouterLink>
             </li>

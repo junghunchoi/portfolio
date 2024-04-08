@@ -1,8 +1,16 @@
 <template>
+  <section>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <h2>{{ board.title }}</h2>
+        <p class="text-muted">작성자: {{ board.writer }} | 조회수: {{ board.viewCount }}</p>
+      </div>
+    </div>
+  </section>
+  <section>
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-        <div class="card-header">Board Read</div>
         <div class="card-body">
           <div class="input-group mb-3">
             <span class="input-group-text">제목</span>
@@ -11,10 +19,6 @@
           <div class="input-group mb-3">
             <span class="input-group-text">내용</span>
             <input type="text" class="form-control" :value="board.content" readonly>
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">작성자</span>
-            <input type="text" class="form-control" :value="board.writer" readonly>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">카테고리</span>
@@ -48,8 +52,11 @@
       </div>
     </div>
   </div>
+  </section>
+  <section>
   <ReplyArea :bno="bno" :reply-list="replies.list" v-model="replyText"
              @update:replyText="loadReplyDate" @replyDelete="loadReplyDate"/>
+  </section>
 </template>
 
 <script setup>

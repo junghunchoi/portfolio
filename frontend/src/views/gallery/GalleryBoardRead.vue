@@ -6,7 +6,6 @@
         <p class="text-muted">작성자: {{ gallery.writer }} | 조회수: {{ gallery.viewCount }}</p>
       </div>
     </div>
-
   </section>
   <section>
     <div class="slider-container">

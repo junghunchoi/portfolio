@@ -16,7 +16,6 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "help")
 public class Help extends BaseEntity {
 
 	@Id
@@ -32,6 +31,8 @@ public class Help extends BaseEntity {
 	private long viewCount;
 
 	private String writer;
+
+	private int isSecret;
 
 	public void updateViewCount(long viewCount) {
 		this.viewCount = viewCount;

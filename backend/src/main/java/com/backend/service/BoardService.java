@@ -39,23 +39,4 @@ public interface BoardService {
 		                   .category(boardDTO.getCategory())
 		                   .build();
 	}
-
-	/**
-	 * entity -> dto 변환 메소드
-	 * @param board
-	 * @return BoardDTO
-	 */
-	default BoardDTO entityToDTO(Board board) {
-
-		BoardDTO boardDTO = BoardDTO.builder()
-				.bno(board.getBno())
-				.title(board.getTitle())
-				.content(board.getContent())
-				.writer(board.getWriter())
-				.regDate(board.getRegDate())
-				.modDate(board.getModDate())
-				.build();
-
-		return boardDTO;
-	}
 }

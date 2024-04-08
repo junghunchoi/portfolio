@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HelpListDTO {
+	private Long hno;
+	private String title;
 	private String content;
 	private String answer;
 	private long viewCount;
+	private int isSecret;
 	private LocalDateTime regDate;
 	private String writer;
-
-
 }

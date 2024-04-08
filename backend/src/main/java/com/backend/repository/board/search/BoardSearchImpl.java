@@ -1,4 +1,4 @@
-package com.backend.repository.search;
+package com.backend.repository.board.search;
 
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.GalleryListDTO;
@@ -11,7 +11,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

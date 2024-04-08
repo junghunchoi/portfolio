@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <h2>게시글 등록</h2>
     <hr class="my-4"/>
     <form @submit.prevent>
@@ -65,7 +65,7 @@
         <button class="btn btn-primary" @click="save">저장</button>
       </div>
     </form>
-  </div>
+  </section>
 </template>
 
 <script setup>

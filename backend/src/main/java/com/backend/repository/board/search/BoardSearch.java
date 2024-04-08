@@ -1,4 +1,4 @@
-package com.backend.repository.search;
+package com.backend.repository.board.search;
 
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.GalleryListDTO;
