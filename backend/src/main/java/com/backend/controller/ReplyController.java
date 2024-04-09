@@ -56,12 +56,13 @@ public class ReplyController {
 	 */
 	@ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물 댓글목록")
 	@GetMapping(value = "/{bno}")
-	public PageResponseDTO<ReplyDTO> getList(@PathVariable("bno") Long bno,
+	public ResponseEntity<ResultDTO> getList(@PathVariable("bno") Long bno,
 		PageRequestDTO pageRequestDTO) {
-		PageResponseDTO<ReplyDTO> requestDTO = replyService.getListOfBoard(bno, pageRequestDTO);
+		PageResponseDTO<ReplyDTO> response = replyService.getListOfBoard(bno, pageRequestDTO);
 
-		log.info("requestDTO -> " + requestDTO.toString());
-		return requestDTO;
+		log.info("requestDTO -> " + response.toString());
+
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), response));
 
 	}
 

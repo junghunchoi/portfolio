@@ -238,7 +238,7 @@ public class CustomRestAdvice {
 	@ExceptionHandler(BusinessExceptionHandler.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(BusinessExceptionHandler ex) {
 		log.debug("===========================================================");
-		log.debug("여기로 오는가?!");
+		log.debug("BusinessExceptionHandler");
 		log.debug("===========================================================");
 
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR, ex.getMessage());
@@ -250,7 +250,6 @@ public class CustomRestAdvice {
 		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("파일 사이즈가 너무 큽니다.");
 	}
 
-	// ==================================================================================================================
 
 	/**
 	 * [Exception] 모든 Exception 경우 발생

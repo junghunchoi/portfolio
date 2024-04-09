@@ -1,25 +1,23 @@
 <template>
   <div class="row d-flex justify-content-center">
-    <div class="card" style="background-color: #f0f2f5;">
-      <div class="card-body p-4">
-        <div class="card">
-          <ul>
-            <li v-for="reply in replyList" :key="reply.rno">
-              <div class="reply_nick shadow-0">{{ reply.replyer }}</div>
-              <div class="reply_box">{{ reply.replyText }}</div>
-              <div class="reply_info">{{ reply.regDate }}</div>
-              <button v-if="userName === reply.replyer" class="btn btn-danger btn-sm"
-                      @click="deleteReplyHandler(reply.rno)">댓글삭제
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div>
+      <ul>
+        <li v-for="reply in replyList" :key="reply.rno">
+          <div class="reply_nick shadow-0">{{ reply.replyer }} | {{ reply.regDate }}</div>
+          <div class="reply_box">{{ reply.replyText }}</div>
+          <div>
+            <button v-if="userName === reply.replyer" class="btn btn-danger btn-sm float-right"
+                    @click="deleteReplyHandler(reply.rno)">삭제
+            </button>
+          </div>
+
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="form-outline">
+  <div class="border border-secondary border-2 rounded mt-0">
     <input v-model="replyText" type="text" id="addReply" class="form-control"
-           placeholder="댓글 입력"/>
+           placeholder="댓글을 남겨보세요"/>
     <button class="btn btn-primary btn-sm" @click="registerReplyHandler">댓글등록</button>
   </div>
 
@@ -40,7 +38,7 @@ const props = defineProps({
   modelValue: String
 })
 const replyText = ref(props.replyText);
-const emit = defineEmits(['update:replyText','replyDelete'])
+const emit = defineEmits(['update:replyText', 'replyDelete'])
 
 const registerReplyHandler = async () => {
   // 댓글 내용 , 댓글단 사람
@@ -72,5 +70,13 @@ const deleteReplyHandler = async (rno) => {
 </script>
 
 <style scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
+li {
+  margin-bottom: 10px;
+}
 </style>

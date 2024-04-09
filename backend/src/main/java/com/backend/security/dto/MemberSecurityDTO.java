@@ -22,8 +22,6 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 	private String password;
 	private String email;
 	private String userRealName;
-//	private boolean del = false;
-//	private boolean social = false;
 
 	private Map<String, Object> props;
 
@@ -36,8 +34,6 @@ public class MemberSecurityDTO extends User implements OAuth2User {
 		this.username = username;
 		this.password = password;
 		this.email = email;
-//		this.del = del;
-//		this.social = social;
 	}
 
 

@@ -6,7 +6,8 @@ import router from '@/router';
 import 'bootstrap/dist/js/bootstrap.js';
 import dayjs from "@/plugins/dayjs";
 import {createPinia} from "pinia";
-import { createPersistedState } from 'pinia-plugin-persistedstate'
+import {createPersistedState} from 'pinia-plugin-persistedstate'
+import axios from '@/plugins/axios'
 
 
 const pinia = createPinia()
@@ -15,7 +16,10 @@ pinia.use(createPersistedState({
   auto: true,
 }))
 
-createApp(App).use(router)
+const app = createApp(App)
+.use(router)
 .use(pinia)
 .use(dayjs)
-.mount('#app');
+
+app.provide('$axios', axios);
+app.mount('#app');
