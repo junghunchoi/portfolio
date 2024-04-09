@@ -81,6 +81,7 @@ public class BoardController {
 		log.info(" --- board read --- ");
 		BoardDTO boardDTO = boardService.readOne(bno);
 
+
 		return ResponseEntity.ok(boardDTO);
 	}
 

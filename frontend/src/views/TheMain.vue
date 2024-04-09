@@ -8,7 +8,7 @@
                    :destination="'/notices'"/>
         <BoardCard class="col" :title="'자유게시판'"
                    :items="Mock"
-                   :destination="'/frees'"/>
+                   :destination="'/boards'"/>
       </div>
     </div>
     <div class="row">

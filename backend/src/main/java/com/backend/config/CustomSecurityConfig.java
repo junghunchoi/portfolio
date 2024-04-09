@@ -7,7 +7,6 @@ import com.backend.security.filter.RefreshTokenFilter;
 import com.backend.security.filter.TokenCheckFilter;
 import com.backend.security.handler.ApiLoginSuccessHandler;
 import com.backend.security.handler.Custom403Handler;
-//import com.backend.security.handler.CustomSocialLoginSuccessHandler;
 import com.backend.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,9 +26,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
 import javax.sql.DataSource;
 
+/**
+ * Spring Security 설정을 위한 Configuration 클래스
+ */
 @Log4j2
 @Configuration
 @RequiredArgsConstructor
@@ -85,25 +86,26 @@ public class CustomSecurityConfig {
 		    .disable()
 		    .authorizeRequests()
 		    .antMatchers( "/api/**","/api/auth/**", "/api/members/**", "/oauth/**", "/api/boards/**")
-		    .permitAll() // 로그인과 관련된 경로는 인증 없이 접근 허용
+		    .permitAll()
 		    .anyRequest()
-		    .authenticated(); // 그 외 모든 요청은 인증 필요
+		    .authenticated();
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 
-//		http.oauth2Login()
-//		    .loginPage("/member/login")
-//		    .successHandler(authenticationSuccessHandler());
+
 
 		return http.build();
 	}
 
 
+	/**
+	 * 정적 자원에 대한 보안 설정을 무시하는 WebSecurityCustomizer 빈 생성
+	 *
+	 * @return WebSecurityCustomizer 객체
+	 */
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		/*
-		정적 자원(css 등)을 호출할 때 필터가 동작하지 않는다.
-		 */
+
 
 		log.info("--- web config ---");
 
@@ -111,11 +113,21 @@ public class CustomSecurityConfig {
 		                   .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 
+	/**
+	 * 패스워드 인코더로 BCryptPasswordEncoder 사용
+	 *
+	 * @return PasswordEncoder 객체
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * 토큰 저장소로 JdbcTokenRepositoryImpl 사용
+	 *
+	 * @return PersistentTokenRepository 객체
+	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
@@ -124,25 +136,25 @@ public class CustomSecurityConfig {
 		return repo;
 	}
 
+	/**
+	 * 접근 거부 처리를 위한 AccessDeniedHandler로 Custom403Handler 사용
+	 *
+	 * @return AccessDeniedHandler 객체
+	 */
 	@Bean
 	public AccessDeniedHandler accessDeniedHandler() {
 		return new Custom403Handler();
 	}
 
+	/**
+	 * 토큰 검사를 위한 TokenCheckFilter 생성
+	 *
+	 * @param jwtUtil JWTUtil 객체
+	 * @param userDetailsService CustomUserDetailsService 객체
+	 * @return TokenCheckFilter 객체
+	 */
 	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CustomUserDetailsService userDetailsService) {
 		return new TokenCheckFilter(userDetailsService, jwtUtil);
 	}
-
-//	@Bean
-//	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//		return new CustomSocialLoginSuccessHandler(passwordEncoder());
-//	}
-
-//		@Bean
-//	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//
-//		//		return new CustomSocialLoginSuccessHandler(passwordEncoder());
-//	}
-
 
 }
