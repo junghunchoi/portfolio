@@ -10,6 +10,7 @@ import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.Objects;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,19 +49,18 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		if ((types != null && types.length > 0) && keyword != null) {
 
 			BooleanBuilder booleanBuilder = new BooleanBuilder();
-			String convertString = '%' + keyword + '%';
 
 			for (String type : types) {
 
 				switch (type) {
 					case "t":
-						booleanBuilder.or(board.title.contains(convertString));
+						booleanBuilder.or(board.title.contains(keyword));
 						break;
 					case "c":
-						booleanBuilder.or(board.content.contains(convertString));
+						booleanBuilder.or(board.content.contains(keyword));
 						break;
 					case "w":
-						booleanBuilder.or(board.writer.contains(convertString));
+						booleanBuilder.or(board.writer.contains(keyword));
 						break;
 				}
 			}//end for
@@ -73,7 +73,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		//자유게시판만 조회
 		query.where(board.boardType.eq(1));
 
-		if (sort == "asc") {
+		if (Objects.equals(sort, "asc")) {
 			switch (order) {
 				case "regDate":
 					query.orderBy(board.regDate.asc());
@@ -105,6 +105,8 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 			file.count().as("fileCount")
 		));
 
+		log.info(query);
+		log.info(dtoQuery);
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<BoardListDTO> dtoList = dtoQuery.fetch();

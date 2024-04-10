@@ -13,21 +13,18 @@
       <div class="card">
         <div class="card-body">
           <button class="btn btn-primary" @click="goRegisterPage">갤러리 등록</button>
-          <div class="card mb-3" style="max-width: 540px;">
-            <div v-for="gallery in response.items" class="row g-0">
+          <div class="card mb-3" >
+            <div v-for="gallery in response.items" class="">
               <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
-
-              <div class="col-md-4">
-                <img :src="'data:image/jpeg;base64,' + gallery.file"  class="img-fluid rounded-start">
+              <div class="card">
+                <img :src="'data:image/jpeg;base64,' + gallery.file"  class="card-img-top">
               </div>
-              <div class="col-md-8">
                 <div class="card-body">
                   <h5 class="card-title">{{gallery.title}}</h5>
                   <p class="card-text">{{gallery.content}}</p>
                   <p class="card-text"><small class="text-muted">
                     {{ $dayjs(gallery.regDate).format('YYYY.MM.DD') }}</small></p>
                 </div>
-              </div>
               </router-link>
             </div>
           </div>
@@ -65,7 +62,7 @@ const response = reactive({
 
 const params = reactive({
   order: "regDate",
-  sort: "asc",
+  sort: "desc",
   page: 1, // 현재 페이지
   size: null,
   type: null,
@@ -124,5 +121,8 @@ const handleUpdateSort = (value) => {
 
 <style scoped>
 
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>

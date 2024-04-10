@@ -55,15 +55,15 @@ const isNextPage = computed(() => ({
 
 const visiblePages = computed(() => {
   const correctedCurrentPage = Math.max(props.currentPage, 1);
-
   const startPage = Math.floor((correctedCurrentPage - 1) / 10) * 10 + 1;
-  let endPage = startPage + 9;
-  if (endPage > props.total) {
-    endPage = props.total;
-  }
+  let endPage = Math.min(startPage + 9, Math.ceil(props.total / 10));
+  // if (endPage > props.total) {
+  //   endPage = props.total;
+  // }
+
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 });
-console.log(props.total)
+
 </script>
 
 <style lang="scss" scoped></style>

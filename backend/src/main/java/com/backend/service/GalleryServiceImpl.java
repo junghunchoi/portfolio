@@ -89,6 +89,7 @@ public class GalleryServiceImpl implements GalleryService {
 		}
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
+
 		boardDTO.setFiles(convertFiles);
 
 		// 조회수 증가 로직

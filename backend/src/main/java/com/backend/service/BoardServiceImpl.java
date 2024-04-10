@@ -56,6 +56,9 @@ public class BoardServiceImpl implements BoardService {
 			category = (Category) result[1];
 		}
 
+		log.info(results);
+		log.info(fileList);
+		log.info("board " + board);
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 		boardDTO.setCategory(category);
 		boardDTO.setFiles(fileList);

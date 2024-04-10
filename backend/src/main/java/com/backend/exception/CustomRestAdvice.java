@@ -14,6 +14,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -250,6 +251,23 @@ public class CustomRestAdvice {
 		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("파일 사이즈가 너무 큽니다.");
 	}
 
+	@ExceptionHandler(HttpMessageConversionException.class)
+	public ResponseEntity<String> handleHttpMessageConversionException(HttpMessageConversionException exc) {
+
+		StackTraceElement[] stackTrace = exc.getStackTrace();
+		String errorLocation = "";
+		if (stackTrace.length > 0) {
+			StackTraceElement firstElement = stackTrace[0];
+			errorLocation = firstElement.getClassName() + "." + firstElement.getMethodName() +
+				"(" + firstElement.getFileName() + ":" + firstElement.getLineNumber() + ")";
+		}
+
+		// 예외 메시지와 발생 위치를 응답 본문에 포함시킵니다.
+		String errorMessage = "Error: " + exc.getMessage() + "\nLocation: " + errorLocation;
+		log.error(errorMessage);
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("HttpMessageConversionException 에러");
+
+	}
 
 	/**
 	 * [Exception] 모든 Exception 경우 발생
@@ -263,4 +281,6 @@ public class CustomRestAdvice {
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
+
+
 }

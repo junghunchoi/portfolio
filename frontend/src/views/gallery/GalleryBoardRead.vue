@@ -130,7 +130,6 @@ const loadReplyDate = async () => {
     bno: bno.value
   }));
   replies.list = replyList;
-  this.$axios.get()
 }
 
 onMounted(async () => {
