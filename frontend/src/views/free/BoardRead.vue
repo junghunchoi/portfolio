@@ -44,8 +44,8 @@
 
           <div class="my-4">
             <div class="float-end">
-              <button type="button" class="btn btn-primary" @click="goBoardPage">List</button>
-              <button v-if="board.writer === userName" type="button" class="btn btn-secondary" @click="modifyBoard">Modify</button>
+              <button type="button" class="btn btn-primary" @click="goBoardPage">목록</button>
+              <button v-if="board.writer === userName" type="button" class="btn btn-secondary" @click="modifyBoard">수정</button>
             </div>
           </div>
         </div>
@@ -62,10 +62,8 @@
 <script setup>
 import {ref, watch, onMounted, reactive,inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {getBoardBybno} from "@/api/board";
 import ReplyArea from "@/views/reply/ReplyArea.vue";
 import {downloadFile} from "@/api/file"
-import {getReplies, registerReply} from "@/api/reply";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 const $axios = inject('$axios');
@@ -91,13 +89,13 @@ const board = reactive({
 const replies = reactive({list: []});
 
 const loadBoardData = async () => {
-    const {data} = await $axios.get(`/boards/${bno.value}`)  //getBoardBybno(bno.value);
+    const {data} = await $axios.get(`/boards/${bno.value}`)
     Object.assign(board, data); // board 객체에 데이터 할당
     console.log(data)
 };
 
 const loadReplyDate = async () => {
-  const response = await $axios.get(`/replies/${bno.value}`) //await getReplies(bno.value); // getReplies 호출 시 bno 값 전달 수정
+  const response = await $axios.get(`/replies/${bno.value}`)
   const replyList = response.data.resultData.items.map(reply => ({
     ...reply,
     bno: bno.value

@@ -1,0 +1,96 @@
+<template>
+  <div>
+    <h2>공지글 등록</h2>
+    <hr class="my-4"/>
+    <form @submit.prevent>
+      <div class="mb-3">
+        <label for="title" class="form-label">작성자</label>
+        <input
+            v-model="notice.writer"
+            type="text"
+            class="form-control"
+            id="writer"
+            readonly
+        >
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">제목</label>
+        <input
+            v-model="notice.title"
+            type="text"
+            class="form-control"
+            id="title"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">내용</label>
+        <textarea
+            v-model="notice.content"
+            class="form-control"
+            id="content"
+            rows="3"
+        ></textarea>
+      </div>
+      <div class="pt-4">
+        <button
+            type="button"
+            class="btn btn-outline-dark me-2"
+            @click="goNoticePage"
+        >
+          목록
+        </button>
+        <button class="btn btn-primary" @click="registerNoticeHandler">저장</button>
+      </div>
+    </form>
+  </div>
+  <TheModal :is-popup="show"
+            :title="'확인'"
+  >
+    <template #default>
+      jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.
+    </template>
+    <template #actions>
+      <button class="btn btn-light" @click="closeModal">닫기</button>
+    </template>
+
+  </TheModal>
+</template>
+
+<script setup>
+import TheModal from "@/components/common/TheModal.vue";
+import {useAuthStore} from "@/store/loginStore";
+import {storeToRefs} from "pinia";
+import {inject, reactive, ref} from "vue";
+import {useRouter} from "vue-router";
+const authStore = useAuthStore();
+const {userName} = storeToRefs(authStore);
+const $axios = inject('$axios');
+
+
+const show = ref(false);
+const router = useRouter();
+
+const notice = reactive({
+  title: null,
+  content: null,
+  writer: userName
+});
+
+
+const goNoticePage = () => {
+  router.push('/notices');
+};
+
+const registerNoticeHandler = async () =>{
+  const res = $axios.post('/notices',{...notice})
+}
+
+
+const closeModal = () => {
+  show.value = false;
+}
+</script>
+
+<style scoped>
+
+</style>

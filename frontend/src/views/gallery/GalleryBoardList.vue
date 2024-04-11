@@ -7,12 +7,12 @@
         @update:sort="handleUpdateSort"
     />
   </div>
-
+  <button class="btn btn-primary mt-3" @click="goRegisterPage">갤러리 등록</button>
   <div class="row mt-3">
     <div class="col">
       <div class="card">
         <div class="card-body">
-          <button class="btn btn-primary" @click="goRegisterPage">갤러리 등록</button>
+
           <div class="card mb-3" >
             <div v-for="gallery in response.items" class="">
               <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">

@@ -22,11 +22,11 @@
             </div>
             <!-- 원본 슬라이드 -->
             <div class="slide_content" v-for="file in gallery.files">
-              <img :src="'data:image/jpeg;base64,' + file">
+              <img :src="'data:image/jpeg;base64,' + file.resourceConvert">
             </div>
             <!-- 첫 슬라이드를 마지막 위치에 복제 -->
             <div class="slide_content">
-              <img :src="'data:image/jpeg;base64,' + gallery.files[0]" alt="Slide Image">
+              <img :src="'data:image/jpeg;base64,' + gallery.files[0].resourceConvert" alt="Slide Image">
             </div>
           </div>
         </div>
@@ -62,9 +62,9 @@
   <ReplyArea :bno="bno" :reply-list="replies.list" v-model="replyText"
              @update:replyText="loadReplyDate" @replyDelete="loadReplyDate"/>
   <div class="float-end">
-    <button type="button" class="btn btn-primary" @click="goGalleryPage">목록</button>
-    <button v-if="gallery.writer === userName" type="button" class="btn btn-secondary" @click="modifyGallery">수정</button>
-    <button v-if="gallery.writer === userName" type="button" class="btn btn-danger" @click="openModal">삭제</button>
+    <button type="button" class="btn btn-primary m-1" @click="goGalleryPage">목록</button>
+    <button v-if="gallery.writer === userName" type="button" class="btn btn-secondary m-1" @click="modifyGallery">수정</button>
+    <button v-if="gallery.writer === userName" type="button" class="btn btn-danger m-1"  @click="openModal">삭제</button>
   </div>
   <Teleport to="#modal">
     <TheModal
@@ -86,7 +86,7 @@
 import {ref, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import ReplyArea from "@/views/reply/ReplyArea.vue";
-import {getReplies, registerReply} from "@/api/reply";
+import {getReplies} from "@/api/reply";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery";

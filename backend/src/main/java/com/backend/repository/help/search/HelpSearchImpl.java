@@ -31,19 +31,18 @@ public class HelpSearchImpl extends QuerydslRepositorySupport implements HelpSea
 		if ((types != null && types.length > 0) && keyword != null) {
 
 			BooleanBuilder booleanBuilder = new BooleanBuilder();
-			String convertString = '%' + keyword + '%';
 
 			for (String type : types) {
 
 				switch (type) {
 					case "t":
-						booleanBuilder.or(help.title.contains(convertString));
+						booleanBuilder.or(help.title.contains(keyword));
 						break;
 					case "c":
-						booleanBuilder.or(help.content.contains(convertString));
+						booleanBuilder.or(help.content.contains(keyword));
 						break;
 					case "w":
-						booleanBuilder.or(help.writer.contains(convertString));
+						booleanBuilder.or(help.writer.contains(keyword));
 						break;
 				}
 			}//end for

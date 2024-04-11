@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h2>게시글 등록</h2>
+    <h2>갤러리 수정</h2>
     <hr class="my-4"/>
     <form @submit.prevent>
       <div class="mb-3">
         <label for="title" class="form-label">작성자</label>
         <input
-            v-model="form.writer"
+            v-model="gallery.writer"
             type="text"
             class="form-control"
             id="writer"
@@ -16,7 +16,7 @@
       <div class="mb-3">
         <label for="title" class="form-label">제목</label>
         <input
-            v-model="form.title"
+            v-model="gallery.title"
             type="text"
             class="form-control"
             id="title"
@@ -25,7 +25,7 @@
       <div class="mb-3">
         <label for="content" class="form-label">내용</label>
         <textarea
-            v-model="form.content"
+            v-model="gallery.content"
             class="form-control"
             id="content"
             rows="3"
@@ -35,7 +35,7 @@
         <label class="form-label">첨부파일</label>
         <div>jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.</div>
         <div>1번째 이미지는 썸네일로 활용됩니다.</div>
-        <div v-for="(input, index) in fileInputs" :key="index" style="padding:30px;">
+        <div v-for="(input, index) in gallery.files" :key="index" style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, index)"/>
           <button class="btn btn-light" ><i class="bi bi-x"></i></button>
         </div>
@@ -53,10 +53,80 @@
       </div>
     </form>
   </div>
+  <Teleport to="#modal">
+    <TheModal
+        :isPopup="show"
+        :title="'확인'"
+    >
+      <template #default>
+        정말로 수정하시겠습니까?
+      </template>
+      <template #actions>
+        <button class="btn btn-secondary" @click="updateDataAndGolist">수정</button>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
+    </TheModal>
+  </Teleport>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {inject, onMounted, reactive, ref} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import TheModal from "@/components/common/TheModal.vue";
+import {useAuthStore} from "@/store/loginStore";
+import {storeToRefs} from "pinia";
+
+const authStore = useAuthStore();
+const {userName} = storeToRefs(authStore);
+
+const route = useRoute();
+const router = useRouter();
+const $axios = inject('$axios');
+const bno = ref(route.params.bno);
+const gallery = reactive({
+  bno: '',
+  title: '',
+  content: '',
+  writer: userName,
+  files: [],
+  modDate: new Date(),
+});
+
+const fetchData = async (bno) => {
+  try {
+    const {data} = await $axios.get(`/galleries/${bno}`)
+    Object.assign(gallery, data);
+    console.log(data)
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+fetchData(bno.value)
+
+const goGalleryPage = () => {
+  router.push({name: 'GalleryList'});
+};
+
+async function updateDataAndGolist() {
+  try {
+    await $axios.put(`/galleries`,{...gallery})
+    router.push({name: 'GalleryRead', params: {bno: bno.value}});
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// modal
+const show = ref(false);
+
+const openModal = () => {
+  show.value = true;
+};
+
+const closeModal = () => {
+  show.value = false;
+}
 </script>
 
 <style scoped>

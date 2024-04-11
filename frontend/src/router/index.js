@@ -13,6 +13,10 @@ import HelpList from '@/views/help/HelpList.vue'
 import HelpRead from '@/views/help/HelpRead.vue'
 import HelpRegister from '@/views/help/HelpRegister.vue'
 import HelpModify from '@/views/help/HelpModify.vue'
+import NoticeList from '@/views/notice/NoticeList.vue'
+import NoticeRegister from '@/views/notice/NoticeRegister.vue'
+import NoticeModify from '@/views/notice/NoticeModify.vue'
+import NoticeRead from '@/views/notice/NoticeRead.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/TheMain.vue'
 import {useAuthStore} from '@/store/loginStore.js'
@@ -59,7 +63,27 @@ const routes = [
   /*
   [noticeBoard router ]
 */
-
+  {
+    path: '/notices',
+    name: 'NoticeList',
+    component: NoticeList,
+  },
+  {
+    path: '/notices/register',
+    name: 'NoticeRegister',
+    component: NoticeRegister,
+  },
+  {
+    path: '/notices/:bno',
+    name: 'NoticeRead',
+    component: NoticeRead,
+    props: route => ({nno: parseInt(route.params.nno)}),
+  },
+  {
+    path: '/notices/modify/:bno',
+    name: 'NoticeModify',
+    component: NoticeModify,
+  },
   /*
   [galleryBoard router ]
 */

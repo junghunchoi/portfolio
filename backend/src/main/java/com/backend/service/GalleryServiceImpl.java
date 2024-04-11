@@ -4,6 +4,7 @@ import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.GalleryListDTO;
+import com.backend.dto.file.FileDTO;
 import com.backend.entity.Board;
 import com.backend.entity.File;
 import com.backend.repository.board.BoardRepository;
@@ -38,7 +39,6 @@ public class GalleryServiceImpl implements GalleryService {
 		String sort = pageRequestDTO.getSort();
 		Pageable pageable = pageRequestDTO.getPageable(order);
 
-
 		Page<GalleryListDTO> result = boardRepository.searchGalleryList(types, keyword,
 			order, sort, pageable);
 
@@ -71,28 +71,34 @@ public class GalleryServiceImpl implements GalleryService {
 	@Override
 	public BoardDTO readOne(Long bno) {
 		List<Object[]> results = boardRepository.findBoardWithFileById(bno);
-		Board board = null;
-		board = (Board) results.get(0)[0]; // 첫 번째 열은 Board 객체를 가정합니다.
-		List<File> files = new ArrayList<>();
-		List<String> convertFiles = new ArrayList<>();
+		Board board = (Board) results.get(0)[0]; // 첫 번째 열은 Board 객체를 가정합니다.
+		List<File> filesFromDatabase = new ArrayList<>();
+		List<FileDTO> files = new ArrayList<>();
 
 		for (Object[] result : results) {
 			// 각 행에서 File 객체를 가져와 set에 추가합니다.
 			File file = (File) result[1]; // 두 번째 열은 File 객체를 가정합니다.
-			files.add(file);
+			filesFromDatabase.add(file);
 		}
 
-		for (File file : files) {
+		for (File file : filesFromDatabase) {
 			Resource resource = fileUtils.readFileAsResource(file.getUploadedFileName());
 			String resourceConvert = fileUtils.encodeResourceToBase64(resource);
-			convertFiles.add(resourceConvert);
+
+			FileDTO fileDTO = FileDTO.builder()
+			                         .fileName(file.getFileName())
+			                         .fileSize(file.getFileSize())
+			                         .fileType(file.getFileType())
+			                         .resourceConvert(resourceConvert)
+			                         .build();
+
+			files.add(fileDTO);
 		}
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
+		boardDTO.setFiles(files);
+		log.info(boardDTO);
 
-		boardDTO.setFiles(convertFiles);
-
-		// 조회수 증가 로직
 		board.updateViewCount(board.getViewCount() + 1);
 
 		boardRepository.save(board);

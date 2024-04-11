@@ -128,7 +128,6 @@ const handleFileUpload = (event, index) => {
     const newInputId = files.value.length; // 새 입력 필드의 고유 ID 생성
     files.value.push({id: newInputId}); // 배열에 새 입력 필드 정보 추가
   }
-  console.log(files);
 };
 
 const removefiles = (index) => {

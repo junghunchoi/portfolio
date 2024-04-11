@@ -28,4 +28,6 @@ public class FileDTO {
 	private long fileSize;
 
 	private String filePath;
+
+	private String resourceConvert;
 }

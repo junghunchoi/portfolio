@@ -1,5 +1,6 @@
 package com.backend.entity;
 
+import com.backend.domain.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,11 +19,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "notice")
-public class Notice {
+public class Notice extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long nno;
+
+	private String title;
+
+	private String content;
+
+	private int isMain;
 
 	private Long viewCount;
 
