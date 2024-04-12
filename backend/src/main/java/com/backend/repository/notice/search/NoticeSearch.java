@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface NoticeSearch {
-	Page<NoticeListDTO> searchHelpList(String[] types, String keyword,
+	Page<NoticeListDTO> searchNoticeList(String[] types, String keyword,
 		String order, String sort, Pageable pageable);
 
 }

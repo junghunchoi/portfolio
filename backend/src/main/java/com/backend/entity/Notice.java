@@ -18,7 +18,6 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "notice")
 public class Notice extends BaseEntity {
 
 	@Id
@@ -28,6 +27,8 @@ public class Notice extends BaseEntity {
 	private String title;
 
 	private String content;
+
+	private String writer;
 
 	private int isMain;
 

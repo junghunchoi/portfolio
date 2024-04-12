@@ -31,6 +31,12 @@
             rows="3"
         ></textarea>
       </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">상단고정</label>
+        <input type="checkbox"
+               v-model=notice.isMain"
+        />
+      </div>
       <div class="pt-4">
         <button
             type="button"
@@ -43,17 +49,6 @@
       </div>
     </form>
   </div>
-  <TheModal :is-popup="show"
-            :title="'확인'"
-  >
-    <template #default>
-      jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.
-    </template>
-    <template #actions>
-      <button class="btn btn-light" @click="closeModal">닫기</button>
-    </template>
-
-  </TheModal>
 </template>
 
 <script setup>
@@ -62,10 +57,10 @@ import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
 import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 const $axios = inject('$axios');
-
 
 const show = ref(false);
 const router = useRouter();
@@ -73,18 +68,17 @@ const router = useRouter();
 const notice = reactive({
   title: null,
   content: null,
+  isMain: null,
   writer: userName
 });
-
 
 const goNoticePage = () => {
   router.push('/notices');
 };
 
-const registerNoticeHandler = async () =>{
-  const res = $axios.post('/notices',{...notice})
+const registerNoticeHandler = async () => {
+  const res = $axios.post('/notices', {...notice})
 }
-
 
 const closeModal = () => {
   show.value = false;

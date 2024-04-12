@@ -27,7 +27,7 @@ public class NoticeController {
 	public ResponseEntity<ResultDTO> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
 		PageResponseDTO<NoticeListDTO> responseDTO =
-			(PageResponseDTO<BoardListDTO>) boardService.list(pageRequestDTO);
+			(PageResponseDTO<NoticeListDTO>) noticeService.list(pageRequestDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Board SuccessFully"));
 
