@@ -2,6 +2,7 @@ package com.backend.entity;
 
 import com.backend.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.BatchSize;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "files"})
 @ToString
 public class Board extends BaseEntity {
 

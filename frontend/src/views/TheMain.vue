@@ -27,7 +27,14 @@
 
 <script setup>
 import BoardCard from "@/views/free/BoardCard.vue";
-import {ref} from "vue";
+import {inject, onMounted, ref} from "vue";
+
+const $axios = inject('$axios');
+
+onMounted(()=>{
+  const res = $axios.get('/common/main')
+  console.log(res);
+})
 
 const Mock = ref([
   {
@@ -44,6 +51,8 @@ const Mock = ref([
     isLcok: false,
   }
 ])
+
+
 
 </script>
 

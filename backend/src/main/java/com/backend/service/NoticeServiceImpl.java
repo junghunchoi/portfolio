@@ -2,13 +2,9 @@ package com.backend.service;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.GalleryListDTO;
 import com.backend.dto.notice.NoticeDTO;
 import com.backend.dto.notice.NoticeListDTO;
-import com.backend.dto.reply.ReplyDTO;
 import com.backend.entity.Notice;
-import com.backend.entity.Reply;
 import com.backend.repository.notice.NoticeRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class NoticeServiceImpl implements NoticeService{
 
 	private final ModelMapper modelMapper;
-	private final NoticeService noticeService;
 	private final NoticeRepository noticeRepository;
 
 	@Override
@@ -35,7 +30,7 @@ public class NoticeServiceImpl implements NoticeService{
 		String sort = pageRequestDTO.getSort();
 		Pageable pageable = pageRequestDTO.getPageable(order);
 
-		Page<NoticeListDTO> result = noticeService.list(types, keyword,
+		Page<NoticeListDTO> result = noticeRepository.searchNoticeList(types, keyword,
 			order, sort, pageable);
 
 
@@ -67,7 +62,7 @@ public class NoticeServiceImpl implements NoticeService{
 
 	@Override
 	public void modify(NoticeDTO noticeDTO) {
-		Optional<Notice> noticeOptional = noticeRepository.findById(replyDTO.getRno());
+		Optional<Notice> noticeOptional = noticeRepository.findById(noticeDTO.getNno());
 
 		Notice notice = noticeOptional.orElseThrow();
 
@@ -79,6 +74,9 @@ public class NoticeServiceImpl implements NoticeService{
 
 	@Override
 	public void remove(Long nno) {
+		Optional<Notice> noticeOptional = noticeRepository.findById(nno);
 
+		Notice notice = noticeOptional.orElseThrow();
+		noticeRepository.delete(notice);
 	}
 }

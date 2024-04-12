@@ -23,7 +23,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="content" class="form-label">내용</label>
+        <label  class="form-label">내용</label>
         <textarea
             v-model="notice.content"
             class="form-control"
@@ -32,9 +32,9 @@
         ></textarea>
       </div>
       <div class="mb-3">
-        <label for="content" class="form-label">상단고정</label>
+        <label class="form-label">상단고정</label>
         <input type="checkbox"
-               v-model=notice.isMain"
+               v-model="notice.isMain"
         />
       </div>
       <div class="pt-4">
@@ -68,7 +68,7 @@ const router = useRouter();
 const notice = reactive({
   title: null,
   content: null,
-  isMain: null,
+  isMain: 0,
   writer: userName
 });
 
@@ -77,6 +77,7 @@ const goNoticePage = () => {
 };
 
 const registerNoticeHandler = async () => {
+  notice.isMain = notice.isMain === true ? 1 : 0;
   const res = $axios.post('/notices', {...notice})
 }
 

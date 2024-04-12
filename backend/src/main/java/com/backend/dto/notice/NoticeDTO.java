@@ -18,6 +18,8 @@ public class NoticeDTO {
 
 	private int isMain;
 
+	private String writer;
+
 	private Long viewCount;
 
 }
