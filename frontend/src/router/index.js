@@ -74,7 +74,7 @@ const routes = [
     component: NoticeRegister,
   },
   {
-    path: '/notices/:bno',
+    path: '/notices/:nno',
     name: 'NoticeRead',
     component: NoticeRead,
     props: route => ({nno: parseInt(route.params.nno)}),

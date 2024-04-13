@@ -17,7 +17,7 @@
                    , transition: `${transitionSpeed}ms` }">
             <!-- 마지막 슬라이드를 첫 위치에 복제 -->
             <div class="slide_content">
-              <img :src="'data:image/jpeg;base64,' +gallery.files[gallery.files.length - 1]"
+              <img :src="'data:image/jpeg;base64,' +gallery.files[gallery.files.length - 1].resourceConvert"
                    alt="Slide Image">
             </div>
             <!-- 원본 슬라이드 -->
@@ -25,7 +25,7 @@
               <img :src="'data:image/jpeg;base64,' + file.resourceConvert">
             </div>
             <!-- 첫 슬라이드를 마지막 위치에 복제 -->
-            <div class="slide_content">
+            <div class="slide_content" v-if="gallery.files && gallery.files.length > 0">
               <img :src="'data:image/jpeg;base64,' + gallery.files[0].resourceConvert" alt="Slide Image">
             </div>
           </div>
@@ -116,8 +116,8 @@ const replies = reactive({list: []});
 const loadGalleryData = async () => {
   try {
     const {data} = await getGalleryBybno(bno.value);
-    Object.assign(gallery, data); // gallery 객체에 데이터 할당
     console.log(data)
+    Object.assign(gallery, data); // gallery 객체에 데이터 할당
   } catch (e) {
     console.error(e);
   }
@@ -135,6 +135,7 @@ const loadReplyDate = async () => {
 onMounted(async () => {
   await loadGalleryData();
   await loadReplyDate();
+  console.log(gallery.files[0].resourceConvert)
 });
 
 const goGalleryPage = () => {
@@ -142,7 +143,7 @@ const goGalleryPage = () => {
 };
 
 const modifyGallery = () => {
-  router.push({name: 'GalleryModify', params: {bno: bno.value}}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+  router.push({name: 'GalleryModify', params: {bno: bno.value}});
 }
 
 const clickRemoveHandler = () => {

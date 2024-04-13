@@ -35,12 +35,13 @@ public class NoticeController {
 
 	@GetMapping()
 	public ResponseEntity<ResultDTO> list(PageRequestDTO pageRequestDTO) {
-		log.info(" --- board list --- ");
-		PageResponseDTO<NoticeListDTO> responseDTO = (PageResponseDTO<NoticeListDTO>) noticeService.list(
+		log.info(" --- notice list --- ");
+		log.info(pageRequestDTO);
+		PageResponseDTO<NoticeListDTO> responseDTO = noticeService.list(
 			pageRequestDTO);
 
 		return ResponseEntity.ok(
-			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Board SuccessFully"));
+			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
 
 	}
 
@@ -68,7 +69,7 @@ public class NoticeController {
 	@PutMapping()
 	public ResponseEntity<?> modify(@RequestBody @Valid NoticeDTO noticeDTO,
 		BindingResult bindingResult) {
-		log.info(" --- board modify --- ");
+		log.info(" --- notice modify --- ");
 
 		if (bindingResult.hasErrors()) {
 			log.error("has errors.......");
@@ -85,7 +86,7 @@ public class NoticeController {
 	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
 	@DeleteMapping("/{nno}")
 	public ResponseEntity<?> remove(@PathVariable("nno") Long nno) {
-		log.info("--- board delete ---");
+		log.info("--- notice delete ---");
 
 		noticeService.remove(nno);
 

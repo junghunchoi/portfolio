@@ -5,10 +5,41 @@
         <BoardCard class="col"
                    :title="'공지사항'"
                    :items="Mock"
-                   :destination="'/notices'"/>
+                   :destination="'/notices'">
+
+          <div  >
+
+          </div>
+        </BoardCard>
         <BoardCard class="col" :title="'자유게시판'"
                    :items="Mock"
-                   :destination="'/boards'"/>
+                   :destination="'/boards'">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">제목</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="board in boards">
+
+              <td>
+                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">{{
+                    board.title
+                  }}
+                </router-link>
+                <span>[{{
+                    board.replyCount
+                  }}]</span>
+                <span v-if="board.fileCount>=1" class="attachment-icon show">
+                  <i class="fas fa-paperclip"></i>
+                </span>
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </BoardCard>
       </div>
     </div>
     <div class="row">
@@ -19,7 +50,31 @@
       <BoardCard class="col"
                  :title="'문의게시판'"
                  :items="Mock"
-                 :destination="'/helps'"/>
+                 :destination="'/helps'">
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col">제목</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="help in helps">
+            <td>
+              <router-link :to="{ name: 'HelpRead', params: { hno: help.hno }}">{{
+                  help.title
+                }}
+              </router-link>
+              <span v-if="help.answer">(답변완료)</span>
+              <span v-else>(미답변)</span>
+              <span  v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
+              <span v-if="help.isSecret===1" class="attachment-icon show">
+                  <i class="bi bi-lock"></i>
+                </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </BoardCard>
     </div>
 
   </section>
@@ -27,13 +82,25 @@
 
 <script setup>
 import BoardCard from "@/views/free/BoardCard.vue";
-import {inject, onMounted, ref} from "vue";
+import {useRouter} from 'vue-router';
+import {inject, onMounted, reactive, ref} from "vue";
+import {isCreatedWithin7Days} from "@/common/dateUtils"
 
+const router = useRouter();
 const $axios = inject('$axios');
 
-onMounted(()=>{
-  const res = $axios.get('/common/main')
-  console.log(res);
+const boards = reactive({});
+const notices = reactive({});
+const galleries = reactive({});
+const helps = reactive({});
+
+onMounted(async ()=>{
+  const res = await $axios.get('/common/main')
+
+  Object.assign(boards,res.data.resultData.boards )
+  Object.assign(notices,res.data.resultData.notices )
+  Object.assign(galleries,res.data.resultData.galleries )
+  Object.assign(helps,res.data.resultData.helps )
 })
 
 const Mock = ref([

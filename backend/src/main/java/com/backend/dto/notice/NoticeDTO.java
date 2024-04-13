@@ -1,5 +1,6 @@
 package com.backend.dto.notice;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class NoticeDTO {
 
 	private String writer;
 
-	private Long viewCount;
+	private Long viewCount = 0L;
+
+	private LocalDateTime regDate;
 
 }

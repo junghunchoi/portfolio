@@ -69,7 +69,7 @@
   </div>
 </template>
 <script setup>
-import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
+import {computed, ref, watchEffect, reactive, onMounted, watch, inject} from 'vue';
 import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
@@ -80,6 +80,7 @@ defineProps({
 });
 
 const router = useRouter();
+const $axios = inject("$axios")
 const response = reactive({
   items: [],
   end: 0,

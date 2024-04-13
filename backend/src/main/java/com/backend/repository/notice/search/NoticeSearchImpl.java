@@ -26,6 +26,7 @@ public class NoticeSearchImpl extends QuerydslRepositorySupport implements Notic
 		String sort, Pageable pageable) {
 		QNotice notice = QNotice.notice;
 
+		log.info("searchNoticeList");
 		JPQLQuery<Notice> query = from(notice);
 
 		if ((types != null && types.length > 0) && keyword != null) {
@@ -42,6 +43,8 @@ public class NoticeSearchImpl extends QuerydslRepositorySupport implements Notic
 			query.where(booleanBuilder);
 		}
 
+		query.orderBy(notice.isMain.desc());
+
 		if (sort.equals("asc")) {
 			switch (order) {
 				case "regDate" -> query.orderBy(notice.regDate.asc());
@@ -57,9 +60,11 @@ public class NoticeSearchImpl extends QuerydslRepositorySupport implements Notic
 		}
 
 		JPQLQuery<NoticeListDTO> dtoQuery = query.select(Projections.bean(NoticeListDTO.class,
+			notice.nno,
 			notice.title,
 			notice.content,
 			notice.writer,
+			notice.viewCount,
 			notice.isMain,
 			notice.regDate
 		));

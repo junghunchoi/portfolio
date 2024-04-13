@@ -79,6 +79,7 @@ public class BoardController {
 	@GetMapping("/{bno}")
 	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
 		log.info(" --- board read --- ");
+		log.info(bno);
 		BoardDTO boardDTO = boardService.readOne(bno);
 
 

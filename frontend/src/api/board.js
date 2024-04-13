@@ -7,7 +7,7 @@ export function getBoards(params) {
 }
 
 export function getBoardBybno(bno) {
-    return axios.get(`http://localhost:1541/api/boards/${bno}`);
+    return axios.get(`http://localhost:1541/api/boards/${bno}`,);
 }
 
 export function createBoard(data) {

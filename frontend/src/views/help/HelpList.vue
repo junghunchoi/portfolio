@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import {computed, reactive, watch} from 'vue';
+import {computed, inject, reactive, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {getHelps} from "@/api/help";
 import ThePagination from "@/components/common/ThePagination.vue";
@@ -71,7 +71,7 @@ import {isCreatedWithin7Days} from "@/common/dateUtils"
 defineProps({
   limit: Number,
 });
-
+const $axios = inject("$axios")
 const router = useRouter();
 const response = reactive({
   items: [],
@@ -86,7 +86,7 @@ const response = reactive({
 
 const params = reactive({
   order: "regDate",
-  sort: "asc",
+  sort: "desc",
   page: 1, // 현재 페이지
   size: null,
   type: null,
@@ -103,7 +103,7 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-    const {data} = await getHelps(params);
+    const {data} = await $axios.get('/helps', {params:params});
     console.log(data);
     Object.assign(response, data);
   } catch (e) {
@@ -114,6 +114,7 @@ const fetchData = async () => {
 fetchData();
 
 watch(params, async (newVal, oldVal) => {
+  console.log(params)
   await fetchData(params)
 })
 

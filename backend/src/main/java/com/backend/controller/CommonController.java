@@ -21,7 +21,7 @@ public class CommonController {
 
 	private final CommonService commonService;
 
-	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
+	@ApiOperation(value = "get mainlist", notes = "게시물을 리스트로 조회")
 	@GetMapping("/main")
 	public ResponseEntity<ResultDTO> listMainPage() {
 

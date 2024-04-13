@@ -53,6 +53,9 @@ public class CustomRestAdvice {
 			stringBuilder.append(", ");
 		}
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR, String.valueOf(stringBuilder));
+
+		log.error("MethodArgumentNotValidException"  + stringBuilder);
+
 		return ResponseEntity.badRequest().body(response);
 	}
 

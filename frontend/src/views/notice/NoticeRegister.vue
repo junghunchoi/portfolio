@@ -79,6 +79,7 @@ const goNoticePage = () => {
 const registerNoticeHandler = async () => {
   notice.isMain = notice.isMain === true ? 1 : 0;
   const res = $axios.post('/notices', {...notice})
+  router.push('/notices');
 }
 
 const closeModal = () => {

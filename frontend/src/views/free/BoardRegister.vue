@@ -31,7 +31,7 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="content" class="form-label">내용</label>
+        <label class="form-label">내용</label>
         <textarea
             v-model="form.content"
             class="form-control"
@@ -43,11 +43,9 @@
         <label class="form-label">첨부파일</label>
         <div style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, 0)"/>
-
         </div>
         <div style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, 1)"/>
-
         </div>
         <div style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, 2)"/>
@@ -96,7 +94,6 @@ const save = () => {
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));
-
     uploadFile(formData)
     .then(() => {
       router.push({name: 'BoardList'});

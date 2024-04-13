@@ -9,7 +9,6 @@ import {createPinia} from "pinia";
 import {createPersistedState} from 'pinia-plugin-persistedstate'
 import axios from '@/plugins/axios'
 
-
 const pinia = createPinia()
 pinia.use(createPersistedState({
   storage: localStorage,
