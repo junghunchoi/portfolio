@@ -40,6 +40,7 @@ public class HelpServiceImpl implements HelpService {
 
 		Optional<Help> result = helpRepository.findById(hno);
 		Help help = result.orElseThrow();
+		log.info(help.getWriter());
 		HelpDTO helpDTO = modelMapper.map(help, HelpDTO.class);
 
 		//조회수 증가

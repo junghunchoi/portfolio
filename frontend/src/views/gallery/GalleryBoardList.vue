@@ -17,7 +17,7 @@
             <div v-for="gallery in response.items" class="">
               <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
               <div class="card">
-                <img :src="'data:image/jpeg;base64,' + gallery.file"  class="card-img-top">
+                <img :src="'http://localhost:1541/api/files/' + gallery.fileName"  class="card-img-top">
               </div>
                 <div class="card-body">
                   <h5 class="card-title">{{gallery.title}}</h5>

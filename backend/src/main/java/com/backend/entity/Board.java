@@ -48,13 +48,6 @@ public class Board extends BaseEntity {
 
 	private long viewCount;
 
-//	@OneToMany(mappedBy = "board", cascade = {
-//		CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-//	@Builder.Default
-//	@BatchSize(size = 20)
-//	private Set<BoardImage> imageSet = new HashSet<>();
-
-
 	/**
 	 * 변경이 가능한 컬럼을 메소드로 처리해 영속성을 관리한다.
 	 *

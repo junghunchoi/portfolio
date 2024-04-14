@@ -103,8 +103,9 @@ public class FileController {
 	 * @return 파일 데이터를 담고 있는 Resource와 함께 반환되는 ResponseEntity 객체
 	 */
 	@ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
-	@GetMapping("/view/{fileName}")
+	@GetMapping("/{fileName}")
 	public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) {
+		log.info("viewFileGET");
 
 		Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
 		String resourceName = resource.getFilename();

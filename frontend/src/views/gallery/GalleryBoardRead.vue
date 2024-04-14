@@ -16,17 +16,17 @@
                    , transform: `translate3d(-${slideWidth * (currentSlideIndex + 1)}px, 0px, 0px)`
                    , transition: `${transitionSpeed}ms` }">
             <!-- 마지막 슬라이드를 첫 위치에 복제 -->
-            <div class="slide_content">
-              <img :src="'data:image/jpeg;base64,' +gallery.files[gallery.files.length - 1].resourceConvert"
+            <div class="slide_content" v-if="gallery.files && gallery.files.length > 0">
+              <img :src="'http://localhost:1541/api/files/' +gallery.files[gallery.files.length - 1].uploadedFileName"
                    alt="Slide Image">
             </div>
             <!-- 원본 슬라이드 -->
             <div class="slide_content" v-for="file in gallery.files">
-              <img :src="'data:image/jpeg;base64,' + file.resourceConvert">
+              <img :src="'http://localhost:1541/api/files/' + file.uploadedFileName">
             </div>
             <!-- 첫 슬라이드를 마지막 위치에 복제 -->
             <div class="slide_content" v-if="gallery.files && gallery.files.length > 0">
-              <img :src="'data:image/jpeg;base64,' + gallery.files[0].resourceConvert" alt="Slide Image">
+              <img :src="'http://localhost:1541/api/files/' + gallery.files[0].uploadedFileName" alt="Slide Image">
             </div>
           </div>
         </div>
@@ -135,7 +135,6 @@ const loadReplyDate = async () => {
 onMounted(async () => {
   await loadGalleryData();
   await loadReplyDate();
-  console.log(gallery.files[0].resourceConvert)
 });
 
 const goGalleryPage = () => {

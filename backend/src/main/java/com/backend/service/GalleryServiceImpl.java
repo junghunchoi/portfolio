@@ -82,14 +82,14 @@ public class GalleryServiceImpl implements GalleryService {
 		}
 
 		for (File file : filesFromDatabase) {
-			Resource resource = fileUtils.readFileAsResource(file.getUploadedFileName());
-			String resourceConvert = fileUtils.encodeResourceToBase64(resource);
+//			Resource resource = fileUtils.readFileAsResource(file.getUploadedFileName());
+//			String resourceConvert = fileUtils.encodeResourceToBase64(resource);
 
 			FileDTO fileDTO = FileDTO.builder()
 			                         .fileName(file.getFileName())
 			                         .fileSize(file.getFileSize())
 			                         .fileType(file.getFileType())
-			                         .resourceConvert(resourceConvert)
+				.uploadedFileName(file.getUploadedFileName())
 			                         .build();
 
 			files.add(fileDTO);

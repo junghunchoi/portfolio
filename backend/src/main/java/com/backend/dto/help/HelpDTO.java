@@ -20,5 +20,7 @@ public class HelpDTO {
 
 	private int isSecret;
 
+	private String writer;
+
 	private long viewCount;
 }

@@ -54,6 +54,7 @@ const help = reactive({
 
 const save = () => {
   console.log(help)
+  help.isSecret = help.isSecret === true ? 1 : 0;
   createHelp({
     ...help,
   }).then(() => {
