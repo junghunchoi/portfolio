@@ -33,14 +33,14 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<ResultDTO> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
+	public ResponseEntity<ResultDTO<String>> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
 
 		log.info("---- membercontroller login ----");
 		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
 	}
 
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultDTO> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
+	public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
 		log.info("memberController - registerMember");
 		log.info(memberJoinDTO);
 		try {
@@ -49,14 +49,10 @@ public class MemberController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(ResultDTO.res(HttpStatus.BAD_REQUEST, e.getMessage()));
 		}
-
-
-
-
 	}
 
 	@PostMapping("/check")
-	public ResponseEntity<ResultDTO> checkUserName(@RequestBody String userName) {
+	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody String userName) {
 		log.info("memberController - checkUserName");
 		log.info(userName);
 		Optional<Member> member = memberService.readOne(userName);

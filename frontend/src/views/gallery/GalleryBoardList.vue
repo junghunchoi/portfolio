@@ -81,8 +81,7 @@ const fetchData = async () => {
   try {
 
     const {data} = await getGalleries(params);
-    Object.assign(response, data);
-    console.log(data);
+    Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
   }
@@ -90,7 +89,7 @@ const fetchData = async () => {
 
 fetchData();
 
-watch(params, async (newVal, oldVal) => {
+watch(params, async () => {
   await fetchData(params)
 })
 

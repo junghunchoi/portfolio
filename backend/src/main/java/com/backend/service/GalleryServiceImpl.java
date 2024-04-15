@@ -44,10 +44,7 @@ public class GalleryServiceImpl implements GalleryService {
 
 		for (GalleryListDTO galleryListDTO : result.getContent()) {
 			String fileName = galleryListDTO.getFileName();
-			if (fileName == null) {
-				continue;
-			}
-			galleryListDTO.setFile(fileUtils.readFileAsResource(fileName));
+
 		}
 
 		return PageResponseDTO.<GalleryListDTO>withAll()
@@ -82,14 +79,11 @@ public class GalleryServiceImpl implements GalleryService {
 		}
 
 		for (File file : filesFromDatabase) {
-//			Resource resource = fileUtils.readFileAsResource(file.getUploadedFileName());
-//			String resourceConvert = fileUtils.encodeResourceToBase64(resource);
-
 			FileDTO fileDTO = FileDTO.builder()
 			                         .fileName(file.getFileName())
 			                         .fileSize(file.getFileSize())
 			                         .fileType(file.getFileType())
-				.uploadedFileName(file.getUploadedFileName())
+			                         .uploadedFileName(file.getUploadedFileName())
 			                         .build();
 
 			files.add(fileDTO);
@@ -97,7 +91,6 @@ public class GalleryServiceImpl implements GalleryService {
 
 		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 		boardDTO.setFiles(files);
-		log.info(boardDTO);
 
 		board.updateViewCount(board.getViewCount() + 1);
 

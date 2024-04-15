@@ -42,18 +42,19 @@ public class GalleryController {
 //	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiOperation(value = "get galleryList", notes = "게시물을 리스트로 조회")
 	@GetMapping()
-	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
+	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- gallery list --- ");
 		PageResponseDTO<GalleryListDTO> responseDTO =
 			galleryService.list(pageRequestDTO);
 
-		return ResponseEntity.ok(responseDTO);
+
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
 	}
 
 
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultDTO> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
+	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
 		throws BindException {
 		log.info(" --- gallery register --- ");
 		log.info(boardDTO);

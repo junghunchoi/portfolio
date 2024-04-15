@@ -29,9 +29,6 @@ public class GalleryListDTO {
 
 	private String fileName;
 
-	@JsonSerialize(using = ResourceSerializer.class)
-	private Resource file;
-
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 }

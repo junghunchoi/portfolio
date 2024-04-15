@@ -8,6 +8,9 @@ import dayjs from "@/plugins/dayjs";
 import {createPinia} from "pinia";
 import {createPersistedState} from 'pinia-plugin-persistedstate'
 import axios from '@/plugins/axios'
+import BootstrapVue3 from 'bootstrap-vue-3';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
 const pinia = createPinia()
 pinia.use(createPersistedState({
@@ -19,6 +22,8 @@ const app = createApp(App)
 .use(router)
 .use(pinia)
 .use(dayjs)
+.use(BootstrapVue3)
+
 
 app.provide('$axios', axios);
 app.mount('#app');

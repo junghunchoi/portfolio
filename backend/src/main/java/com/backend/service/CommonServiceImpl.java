@@ -1,5 +1,8 @@
 package com.backend.service;
 
+import com.backend.dto.board.BoardListDTO;
+import com.backend.dto.board.BoardMainDTO;
+import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Help;
 import com.backend.entity.Notice;
@@ -32,8 +35,8 @@ public class CommonServiceImpl implements CommonService{
 		Map<String, List<?>> result = new HashMap<>();
 		Pageable pageable = PageRequest.of(0, 5); // 5개의 행만 조회
 
-		List<Board> boardData = boardRepository.findBoardsTop5(pageable);
-		List<Board> galleryData = boardRepository.findGalleiesTop5(pageable);
+		List<BoardMainDTO> boardData = boardRepository.findBoardsTop5(pageable);
+		List<GalleryListDTO> galleryData = boardRepository.findGalleiesTop3(PageRequest.of(0, 3));
 		List<Help> helpData = helpRepository.findHelpsTop5(pageable);
 		List<Notice> noticeData = noticeRepository.findNoticesTop5(pageable);
 

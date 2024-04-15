@@ -3,13 +3,13 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          Board Modify
+          게시물 수정
         </div>
         <div class="card-body">
           <form @submit.prevent id="f1">
 
             <div class="input-group mb-3">
-              <span class="input-group-text">Title</span>
+              <span class="input-group-text">제목</span>
               <input type="text" class="form-control" v-model="board.title">
             </div>
             <div class="input-group mb-3">
@@ -21,21 +21,21 @@
               </select>
             </div>
             <div class="input-group mb-3">
-              <span class="input-group-text">Content</span>
-              <textarea class="form-control " v-model="board.content"></textarea>
+              <span class="input-group-text">내용</span>
+              <textarea class="form-control" v-model="board.content"></textarea>
             </div>
 
             <div class="input-group mb-3">
-              <span class="input-group-text">Writer</span>
+              <span class="input-group-text">작성자</span>
               <input type="text" class="form-control" v-model="board.writer" readonly>
             </div>
             <div class="input-group mb-3">
-              <span class="input-group-text">RegDate</span>
-              <input type="text" class="" :value="board.regDate" readonly>
+              <span class="input-group-text">등록일</span>
+              <div class="form-control">{{ $dayjs(board.regDate).format('YYYY.MM.DD') }}</div>
             </div>
             <div class="input-group mb-3">
-              <span class="input-group-text">ModDate</span>
-              <input type="text" class="" :value="board.modDate" readonly>
+              <span class="input-group-text">수정일</span>
+              <div class="form-control">{{ $dayjs(board.modDate).format('YYYY.MM.DD') }}</div>
             </div>
             <div class="my-4">
               <div class="float-end">

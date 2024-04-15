@@ -38,12 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Log4j2
 public class FileController {
-	/*
-	1) List<FileResultDTO> upload // 수정은 삭제후 다시 삽입.
-	2) ResponseEntity<Resource> viewFileGET
-	3) Map<String,Boolean> removeFile
-	 */
-
 	@Value("${com.backend.upload.path}")
 	private String uploadPath;
 
@@ -60,7 +54,6 @@ public class FileController {
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ResultDTO> upload( FileDTO fileDTO) {
 		log.info("FileController upload ....");
-		log.info(fileDTO);
 
 		if (fileDTO.getFiles() != null) {
 			filesService.uploadFiles(fileDTO);
@@ -75,7 +68,6 @@ public class FileController {
 	@PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?>  download(@RequestBody FileDTO fileDTO) {
 		log.info("FileController download ....");
-		log.info(fileDTO);
 		String contentType = "application/octet-stream";
 
 		String uploadFileName = filesService.uploadFileNameByBnoAndOriginalFileName(fileDTO);
@@ -105,10 +97,7 @@ public class FileController {
 	@ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
 	@GetMapping("/{fileName}")
 	public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) {
-		log.info("viewFileGET");
-
 		Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
-		String resourceName = resource.getFilename();
 		HttpHeaders headers = new HttpHeaders();
 
 		try {
@@ -129,7 +118,6 @@ public class FileController {
 	@DeleteMapping("/remove/{fileName}")
 	public Map<String, Boolean> removeFile(@PathVariable String fileName) {
 		Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
-		String resourceName = resource.getFilename();
 		Map<String, Boolean> resultMap = new HashMap<>();
 		boolean removed = false;
 		try {

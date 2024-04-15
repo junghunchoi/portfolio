@@ -71,8 +71,6 @@ public class CustomSecurityConfig {
 		//refreshtoken 호출처리
 		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil), TokenCheckFilter.class);
 
-		/////////
-
 		http.cors()
 		    .and()
 		    .csrf()

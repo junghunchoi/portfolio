@@ -1,9 +1,8 @@
 package com.backend.entity;
 
-import com.backend.domain.BaseEntity;
+import com.backend.entity.common.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

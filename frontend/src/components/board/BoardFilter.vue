@@ -1,21 +1,16 @@
 <template>
   <div class="d-flex justify-content-between">
     <div class="d-flex w-75">
-    <select class="form-select w-25" v-model="searchCondition.type">
-      <option selected value="t">제목</option>
-      <option value="c">내용</option>
-      <option value="w">작성자</option>
-      <option value="tc">제목+내용</option>
-      <option value="tcw">제목+내용+작성자</option>
-    </select>
-    <input
-        v-model="searchCondition.keyword"
-        type="text"
-        class="form-control w-75"
-    />
+      <b-form-select class="form-select w-25" v-model="searchCondition.type"
+                     :options="options"></b-form-select>
+      <input
+          v-model="searchCondition.keyword"
+          type="text"
+          class="form-control w-75"
+      />
     </div>
     <div>
-    <button class="btn btn-light" @click="$emit('search', searchCondition);">검색</button>
+      <button class="btn btn-light" @click="$emit('search', searchCondition);">검색</button>
     </div>
   </div>
   <div class="d-flex justify-content-between gy-3">
@@ -52,22 +47,32 @@
 </template>
 
 <script setup>
-import {  reactive} from 'vue';
+import {ref, reactive} from 'vue';
 
 const props = defineProps({
   keyword: String,
 
 })
 
-defineEmits(["search","update:size","update:sort","update:order"]);
+defineEmits(["search", "update:size", "update:sort", "update:order"]);
 
 const searchCondition = reactive({
-  type: '',
+  type: 't',
   keyword: '',
-  size:10,
-  sort:'',
-  order:'',
+  size: 10,
+  sort: '',
+  order: '',
 })
+
+// const selectedOption = ref('제목')
+const options = ref([
+  {value: 't', text: '제목'},
+  {value: 'c', text: '내용'},
+  {value: 'w', text: '작성자'},
+  {value: 'tc', text: '제목+내용'},
+  {value: 'tcw', text: '제목+내용+작성자'}
+])
+
 
 </script>
 

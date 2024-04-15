@@ -20,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,7 +57,6 @@ public class FilesServiceImpl implements FilesService{
 	public String registerFiles(FileDTO fileDTO) {
 
 		try {
-			log.info(fileDTO);
 			log.info(fileDTO.getFileType());
 
 			File file = File.builder()
@@ -126,12 +126,11 @@ public class FilesServiceImpl implements FilesService{
 		QFile file = QFile.file;
 		String originalFileName = fileDTO.getFileName();
 
-		String uploadFileName = queryFactory
+		return queryFactory
 			.select(file.uploadedFileName)
 			.from(file)
 			.where(file.fileName.eq(originalFileName))
 			.fetchOne();
-
-		return uploadFileName;
 	}
+
 }

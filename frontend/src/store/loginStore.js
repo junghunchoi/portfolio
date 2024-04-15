@@ -16,7 +16,6 @@ export const useAuthStore = defineStore('auth', () => {
         username: inputUsername,
         password: inputPassword,
       });
-
       if (result.status === 200) {
         loginSuccess.value = true;
         userName.value = inputUsername;
@@ -24,8 +23,6 @@ export const useAuthStore = defineStore('auth', () => {
 
         const accessToken = result.data.accessToken;
         const refreshToken = result.data.refreshToken;
-
-
 
         localStorage.setItem("accessToken", accessToken)
         localStorage.setItem("refreshToken", refreshToken)

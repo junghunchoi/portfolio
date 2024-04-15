@@ -85,7 +85,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public PageResponseDTO<?> list(PageRequestDTO pageRequestDTO) {
+	public PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();

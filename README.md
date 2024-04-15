@@ -1,23 +1,45 @@
-# 프로젝트 이름: 개발자 포트폴리오
+# 프로젝트 이름: junghun's portfolio
 
 ## 프로젝트 소개
-이 포트폴리오는 스프링 부트와 Vue.js를 활용하여 개발되었습니다. 주요 기능으로는 CRUD, 소셜 로그인, 파일 저장 등이 있습니다. 이 프로젝트는 개발자가 자신의 경력과 프로젝트를 소개하기 위한 목적으로 만들어졌습니다.
+이 포트폴리오는 스프링 부트와 Vue.js를 활용하여 개발되었습니다. 
+게시판에서 가장 범용적으로 많이 사용되는 기능들을 구현하였습니다.
+이 프로젝트는 개발자가 자신의 경력과 프로젝트를 소개하기 위한 목적으로 만들어졌습니다.
 
 ## 기술 스택
-- 백엔드: Spring Boot, JPA, Spring Security
-- 프론트엔드: Vue.js, Thymeleaf
-- 데이터베이스: MariaDB
+###백엔드
+
+  <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"></br>
+<img src="https://img.shields.io/badge/JPA-59666C?style=flat-square&logo=Hibernate&logoColor=white"></br>
+<img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=Spring-Security&logoColor=white"></br>
+
+###프론트엔드
+<img src="https://img.shields.io/badge/Vue.js-35495E?style=flat-square&logo=vue.js&logoColor=4FC08D"></br>
+<img src="https://img.shields.io/badge/Pinia-35495E?style=flat-square&logo=vuedotjs&logoColor=4FC08D"></br>
+<img src="https://img.shields.io/badge/Bootstrap--Vue-563D7C?style=flat-square&logo=bootstrap-vue&logoColor=white"></br>
+
+###데이터베이스 
+<img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=mariadb&logoColor=white"></br>
 - 개발 환경: Intellij, AWS
-- 주요 라이브러리: Swagger-UI
 
-## 시작하기
-이 섹션에서는 프로젝트를 로컬 머신에서 실행하기 위한 절차를 설명합니다.
 
-### 전제 조건
-- Java 11
-- Node.js 최신 버전
-- MariaDB 서버
 
-### 설치 방법
-1. 깃허브에서 프로젝트 클론:
-2. git clone https://github.com/junghunchoi/portfolio.git
+### 버전
+- Java 14
+- Spring boot 2.7.14
+- Vue 3
+- MariaDB
+- 
+
+## ERD
+
+## <a href=""> Java Doc</a>
+- 프로젝트 로직의 java Doc
+
+## <a href=""> Api 문서</a>
+- 프로젝트 로직의 java Doc
+
+## ⭐ 주요 기능
+사용자 및 관리자의 기능 분기
+프론트의 상태 관리
+JPA를 통해 영속성관리
+첨부파일, 댓글, 정렬 등 게시판이 기본으로 필요로하는 대부분의 기능 구현

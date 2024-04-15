@@ -17,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST API 컨트롤러 클래스로 게시판 관련 HTTP 요청을 처리합니다.
+ * REST API 컨트롤러 클래스로 자유 게시판 관련 HTTP 요청을 처리합니다.
  */
 @RestController
 @RequestMapping("/api/boards")
@@ -36,12 +36,11 @@ public class BoardController {
 //	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
-	public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
+	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		log.info(" --- board list --- ");
-		PageResponseDTO<BoardListDTO> responseDTO =
-			(PageResponseDTO<BoardListDTO>) boardService.list(pageRequestDTO);
+		PageResponseDTO<BoardListDTO> responseDTO =	boardService.list(pageRequestDTO);
 
-		return ResponseEntity.ok(responseDTO);
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
 	}
 
 	/**
@@ -51,11 +50,9 @@ public class BoardController {
 	 * @param bindingResult 요청 데이터의 유효성 검사 결과
 	 * @return 생성된 게시물의 번호와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	//@Valid -> DTO에서 설정한 제약을 검증하는 어노테이션
-	//BindingResult -> 유효성 검사를 위한 클래스로 아래 if문을 통해 검증한다.
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
-	public ResponseEntity<ResultDTO> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult)
+	public ResponseEntity<ResultDTO<Long>> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult)
 		throws BindException {
 		log.info(" --- board register --- ");
 		log.info(boardDTO);
@@ -95,15 +92,9 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PutMapping()
-	public ResponseEntity<?> modify(@RequestBody @Valid BoardDTO boardDTO,
+	public ResponseEntity<ResultDTO<String>> modify(@RequestBody @Valid BoardDTO boardDTO,
 		BindingResult bindingResult) {
 		log.info(" --- board modify --- ");
-
-		if (bindingResult.hasErrors()) {
-			log.error("has errors.......");
-
-			return ResponseEntity.badRequest().body("wrong parameter");
-		}
 		log.info(boardDTO);
 		boardService.modify(boardDTO);
 
@@ -118,13 +109,10 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
 	@DeleteMapping("/{bno}")
-	public ResponseEntity<?> remove(@PathVariable("bno") Long bno) {
+	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("bno") Long bno) {
 		log.info("--- board delete ---");
-		try {
-			boardService.remove(bno);
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("fail remove board : " + bno + " check log");
-		}
+		boardService.remove(bno);
+
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Board SuccessFully"));
 
 	}

@@ -3,6 +3,7 @@ package com.backend.service;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
+import com.backend.dto.board.BoardListDTO;
 import com.backend.entity.Board;
 
 public interface BoardService {
@@ -21,7 +22,7 @@ public interface BoardService {
 	 * @param pageRequestDTO
 	 * @return PageResponseDTO
 	 */
-	PageResponseDTO<?> list(PageRequestDTO pageRequestDTO);
+	PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO);
 
 
 	/**

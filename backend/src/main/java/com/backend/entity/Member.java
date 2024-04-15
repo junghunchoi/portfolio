@@ -4,10 +4,9 @@ package com.backend.entity;
  * 사용자 entity 클래스
  * 추후 구현 예정
  */
-import com.backend.domain.BaseEntity;
+import com.backend.entity.common.BaseEntity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
 import lombok.*;
 
 import javax.persistence.ElementCollection;

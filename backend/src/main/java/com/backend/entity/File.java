@@ -1,6 +1,6 @@
 package com.backend.entity;
 
-import com.backend.domain.BaseEntity;
+import com.backend.entity.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;

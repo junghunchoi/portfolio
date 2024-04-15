@@ -69,7 +69,7 @@
   </div>
 </template>
 <script setup>
-import {computed, ref, watchEffect, reactive, onMounted, watch, inject} from 'vue';
+import {computed, reactive, watch, inject} from 'vue';
 import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board";
 import ThePagination from "@/components/common/ThePagination.vue";
@@ -113,17 +113,16 @@ const fetchData = async () => {
   try {
 
     const {data} = await getBoards(params);
-    Object.assign(response, data);
-    console.log(data);
+    Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
   }
 };
 
+
 fetchData();
 
 watch(params, async (newVal, oldVal) => {
-  console.log(params)
   await fetchData(params)
 })
 

@@ -1,15 +1,11 @@
 package com.backend.entity;
 
-import com.backend.domain.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.backend.entity.common.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.*;
 
 import javax.persistence.*;
-import org.hibernate.annotations.BatchSize;
 
 /**
  * 게시글 entity 클래스

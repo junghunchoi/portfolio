@@ -75,6 +75,7 @@ public class HelpSearchImpl extends QuerydslRepositorySupport implements HelpSea
 			help.title,
 			help.content,
 			help.answer,
+			help.writer,
 			help.isSecret,
 			help.regDate
 		));

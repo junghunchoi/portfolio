@@ -24,8 +24,6 @@
               <span class="input-group-text">답변</span>
               <input type="text" class="form-control" :value="help.answer" readonly>
             </div>
-
-
             <div class="my-4">
               <div class="float-end">
                 <button type="button" class="btn btn-primary" @click="goListPage">목록</button>
@@ -40,7 +38,7 @@
 </template>
 
 <script setup>
-import {ref, watch, onMounted, reactive,inject} from 'vue';
+import {ref, onMounted, reactive,inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'

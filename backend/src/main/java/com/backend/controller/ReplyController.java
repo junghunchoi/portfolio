@@ -38,7 +38,7 @@ public class ReplyController {
 	 */
 	@ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글등록")
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultDTO> register(@Valid @RequestBody ReplyDTO replyDTO) {
+	public ResponseEntity<ResultDTO<String>> register(@Valid @RequestBody ReplyDTO replyDTO) {
 		log.info("replyController register...");
 		log.info(replyDTO);
 
@@ -56,11 +56,10 @@ public class ReplyController {
 	 */
 	@ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물 댓글목록")
 	@GetMapping(value = "/{bno}")
-	public ResponseEntity<ResultDTO> getList(@PathVariable("bno") Long bno,
+	public ResponseEntity<ResultDTO<Object>> getList(@PathVariable("bno") Long bno,
 		PageRequestDTO pageRequestDTO) {
+		log.info("replyController register...");
 		PageResponseDTO<ReplyDTO> response = replyService.getListOfBoard(bno, pageRequestDTO);
-
-		log.info("requestDTO -> " + response.toString());
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), response));
 

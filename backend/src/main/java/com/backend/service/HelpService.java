@@ -3,6 +3,7 @@ package com.backend.service;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.help.HelpDTO;
+import com.backend.dto.help.HelpListDTO;
 
 public interface HelpService {
 	Long register(HelpDTO helpDTO);
@@ -19,5 +20,5 @@ public interface HelpService {
 	 * @param pageRequestDTO
 	 * @return PageResponseDTO
 	 */
-	PageResponseDTO<?> list(PageRequestDTO pageRequestDTO);
+	PageResponseDTO<HelpListDTO> list(PageRequestDTO pageRequestDTO);
 }

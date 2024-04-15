@@ -72,7 +72,7 @@ public class HelpServiceImpl implements HelpService {
 	}
 
 	@Override
-	public PageResponseDTO<?> list(PageRequestDTO pageRequestDTO) {
+	public PageResponseDTO<HelpListDTO> list(PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
