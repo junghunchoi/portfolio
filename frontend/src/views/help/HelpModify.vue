@@ -31,8 +31,8 @@ import {ref, onMounted, reactive, inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import {createBoard} from "@/api/board";
-import {uploadFile} from "@/api/file";
+
+const AUTHORITY = useAuthStore().getAuthorities
 
 const route = useRoute();
 const router = useRouter();

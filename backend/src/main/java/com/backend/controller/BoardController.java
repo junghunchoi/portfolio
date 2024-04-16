@@ -27,17 +27,16 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
 	private final BoardService boardService;
-
 	/**
 	 * 페이지 요청 정보를 기반으로 게시물 목록과 각 게시물의 댓글 수를 조회합니다.
 	 *
 	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
+
 		log.info(" --- board list --- ");
 		PageResponseDTO<BoardListDTO> responseDTO =	boardService.list(pageRequestDTO);
 

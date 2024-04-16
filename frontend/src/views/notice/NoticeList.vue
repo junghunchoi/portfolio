@@ -6,7 +6,7 @@
       @update:sort="handleUpdateSort"
   />
 
-  <button class="btn btn-primary m-2" @click="goRegisterPage">공지 등록</button>
+  <button v-if="AUTHORITY === 'ADMIN'" class="btn btn-primary m-2" @click="goRegisterPage">공지 등록</button>
   <table class="table">
     <thead>
     <tr>
@@ -54,7 +54,9 @@ import BoardFilter from "@/components/board/BoardFilter.vue";
 import {useRouter} from "vue-router";
 import ThePagination from "@/components/common/ThePagination.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
+import {useAuthStore} from "@/store/loginStore.js";
 
+const AUTHORITY = useAuthStore().getAuthorities
 defineProps({
   limit: Number,
 });

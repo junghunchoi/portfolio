@@ -43,12 +43,15 @@ import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 
+const AUTHORITY = useAuthStore().getAuthorities
+
 const route = useRoute();
 const router = useRouter();
 const $axios = inject('$axios');
 const hno = ref(Number(route.params.hno));
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
+
 
 
 const help = reactive({

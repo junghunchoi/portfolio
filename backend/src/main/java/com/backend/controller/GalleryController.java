@@ -39,7 +39,6 @@ public class GalleryController {
 	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-//	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiOperation(value = "get galleryList", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {

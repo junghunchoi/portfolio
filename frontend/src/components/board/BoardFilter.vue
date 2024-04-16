@@ -1,12 +1,13 @@
 <template>
   <div class="d-flex justify-content-between">
-    <div class="d-flex w-75">
-      <b-form-select class="form-select w-25" v-model="searchCondition.type"
+    <div class="d-flex" style="width: 90%">
+      <b-form-select class="form-select w-25 me-2"
+                     v-model="searchCondition.type"
                      :options="options"></b-form-select>
       <input
           v-model="searchCondition.keyword"
           type="text"
-          class="form-control w-75"
+          class="form-control"
       />
     </div>
     <div>

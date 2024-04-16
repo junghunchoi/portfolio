@@ -35,7 +35,9 @@
 <script setup>
 import {inject, onMounted, reactive, ref} from 'vue';
 import {useRoute, useRouter} from "vue-router";
+import {useAuthStore} from "@/store/loginStore.js";
 
+const AUTHORITY = useAuthStore().getAuthorities
 const route = useRoute();
 const router = useRouter();
 const $axios = inject('$axios');

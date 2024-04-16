@@ -8,6 +8,7 @@ import com.backend.security.filter.TokenCheckFilter;
 import com.backend.security.handler.ApiLoginSuccessHandler;
 import com.backend.security.handler.Custom403Handler;
 import com.backend.utils.JWTUtil;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,27 +38,38 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 필요한 화면에만 보안설정을 할 수있는 어노테이션
 public class CustomSecurityConfig {
+
 	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
 	private final CustomUserDetailsService userDetailsService;
 	private final JWTUtil jwtUtil;
 
+	private static final String[] PERMIT_URL_ARRAY = {
+		"/swagger-ui/**",
+		"/api/auth/*",
+		"/api/members/**",
+		"/login",
+		"/api/files/**"
+	};
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
 		log.info("---- security config ---");
 
+		//AuthenticationManagerBuilder 설정
 		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
 			AuthenticationManagerBuilder.class);
 
 		authenticationManagerBuilder.userDetailsService(userDetailsService)
 		                            .passwordEncoder(passwordEncoder());
 
+		//get AuthenticationManager
 		AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
+		//필터체인에 AuthenticationManager 등록
 		http.authenticationManager(authenticationManager);
 
 		//ApiLoginFilter
-		APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
+		APILoginFilter apiLoginFilter = new APILoginFilter("/login");
 		apiLoginFilter.setAuthenticationManager(authenticationManager);
 		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -65,10 +78,12 @@ public class CustomSecurityConfig {
 		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
 
 		//api로 시작하는 모든 경로는 tokenfilterchain 동작
-		http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService),
+			UsernamePasswordAuthenticationFilter.class);
 
 		//refreshtoken 호출처리
-		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil), TokenCheckFilter.class);
+		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),
+			TokenCheckFilter.class);
 
 		http.cors()
 		    .and()
@@ -82,7 +97,7 @@ public class CustomSecurityConfig {
 		    .httpBasic()
 		    .disable()
 		    .authorizeRequests()
-		    .antMatchers( "/api/**","/api/auth/**")
+		    .antMatchers("/api/files/**")
 		    .permitAll()
 		    .anyRequest()
 		    .authenticated();
@@ -140,11 +155,12 @@ public class CustomSecurityConfig {
 	/**
 	 * 토큰 검사를 위한 TokenCheckFilter 생성
 	 *
-	 * @param jwtUtil JWTUtil 객체
+	 * @param jwtUtil            JWTUtil 객체
 	 * @param userDetailsService CustomUserDetailsService 객체
 	 * @return TokenCheckFilter 객체
 	 */
-	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil,
+		CustomUserDetailsService userDetailsService) {
 		return new TokenCheckFilter(userDetailsService, jwtUtil);
 	}
 

@@ -39,20 +39,18 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 		String path = request.getRequestURI();
 
-		if (path.startsWith("/api/members")
-		|| path.startsWith("/api")) {
+		if (path.startsWith("/api/auth/**") || path.startsWith("/api/files/**") ) {
+			log.info("skip token check filter ....");
 			filterChain.doFilter(request, response);
 			return;
 		}
 
 		log.info("token check filter ....");
-		log.info("JWTUTIL : " + jwtUtil);
 
-		try{
-
+		try {
 			Map<String, Object> payload = validateAccessToken(request);
 
-			String userName = (String)payload.get("userName");
+			String userName = (String) payload.get("userName");
 
 			log.info("userName: " + userName);
 
@@ -62,11 +60,10 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 				new UsernamePasswordAuthenticationToken(
 					userDetails, null, userDetails.getAuthorities());
 
-
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			filterChain.doFilter(request,response);
-		}catch(AccessTokenException accessTokenException){
+			filterChain.doFilter(request, response);
+		} catch (AccessTokenException accessTokenException) {
 			accessTokenException.sendResponseError(response);
 		}
 	}
@@ -90,7 +87,6 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 		try {
 			Map<String, Object> values = jwtUtil.validateToken(tokenStr);
-
 			return values;
 		} catch (MalformedJwtException malformedJwtException) {
 			log.error("MalformedJwtException----------------------");

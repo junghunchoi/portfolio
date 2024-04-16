@@ -6,7 +6,6 @@
       <hr/>
     </div>
     <slot></slot>
-
   </div>
 </template>
 

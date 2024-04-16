@@ -24,8 +24,7 @@ public class SwaggerConfig {
 	public Docket api() {
 		return new Docket(DocumentationType.OAS_30).useDefaultResponseMessages(false)
 		                                           .select()
-		                                           .apis(RequestHandlerSelectors.basePackage(
-			                                           "com.backend.controller"))
+		                                           .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
 		                                           .paths(PathSelectors.any())
 		                                           .build()
 		                                           .apiInfo(apiInfo());

@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
 import java.io.File;
@@ -77,15 +78,7 @@ public class FileController {
 			                     .contentType(MediaType.parseMediaType(contentType))
 			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 			                     .body(resource);
-//		if(resource.exists() && resource.isReadable()) {
-//
-//			return ResponseEntity.ok()
-//			                     .contentType(MediaType.parseMediaType(contentType))
-//			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-//			                     .body(resource);
-//		}else{
-//			return ResponseEntity.ok().body("file not exists");
-//		}
+
 	}
 
 	/**

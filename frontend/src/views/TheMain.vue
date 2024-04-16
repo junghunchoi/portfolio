@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import BoardCard from "@/views/free/BoardCard.vue";
+import BoardCard from "@/components/common/TheMainCard.vue";
 import {useRouter} from 'vue-router';
 import {inject, onMounted, reactive, ref} from "vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"

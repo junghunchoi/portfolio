@@ -10,7 +10,7 @@ import axios from 'axios';
   axiosInstance.interceptors.request.use(
       config => {
         // 요청 전 처리 로직 추가
-        config.headers.Authorization = `${localStorage.getItem('accessToken')}`;
+        config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
         return config;
       },
       error => {

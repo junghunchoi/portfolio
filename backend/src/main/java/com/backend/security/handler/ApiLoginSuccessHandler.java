@@ -1,9 +1,11 @@
 package com.backend.security.handler;
 
 import com.backend.utils.JWTUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,12 +36,15 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-			userDetails, null, authorities);
+		// 응답 데이터 생성
+		Map<String, Object> responseData = new HashMap<>();
+		responseData.put("username", authentication.getName());
+		responseData.put("authorities", authorities);
 
-		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-		log.info("권한" + SecurityContextHolder.getContext());
+		// JSON 응답 생성
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
 
 
 		Map<String, Object> claim = Map.of("userName", authentication.getName());

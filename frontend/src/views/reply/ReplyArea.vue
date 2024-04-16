@@ -19,7 +19,8 @@
 
             <div class="d-flex d-">
               <div class="reply_box">{{ reply.replyText }}</div>
-              <button v-if="userName === reply.replyer" class="btn btn-danger btn-sm float-right m-lg-3"
+              <button v-if="userName === reply.replyer"
+                      class="btn btn-danger btn-sm float-right m-lg-3"
                       @click="deleteReplyHandler(reply.rno)">삭제
               </button>
             </div>

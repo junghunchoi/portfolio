@@ -51,7 +51,7 @@ public class MemberController {
 		}
 	}
 
-	@PostMapping("/members/check")
+	@PostMapping("/auth/members/check")
 	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody String userName) {
 		log.info("memberController - checkUserName");
 		log.info(userName);
