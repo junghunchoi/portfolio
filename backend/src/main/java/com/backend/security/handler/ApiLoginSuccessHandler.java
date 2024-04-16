@@ -3,6 +3,7 @@ package com.backend.security.handler;
 import com.backend.utils.JWTUtil;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Log4j2
@@ -26,8 +31,16 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-		log.info(authentication);
-		log.info(authentication.getName());
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+			userDetails, null, authorities);
+
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+		log.info("권한" + SecurityContextHolder.getContext());
+
 
 		Map<String, Object> claim = Map.of("userName", authentication.getName());
 

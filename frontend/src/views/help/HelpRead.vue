@@ -62,7 +62,7 @@ const help = reactive({
 onMounted(async ()=>{
   const res = await $axios.get(`/helps/${hno.value}`)
   console.log(res);
-  Object.assign(help, res.data);
+  Object.assign(help, res.data.resultData);
 })
 
 const goListPage = () => {

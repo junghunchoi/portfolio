@@ -16,17 +16,14 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 
 @Log4j2
 public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
-
 	public APILoginFilter(String defaultFilterProcessesUrl) {
 		super(defaultFilterProcessesUrl);
 	}
-
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
 		HttpServletResponse response)
 		throws AuthenticationException, IOException, ServletException {
-
 		log.info("ApiLoginFilter......");
 
 		if (request.getMethod().equalsIgnoreCase("GET")) {

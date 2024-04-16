@@ -25,21 +25,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api")
 @Log4j2
 @RequiredArgsConstructor
 public class MemberController {
 
 	private final MemberService memberService;
 
-	@PostMapping("/login")
+	@PostMapping("/auth/member/login")
 	public ResponseEntity<ResultDTO<String>> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
 
 		log.info("---- membercontroller login ----");
 		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
 	}
 
-	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
 		log.info("memberController - registerMember");
 		log.info(memberJoinDTO);
@@ -51,7 +51,7 @@ public class MemberController {
 		}
 	}
 
-	@PostMapping("/check")
+	@PostMapping("/members/check")
 	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody String userName) {
 		log.info("memberController - checkUserName");
 		log.info(userName);

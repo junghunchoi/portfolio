@@ -36,7 +36,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 필요한 화면에만 보안설정을 할 수있는 어노테이션
 public class CustomSecurityConfig {
-
 	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
 	private final CustomUserDetailsService userDetailsService;
 	private final JWTUtil jwtUtil;
@@ -83,14 +82,12 @@ public class CustomSecurityConfig {
 		    .httpBasic()
 		    .disable()
 		    .authorizeRequests()
-		    .antMatchers( "/api/**","/api/auth/**", "/api/members/**", "/oauth/**", "/api/boards/**")
+		    .antMatchers( "/api/**","/api/auth/**")
 		    .permitAll()
 		    .anyRequest()
 		    .authenticated();
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
-
-
 
 		return http.build();
 	}
@@ -103,10 +100,6 @@ public class CustomSecurityConfig {
 	 */
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-
-
-		log.info("--- web config ---");
-
 		return (web) -> web.ignoring()
 		                   .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}

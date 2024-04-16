@@ -24,8 +24,6 @@ import java.util.List;
  */
 @Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
-
-
 	public BoardSearchImpl() {
 		super(Board.class);
 	}
@@ -47,21 +45,13 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		query.groupBy(board);
 
 		if ((types != null && types.length > 0) && keyword != null) {
-
 			BooleanBuilder booleanBuilder = new BooleanBuilder();
 
 			for (String type : types) {
-
 				switch (type) {
-					case "t":
-						booleanBuilder.or(board.title.contains(keyword));
-						break;
-					case "c":
-						booleanBuilder.or(board.content.contains(keyword));
-						break;
-					case "w":
-						booleanBuilder.or(board.writer.contains(keyword));
-						break;
+					case "t" -> booleanBuilder.or(board.title.contains(keyword));
+					case "c" -> booleanBuilder.or(board.content.contains(keyword));
+					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
 				}
 			}//end for
 			query.where(booleanBuilder);
@@ -75,35 +65,22 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		if (Objects.equals(sort, "asc")) {
 			switch (order) {
-				case "regDate":
-					query.orderBy(board.regDate.asc());
-				case "title":
-					query.orderBy(board.title.asc());
-				case "viewCount":
-					query.orderBy(board.viewCount.asc());
+				case "regDate" -> query.orderBy(board.regDate.asc());
+				case "title" -> query.orderBy(board.title.asc());
+				case "viewCount" -> query.orderBy(board.viewCount.asc());
 			}
 		} else {
 			switch (order) {
-				case "regDate":
-					query.orderBy(board.regDate.desc());
-				case "title":
-					query.orderBy(board.title.desc());
-				case "viewCount":
-					query.orderBy(board.viewCount.desc());
+				case "regDate" -> query.orderBy(board.regDate.desc());
+				case "title" -> query.orderBy(board.title.desc());
+				case "viewCount" -> query.orderBy(board.viewCount.desc());
 			}
 		}
 
-		JPQLQuery<BoardListDTO> dtoQuery = query.select(Projections.bean(BoardListDTO.class,
-			board.bno,
-			category.content.as("category"),
-			board.title,
-			board.writer,
-			board.viewCount,
-			board.regDate,
-			board.modDate,
-			reply.count().as("replyCount"),
-			file.count().as("fileCount")
-		));
+		JPQLQuery<BoardListDTO> dtoQuery = query.select(
+			Projections.bean(BoardListDTO.class, board.bno, category.content.as("category"),
+				board.title, board.writer, board.viewCount, board.regDate, board.modDate,
+				reply.count().as("replyCount"), file.count().as("fileCount")));
 
 		log.info(query);
 		log.info(dtoQuery);
@@ -135,15 +112,10 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 			for (String type : types) {
 
 				switch (type) {
-					case "t":
-						booleanBuilder.or(board.title.contains(keyword));
-						break;
-					case "c":
-						booleanBuilder.or(board.content.contains(keyword));
-						break;
-					case "w":
-						booleanBuilder.or(board.writer.contains(keyword));
-						break;
+					case "t" -> booleanBuilder.or(board.title.contains(keyword));
+					case "c" -> booleanBuilder.or(board.content.contains(keyword));
+					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
+
 				}
 			}//end for
 			query.where(booleanBuilder);
@@ -156,32 +128,21 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
 		if (sort.equals("asc")) {
 			switch (order) {
-				case "regDate":
-					query.orderBy(board.regDate.asc());
-				case "title":
-					query.orderBy(board.title.asc());
-				case "viewCount":
-					query.orderBy(board.viewCount.asc());
+				case "regDate" -> query.orderBy(board.regDate.asc());
+				case "title" -> query.orderBy(board.title.asc());
+				case "viewCount" -> query.orderBy(board.viewCount.asc());
 			}
 		} else {
 			switch (order) {
-				case "regDate":
-					query.orderBy(board.regDate.desc());
-				case "title":
-					query.orderBy(board.title.desc());
-				case "viewCount":
-					query.orderBy(board.viewCount.desc());
+				case "regDate" -> query.orderBy(board.regDate.desc());
+				case "title" -> query.orderBy(board.title.desc());
+				case "viewCount" -> query.orderBy(board.viewCount.desc());
 			}
 		}
 
-		JPQLQuery<GalleryListDTO> dtoQuery = query.select(Projections.bean(GalleryListDTO.class,
-			board.bno,
-			board.title,
-			board.content,
-			board.regDate,
-			board.modDate,
-			file.uploadedFileName.as("fileName")
-		));
+		JPQLQuery<GalleryListDTO> dtoQuery = query.select(
+			Projections.bean(GalleryListDTO.class, board.bno, board.title, board.content,
+				board.regDate, board.modDate, file.uploadedFileName.as("fileName")));
 
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 

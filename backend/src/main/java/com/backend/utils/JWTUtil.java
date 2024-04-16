@@ -30,7 +30,6 @@ public class JWTUtil {
 	 * @return 생성된 JWT 토큰 문자열.
 	 */
 	public String generateToken(Map<String, Object> valueMap, int days) {
-		log.info("generatekey: " + key);
 
 		//헤더영역
 		Map<String, Object> headers = new HashMap<>();

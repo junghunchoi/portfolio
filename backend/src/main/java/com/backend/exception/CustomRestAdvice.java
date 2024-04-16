@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -271,6 +272,14 @@ public class CustomRestAdvice {
 		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("HttpMessageConversionException 에러");
 
 	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException exc) {
+		log.error(exc.getMessage());
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 페이지에 접근권한이 없습니다. 관리자에게 문의하세요");
+	}
+
 
 	/**
 	 * [Exception] 모든 Exception 경우 발생
