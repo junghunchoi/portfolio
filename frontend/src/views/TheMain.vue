@@ -119,6 +119,7 @@ import {useRouter} from 'vue-router';
 import {inject, onMounted, reactive, ref} from "vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
 
+console.log(process.env.VUE_APP_API_URL);
 const router = useRouter();
 const $axios = inject('$axios');
 
