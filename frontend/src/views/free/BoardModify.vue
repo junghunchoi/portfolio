@@ -87,6 +87,7 @@ const board = ref({
     cno: '',
     content: ''
   },
+  boardType: 1,
   content: '',
   writer: '',
   modDate: new Date(),

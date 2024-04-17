@@ -119,7 +119,6 @@ const fetchData = async () => {
   }
 };
 
-
 fetchData();
 
 watch(params, async (newVal, oldVal) => {
@@ -133,7 +132,6 @@ const searchBoard = async (searchCondition) => {
 
     const {data} = await getBoards(params);
   } catch (e) {
-    console.log(e);
   }
 }
 

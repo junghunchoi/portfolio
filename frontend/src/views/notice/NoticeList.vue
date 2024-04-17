@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import {inject, reactive, ref, watchEffect} from 'vue';
+import {inject, onMounted, reactive, ref, watch, watchEffect} from 'vue';
 import BoardFilter from "@/components/board/BoardFilter.vue";
 import {useRouter} from "vue-router";
 import ThePagination from "@/components/common/ThePagination.vue";
@@ -94,15 +94,22 @@ const fetchData = async () => {
   }
 }
 
-watchEffect(() => {
-  fetchData();
-});
+watch(params, async () => {
+  console.log(123);
+  await fetchData(params)
+})
+
+onMounted(()=>{
+  fetchData()
+})
+
 
 const searchBoard = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
 
+    console.log(params);
     const {data} = await $axios.get('/notices', params);
   } catch (e) {
     console.log(e);

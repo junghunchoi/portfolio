@@ -13,6 +13,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+/**
+ * HelpSearch 인터페이스를 구현한 HelpSearchImpl 클래스.
+ * Querydsl을 사용하여 Help 엔티티에 대한 검색 기능을 제공합니다.
+ */
 @Log4j2
 public class HelpSearchImpl extends QuerydslRepositorySupport implements HelpSearch {
 
@@ -20,6 +24,16 @@ public class HelpSearchImpl extends QuerydslRepositorySupport implements HelpSea
 		super(Help.class);
 	}
 
+	/**
+	 * Help 리스트를 검색하여 페이징된 결과를 반환합니다.
+	 *
+	 * @param types    검색할 필드 유형 배열 (t: 제목, c: 내용, w: 작성자)
+	 * @param keyword  검색할 키워드
+	 * @param order    정렬 기준 필드 (regDate: 등록일, title: 제목, viewCount: 조회수)
+	 * @param sort     정렬 방식 (asc: 오름차순, desc: 내림차순)
+	 * @param pageable 페이징 정보
+	 * @return 검색 결과에 해당하는 HelpListDTO 객체들의 페이징된 결과
+	 */
 	@Override
 	public Page<HelpListDTO> searchHelpList(String[] types, String keyword, String order,
 		String sort, Pageable pageable) {

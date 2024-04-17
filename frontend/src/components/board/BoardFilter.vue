@@ -14,7 +14,7 @@
       <button class="btn btn-light" @click="$emit('search', searchCondition);">검색</button>
     </div>
   </div>
-  <div class="d-flex justify-content-between gy-3">
+  <div class="d-flex justify-content-between gy-3 mt-2">
     <div class="col-md-3">
       <select class="form-select" @input="$emit('update:size', $event.target.value)">
         <option selected value="10">10개씩 보기</option>

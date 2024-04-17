@@ -6,7 +6,7 @@
       <div class="mb-3">
         <label for="title" class="form-label">작성자</label>
         <input
-            v-model="form.writer"
+            v-model="board.writer"
             type="text"
             class="form-control"
             id="writer"
@@ -16,7 +16,7 @@
       <div class="mb-3">
         <label for="title" class="form-label">제목</label>
         <input
-            v-model="form.title"
+            v-model="board.title"
             type="text"
             class="form-control"
             id="title"
@@ -24,7 +24,7 @@
       </div>
       <div class="mb-3">
         <label for="title" class="form-label">카테고리</label>
-        <select v-model="form.category.cno" class="form-control">
+        <select v-model="board.category.cno" class="form-control">
           <option value="1">java</option>
           <option value="2">javascript</option>
           <option value="3">sql</option>
@@ -33,7 +33,7 @@
       <div class="mb-3">
         <label class="form-label">내용</label>
         <textarea
-            v-model="form.content"
+            v-model="board.content"
             class="form-control"
             id="content"
             rows="3"
@@ -78,19 +78,21 @@ const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
 const router = useRouter();
-const form = ref({
+
+const board = ref({
   title: null,
   category:{cno: null, content: null},
   content: null,
   cno: null,
-  writer: userName
+  writer: userName,
+  boardType: 1
 });
 const files = ref([null, null, null]);
 const formData = new FormData();
 
 const save = () => {
   createBoard({
-    ...form.value,
+    ...board.value,
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));

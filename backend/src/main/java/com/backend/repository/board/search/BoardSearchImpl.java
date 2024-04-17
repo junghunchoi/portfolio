@@ -19,8 +19,10 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 
+
 /**
- * 게시물 리스트 검색을 위한 클래스
+ * BoardSearch 인터페이스를 구현한 BoardSearchImpl 클래스.
+ * Querydsl을 사용하여 Board 엔티티에 대한 검색 기능을 제공합니다.
  */
 @Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
@@ -28,6 +30,16 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		super(Board.class);
 	}
 
+	/**
+	 * 게시판 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
+	 *
+	 * @param types    검색할 필드 유형 배열
+	 * @param keyword  검색 키워드
+	 * @param sort     정렬 방향 (asc 또는 desc)
+	 * @param order    정렬 기준 필드
+	 * @param pageable 페이징 정보
+	 * @return 검색된 게시판 목록 페이지
+	 */
 	@Override
 	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,
 		String sort, String order, Pageable pageable) {
@@ -53,7 +65,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 					case "c" -> booleanBuilder.or(board.content.contains(keyword));
 					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
 				}
-			}//end for
+			}
 			query.where(booleanBuilder);
 		}
 
@@ -82,8 +94,6 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 				board.title, board.writer, board.viewCount, board.regDate, board.modDate,
 				reply.count().as("replyCount"), file.count().as("fileCount")));
 
-		log.info(query);
-		log.info(dtoQuery);
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<BoardListDTO> dtoList = dtoQuery.fetch();
@@ -93,6 +103,16 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		return new PageImpl<>(dtoList, pageable, count);
 	}
 
+	/**
+	 * 갤러리 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
+	 *
+	 * @param types    검색할 필드 유형 배열
+	 * @param keyword  검색 키워드
+	 * @param order    정렬 기준 필드
+	 * @param sort     정렬 방향 (asc 또는 desc)
+	 * @param pageable 페이징 정보
+	 * @return 검색된 갤러리 목록 페이지
+	 */
 	@Override
 	public Page<GalleryListDTO> searchGalleryList(String[] types, String keyword, String order,
 		String sort, Pageable pageable) {
@@ -117,7 +137,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
 
 				}
-			}//end for
+			}
 			query.where(booleanBuilder);
 		}
 
