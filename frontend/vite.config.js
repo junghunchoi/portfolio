@@ -3,12 +3,19 @@ import Components from 'unplugin-vue-components/vite';
 import {defineConfig} from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-// https://vitejs.dev/config/
+// ckeditor
+import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5';
+import {createRequire} from 'node:module';
+
+const require = createRequire(import.meta.url);
+
 export default defineConfig({
+  envDir: '.',
   plugins: [vue(), Components({
     dirs: ['src/components/app'],
     dts: true,
-  }),],
+  }),
+  ],
   server: {
     proxy: {
       '/api': 'http://localhost:1541'

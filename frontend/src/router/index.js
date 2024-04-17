@@ -80,7 +80,7 @@ const routes = [
     props: route => ({nno: parseInt(route.params.nno)}),
   },
   {
-    path: '/notices/modify/:bno',
+    path: '/notices/modify/:nno',
     name: 'NoticeModify',
     component: NoticeModify,
   },

@@ -63,13 +63,11 @@ public class NoticeServiceImpl implements NoticeService{
 	@Override
 	public void modify(NoticeDTO noticeDTO) {
 		Optional<Notice> noticeOptional = noticeRepository.findById(noticeDTO.getNno());
-
 		Notice notice = noticeOptional.orElseThrow();
 
-//		notice.changeText(NoticeDTO.getReplyText());
+		notice.change(noticeDTO.getTitle(),noticeDTO.getContent(),noticeDTO.getIsMain());
 
 		noticeRepository.save(notice);
-
 	}
 
 	@Override

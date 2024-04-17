@@ -40,4 +40,10 @@ public class Notice extends BaseEntity {
 		this.viewCount = viewCount;
 	}
 
+	public void change(String title, String content, int isMain) {
+		this.title = title;
+		this.content = content;
+		this.isMain = isMain;
+	}
+
 }

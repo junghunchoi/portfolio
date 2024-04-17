@@ -29,20 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RequiredArgsConstructor
 public class MemberController {
-
 	private final MemberService memberService;
 
-	@PostMapping("/auth/member/login")
-	public ResponseEntity<ResultDTO<String>> login(@RequestBody MemberSecurityDTO memberSecurityDTO) {
 
-		log.info("---- membercontroller login ----");
-		return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success"));
-	}
-
-	@PostMapping(value = "/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/auth/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
 		log.info("memberController - registerMember");
-		log.info(memberJoinDTO);
 		try {
 			memberService.register(memberJoinDTO);
 			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "member register success"));

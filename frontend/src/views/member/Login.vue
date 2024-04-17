@@ -5,25 +5,35 @@
           <input v-model="username" type="text" class="form-control" placeholder="ID">
           <label for="floatingInput">ID</label>
         </div>
-        <div class="form-floating">
+        <div class="form-floating mt-3">
           <input v-model="password" type="password" class="form-control" id="password"
                  placeholder="Password">
           <label for="floatingPassword">Password</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" variant="success" type="submit" @click="login">Sign in
-        </button>
-        <button class="w-100 btn btn-secondary" type="button" @click="goMemberRegister">
-          회원가입
+        <button class="w-100 btn btn-lg btn-primary mt-3" variant="success" type="submit" @click="login">로그인
         </button>
       </form>
-      <a href="/oauth2/authorization/kakao">KAKAO</a>
   </main>
+  <Teleport to="#modal">
+    <TheModal
+        :isPopup="show"
+        :title="'확인'"
+    >
+      <template #default>
+        비밀번호 또는 아이디를 확인해주세요
+      </template>
+      <template #actions>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
+    </TheModal>
+  </Teleport>
 </template>
 
 <script setup>
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import {useAuthStore} from '@/store/loginStore.js'
+import TheModal from "@/components/common/TheModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -38,18 +48,19 @@ const login = async () =>{
   try {
     await authStore.login(username.value, password.value);
     await router.push('/');
-
   } catch (err) {
     loginError.value = true;
+    show.value=true
     console.log(err);
   }
 }
 
-const goMemberRegister = () => {
-  router.push({
-    name: 'MemberRegister',
-  });
-};
+// 모달 로직
+const show = ref(false);
+
+const closeModal = () => {
+  show.value = false;
+}
 
 
 </script>

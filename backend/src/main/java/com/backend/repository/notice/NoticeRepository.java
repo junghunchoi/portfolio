@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoticeRepository extends JpaRepository<Notice,Long>, NoticeSearch {
 
-	@Query("SELECT n from Notice n order by n.nno desc")
+	@Query("SELECT n from Notice n order by n.isMain desc, n.nno desc")
 	List<Notice> findNoticesTop5(Pageable pageable);
 
 }

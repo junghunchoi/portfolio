@@ -44,9 +44,9 @@ public class CustomSecurityConfig {
 	private final JWTUtil jwtUtil;
 
 	private static final String[] PERMIT_URL_ARRAY = {
-		"/swagger-ui/**",
-		"/api/auth/*",
-		"/api/members/**",
+		"/swagger-ui/",
+		"/api/auth/**",
+		"/api/members/",
 		"/login",
 		"/api/files/**"
 	};
@@ -97,7 +97,7 @@ public class CustomSecurityConfig {
 		    .httpBasic()
 		    .disable()
 		    .authorizeRequests()
-		    .antMatchers("/api/files/**")
+		    .antMatchers(PERMIT_URL_ARRAY)
 		    .permitAll()
 		    .anyRequest()
 		    .authenticated();

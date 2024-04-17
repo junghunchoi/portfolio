@@ -16,7 +16,6 @@
         <ul>
           <li v-for="reply in replyList" :key="reply.rno">
             <div class="reply_nick shadow-0">{{ reply.replyer }} | {{ reply.regDate }}</div>
-
             <div class="d-flex d-">
               <div class="reply_box">{{ reply.replyText }}</div>
               <button v-if="userName === reply.replyer"

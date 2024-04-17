@@ -2,8 +2,10 @@ package com.backend.service;
 
 import com.backend.dto.member.MemberJoinDTO;
 import com.backend.entity.Member;
+import com.backend.entity.MemberRole;
 import com.backend.repository.MemberRepository;
 import com.backend.security.dto.MemberSecurityDTO;
+import java.util.HashSet;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class MemberServiceImpl implements MemberService{
 		                      .email(memberJoinDTO.getEmail())
 		                      .userRealName(memberJoinDTO.getUserRealName())
 		                      .build();
+
+		member.addRole(MemberRole.USER);
 
 		Long id = memberRepository.save(member).getId();
 

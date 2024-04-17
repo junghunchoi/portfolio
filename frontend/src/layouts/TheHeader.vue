@@ -43,9 +43,9 @@
               회원가입
             </button>
 					</div>
-          <div v-else>
-            <div> {{userName}}님 안녕하세요 !</div>
-            <div><button @click="logoutHandler">로그아웃</button></div>
+          <div class="d-flex justify-content-center" v-else>
+            <div class="pt-lg-1"> {{userName}}님 </div>
+            <div class="me-2 ms-2" ><button class="btn btn-sm btn-light fw-bold" @click="logoutHandler">로그아웃</button></div>
           </div>
 				</div>
 			</div>
