@@ -1,23 +1,20 @@
 <template>
   <section>
-    <div class="border  border-secondary-subtle border-1 rounded mt-4">
-      <div class="my-2 ms-2">{{ userName }}</div>
-      <div class="d-flex">
-    <textarea v-model="replyText" type="text" id="addReply" class="form-control"
-              placeholder="댓글을 남겨보세요"/>
-        <button class="btn btn-secondary btn-sm m-1 p-1 rbtn"
-                @click="registerReplyHandler"
-        >등록
-        </button>
-      </div>
-    </div>
     <div class="row d-flex justify-content-center">
       <div>
         <ul>
           <li v-for="reply in replyList" :key="reply.rno">
-            <div class="reply_nick shadow-0">{{ reply.replyer }} | {{ reply.regDate }}</div>
+            <div class="reply_nick shadow-0">{{
+                reply.replyer
+              }} | {{
+                reply.regDate
+              }}
+            </div>
             <div class="d-flex d-">
-              <div class="reply_box">{{ reply.replyText }}</div>
+              <div class="reply_box">{{
+                  reply.replyText
+                }}
+              </div>
               <button v-if="userName === reply.replyer"
                       class="btn btn-danger btn-sm float-right m-lg-3"
                       @click="deleteReplyHandler(reply.rno)">삭제
@@ -25,6 +22,20 @@
             </div>
           </li>
         </ul>
+      </div>
+    </div>
+    <div class="border  border-secondary-subtle border-1 rounded mt-4">
+      <div class="my-2 ms-2">{{
+          userName
+        }}
+      </div>
+      <div class="d-flex">
+    <textarea v-model="replyText" type="text" id="addReply" class="form-control"
+              placeholder="댓글을 남겨보세요"/>
+        <button class="btn btn-secondary btn-sm m-1 p-1 rbtn"
+                @click="registerReplyHandler"
+        >등록
+        </button>
       </div>
     </div>
   </section>

@@ -1,27 +1,30 @@
 <template>
   <section>
-    <div class="row mt-3">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <div class="input-group mb-3">
-              <span class="input-group-text">제목</span>
-              <input type="text" class="form-control" v-model="help.title">
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">내용</span>
-              <input type="text" class="form-control" v-model="help.content">
-            </div>
-            <div class="my-4">
-              <div class="float-end">
-                <button type="button" class="btn btn-primary" @click="goListPage">목록</button>
-                <button type="button" class="btn btn-secondary" @click="modifyHelpHandler">저장
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="titleArea d-flex  mt-5">
+      <p class=" me-4 fw-bold text-start leftArea ps-2 w-25">제목</p>
+      <div >{{help.title}}</div>
+    </div>
+    <hr/>
+    <div class="contentArea d-flex ">
+      <p class=" me-4 fw-bold text-start leftArea ps-2">내용</p>
+      <TheEditor
+          v-if="help.content"
+          :init-eeditor-data="help.content"
+          v-model:editorData="help.content"
+          :isDisabled="false"/>
+    </div>
+    <hr/>
+    <div v-if="AUTHORITY==='ADMIN'" class="answerArea d-flex">
+      <p class=" me-4 fw-bold text-start leftArea ps-2">답변</p>
+      <TheEditor
+          :init-eeditor-data="help.answer"
+          v-model:editorData="help.answer"
+          :isDisabled="false"/>
+    </div>
+    <div class="float-end">
+      <button type="button" class="btn btn-primary me-1" @click="goListPage">목록</button>
+      <button type="button" class="btn btn-secondary" @click="modifyHelpHandler">저장
+      </button>
     </div>
   </section>
 </template>
@@ -31,6 +34,7 @@ import {ref, onMounted, reactive, inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const AUTHORITY = useAuthStore().getAuthorities
 
@@ -51,8 +55,7 @@ const help = reactive({
 
 onMounted(async () => {
   const res = await $axios.get(`/helps/${hno.value}`)
-  console.log(res);
-  Object.assign(help, res.data);
+  Object.assign(help, res.data.resultData);
 })
 
 const goListPage = () => {
@@ -60,13 +63,14 @@ const goListPage = () => {
 };
 
 const modifyHelpHandler = () => {
-  $axios.put('/helps', {
-    ...help,
-  })
+  console.log(help);
+  $axios.put('/helps', help)
   .then(res => router.push({name: 'HelpList'}))
 }
 </script>
 
 <style scoped>
-
+p{
+  width: 10%;
+}
 </style>

@@ -37,7 +37,7 @@
         <div>1번째 이미지는 썸네일로 활용됩니다.</div>
         <div v-for="(input, index) in gallery.files" :key="index" style="padding:30px;">
           <input type="file" @change="handleFileUpload($event, index)"/>
-          <button class="btn btn-light" ><i class="bi bi-x"></i></button>
+          <button class="btn btn-light"><i class="bi bi-x"></i></button>
         </div>
 
       </div>
@@ -91,8 +91,18 @@ const gallery = reactive({
   files: [],
   modDate: new Date(),
 });
+//
+// const fetchData = async (bno) => {
+//   try {
+//     const {data} = await $axios.get(`/galleries/${bno}`)
+//     Object.assign(gallery, data);
+//     console.log(data)
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
 
-const fetchData = async (bno) => {
+onMounted(async ()=>{
   try {
     const {data} = await $axios.get(`/galleries/${bno}`)
     Object.assign(gallery, data);
@@ -100,9 +110,7 @@ const fetchData = async (bno) => {
   } catch (e) {
     console.error(e);
   }
-}
-
-fetchData(bno.value)
+})
 
 const goGalleryPage = () => {
   router.push({name: 'GalleryList'});
@@ -110,12 +118,29 @@ const goGalleryPage = () => {
 
 async function updateDataAndGolist() {
   try {
-    await $axios.put(`/galleries`,{...gallery})
+    await $axios.put(`/galleries`, {...gallery})
     router.push({name: 'GalleryRead', params: {bno: bno.value}});
   } catch (e) {
     console.log(e)
   }
 }
+
+const handleFileUpload = (event, index) => {
+  const selectedFile = event.target.files[0];
+
+  if (!isValidateFile(selectedFile)) {
+    show.value = true;
+    return;
+  }
+
+  files.value[index].file = selectedFile;
+  formData.append('files', selectedFile);
+
+  if (index + 1 === files.value.length) {
+    const newInputId = files.value.length; // 새 입력 필드의 고유 ID 생성
+    files.value.push({id: newInputId}); // 배열에 새 입력 필드 정보 추가
+  }
+};
 
 // modal
 const show = ref(false);

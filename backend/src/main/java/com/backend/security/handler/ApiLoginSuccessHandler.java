@@ -50,9 +50,9 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 		Map<String, Object> claim = Map.of("userName", authentication.getName());
 
 		//Access Token 유효기간
-		String accessToken = jwtUtil.generateToken(claim, 1);
+		String accessToken = jwtUtil.generateToken(claim, 3);
 		//Refresh Token 유효기간
-		String refreshToken = jwtUtil.generateToken(claim, 1);
+		String refreshToken = jwtUtil.generateToken(claim, 30);
 
 		Gson gson = new Gson();
 

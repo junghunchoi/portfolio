@@ -148,7 +148,6 @@ const searchHelp = async (searchCondition) => {
 }
 
 const checkValidateUser = (help) => {
-  console.log(help.hno)
   if (help.isSecret === 0) {
     router.push({name: 'HelpRead', params: {hno: Number(help.hno)}})
   } else {

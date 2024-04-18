@@ -7,12 +7,20 @@
     <hr/>
     <div class="contentArea d-flex ">
       <p class=" me-4 fw-bold text-start leftArea ps-2">내용</p>
-      <div>{{help.content}}</div>
+      <TheEditor
+          v-if="help.content"
+          :init-eeditor-data="help.content"
+          v-model:editorData="help.content"
+          :isDisabled="true"/>
     </div>
     <hr/>
     <div class="answerArea d-flex">
       <p class=" me-4 fw-bold text-start leftArea ps-2">답변</p>
-      <div>{{help.answer}}</div>
+      <TheEditor
+          v-if="help.content"
+          :init-eeditor-data="help.answer"
+          v-model:editorData="help.answer"
+          :isDisabled="true"/>
     </div>
     <div class="float-end">
       <button type="button" class="btn btn-primary me-1" @click="goListPage">목록</button>
@@ -27,6 +35,7 @@ import {ref, onMounted, reactive,inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const AUTHORITY = useAuthStore().getAuthorities
 
@@ -66,5 +75,8 @@ const modifyHelp = () => {
 <style scoped>
 .leftArea{
   width: 15%;
+}
+.editor-container .ck.ck-editor__main > .ck-editor__editable {
+  border: none;
 }
 </style>

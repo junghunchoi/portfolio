@@ -37,9 +37,10 @@ public class Help extends BaseEntity {
 		this.viewCount = viewCount;
 	}
 
-	public void change(String title, String content) {
+	public void change(String title, String content, String answer) {
 		this.title = title;
 		this.content = content;
+		this.answer = answer;
 
 	}
 }

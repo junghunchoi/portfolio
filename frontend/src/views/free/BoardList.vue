@@ -157,4 +157,9 @@ const handleUpdateSort = (value) => {
   font-family: 'Font Awesome 5 Free';
   content: '\f0c6';
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>

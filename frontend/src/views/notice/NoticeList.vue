@@ -135,5 +135,8 @@ const handleUpdateSort = (value) => {
 </script>
 
 <style scoped>
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>
