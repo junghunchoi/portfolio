@@ -39,11 +39,9 @@
             </div>
             <div class="my-4">
               <div class="float-end">
-                <button type="button" class="btn btn-primary" @click="goBoardPage">목록</button>
-                <button type="submit" class="btn btn-secondary" @click="openModal">
-                  수정
-                </button>
-                <button type="button" class="btn btn-danger" @click="clickRemoveHandler">삭제
+                <button type="button" class="btn btn-primary me-1" @click="goBoardPage">목록</button>
+                <button type="submit" class="btn btn-secondary me-1" @click="openModal">수정</button>
+                <button type="button" class="btn btn-danger me-1" @click="clickRemoveHandler">삭제
                 </button>
               </div>
             </div>
@@ -69,11 +67,12 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref, inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board";
+import {getBoardBybno} from "@/api/board";
 import TheModal from "@/components/common/TheModal.vue";
 
+const $axios = inject('$axios')
 const route = useRoute();
 const router = useRouter();
 
@@ -98,7 +97,6 @@ const fetchData = async (bno) => {
   try {
     const {data} = await getBoardBybno(bno);
     board.value = data;
-    console.log(data)
   } catch (e) {
     console.error(e);
   }
@@ -112,25 +110,20 @@ const goBoardPage = () => {
 
 async function updateDateAndGolist() {
   try {
-    await updateBoard({
-      ...board.value,
-    })
+    const res = await $axios.patch('/boards',board.value)
+    console.log(res)
     router.push({name: 'BoardRead', params: {bno: bno.value}});
   } catch (e) {
     console.log(e)
   }
 }
 
-const clickRemoveHandler = () => {
-  deleteAndGolist();
+const clickRemoveHandler = async () => {
+  await $axios.delete('/boards', bno.value);
+  router.push({name: 'BoardList'});
 }
 
-async function deleteAndGolist() {
-  await deleteBoard(bno.value);
-  router.push({name: 'BoardList'}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
-}
-
-// modal
+// 모달관리
 const show = ref(false);
 
 const openModal = () => {

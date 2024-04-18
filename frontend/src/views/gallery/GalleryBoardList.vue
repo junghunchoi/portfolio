@@ -11,24 +11,20 @@
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-        <div class="card-body">
-
-          <div class="card mb-3" >
             <div v-for="gallery in response.items" class="">
               <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
-              <div class="card">
+              <div class=" d-flex align-items-center mb-3">
                 <img :src="'http://localhost:1541/api/files/' + gallery.fileName"  class="card-img-top">
-              </div>
-                <div class="card-body">
+                <div class="ms-4">
                   <h5 class="card-title">{{gallery.title}}</h5>
                   <p class="card-text">{{gallery.content}}</p>
                   <p class="card-text"><small class="text-muted">
                     {{ $dayjs(gallery.regDate).format('YYYY.MM.DD') }}</small></p>
                 </div>
+              </div>
+
               </router-link>
             </div>
-          </div>
-        </div>
       </div>
       <ThePagination :current-page="response.page"
                      :total="response.total"
@@ -119,9 +115,13 @@ const handleUpdateSort = (value) => {
 </script>
 
 <style scoped>
-
 a {
   color: inherit;
   text-decoration: none;
+}
+
+img {
+  width: 200px;
+  height: 200px;
 }
 </style>

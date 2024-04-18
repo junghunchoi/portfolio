@@ -96,7 +96,7 @@ const params = reactive({
   order: "regDate",
   sort: "desc",
   page: 1, // 현재 페이지
-  size: null,
+  size: 10,
   type: null,
   keyword: null
 });
@@ -111,8 +111,7 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-
-    const {data} = await getBoards(params);
+    const {data} = await $axios.get('/boards',{params:params})
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -146,17 +145,16 @@ const handleUpdateOrder = (value) => {
 const handleUpdateSort = (value) => {
   params.sort = value;
 }
-
 </script>
 
 <style scoped>
 .attachment-icon {
-  display: none; /* 기본적으로는 아이콘을 숨깁니다 */
+  display: none;
 }
 
 .attachment-icon.show {
-  display: inline-block; /* 첨부파일이 있는 경우 아이콘을 표시합니다 */
-  font-family: 'Font Awesome 5 Free'; /* Font Awesome 아이콘 사용 */
-  content: '\f0c6'; /* 클립 아이콘 */
+  display: inline-block;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f0c6';
 }
 </style>

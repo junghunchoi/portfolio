@@ -67,19 +67,20 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {inject, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {createBoard} from '@/api/board';
 import {uploadFile} from "@/api/file";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 
+const $axios = inject('$axios')
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
 const router = useRouter();
 
-const board = ref({
+const board = reactive({
   title: null,
   category:{cno: null, content: null},
   content: null,
@@ -90,23 +91,16 @@ const board = ref({
 const files = ref([null, null, null]);
 const formData = new FormData();
 
-const save = () => {
-  createBoard({
-    ...board.value,
-  })
-  .then(res => {
-    formData.append('bno', Number(res.data.resultData));
-    uploadFile(formData)
-    .then(() => {
-      router.push({name: 'BoardList'});
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  })
-  .catch(error => {
-    console.error(error);
-  });
+const save = async () => {
+  try {
+    const res = await $axios.post('/boards/', board);
+
+    formData.append('bno', res.data.resultData);
+    await uploadFile(formData);
+    router.push({name: 'BoardList'});
+  } catch (e){
+    console.error(e)
+  }
 };
 
 const goBoardPage = () => {

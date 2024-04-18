@@ -37,10 +37,10 @@ public class BoardServiceImpl implements BoardService {
 			Category category = categoryResult.orElseThrow();
 			boardDTO.setCategory(category);
 		} catch (Exception e) {
-			log.info(e.getMessage());
+			log.error(e.getMessage());
 		}
 
-		Board board = dtoToEntity(boardDTO);
+		Board board = modelMapper.map(boardDTO, Board.class);
 		return boardRepository.save(board).getBno();
 	}
 
@@ -72,7 +72,7 @@ public class BoardServiceImpl implements BoardService {
 		Optional<Board> result = boardRepository.findById(boardDTO.getBno());
 
 		Board board = result.orElseThrow();
-
+		log.info("수정 : " + boardDTO);
 		board.change(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
 
 		boardRepository.save(board);

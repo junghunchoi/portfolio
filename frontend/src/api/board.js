@@ -15,7 +15,7 @@ export function createBoard(data) {
 }
 
 export function updateBoard(data) {
-    return axios.put('http://localhost:1541/api/boards', data);
+    return axios.patch('http://localhost:1541/api/boards', data);
 }
 
 export function deleteBoard(bno) {

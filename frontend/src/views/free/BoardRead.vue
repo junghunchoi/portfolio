@@ -36,7 +36,7 @@
           </div>
 
           <div>
-            <i class="fas fa-paperclip m-2"></i>
+            <i v-if="board.files.length >0" class="fas fa-paperclip m-2"></i>
             <span  v-for="file in board.files" @click="downloadFileHandler(file)" >
               {{file}}
             </span>
@@ -44,7 +44,7 @@
 
           <div class="my-4">
             <div class="float-end">
-              <button type="button" class="btn btn-primary" @click="goBoardPage">목록</button>
+              <button type="button" class="btn btn-primary me-1" @click="goBoardPage">목록</button>
               <button v-if="board.writer === userName" type="button" class="btn btn-secondary" @click="modifyBoard">수정</button>
             </div>
           </div>

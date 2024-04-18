@@ -1,39 +1,24 @@
 <template>
   <section>
-    <div class="row">
-      <div class="col-12 mb-3">
-        <h2>{{ help.title }}</h2>
-        <p class="text-muted">작성자: {{ help.writer }} </p>
-      </div>
+    <div class="titleArea d-flex  mt-5">
+      <p class=" me-4 fw-bold text-start leftArea ps-2">제목</p>
+      <div >{{help.title}}</div>
     </div>
-  </section>
-  <section>
-    <div class="row mt-3">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <div class="input-group mb-3">
-              <span class="input-group-text">제목</span>
-              <input type="text" class="form-control" :value="help.title" readonly>
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">내용</span>
-              <input type="text" class="form-control" :value="help.content" readonly>
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">답변</span>
-              <input type="text" class="form-control" :value="help.answer" readonly>
-            </div>
-            <div class="my-4">
-              <div class="float-end">
-                <button type="button" class="btn btn-primary" @click="goListPage">목록</button>
-                <button v-if="help.writer === userName" type="button" class="btn btn-secondary" @click="modifyHelp">수정</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <hr/>
+    <div class="contentArea d-flex ">
+      <p class=" me-4 fw-bold text-start leftArea ps-2">내용</p>
+      <div>{{help.content}}</div>
     </div>
+    <hr/>
+    <div class="answerArea d-flex">
+      <p class=" me-4 fw-bold text-start leftArea ps-2">답변</p>
+      <div>{{help.answer}}</div>
+    </div>
+    <div class="float-end">
+      <button type="button" class="btn btn-primary me-1" @click="goListPage">목록</button>
+      <button v-if="help.writer === userName" type="button" class="btn btn-secondary" @click="modifyHelp">수정</button>
+    </div>
+
   </section>
 </template>
 
@@ -79,5 +64,7 @@ const modifyHelp = () => {
 </script>
 
 <style scoped>
-
+.leftArea{
+  width: 15%;
+}
 </style>

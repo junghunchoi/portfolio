@@ -36,7 +36,6 @@ public class BoardController {
 	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
-
 		log.info(" --- board list --- ");
 		PageResponseDTO<BoardListDTO> responseDTO =	boardService.list(pageRequestDTO);
 
@@ -52,7 +51,7 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
-	public ResponseEntity<ResultDTO<Long>> register(@RequestBody @Valid BoardDTO boardDTO, BindingResult bindingResult)
+	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
 		throws BindException {
 		log.info(" --- board register --- ");
 		log.info(boardDTO);
@@ -91,8 +90,8 @@ public class BoardController {
 	 * @return 수정된 게시물 정보와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
-	@PutMapping()
-	public ResponseEntity<ResultDTO<String>> modify(@RequestBody @Valid BoardDTO boardDTO,
+	@PatchMapping("")
+	public ResponseEntity<ResultDTO<String>> modify(@RequestBody BoardDTO boardDTO,
 		BindingResult bindingResult) {
 		log.info(" --- board modify --- ");
 		log.info(boardDTO);
