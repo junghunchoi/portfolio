@@ -34,7 +34,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 	 */
 	@EntityGraph(attributePaths = "roleSet")
 	@Query("select m from Member m where m.username = :username")
-	Optional<Member> getWithuserName(String username);
+	Optional<Member> getWithuserName(@Param("username") String username);
 
 	/**
 	 * 주어진 email에 해당하는 Member 엔티티와 연관된 Role 엔티티를 함께 조회합니다.

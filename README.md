@@ -19,7 +19,11 @@
 
 ###데이터베이스 
 <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=mariadb&logoColor=white"></br>
-- 개발 환경: Intellij, AWS
+
+
+###인프라 
+<img src="https://img.shields.io/badge/Amazon AWS EC2-232F3E?style=flat-square&logo=amazon-aws&logoColor=white"></br>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"></br>
 
 
 
@@ -35,8 +39,8 @@
 ## <a href=""> Java Doc</a>
 - 프로젝트 로직의 java Doc
 
-## <a href=""> Api 문서</a>
-- 프로젝트 로직의 java Doc
+## <a href="https://documenter.getpostman.com/view/22369547/2sA3BoZWgk"> Api 문서</a>
+- 포트폴리오의 postman 기반 api 문서
 
 ## ⭐ 주요 기능
 사용자 및 관리자의 기능 분기

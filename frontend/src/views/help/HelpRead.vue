@@ -24,7 +24,8 @@
     </div>
     <div class="float-end">
       <button type="button" class="btn btn-primary me-1" @click="goListPage">목록</button>
-      <button v-if="help.writer === userName" type="button" class="btn btn-secondary" @click="modifyHelp">수정</button>
+      <button v-if="help.writer === userName" type="button" class="btn btn-secondary me-1" @click="modifyHelpHandler">수정</button>
+      <button v-if="help.writer === userName" type="button" class="btn btn-danger" @click="deleteHelpHandler">삭제</button>
     </div>
 
   </section>
@@ -58,7 +59,6 @@ const help = reactive({
 
 onMounted(async ()=>{
   const res = await $axios.get(`/helps/${hno.value}`)
-  console.log(res);
   Object.assign(help, res.data.resultData);
 })
 
@@ -66,8 +66,13 @@ const goListPage = () => {
   router.push('/helps');
 };
 
-const modifyHelp = () => {
+const modifyHelpHandler = () => {
   router.push({name: 'HelpModify', params: {hno: hno.value}}); // bno는 이동하려는 라우트의 경로에 정의된 파라미터입니다.
+}
+
+const deleteHelpHandler = async () =>{
+  await $axios.delete(`/helps/${hno.value}`)
+  router.push({name: 'HelpList'});
 }
 
 </script>

@@ -40,13 +40,13 @@ public class CustomRestAdvice {
 	/**
 	 * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
 	 *
-	 * @param ex MethodArgumentNotValidException
+	 * @param e MethodArgumentNotValidException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		log.error("handleMethodArgumentNotValidException", ex);
-		BindingResult bindingResult = ex.getBindingResult();
+	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		log.error("handleMethodArgumentNotValidException", e);
+		BindingResult bindingResult = e.getBindingResult();
 		StringBuilder stringBuilder = new StringBuilder();
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
 			stringBuilder.append(fieldError.getField()).append(":");
@@ -60,6 +60,12 @@ public class CustomRestAdvice {
 		return ResponseEntity.badRequest().body(response);
 	}
 
+	/**
+	 * 바인딩 예외를 처리합니다.
+	 *
+	 * @param e BindException
+	 * @return 에러 응답 엔티티
+	 */
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 	public ResponseEntity<ErrorResponse> handleBindException(BindException e) {
@@ -75,6 +81,7 @@ public class CustomRestAdvice {
 		}
 
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE, String.valueOf(stringBuilder));
+		log.error("Binding exception occurred: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(response);
 	}
 
@@ -82,6 +89,7 @@ public class CustomRestAdvice {
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 	public ResponseEntity<ErrorResponse> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE, e.getStackTrace().toString());
+		log.error("Invalid data access API usage: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(response);
 	}
 
@@ -93,6 +101,7 @@ public class CustomRestAdvice {
 
 		errorMap.put("time", "" + System.currentTimeMillis());
 		errorMap.put("msg", "constraint fail");
+		log.error("Data integrity violation: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(errorMap);
 
 	}
@@ -106,7 +115,7 @@ public class CustomRestAdvice {
 
 		errorMap.put("time", "" + System.currentTimeMillis());
 		errorMap.put("msg", "No Such Element");
-
+		log.error("Element not found: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(errorMap);
 
 	}
@@ -114,41 +123,41 @@ public class CustomRestAdvice {
 	/**
 	 * [Exception] API 호출 시 'Header' 내에 데이터 값이 유효하지 않은 경우
 	 *
-	 * @param ex MissingRequestHeaderException
+	 * @param e MissingRequestHeaderException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(MissingRequestHeaderException.class)
-	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
-		log.error("MissingRequestHeaderException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
+	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
+		log.error("Missing request header: {}", e.getHeaderName());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
 	/**
 	 * [Exception] 클라이언트에서 Body로 '객체' 데이터가 넘어오지 않았을 경우
 	 *
-	 * @param ex HttpMessageNotReadableException
+	 * @param e HttpMessageNotReadableException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
-		HttpMessageNotReadableException ex) {
-		log.error("HttpMessageNotReadableException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
+		HttpMessageNotReadableException e) {
+		log.error("HttpMessageNotReadableException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
 	 * [Exception] 클라이언트에서 request로 '파라미터로' 데이터가 넘어오지 않았을 경우
 	 *
-	 * @param ex MissingServletRequestParameterException
+	 * @param e MissingServletRequestParameterException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderExceptionException(
-		MissingServletRequestParameterException ex) {
-		log.error("handleMissingServletRequestParameterException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER_ERROR, ex.getMessage());
+		MissingServletRequestParameterException e) {
+		log.error("handleMissingServletRequestParameterException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -197,13 +206,13 @@ public class CustomRestAdvice {
 	/**
 	 * Input / Output 내에서 발생한 경우
 	 *
-	 * @param ex IOException
+	 * @param e IOException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(IOException.class)
-	protected ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
-		log.error("handleIOException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.IO_ERROR, ex.getMessage());
+	protected ResponseEntity<ErrorResponse> handleIOException(IOException e) {
+		log.error("handleIOException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.IO_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
@@ -211,54 +220,52 @@ public class CustomRestAdvice {
 	/**
 	 * com.google.gson 내에 Exception 발생하는 경우
 	 *
-	 * @param ex JsonParseException
+	 * @param e JsonParseException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(JsonParseException.class)
-	protected ResponseEntity<ErrorResponse> handleJsonParseExceptionException(JsonParseException ex) {
-		log.error("handleJsonParseExceptionException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.JSON_PARSE_ERROR, ex.getMessage());
+	protected ResponseEntity<ErrorResponse> handleJsonParseExceptionException(JsonParseException e) {
+		log.error("handleJsonParseExceptionException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.JSON_PARSE_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
 	/**
 	 * com.fasterxml.jackson.core 내에 Exception 발생하는 경우
 	 *
-	 * @param ex JsonProcessingException
+	 * @param e JsonProcessingException
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(JsonProcessingException.class)
-	protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex) {
-		log.error("handleJsonProcessingException", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, ex.getMessage());
+	protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException e) {
+		log.error("handleJsonProcessingException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
 	/**
 	 * BusinessException에서 발생한 에러
 	 *
-	 * @param ex BusinessException
+	 * @param e BusinessException
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(BusinessExceptionHandler.class)
-	public ResponseEntity<ErrorResponse> handleCustomException(BusinessExceptionHandler ex) {
-		log.debug("===========================================================");
-		log.debug("BusinessExceptionHandler");
-		log.debug("===========================================================");
-
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR, ex.getMessage());
+	public ResponseEntity<ErrorResponse> handleCustomException(BusinessExceptionHandler e) {
+		log.error("BusinessExceptionHandler : ", e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(MaxUploadSizeExceededException.class)
-	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException e) {
+		log.error("MaxUploadSizeExceededException : " + e.getMessage());
 		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("파일 사이즈가 너무 큽니다.");
 	}
 
 	@ExceptionHandler(HttpMessageConversionException.class)
-	public ResponseEntity<String> handleHttpMessageConversionException(HttpMessageConversionException exc) {
+	public ResponseEntity<String> handleHttpMessageConversionException(HttpMessageConversionException e) {
 
-		StackTraceElement[] stackTrace = exc.getStackTrace();
+		StackTraceElement[] stackTrace = e.getStackTrace();
 		String errorLocation = "";
 		if (stackTrace.length > 0) {
 			StackTraceElement firstElement = stackTrace[0];
@@ -267,15 +274,15 @@ public class CustomRestAdvice {
 		}
 
 		// 예외 메시지와 발생 위치를 응답 본문에 포함시킵니다.
-		String errorMessage = "Error: " + exc.getMessage() + "\nLocation: " + errorLocation;
-		log.error(errorMessage);
+		String errorMessage = "Error: " + e.getMessage() + "\nLocation: " + errorLocation;
+		log.error("HttpMessageConversionException : " + errorMessage);
 		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("HttpMessageConversionException 에러");
 
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException exc) {
-		log.error(exc.getMessage());
+	public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+		log.error("AccessDeniedException : " + e.getMessage());
 
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 페이지에 접근권한이 없습니다. 관리자에게 문의하세요");
 	}
@@ -284,13 +291,13 @@ public class CustomRestAdvice {
 	/**
 	 * [Exception] 모든 Exception 경우 발생
 	 *
-	 * @param ex Exception
+	 * @param e Exception
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(Exception.class)
-	protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
-		log.error("Exception", ex);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+	protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
+		log.error("Exception", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 

@@ -20,6 +20,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -93,7 +94,7 @@ public class HelpController {
 	 * @param helpDTO 수정할 문의글 정보
 	 * @return 수정 결과 메시지를 포함한 응답 객체
 	 */
-	@PutMapping()
+	@PatchMapping("")
 	public ResponseEntity<ResultDTO<String>> modify(@RequestBody @Valid HelpDTO helpDTO) {
 		log.info(" ---help modify --- ");
 		log.info(helpDTO);
