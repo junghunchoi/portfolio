@@ -29,7 +29,7 @@
                   }}
                   <span v-if="help.answer">(답변완료)</span>
                   <span v-else>(미답변)</span>
-                  <span  v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
+                  <span class="ms-1"  v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
                 </a>
 
                 <span v-if="help.isSecret===1" class="attachment-icon show">
@@ -61,6 +61,7 @@
   </div>
   <Teleport to="#modal">
     <TheModal
+        v-model="show"
         :isPopup="show"
         :title="'확인'"
     >
@@ -161,6 +162,7 @@ const checkValidateUser = (help) => {
 
 const handleUpdateSize = (value) => {
   params.size = value;
+  params.page = 1;
 }
 
 const handleUpdateOrder = (value) => {

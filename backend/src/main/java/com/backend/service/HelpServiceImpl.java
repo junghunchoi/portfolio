@@ -15,6 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * 공지 관련 서비스를 제공하는 구현 클래스.
+ * 공지 등록, 조회, 수정, 삭제 및 목록 조회 기능을 수행합니다.
+ */
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -23,6 +27,12 @@ public class HelpServiceImpl implements HelpService {
 	private final ModelMapper modelMapper;
 	private final HelpRepository helpRepository;
 
+	/**
+	 * 공지를 등록하는 메서드.
+	 *
+	 * @param helpDTO 등록할 공지 정보를 담고 있는 DTO 객체
+	 * @return 등록된 공지의 식별자(hno)
+	 */
 	@Override
 	public Long register(HelpDTO helpDTO) {
 		try {
@@ -35,6 +45,12 @@ public class HelpServiceImpl implements HelpService {
 		return null;
 	}
 
+	/**
+	 * 특정 공지를 조회하는 메서드.
+	 *
+	 * @param hno 조회할 공지의 식별자(hno)
+	 * @return 조회된 공지 정보를 담고 있는 DTO 객체
+	 */
 	@Override
 	public HelpDTO readOne(Long hno) {
 
@@ -49,6 +65,11 @@ public class HelpServiceImpl implements HelpService {
 		return helpDTO;
 	}
 
+	/**
+	 * 공지를 수정하는 메서드.
+	 *
+	 * @param helpDTO 수정할 공지 정보를 담고 있는 DTO 객체
+	 */
 	@Override
 	public void modify(HelpDTO helpDTO) {
 		Optional<Help> result = helpRepository.findById(helpDTO.getHno());
@@ -61,6 +82,11 @@ public class HelpServiceImpl implements HelpService {
 
 	}
 
+	/**
+	 * 공지를 삭제하는 메서드.
+	 *
+	 * @param bno 삭제할 공지의 식별자(hno)
+	 */
 	@Override
 	public void remove(Long bno) {
 		try {
@@ -70,6 +96,12 @@ public class HelpServiceImpl implements HelpService {
 		}
 	}
 
+	/**
+	 * 공지 목록을 페이징하여 조회하는 메서드.
+	 *
+	 * @param pageRequestDTO 페이징 정보와 검색 조건을 담고 있는 DTO 객체
+	 * @return 조회된 공지 목록과 페이징 정보를 담고 있는 DTO 객체
+	 */
 	@Override
 	public PageResponseDTO<HelpListDTO> list(PageRequestDTO pageRequestDTO) {
 		log.info(pageRequestDTO);

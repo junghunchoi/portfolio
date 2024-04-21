@@ -16,6 +16,7 @@
   </main>
   <Teleport to="#modal">
     <TheModal
+        v-model="show"
         :isPopup="show"
         :title="'확인'"
     >

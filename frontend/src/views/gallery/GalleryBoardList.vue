@@ -75,8 +75,8 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-
     const {data} = await getGalleries(params);
+    console.log(data);
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -102,6 +102,7 @@ const searchBoard = async (searchCondition) => {
 
 const handleUpdateSize = (value) => {
   params.size = value;
+  params.page = 1;
 }
 
 const handleUpdateOrder = (value) => {

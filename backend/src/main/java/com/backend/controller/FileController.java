@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Log4j2
 public class FileController {
+
 	@Value("${com.backend.upload.path}")
 	private String uploadPath;
 
@@ -53,31 +54,35 @@ public class FileController {
 	 */
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ResultDTO> upload( FileDTO fileDTO) {
+	public ResponseEntity<ResultDTO<String>> upload(FileDTO fileDTO) {
 		log.info("FileController upload ....");
+		log.info(fileDTO);
 
 		if (fileDTO.getFiles() != null) {
 			filesService.uploadFiles(fileDTO);
 
-			return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "upload Success"));
+			return ResponseEntity.ok(
+				ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "upload Success"));
 		}
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "skip this api"));
+		return ResponseEntity.ok(
+			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "skip this api"));
 	}
 
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?>  download(@RequestBody FileDTO fileDTO) {
+	public ResponseEntity<?> download(@RequestBody FileDTO fileDTO) {
 		log.info("FileController download ....");
 		String contentType = "application/octet-stream";
 
 		String uploadFileName = filesService.uploadFileNameByBnoAndOriginalFileName(fileDTO);
 		Resource resource = fileUtils.readFileAsResource(uploadFileName);
 
-					return ResponseEntity.ok()
-			                     .contentType(MediaType.parseMediaType(contentType))
-			                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-			                     .body(resource);
+		return ResponseEntity.ok()
+		                     .contentType(MediaType.parseMediaType(contentType))
+		                     .header(HttpHeaders.CONTENT_DISPOSITION,
+			                     "attachment; filename=\"" + resource.getFilename() + "\"")
+		                     .body(resource);
 
 	}
 
@@ -109,24 +114,13 @@ public class FileController {
 	 */
 	@ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
 	@DeleteMapping("/remove/{fileName}")
-	public Map<String, Boolean> removeFile(@PathVariable String fileName) {
-		Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
-		Map<String, Boolean> resultMap = new HashMap<>();
-		boolean removed = false;
-		try {
-			String contentType = Files.probeContentType(resource.getFile().toPath());
-			removed = resource.getFile().delete();
-			//섬네일이 존재한다면
-			if (contentType.startsWith("image")) {
-				File thumbnailFile = new File(uploadPath + File.separator + "s_" + fileName);
-				thumbnailFile.delete();
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		resultMap.put("result", removed);
+	public ResponseEntity<ResultDTO<String>> removeFile(@PathVariable String fileName) {
+		log.info("----- fileController removeFile -----");
+		log.info(fileName);
+		filesService.deleteFileByFileName(fileName);
 
-		return resultMap;
+		return ResponseEntity.ok(
+			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "delete Success"));
 	}
 
 }

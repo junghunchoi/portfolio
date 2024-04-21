@@ -24,20 +24,4 @@ public interface BoardService {
 	 */
 	PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO);
 
-
-	/**
-	 * dto -> entity로 변환하는 메소드
-	 * @param boardDTO
-	 * @return Board
-	 */
-	default Board dtoToEntity(BoardDTO boardDTO){
-
-		return Board.builder()
-		                   .bno(boardDTO.getBno())
-		                   .title(boardDTO.getTitle())
-		                   .content(boardDTO.getContent())
-		                   .writer(boardDTO.getWriter())
-		                   .category(boardDTO.getCategory())
-		                   .build();
-	}
 }

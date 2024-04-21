@@ -55,6 +55,7 @@
   </div>
   <Teleport to="#modal">
     <TheModal
+        v-model="show"
         :isPopup="show"
         :title="'확인'"
     >
@@ -104,7 +105,7 @@ const gallery = reactive({
 
 onMounted(async ()=>{
   try {
-    const {data} = await $axios.get(`/galleries/${bno}`)
+    const {data} = await $axios.get(`/galleries/${bno.value}`)
     Object.assign(gallery, data);
     console.log(data)
   } catch (e) {
@@ -142,6 +143,15 @@ const handleFileUpload = (event, index) => {
   }
 };
 
+const isValidateFile = (file) => {
+  if (file.size > 1048576) { // 1mb까지 업로드가능
+    return false;
+  }
+  if (!(file.type === "image/gif" || file.type === "image/jpeg" || file.type === "image/png")) {
+    return false;
+  }
+  return true;
+}
 // modal
 const show = ref(false);
 

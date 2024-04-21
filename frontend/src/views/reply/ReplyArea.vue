@@ -1,25 +1,29 @@
 <template>
   <section>
+    <div v-if="userName !==null">
     <div class="row d-flex justify-content-center">
       <div>
         <ul>
-          <li v-for="reply in replyList" :key="reply.rno">
-            <div class="reply_nick shadow-0">{{
+          <li v-for="(reply, index) in replyList" :key="reply.rno">
+            <div class="reply_nick shadow-0"><b>{{
                 reply.replyer
-              }} | {{
+              }}</b>  {{
                 reply.regDate
               }}
             </div>
-            <div class="d-flex d-">
+            <div class="d-flex justify-content-between">
               <div class="reply_box">{{
                   reply.replyText
                 }}
               </div>
+              <div>
               <button v-if="userName === reply.replyer"
-                      class="btn btn-danger btn-sm float-right m-lg-3"
+                      class="btn btn-danger btn-sm"
                       @click="deleteReplyHandler(reply.rno)">삭제
               </button>
+              </div>
             </div>
+            <hr v-if="replyList.length !== index+1"/>
           </li>
         </ul>
       </div>
@@ -37,6 +41,10 @@
         >등록
         </button>
       </div>
+    </div>
+    </div>
+    <div v-else>
+      로그인한 사용자만 볼 수 있습니다
     </div>
   </section>
 </template>

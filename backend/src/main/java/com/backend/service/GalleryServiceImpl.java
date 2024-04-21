@@ -21,6 +21,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * 갤러리 관련 비즈니스 로직을 처리하는 서비스 구현 클래스입니다.
+ *
+ */
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -31,6 +35,12 @@ public class GalleryServiceImpl implements GalleryService {
 	private final BoardRepository boardRepository;
 	private final FileUtils fileUtils;
 
+	/**
+	 * 갤러리 목록을 페이징 처리하여 조회합니다.
+	 *
+	 * @param pageRequestDTO 페이징 요청 정보를 담은 DTO 객체
+	 * @return 페이징 처리된 갤러리 목록을 담은 DTO 객체
+	 */
 	@Override
 	public PageResponseDTO<GalleryListDTO> list(PageRequestDTO pageRequestDTO) {
 		String[] types = pageRequestDTO.getTypes();
@@ -54,6 +64,12 @@ public class GalleryServiceImpl implements GalleryService {
 		                      .build();
 	}
 
+	/**
+	 * 새로운 갤러리를 등록합니다.
+	 *
+	 * @param boardDTO 등록할 갤러리 정보를 담은 DTO 객체
+	 * @return 등록된 갤러리의 식별자 (bno)
+	 */
 	@Override
 	public Long register(BoardDTO boardDTO) {
 
@@ -65,6 +81,12 @@ public class GalleryServiceImpl implements GalleryService {
 		return bno;
 	}
 
+	/**
+	 * 특정 갤러리를 조회합니다.
+	 *
+	 * @param bno 조회할 갤러리의 식별자
+	 * @return 조회된 갤러리 정보를 담은 DTO 객체
+	 */
 	@Override
 	public BoardDTO readOne(Long bno) {
 		List<Object[]> results = boardRepository.findBoardWithFileById(bno);
@@ -99,6 +121,11 @@ public class GalleryServiceImpl implements GalleryService {
 		return boardDTO;
 	}
 
+	/**
+	 * 갤러리 정보를 수정합니다.
+	 *
+	 * @param boardDTO 수정할 갤러리 정보를 담은 DTO 객체
+	 */
 	@Override
 	public void modify(BoardDTO boardDTO) {
 		Optional<Board> result = boardRepository.findById(boardDTO.getBno());
@@ -110,6 +137,12 @@ public class GalleryServiceImpl implements GalleryService {
 		boardRepository.save(board);
 	}
 
+
+	/**
+	 * 특정 갤러리를 삭제합니다.
+	 *
+	 * @param bno 삭제할 갤러리의 식별자
+	 */
 	@Override
 	public void remove(Long bno) {
 		boardRepository.deleteById(bno);

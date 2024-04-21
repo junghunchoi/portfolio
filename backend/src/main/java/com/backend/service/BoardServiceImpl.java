@@ -8,7 +8,9 @@ import com.backend.entity.Board;
 import com.backend.entity.Category;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.CategoryRepository;
+import com.querydsl.core.Tuple;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -47,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardDTO readOne(Long bno) {
 		List<Object[]> results = boardRepository.findBoardWithCategoryById(bno);
-		List<String> fileList = filesService.getFilesListByBno(bno);
+		List<Map<String, Object>> fileList = filesService.getFilesListByBno(bno);
 		Board board = null;
 		Category category = null;
 

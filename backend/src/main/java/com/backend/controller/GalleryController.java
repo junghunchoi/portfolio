@@ -58,8 +58,6 @@ public class GalleryController {
 		log.info(" --- gallery register --- ");
 		log.info(boardDTO);
 
-
-
 		Long bno = galleryService.register(boardDTO);
 
 

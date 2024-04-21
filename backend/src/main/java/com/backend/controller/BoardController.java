@@ -46,18 +46,14 @@ public class BoardController {
 	 * 새 게시물을 등록합니다. 요청 본문에서 BoardDTO 객체를 받아 처리하며, 유효성 검사 후 게시물을 저장합니다.
 	 *
 	 * @param boardDTO      게시물 정보를 담은 DTO
-	 * @param bindingResult 요청 데이터의 유효성 검사 결과
 	 * @return 생성된 게시물의 번호와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
-	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
+	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO)
 		throws BindException {
 		log.info(" --- board register --- ");
 		log.info(boardDTO);
-		if (bindingResult.hasErrors()) {
-			throw new BindException(bindingResult);
-		}
 
 		Long bno = boardService.register(boardDTO);
 
@@ -73,26 +69,24 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "get board by bno", notes = "특정 게시물 조회")
 	@GetMapping("/{bno}")
-	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
+	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno) {
 		log.info(" --- board read --- ");
 		log.info(bno);
 		BoardDTO boardDTO = boardService.readOne(bno);
+		log.info(boardDTO);
 
-
-		return ResponseEntity.ok(boardDTO);
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), boardDTO));
 	}
 
 	/**
 	 * 특정 게시물을 수정합니다. 요청 본문에서 수정할 게시물 정보를 받아 처리합니다.
 	 *
 	 * @param boardDTO      수정할 게시물 정보
-	 * @param bindingResult 요청 데이터의 유효성 검사 결과
 	 * @return 수정된 게시물 정보와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PatchMapping("")
-	public ResponseEntity<ResultDTO<String>> modify(@RequestBody BoardDTO boardDTO,
-		BindingResult bindingResult) {
+	public ResponseEntity<ResultDTO<String>> modify(@RequestBody BoardDTO boardDTO) {
 		log.info(" --- board modify --- ");
 		log.info(boardDTO);
 		boardService.modify(boardDTO);

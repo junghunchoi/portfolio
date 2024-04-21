@@ -46,7 +46,6 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
 
-
 		Map<String, Object> claim = Map.of("userName", authentication.getName());
 
 		//Access Token 유효기간

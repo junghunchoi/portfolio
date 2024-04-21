@@ -26,7 +26,7 @@
             notice.title
           }}
         </router-link>
-        <span  v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
+        <span class="ms-1"  v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
       </td>
       <td>
         {{
@@ -123,6 +123,7 @@ const goRegisterPage = () => {
 
 const handleUpdateSize = (value) => {
   params.size = value;
+  params.page = 1;
 }
 
 const handleUpdateOrder = (value) => {

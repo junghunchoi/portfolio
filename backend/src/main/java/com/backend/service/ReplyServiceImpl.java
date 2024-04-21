@@ -20,6 +20,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+/**
+ * 댓글 관련 비즈니스 로직을 처리하는 서비스 구현 클래스입니다.
+ *
+ * @author 최정훈
+ * @version 1
+ * @since 2024.04.20
+ */
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -28,6 +35,12 @@ public class ReplyServiceImpl implements ReplyService {
 	private final ReplyRepository replyRepository;
 	private final ModelMapper modelMapper;
 
+	/**
+	 * 새로운 댓글을 등록합니다.
+	 *
+	 * @param replyDTO 등록할 댓글 정보를 담은 DTO 객체
+	 * @return 등록된 댓글의 식별자 (rno)
+	 */
 	@Override
 	public Long Register(ReplyDTO replyDTO) {
 		try {
@@ -41,6 +54,12 @@ public class ReplyServiceImpl implements ReplyService {
 		return null;
 	}
 
+	/**
+	 * 특정 댓글을 조회합니다.
+	 *
+	 * @param rno 조회할 댓글의 식별자
+	 * @return 조회된 댓글 정보를 담은 DTO 객체
+	 */
 	@Override
 	public ReplyDTO read(@Param("rno") Long rno) {
 
@@ -52,6 +71,11 @@ public class ReplyServiceImpl implements ReplyService {
 
 	}
 
+	/**
+	 * 댓글 정보를 수정합니다.
+	 *
+	 * @param replyDTO 수정할 댓글 정보를 담은 DTO 객체
+	 */
 	@Override
 	public void modify(ReplyDTO replyDTO) {
 
@@ -64,11 +88,23 @@ public class ReplyServiceImpl implements ReplyService {
 		replyRepository.save(reply);
 	}
 
+	/**
+	 * 특정 댓글을 삭제합니다.
+	 *
+	 * @param rno 삭제할 댓글의 식별자
+	 */
 	@Override
 	public void remove(Long rno) {
 		replyRepository.deleteById(rno);
 	}
 
+	/**
+	 * 특정 게시물에 속한 댓글 목록을 페이징 처리하여 조회합니다.
+	 *
+	 * @param bno 게시물의 식별자
+	 * @param pageRequestDTO 페이징 요청 정보를 담은 DTO 객체
+	 * @return 페이징 처리된 댓글 목록을 담은 DTO 객체
+	 */
 	@Override
 	public PageResponseDTO<ReplyDTO> getListOfBoard(Long bno, PageRequestDTO pageRequestDTO) {
 
@@ -89,5 +125,4 @@ public class ReplyServiceImpl implements ReplyService {
 		                      .total((int) result.getTotalElements())
 		                      .build();
 	}
-
 }

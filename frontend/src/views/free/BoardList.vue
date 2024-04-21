@@ -136,6 +136,7 @@ const searchBoard = async (searchCondition) => {
 
 const handleUpdateSize = (value) => {
   params.size = value;
+  params.page = 1;
 }
 
 const handleUpdateOrder = (value) => {

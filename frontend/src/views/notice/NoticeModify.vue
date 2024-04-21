@@ -5,19 +5,20 @@
       <b-form-input
           v-model="notice.title"
           id="inline-form-input-name"
-          class="mb-2 mr-sm-2 mb-sm-0"
+          class="mb-2 mr-sm-2 mb-sm-0 mb-3"
           placeholder="제목을 입력해 주세요."
 
       ></b-form-input>
       <TheEditor
           :init-eeditor-data="notice.content"
-          v-model:editorData="notice.content"/>
-
+          v-model:editorData="notice.content"
+          class="mt-3"/>
+      <label>
       <input type="checkbox" class="mb-2 mr-sm-2 mb-sm-0 mt-2"
              :checked="true"
              v-model="notice.isMain"
       />
-      <label>상단고정</label>
+      상단고정</label>
     </b-form>
     <button class="btn btn-primary me-auto mt-2"
             @click="modifyNoticeHandler">저장

@@ -68,6 +68,7 @@
   </div>
   <Teleport to="#modal">
     <TheModal
+        v-model="show"
         :is-popup="show"
         :title="'확인'"
     >

@@ -24,10 +24,13 @@
           board.content
         }}
       </div>
-      <div>
-        <i v-if="board.files.length >0" class="fas fa-paperclip m-2"></i>
-        <span v-for="file in board.files" @click="downloadFileHandler(file)">
-              {{file}}
+      <div class="d-flex flex-column mt-5">
+        <hr/>
+        <span class="mb-3"
+              v-if="board.files.length >0"
+              v-for="file in board.files"
+              @click="downloadFileHandler(file)">
+             <i class="fas fa-file-download"></i> {{file.fileName}}
             </span>
       </div>
 
@@ -76,9 +79,8 @@ const board = reactive({
 const replies = reactive({list: []});
 
 const loadBoardData = async () => {
-  const {data} = await $axios.get(`/boards/${bno.value}`)
-  Object.assign(board, data); // board 객체에 데이터 할당
-  console.log(data)
+  const res = await $axios.get(`/boards/${bno.value}`)
+  Object.assign(board, res.data.resultData); // board 객체에 데이터 할당
 };
 
 const loadReplyDate = async () => {

@@ -23,7 +23,7 @@
                       notice.title
                     }}
                   </router-link>
-                  <span v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
+                  <span class="ms-1" v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
                 </td>
               </tr>
               </tbody>
@@ -51,8 +51,8 @@
                 <span>[{{
                     board.replyCount
                   }}]</span>
-                <span v-if="isCreatedWithin7Days(board.regDate)"><b>new</b></span>
-                <span v-if="board.fileCount>=1" class="attachment-icon show">
+                <span class="ms-1" v-if="isCreatedWithin7Days(board.regDate)"><b>new</b></span>
+                <span v-if="board.fileCount>=1" class="ms-1 attachment-icon show">
                   <i class="fas fa-paperclip"></i>
                 </span>
               </td>
@@ -63,52 +63,52 @@
         </BoardCard>
       </div>
 
-    <div class="row">
-      <BoardCard class="col m-4"
-                 :title="'갤러리'"
-                 :items="Mock"
-                 :destination="'/galleries'">
+      <div class="row">
+        <BoardCard class="col m-4"
+                   :title="'갤러리'"
+                   :items="Mock"
+                   :destination="'/galleries'">
 
-        <div v-for="gallery in galleries" class="media mb-3">
-          <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}"
-                       class="text-decoration-none">
-            <img :src="'http://localhost:1541/api/files/' + gallery.fileName" class="mr-3">
-            <div class="media-body">
-              <h5 class="mt-0">{{ gallery.title }} <span
-                  v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span></h5>
-            </div>
-          </router-link>
-        </div>
-      </BoardCard>
-      <BoardCard class="col m-4"
-                 :title="'문의게시판'"
-                 :items="Mock"
-                 :destination="'/helps'">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col">제목</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="help in helps">
-            <td>
-              <router-link :to="{ name: 'HelpRead', params: { hno: help.hno }}">{{
-                  help.title
-                }}
-              </router-link>
-              <span v-if="help.answer">(답변완료)</span>
-              <span v-else>(미답변)</span>
-              <span v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
-              <span v-if="help.isSecret===1" class="attachment-icon show">
+          <div v-for="gallery in galleries" class="media mb-3">
+            <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}"
+                         class="text-decoration-none">
+              <img :src="'http://localhost:1541/api/files/' + gallery.fileName" class="mr-3">
+              <div class="media-body">
+                <h5 class="mt-0">{{ gallery.title }} <span class="ms-1"
+                    v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span></h5>
+              </div>
+            </router-link>
+          </div>
+        </BoardCard>
+        <BoardCard class="col m-4"
+                   :title="'문의게시판'"
+                   :items="Mock"
+                   :destination="'/helps'">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">제목</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="help in helps">
+              <td>
+                <router-link :to="{ name: 'HelpRead', params: { hno: help.hno }}">{{
+                    help.title
+                  }}
+                </router-link>
+                <span v-if="help.answer">(답변완료)</span>
+                <span v-else>(미답변)</span>
+                <span class="ms-1" v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
+                <span  v-if="help.isSecret===1" class="ms-1 attachment-icon show">
                   <i class="bi bi-lock"></i>
                 </span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </BoardCard>
-    </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </BoardCard>
+      </div>
     </div>
   </section>
 </template>
@@ -134,7 +134,6 @@ onMounted(async () => {
   Object.assign(notices, res.data.resultData.notices)
   Object.assign(galleries, res.data.resultData.galleries)
   Object.assign(helps, res.data.resultData.helps)
-  console.log(boards)
 })
 
 const Mock = ref([

@@ -65,7 +65,6 @@ const searchCondition = reactive({
   order: '',
 })
 
-// const selectedOption = ref('제목')
 const options = ref([
   {value: 't', text: '제목'},
   {value: 'c', text: '내용'},
@@ -73,8 +72,6 @@ const options = ref([
   {value: 'tc', text: '제목+내용'},
   {value: 'tcw', text: '제목+내용+작성자'}
 ])
-
-
 </script>
 
 <style scoped>
