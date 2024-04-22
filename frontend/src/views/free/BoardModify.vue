@@ -30,12 +30,10 @@
     </div>
     <div class="mb-3">
       <label class="form-label">내용</label>
-      <textarea
-          v-model="board.content"
-          class="form-control"
-          id="content"
-          rows="6"
-      ></textarea>
+      <TheEditor
+          :init-eeditor-data="board.content"
+          v-model:editorData="board.content"
+          :isDisabled="false"/>
     </div>
     <TheFiles :files-by-parent="files"
               @update:fileData="handleFileData"
@@ -70,6 +68,7 @@ import {ref, inject, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import TheModal from "@/components/common/TheModal.vue";
 import TheFiles from "@/components/common/TheFiles.vue";
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const $axios = inject('$axios')
 const route = useRoute();

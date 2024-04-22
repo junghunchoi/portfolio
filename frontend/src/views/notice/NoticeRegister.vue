@@ -24,12 +24,10 @@
       </div>
       <div class="mb-3">
         <label  class="form-label">내용</label>
-        <textarea
-            v-model="notice.content"
-            class="form-control"
-            id="content"
-            rows="3"
-        ></textarea>
+        <TheEditor
+            :init-eeditor-data="notice.content"
+            v-model:editorData="notice.content"
+            :isDisabled="false"/>
       </div>
       <div class="mb-3">
         <label class="form-label">상단고정</label>
@@ -57,7 +55,7 @@ import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
 import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-
+import TheEditor from "@/components/common/TheEditor.vue";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 const $axios = inject('$axios');

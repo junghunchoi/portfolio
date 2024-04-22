@@ -24,12 +24,10 @@
       </div>
       <div class="mb-3">
         <label for="content" class="form-label">내용</label>
-        <textarea
-            v-model="form.content"
-            class="form-control"
-            id="content"
-            rows="3"
-        ></textarea>
+        <TheEditor
+            :init-eeditor-data="form.content"
+            v-model:editorData="form.content"
+            :isDisabled="false"/>
       </div>
       <div class="mb-3">
         <label class="form-label">첨부파일</label>
@@ -74,7 +72,7 @@ import {uploadFile} from "@/api/file";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
-
+import TheEditor from "@/components/common/TheEditor.vue";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 

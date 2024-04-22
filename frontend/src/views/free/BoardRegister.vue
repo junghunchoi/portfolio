@@ -32,12 +32,10 @@
       </div>
       <div class="mb-3">
         <label class="form-label">내용</label>
-        <textarea
-            v-model="board.content"
-            class="form-control"
-            id="content"
-            rows="3"
-        ></textarea>
+        <TheEditor
+            :init-eeditor-data="board.content"
+            v-model:editorData="board.content"
+            :isDisabled="false"/>
       </div>
       <div class="mb-3">
         <label class="form-label">첨부파일</label>
@@ -73,6 +71,7 @@ import {createBoard} from '@/api/board';
 import {uploadFile} from "@/api/file";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const $axios = inject('$axios')
 const authStore = useAuthStore();
@@ -93,7 +92,7 @@ const formData = new FormData();
 
 const save = async () => {
   try {
-    const res = await $axios.post('/boards/', board);
+    const res = await $axios.post('/boards', board);
 
     formData.append('bno', res.data.resultData);
     await uploadFile(formData);

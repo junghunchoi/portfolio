@@ -50,13 +50,11 @@
   </section>
   <section class="container my-5">
     <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            {{ gallery.content }}
-          </div>
-        </div>
-      </div>
+          <TheEditor
+              v-if="gallery.content"
+              :init-eeditor-data="gallery.content"
+              v-model:editorData="gallery.content"
+              :isDisabled="true"/>
     </div>
   </section>
   <ReplyArea :bno="bno" :reply-list="replies.list" v-model="replyText"
@@ -92,6 +90,7 @@ import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery";
 import TheModal from "@/components/common/TheModal.vue";
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

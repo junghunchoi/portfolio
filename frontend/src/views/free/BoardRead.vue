@@ -20,10 +20,11 @@
   </section>
   <section>
     <div class="mainArea d-flex flex-column">
-      <div class=""> {{
-          board.content
-        }}
-      </div>
+      <TheEditor
+          v-if="board.content"
+          :init-eeditor-data="board.content"
+          v-model:editorData="board.content"
+          :isDisabled="true"/>
       <div class="d-flex flex-column mt-5">
         <hr/>
         <span class="mb-3"
@@ -55,6 +56,7 @@ import ReplyArea from "@/views/reply/ReplyArea.vue";
 import {downloadFile} from "@/api/file"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const $axios = inject('$axios');
 const authStore = useAuthStore();
