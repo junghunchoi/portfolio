@@ -17,45 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Log4j2
 class BackendApplicationTests {
 
-	@Autowired
-	private MemberRepository memberRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Test
-	public void insertMembers() {
-
-		IntStream.rangeClosed(1,100).forEach(i->{
-			Member member = Member.builder()
-			                      .username("member" + i)
-			                      .password(passwordEncoder.encode("1111"))
-			                      .email("email" + i)
-			                      .build();
-
-			member.addRole(MemberRole.USER);
-
-			if(i>90){
-				member.addRole(MemberRole.ADMIN);
-			}
-			memberRepository.save(member);
-		});
-	}
-
-	@Test
-	public void testRead() {
-
-		Optional<Member> result = memberRepository.getWithRoles("member99");
-
-		Member member = result.orElseThrow();
-
-		log.info(member);
-		log.info(member.getRoleSet());
-
-	}
-
-	@Test
-	void contextLoads() {
-	}
 
 }

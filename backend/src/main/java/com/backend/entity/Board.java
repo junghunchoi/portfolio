@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @AllArgsConstructor
+@Table(name="board")
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "files"})
 @ToString

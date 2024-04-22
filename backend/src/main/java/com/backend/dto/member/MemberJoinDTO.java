@@ -29,7 +29,4 @@ public class MemberJoinDTO {
 	@NotBlank(message = "User real name cannot be blank")
 	private String userRealName;
 
-//	private boolean del;
-//	private boolean social;
-
 }

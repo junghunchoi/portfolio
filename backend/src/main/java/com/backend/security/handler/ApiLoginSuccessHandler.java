@@ -20,12 +20,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+/**
+ * API 로그인 성공 시 처리를 담당하는 핸들러.
+ * 로그인 성공 후 액세스 토큰과 리프레시 토큰을 생성하고 응답으로 반환합니다.
+ */
 @Log4j2
 @RequiredArgsConstructor
 public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final JWTUtil jwtUtil;
 
+	/**
+	 * 로그인 성공 시 처리를 수행하는 메서드.
+	 *
+	 * @param request        로그인 요청 객체
+	 * @param response       로그인 응답 객체
+	 * @param authentication 인증 정보
+	 * @throws IOException      I/O 예외 발생 시
+	 * @throws ServletException 서블릿 예외 발생 시
+	 */
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {

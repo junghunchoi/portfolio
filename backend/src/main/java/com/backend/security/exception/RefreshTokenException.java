@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * 리프레시 토큰 관련 예외를 나타내는 클래스.
+ * 리프레시 토큰 검증 과정에서 발생하는 다양한 예외 상황을 처리합니다.
+ */
 public class RefreshTokenException extends RuntimeException{
 
 	private ErrorCase errorCase;
@@ -22,6 +26,11 @@ public class RefreshTokenException extends RuntimeException{
 		this.errorCase = errorCase;
 	}
 
+	/**
+	 * 예외 정보를 응답으로 전송하는 메서드.
+	 *
+	 * @param response HTTP 응답 객체
+	 */
 	public void sendResponseError(HttpServletResponse response){
 
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -34,7 +43,7 @@ public class RefreshTokenException extends RuntimeException{
 		try {
 			response.getWriter().println(responseStr);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to send response error", e);
 		}
 	}
 }

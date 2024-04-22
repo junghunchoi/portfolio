@@ -50,7 +50,6 @@
 
 <script setup>
 import {ref, reactive,inject} from 'vue';
-import {registerMember, checkUserName} from '@/api/member'
 import AppAlert from "@/components/common/TheAlert.vue";
 import {useRouter} from "vue-router";
 

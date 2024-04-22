@@ -24,12 +24,10 @@
       </div>
       <div class="mb-3">
         <label for="content" class="form-label">내용</label>
-        <textarea
-            v-model="gallery.content"
-            class="form-control"
-            id="content"
-            rows="3"
-        ></textarea>
+        <TheEditor
+            :init-eeditor-data="gallery.content"
+            v-model:editorData="gallery.content"
+            :isDisabled="false"/>
       </div>
       <div class="mb-3">
         <label class="form-label">첨부파일</label>
@@ -76,6 +74,7 @@ import {useRoute, useRouter} from 'vue-router';
 import TheModal from "@/components/common/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -92,16 +91,6 @@ const gallery = reactive({
   files: [],
   modDate: new Date(),
 });
-//
-// const fetchData = async (bno) => {
-//   try {
-//     const {data} = await $axios.get(`/galleries/${bno}`)
-//     Object.assign(gallery, data);
-//     console.log(data)
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
 
 onMounted(async ()=>{
   try {

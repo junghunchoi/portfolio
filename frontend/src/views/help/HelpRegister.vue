@@ -14,12 +14,10 @@
       </div>
       <div class="mb-3">
         <label for="content" class="form-label">내용*</label>
-        <textarea
-            v-model="help.content"
-            class="form-control"
-            id="content"
-            rows="3"
-        ></textarea>
+        <TheEditor
+            :init-eeditor-data="help.content"
+            v-model:editorData="help.content"
+            :isDisabled="false"/>
       </div>
       <div class="pt-4">
         <label class="form-label">비밀글</label>
@@ -33,9 +31,9 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {createHelp} from '@/api/help';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import TheEditor from "@/components/common/TheEditor.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

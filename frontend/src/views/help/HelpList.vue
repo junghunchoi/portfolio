@@ -78,7 +78,6 @@
 <script setup>
 import {computed, inject, onMounted, reactive, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {getHelps} from "@/api/help";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/board/BoardFilter.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"

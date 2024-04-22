@@ -9,7 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-
+/**
+ * 페이지 요총 DTO 클래스.
+ * 페이징 처리된 데이터와 검색 정보등의 정보를 포함합니다.
+ *
+ */
 @Builder
 @Data
 @AllArgsConstructor
