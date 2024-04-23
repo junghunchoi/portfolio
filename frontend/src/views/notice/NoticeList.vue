@@ -1,9 +1,9 @@
 <template>
   <BoardFilter
       @search="searchBoard"
-      @update:size="handleUpdateSize"
-      @update:order="handleUpdateOrder"
-      @update:sort="handleUpdateSort"
+      @update:size="params.size=$event"
+      @update:order="params.sort=$event"
+      @update:sort="params.sort=$event"
   />
 
   <button v-if="AUTHORITY === 'ADMIN'" class="btn btn-primary m-2" @click="goRegisterPage">공지 등록</button>
@@ -50,7 +50,7 @@
 
 <script setup>
 import {inject, onMounted, reactive, ref, watch, watchEffect} from 'vue';
-import BoardFilter from "@/components/board/BoardFilter.vue";
+import BoardFilter from "@/components/TheFilter.vue";
 import {useRouter} from "vue-router";
 import ThePagination from "@/components/common/ThePagination.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
@@ -87,7 +87,6 @@ const params = reactive({
 const fetchData = async () => {
   try {
     const {data} = await $axios.get('/notices', {params:params});
-    console.log(data.resultData)
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -120,19 +119,6 @@ const goRegisterPage = () => {
   router.push('/notices/register');
 };
 
-
-const handleUpdateSize = (value) => {
-  params.size = value;
-  params.page = 1;
-}
-
-const handleUpdateOrder = (value) => {
-  params.order = value;
-}
-
-const handleUpdateSort = (value) => {
-  params.sort = value;
-}
 </script>
 
 <style scoped>

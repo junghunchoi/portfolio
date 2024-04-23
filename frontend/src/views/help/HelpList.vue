@@ -2,9 +2,9 @@
   <div class="row mt-3">
     <BoardFilter
         @search="searchHelp"
-        @update:size="handleUpdateSize"
-        @update:order="handleUpdateOrder"
-        @update:sort="handleUpdateSort"
+        @update:size="params.size=$event"
+        @update:order="params.sort=$event"
+        @update:sort="params.sort=$event"
     />
   </div>
   <div class="row mt-3">
@@ -79,16 +79,16 @@
 import {computed, inject, onMounted, reactive, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import ThePagination from "@/components/common/ThePagination.vue";
-import BoardFilter from "@/components/board/BoardFilter.vue";
+import BoardFilter from "@/components/TheFilter.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
 
 const authStore = useAuthStore();
-const {userName} = storeToRefs(authStore);
+const {userName, getAuthorities} = storeToRefs(authStore);
 
-
+const AUTHORITY = getAuthorities.value;
 const $axios = inject("$axios")
 const router = useRouter();
 const response = reactive({
@@ -148,7 +148,7 @@ const searchHelp = async (searchCondition) => {
 }
 
 const checkValidateUser = (help) => {
-  if (help.isSecret === 0) {
+  if (help.isSecret === 0 || AUTHORITY ==='ADMIN') {
     router.push({name: 'HelpRead', params: {hno: Number(help.hno)}})
   } else {
     if (userName._value === help.writer) {
@@ -157,19 +157,6 @@ const checkValidateUser = (help) => {
       show.value = true
     }
   }
-}
-
-const handleUpdateSize = (value) => {
-  params.size = value;
-  params.page = 1;
-}
-
-const handleUpdateOrder = (value) => {
-  params.order = value;
-}
-
-const handleUpdateSort = (value) => {
-  params.sort = value;
 }
 
 // 모달 로직

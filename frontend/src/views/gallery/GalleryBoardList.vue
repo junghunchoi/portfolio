@@ -2,9 +2,9 @@
   <div class="row mt-3">
     <BoardFilter
         @search="searchBoard"
-        @update:size="handleUpdateSize"
-        @update:order="handleUpdateOrder"
-        @update:sort="handleUpdateSort"
+        @update:size="params.size=$event"
+        @update:order="params.sort=$event"
+        @update:sort="params.sort=$event"
     />
   </div>
   <button class="btn btn-primary mt-3" @click="goRegisterPage">갤러리 등록</button>
@@ -36,9 +36,9 @@
 <script setup>
 import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {getGalleries} from "@/api/gallery";
+import {getGalleries} from "@/api/gallery.js";
 import ThePagination from "@/components/common/ThePagination.vue";
-import BoardFilter from "@/components/board/BoardFilter.vue";
+import BoardFilter from "@/components/TheFilter.vue";
 
 defineProps({
   limit: Number,
@@ -98,19 +98,6 @@ const searchBoard = async (searchCondition) => {
   } catch (e) {
     console.log(e);
   }
-}
-
-const handleUpdateSize = (value) => {
-  params.size = value;
-  params.page = 1;
-}
-
-const handleUpdateOrder = (value) => {
-  params.order = value;
-}
-
-const handleUpdateSort = (value) => {
-  params.sort = value;
 }
 
 </script>

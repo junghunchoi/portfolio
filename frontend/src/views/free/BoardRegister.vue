@@ -67,8 +67,7 @@
 <script setup>
 import {inject, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {createBoard} from '@/api/board';
-import {uploadFile} from "@/api/file";
+import {uploadFile} from "@/api/file.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
@@ -83,7 +82,6 @@ const board = reactive({
   title: null,
   category:{cno: null, content: null},
   content: null,
-  cno: null,
   writer: userName,
   boardType: 1
 });
@@ -92,6 +90,7 @@ const formData = new FormData();
 
 const save = async () => {
   try {
+    console.log(board);
     const res = await $axios.post('/boards', board);
 
     formData.append('bno', res.data.resultData);

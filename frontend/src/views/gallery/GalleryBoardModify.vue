@@ -25,6 +25,7 @@
       <div class="mb-3">
         <label for="content" class="form-label">내용</label>
         <TheEditor
+            v-if="gallery.content"
             :init-eeditor-data="gallery.content"
             v-model:editorData="gallery.content"
             :isDisabled="false"/>
@@ -96,7 +97,6 @@ onMounted(async ()=>{
   try {
     const {data} = await $axios.get(`/galleries/${bno.value}`)
     Object.assign(gallery, data);
-    console.log(data)
   } catch (e) {
     console.error(e);
   }

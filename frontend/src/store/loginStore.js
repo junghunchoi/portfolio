@@ -1,3 +1,7 @@
+/**
+ * Vue.js 애플리케이션의 인증 상태를 관리하는 Pinia 스토어
+ * @module useAuthStore
+ */
 import {defineStore} from 'pinia';
 import axios from 'axios';
 import {ref, computed} from 'vue';
@@ -9,13 +13,18 @@ export const useAuthStore = defineStore('auth', () => {
   const password = ref('');
   const authoritiesRef = ref();
 
+  /**
+   * 로그인 함수
+   * @param {string} inputUsername - 사용자 이름
+   * @param {string} inputPassword - 비밀번호
+   * @returns {Promise<void>}
+   */
   async function login(inputUsername, inputPassword) {
     try {
       const result = await axios.post('http://localhost:1541/login', {
         username: inputUsername,
         password: inputPassword,
       });
-      console.log(result)
       if (result.status === 200) {
         const [userInfo, tokenInfo] = result.data.split('}{');
         const {authorities, usernameRes} = JSON.parse(userInfo + '}');
@@ -37,6 +46,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  /**
+   * 로그아웃 함수
+   */
   function logout() {
     loginSuccess.value = false;
     loginError.value = false;
@@ -47,6 +59,10 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem("refreshToken");
   }
 
+  /**
+   * 액세스 토큰 체크 함수
+   * @returns {Promise<any>}
+   */
   const checkAccessToken = async () => {
     const accessToken = localStorage.getItem("accessToken");
 

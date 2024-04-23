@@ -53,7 +53,7 @@
 import {ref, defineProps} from 'vue';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import {registerReply, deleteReply} from '@/api/reply'
+import {registerReply, deleteReply} from '@/api/reply.js'
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

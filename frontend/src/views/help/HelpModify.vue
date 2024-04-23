@@ -63,7 +63,6 @@ const goListPage = () => {
 };
 
 const modifyHelpHandler = () => {
-  console.log(help);
   $axios.patch('/helps', help)
   .then(res => router.push({name: 'HelpList'}))
 }

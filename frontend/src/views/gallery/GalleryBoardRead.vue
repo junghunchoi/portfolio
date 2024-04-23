@@ -85,10 +85,10 @@
 import {ref, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import ReplyArea from "@/views/reply/ReplyArea.vue";
-import {getReplies} from "@/api/reply";
+import {getReplies} from "@/api/reply.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import {getGalleryBybno,deleteGallery} from "@/api/gallery";
+import {getGalleryBybno,deleteGallery} from "@/api/gallery.js";
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
 
@@ -116,7 +116,6 @@ const replies = reactive({list: []});
 const loadGalleryData = async () => {
   try {
     const {data} = await getGalleryBybno(bno.value);
-    console.log(data)
     Object.assign(gallery, data); // gallery 객체에 데이터 할당
   } catch (e) {
     console.error(e);

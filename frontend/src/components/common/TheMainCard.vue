@@ -1,8 +1,9 @@
 <template>
   <div class="card">
-    <div class="header">
-      <div>{{title}}</div>
-      <router-link :to="destination">더보기+</router-link>
+    <div class="header mt-1">
+      <div>{{title}}
+      <router-link class="float-end" :to="destination"><h4>+</h4></router-link>
+      </div>
       <hr/>
     </div>
     <slot></slot>
@@ -19,5 +20,8 @@ defineProps({
 </script>
 
 <style scoped>
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>

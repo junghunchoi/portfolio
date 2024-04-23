@@ -2,9 +2,9 @@
   <div class="row mt-3">
     <BoardFilter
         @search="searchBoard"
-        @update:size="handleUpdateSize"
-        @update:order="handleUpdateOrder"
-        @update:sort="handleUpdateSort"
+        @update:size="params.size=$event"
+        @update:order="params.sort=$event"
+        @update:sort="params.sort=$event"
     />
   </div>
   <div class="row mt-3">
@@ -25,30 +25,21 @@
             </thead>
             <tbody>
             <tr v-for="board in response.items">
-              <td>{{
-                  board.category
-                }}
+              <td>{{ board.category }}
               </td>
               <td>
-                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">{{
-                    board.title
-                  }}
+                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
+                  {{ board.title }}
                 </router-link>
-                <span>[{{
-                    board.replyCount
-                  }}]</span>
+                <span>[{{ board.replyCount }}]</span>
                 <span v-if="board.fileCount>=1" class="attachment-icon show">
                   <i class="fas fa-paperclip"></i>
                 </span>
               </td>
-              <td>{{
-                  board.writer
-                }}
+              <td>{{ board.writer }}
               </td>
               <td>
-                {{
-                  board.viewCount
-                }}
+                {{ board.viewCount }}
               </td>
               <td>
                 {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
@@ -71,9 +62,9 @@
 <script setup>
 import {computed, reactive, watch, inject} from 'vue';
 import {useRouter} from 'vue-router';
-import {getBoards} from "@/api/board";
+import {getBoards} from "@/api/board.js";
 import ThePagination from "@/components/common/ThePagination.vue";
-import BoardFilter from "@/components/board/BoardFilter.vue";
+import BoardFilter from "@/components/TheFilter.vue";
 
 defineProps({
   limit: Number,
@@ -111,7 +102,7 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-    const {data} = await $axios.get('/boards',{params:params})
+    const {data} = await $axios.get('/boards', {params: params})
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -134,18 +125,6 @@ const searchBoard = async (searchCondition) => {
   }
 }
 
-const handleUpdateSize = (value) => {
-  params.size = value;
-  params.page = 1;
-}
-
-const handleUpdateOrder = (value) => {
-  params.order = value;
-}
-
-const handleUpdateSort = (value) => {
-  params.sort = value;
-}
 </script>
 
 <style scoped>

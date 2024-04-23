@@ -31,6 +31,7 @@
     <div class="mb-3">
       <label class="form-label">내용</label>
       <TheEditor
+          v-if="board.content"
           :init-eeditor-data="board.content"
           v-model:editorData="board.content"
           :isDisabled="false"/>
@@ -105,7 +106,6 @@ const clickRemoveHandler = async () => {
 
 async function updateDateAndGolist() {
   try {
-    console.log(formData.get("files"));
     await $axios.patch('/boards', board);
     await $axios.post('/files/upload', formData);
     router.push({name: 'BoardRead', params: {bno: bno.value}});

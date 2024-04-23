@@ -45,6 +45,7 @@ public class MemberServiceImpl implements MemberService{
 
 		Long id = memberRepository.save(member).getId();
 
+		log.info("register : " + id);
 		return id;
 	}
 

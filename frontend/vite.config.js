@@ -10,6 +10,7 @@ import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 
 export default defineConfig({
+  base: '/',
   envDir: '.',
   plugins: [vue(), Components({
     dirs: ['src/components/app'],
@@ -17,6 +18,9 @@ export default defineConfig({
   }),
   ],
   server: {
+    // headers: {
+    //   'Content-Type': 'application/javascript',
+    // },
     proxy: {
       '/api': 'http://localhost:1541'
     }
@@ -32,3 +36,4 @@ export default defineConfig({
     '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': false, // Explicitly set the flag
   },
 });
+

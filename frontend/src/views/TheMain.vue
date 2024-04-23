@@ -117,7 +117,7 @@
 import BoardCard from "@/components/common/TheMainCard.vue";
 import {useRouter} from 'vue-router';
 import {inject, onMounted, reactive, ref} from "vue";
-import {isCreatedWithin7Days} from "@/common/dateUtils"
+import {isCreatedWithin7Days} from "@/common/dateUtils.js"
 
 const router = useRouter();
 const $axios = inject('$axios');
@@ -159,5 +159,10 @@ const Mock = ref([
 img {
   width: 64px;
   height: 64px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

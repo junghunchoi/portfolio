@@ -19,7 +19,7 @@
             v-model:editorData="help.content"
             :isDisabled="false"/>
       </div>
-      <div class="pt-4">
+      <div class="pt-2">
         <label class="form-label">비밀글</label>
         <input type="checkbox" v-model="help.isSecret" />
       </div>
@@ -51,7 +51,6 @@ const help = reactive({
 });
 
 const save = () => {
-  console.log(help)
   help.isSecret = help.isSecret === true ? 1 : 0;
   createHelp({
     ...help,
@@ -59,11 +58,6 @@ const save = () => {
       router.push({name: 'HelpList'});
     })
   };
-
-const goHelpPage = () => {
-  router.push({name: 'HelpList'});
-};
-
 
 </script>
 

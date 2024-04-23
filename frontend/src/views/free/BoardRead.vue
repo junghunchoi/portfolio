@@ -3,18 +3,9 @@
     <div class="row">
       <div class="col-12 mb-3">
 
-        <h3><b>[{{
-            board.category.content
-          }}]</b> {{
-            board.title
-          }}</h3>
-        <p class="text-muted">작성자: {{
-            board.writer
-          }} | 조회수: {{
-            board.viewCount
-          }} | {{
-            $dayjs(board.regDate).format('YYYY.MM.DD HH:mm:ss')
-          }}</p>
+        <h3><b>[{{ board.category.content }}]</b> {{ board.title }}</h3>
+        <p class="text-muted">작성자: {{ board.writer }} | 조회수: {{ board.viewCount }} | {{
+            $dayjs(board.regDate).format('YYYY.MM.DD HH:mm:ss') }}</p>
       </div>
     </div>
   </section>
@@ -31,7 +22,9 @@
               v-if="board.files.length >0"
               v-for="file in board.files"
               @click="downloadFileHandler(file)">
-             <i class="fas fa-file-download"></i> {{file.fileName}}
+             <i class="fas fa-file-download"></i> {{
+            file.fileName
+          }}
             </span>
       </div>
 
@@ -53,7 +46,7 @@
 import {ref, watch, onMounted, reactive, inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import ReplyArea from "@/views/reply/ReplyArea.vue";
-import {downloadFile} from "@/api/file"
+import {downloadFile} from "@/api/file.js"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
@@ -112,11 +105,11 @@ const modifyBoard = () => {
 const downloadFileHandler = async (file) => {
   const fileInform = {
     bno: bno.value,
-    fileName: file
+    fileName: file.fileName
   }
   const res = await downloadFile(fileInform);
   console.log(res)
-  const name = file
+  const name = file.fileName
   const url = window.URL.createObjectURL(new Blob([res.data]));
   const link = document.createElement("a");
   link.href = url;
@@ -130,7 +123,7 @@ const downloadFileHandler = async (file) => {
 </script>
 
 <style scoped>
-.mainArea{
+.mainArea {
   min-height: 150px;
   height: auto;
 }
