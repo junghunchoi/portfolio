@@ -23,8 +23,8 @@
       </select>
     </div>
 
-    <div class="d-flex ">
-      <div class="">
+    <div class="d-flex me-3">
+      <div >
         <select
             class="form-select"
             @input="$emit('update:order', $event.target.value)"
@@ -34,7 +34,7 @@
           <option value="viewCount">조회수</option>
         </select>
       </div>
-      <div class="">
+      <div >
         <select
             class="form-select"
             @input="$emit('update:sort', $event.target.value)"

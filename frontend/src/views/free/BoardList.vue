@@ -11,7 +11,7 @@
     <div class="col">
       <div class="card">
         <div class="card-body">
-          <button class="btn btn-primary" @click="goRegisterPage">게시글 등록</button>
+          <button class="btn btn-primary mb-2" @click="goRegisterPage">게시글 등록</button>
           <table class="table">
             <thead>
             <tr>
@@ -58,18 +58,40 @@
                      class="flex-md-grow-0"/>
     </div>
   </div>
+  <Teleport to="#modal">
+    <TheModal
+        v-model="show"
+        :isPopup="show"
+        :title="'확인'"
+    >
+      <template #default>
+        로그인한 사용자만 등록할 수 있습니다.
+      </template>
+      <template #actions>
+        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
+    </TheModal>
+  </Teleport>
 </template>
 <script setup>
-import {computed, reactive, watch, inject} from 'vue';
+import {computed, reactive, watch, inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {getBoards} from "@/api/board.js";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
+import TheModal from "@/components/common/TheModal.vue";
+import {useAuthStore} from "@/store/loginStore.js";
+import {storeToRefs} from 'pinia'
+
+const authStore = useAuthStore();
+const {userName} = storeToRefs(authStore);
 
 defineProps({
   limit: Number,
 });
 
+const show = ref(false);
 const router = useRouter();
 const $axios = inject("$axios")
 const response = reactive({
@@ -97,6 +119,10 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
+  if (userName.value === null) {
+    show.value = true;
+    return;
+  }
   router.push('/boards/register');
 };
 
@@ -125,6 +151,16 @@ const searchBoard = async (searchCondition) => {
   }
 }
 
+// 모달 로직
+
+const doLoginHandler = () => {
+  router.push({name: 'Login'});
+}
+
+const closeModal = () => {
+  show.value = false;
+}
+
 </script>
 
 <style scoped>
@@ -142,4 +178,55 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.table .attachment-icon {
+  margin-left: 5px;
+  color: #007bff;
+}
+
+.table .attachment-icon.show {
+  display: inline;
+}
+
+.table .router-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.table .router-link:hover {
+  text-decoration: underline;
+}
+
+.table td:nth-child(1),
+.table td:nth-child(3),
+.table td:nth-child(4),
+.table td:nth-child(5),
+.table td:nth-child(6) {
+  white-space: nowrap;
+}
+
+
 </style>

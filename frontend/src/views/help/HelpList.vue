@@ -7,58 +7,44 @@
         @update:sort="params.sort=$event"
     />
   </div>
-  <div class="row mt-3">
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <button class="btn btn-primary" @click="goRegisterPage">문의 등록</button>
-          <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">제목</th>
-              <th scope="col">작성자</th>
-              <th scope="col">조회수</th>
-              <th style="width: 20%;" scope="col">등록일시</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="help in response.items">
-              <td>
-                <a @click="checkValidateUser(help)">{{
-                    help.title
-                  }}
-                  <span v-if="help.answer">(답변완료)</span>
-                  <span v-else>(미답변)</span>
-                  <span class="ms-1"  v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
-                </a>
-
-                <span v-if="help.isSecret===1" class="attachment-icon show">
+  <button class="btn btn-primary mb-3 mt-3" @click="goRegisterPage">문의 등록</button>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">제목</th>
+      <th scope="col">작성자</th>
+      <th scope="col">조회수</th>
+      <th style="width: 20%;" scope="col">등록일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="help in response.items">
+      <td>
+        <a @click="checkValidateUser(help)">
+          {{ help.title }}
+          <span v-if="help.answer">(답변완료)</span>
+          <span v-else>(미답변)</span>
+          <span class="ms-1" v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
+        </a>
+        <span v-if="help.isSecret===1" class="attachment-icon show">
                   <i class="bi bi-lock"></i>
                 </span>
-              </td>
-              <td>{{
-                  help.writer
-                }}
-              </td>
-              <td>
-                {{
-                  help.viewCount
-                }}
-              </td>
-              <td>
-                {{ $dayjs(help.regDate).format('YYYY.MM.DD') }}
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <ThePagination :current-page="response.page"
-                     :total="response.total"
-                     @page="page => (params.page = page)"
-                     class="flex-md-grow-0"/>
-    </div>
-  </div>
+      </td>
+      <td>{{ help.writer }}
+      </td>
+      <td>
+        {{ help.viewCount }}
+      </td>
+      <td>
+        {{ $dayjs(help.regDate).format('YYYY.MM.DD') }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <ThePagination :current-page="response.page"
+                 :total="response.total"
+                 @page="page => (params.page = page)"
+                 class="flex-md-grow-0"/>
   <Teleport to="#modal">
     <TheModal
         v-model="show"
@@ -66,9 +52,10 @@
         :title="'확인'"
     >
       <template #default>
-        비밀글은 작성한 사용자만 확인할 수 있습니다.
+        {{ modalText }}
       </template>
       <template #actions>
+        <button v-if="userName===null" class="btn btn-primary" @click="doLoginHandler">로그인</button>
         <button class="btn btn-light" @click="closeModal">닫기</button>
       </template>
     </TheModal>
@@ -87,9 +74,10 @@ import TheModal from "@/components/common/TheModal.vue";
 
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
-
+const show = ref(false);
 const AUTHORITY = getAuthorities.value;
 const $axios = inject("$axios")
+const modalText = ref('')
 const router = useRouter();
 const response = reactive({
   items: [],
@@ -116,19 +104,24 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
+  if (userName.value === null) {
+    modalText.value = '로그인한 사용자만 등록할 수 있습니다.'
+    show.value = true;
+    return;
+  }
   router.push({name: 'HelpRegister'});
 };
 
 const fetchData = async () => {
   try {
-    const {data} = await $axios.get('/helps', {params:params});
+    const {data} = await $axios.get('/helps', {params: params});
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
   }
 };
 
-onMounted(() =>{
+onMounted(() => {
   fetchData();
 })
 
@@ -148,20 +141,23 @@ const searchHelp = async (searchCondition) => {
 }
 
 const checkValidateUser = (help) => {
-  if (help.isSecret === 0 || AUTHORITY ==='ADMIN') {
+  if (help.isSecret === 0 || AUTHORITY === 'ADMIN') {
+    router.push({name: 'HelpRead', params: {hno: Number(help.hno)}})
+    return;
+  }
+
+  if (userName._value === help.writer) {
     router.push({name: 'HelpRead', params: {hno: Number(help.hno)}})
   } else {
-    if (userName._value === help.writer) {
-      router.push({name: 'HelpRead', params: {hno: Number(help.hno)}})
-    } else {
-      show.value = true
-    }
+    modalText.value = '비밀글은 작성한 사용자만 확인할 수 있습니다.'
+    show.value = true
   }
 }
 
 // 모달 로직
-
-const show = ref(false);
+const doLoginHandler = () => {
+  router.push({name: 'Login'});
+}
 
 const closeModal = () => {
   show.value = false;
@@ -170,4 +166,53 @@ const closeModal = () => {
 </script>
 
 <style scoped>
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.table .attachment-icon {
+  margin-left: 5px;
+  color: #007bff;
+}
+
+.table .attachment-icon.show {
+  display: inline;
+}
+
+.table .router-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.table .router-link:hover {
+  text-decoration: underline;
+}
+
+.table td:nth-child(1),
+.table td:nth-child(3),
+.table td:nth-child(4),
+.table td:nth-child(5),
+.table td:nth-child(6) {
+  white-space: nowrap;
+}
 </style>

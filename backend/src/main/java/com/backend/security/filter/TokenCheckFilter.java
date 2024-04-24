@@ -26,8 +26,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 
 /**
- * 토큰 검사를 수행하는 필터.
- * 요청 헤더에서 액세스 토큰을 추출하고 유효성을 검사한 후 인증 정보를 설정합니다.
+ * 토큰 검사를 수행하는 필터. 요청 헤더에서 액세스 토큰을 추출하고 유효성을 검사한 후 인증 정보를 설정합니다.
  */
 @Log4j2
 @RequiredArgsConstructor
@@ -51,7 +50,12 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		String path = request.getRequestURI();
-		if (path.startsWith("/api/auth/") || path.startsWith("/api/files/") ) {
+		if (path.startsWith("/api/auth/")
+			|| path.startsWith("/api/files/")
+			|| path.matches("/api/(galleries|helps)$")
+			|| path.startsWith("/api/boards")
+			|| path.startsWith("/api/notices")
+			|| path.startsWith("/api/common/main")) {
 			log.info("skip token check filter ....");
 			filterChain.doFilter(request, response);
 			return;
@@ -68,9 +72,8 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-			UsernamePasswordAuthenticationToken authentication =
-				new UsernamePasswordAuthenticationToken(
-					userDetails, null, userDetails.getAuthorities());
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+				userDetails, null, userDetails.getAuthorities());
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 

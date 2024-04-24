@@ -11,20 +11,21 @@
   <div class="row mt-3">
     <div class="col">
       <div class="card">
-            <div v-for="gallery in response.items" class="">
-              <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
-              <div class=" d-flex align-items-center mb-3">
-                <img :src="'http://localhost:1541/api/files/' + gallery.fileName"  class="card-img-top">
-                <div class="ms-4">
-                  <h5 class="card-title">{{gallery.title}}</h5>
-                  <p class="card-text">{{gallery.content}}</p>
-                  <p class="card-text"><small class="text-muted">
-                    {{ $dayjs(gallery.regDate).format('YYYY.MM.DD') }}</small></p>
-                </div>
+        <div v-for="gallery in response.items" class="">
+          <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
+            <div class=" d-flex align-items-center mb-3">
+              <img :src="'http://localhost:1541/api/files/' + gallery.fileName"
+                   class="card-img-top">
+              <div class="ms-4">
+                <h5 class="card-title">{{ gallery.title }}</h5>
+                <p class="card-text">{{ gallery.content }}</p>
+                <p class="card-text"><small class="text-muted">
+                  {{ $dayjs(gallery.regDate).format('YYYY.MM.DD') }}</small></p>
               </div>
-
-              </router-link>
             </div>
+
+          </router-link>
+        </div>
       </div>
       <ThePagination :current-page="response.page"
                      :total="response.total"
@@ -32,6 +33,21 @@
                      class="flex-md-grow-0"/>
     </div>
   </div>
+  <Teleport to="#modal">
+    <TheModal
+        v-model="show"
+        :isPopup="show"
+        :title="'확인'"
+    >
+      <template #default>
+        로그인한 사용자만 등록할 수 있습니다.
+      </template>
+      <template #actions>
+        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
+    </TheModal>
+  </Teleport>
 </template>
 <script setup>
 import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
@@ -39,11 +55,18 @@ import {useRouter} from 'vue-router';
 import {getGalleries} from "@/api/gallery.js";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
+import TheModal from "@/components/common/TheModal.vue";
+import {useAuthStore} from "@/store/loginStore.js";
+import {storeToRefs} from 'pinia'
+
+const authStore = useAuthStore();
+const {userName} = storeToRefs(authStore);
 
 defineProps({
   limit: Number,
 });
 
+const show = ref(false);
 const router = useRouter();
 const response = reactive({
   items: [],
@@ -70,6 +93,10 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
+  if (userName.value === null) {
+    show.value = true;
+    return;
+  }
   router.push('/galleries/register');
 };
 
@@ -100,6 +127,18 @@ const searchBoard = async (searchCondition) => {
   }
 }
 
+// 모달로직
+const openModal = (index) => {
+  show.value = true;
+};
+
+const doLoginHandler = () => {
+  router.push({name: 'Login'});
+}
+
+  const closeModal = () => {
+    show.value = false;
+  }
 </script>
 
 <style scoped>

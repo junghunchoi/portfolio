@@ -8,7 +8,7 @@
     </div>
   </section>
   <section>
-    <div class="slider-container">
+    <div v-if="gallery.files.length > 0" class="slider-container">
       <div class="slide_wrap">
         <div class="slide_box">
           <div class="slide_list"

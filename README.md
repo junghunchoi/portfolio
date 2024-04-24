@@ -1,4 +1,4 @@
-# 프로젝트 이름: junghun's portfolio
+#  junghun's portfolio
 
 ## 프로젝트 소개
 이 포트폴리오는 스프링 부트와 Vue.js를 활용하여 개발되었습니다. 

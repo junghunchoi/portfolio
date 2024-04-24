@@ -48,7 +48,7 @@ const loginError  = ref(false);
 const login = async () =>{
   try {
     await authStore.login(username.value, password.value);
-    await router.push('/');
+    router.go(-1);
   } catch (err) {
     loginError.value = true;
     show.value=true

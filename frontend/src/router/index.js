@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import NotFoundView from '@/views/NotFoundView.vue';
+import NotFoundView from '@/views/common/NotFoundView.vue';
 import BoardList from '@/views/free/BoardList.vue';
 import BoardRead from "@/views/free/BoardRead.vue";
 import BoardRegister from '@/views/free/BoardRegister.vue';
@@ -18,7 +18,7 @@ import NoticeRegister from '@/views/notice/NoticeRegister.vue'
 import NoticeModify from '@/views/notice/NoticeModify.vue'
 import NoticeRead from '@/views/notice/NoticeRead.vue'
 import Login from '@/views/member/Login.vue';
-import TheMain from '@/views/TheMain.vue'
+import TheMain from '@/views/common/TheMain.vue'
 import {useAuthStore} from '@/store/loginStore.js'
 
 const routes = [

@@ -19,7 +19,6 @@
       <TheEditor
           v-if="help.content"
           :init-eeditor-data="help.answer"
-          v-model:editorData="help.answer"
           :isDisabled="true"/>
     </div>
     <div class="float-end">
@@ -49,13 +48,8 @@ const {userName} = storeToRefs(authStore);
 
 
 
-const help = reactive({
-  hno: '',
-  title: '',
-  content: '',
-  writer: '',
-  answer:''
-});
+const help = reactive({}
+);
 
 onMounted(async ()=>{
   const res = await $axios.get(`/helps/${hno.value}`)
