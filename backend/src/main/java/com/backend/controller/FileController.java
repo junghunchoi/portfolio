@@ -78,6 +78,7 @@ public class FileController {
 		String uploadFileName = filesService.uploadFileNameByBnoAndOriginalFileName(fileDTO);
 		Resource resource = fileUtils.readFileAsResource(uploadFileName);
 
+
 		return ResponseEntity.ok()
 		                     .contentType(MediaType.parseMediaType(contentType))
 		                     .header(HttpHeaders.CONTENT_DISPOSITION,

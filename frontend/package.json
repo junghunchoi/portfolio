@@ -6,7 +6,6 @@
     "build": "vite build",
     "preview": "vite preview --port 1542",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "db": "json-server --watch db.json --port 5000",
     "serve": "vue-cli-service serve"
   },
   "dependencies": {
@@ -20,6 +19,7 @@
     "bootstrap-vue-3": "^0.5.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
+    "nginx-conf": "^2.1.0",
     "npm": "^10.4.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",

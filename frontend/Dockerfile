@@ -1,30 +1,29 @@
-FROM node:18-alpine
-
-# 작업 디렉토리 설정
+# 빌드 스테이지
+FROM node:lts-alpine AS build-stage
 WORKDIR /app
-
-# 프로젝트 파일 복사
-COPY . .
-
-# 의존성 설치
+COPY package*.json ./
 RUN npm install
-
-# 빌드
+COPY . .
 RUN npm run build
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-# Nginx 이미지 사용
-FROM nginx:stable-alpine
-
-# Nginx 설정 파일 복사
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# 빌드된 Vue 앱 복사
-COPY --from=0 /app/dist /usr/share/nginx/html
-
-# 80 포트 노출
-EXPOSE 80
-
-# Nginx 시작
+# 프로덕션 스테이지
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 1542
 CMD ["nginx", "-g", "daemon off;"]
+
+
+#FROM node as build-stage
+#WORKDIR /app
+#COPY package*.json ./
+#ADD . .
+#RUN npm install
+#RUN npm run build
+#
+## production stage
+#FROM nginx:stable-alpine as production-stage
+#COPY  ./nginx.conf /etc/nginx/conf.d/default.conf
+#
+#COPY --from=build-stage /app/dist /usr/share/nginx/html
+#EXPOSE 1542
+#CMD ["nginx", "-g", "daemon off;"]

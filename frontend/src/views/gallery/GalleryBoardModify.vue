@@ -22,24 +22,17 @@
             id="title"
         />
       </div>
-      <div class="mb-3">
+      <div  class="mb-3">
         <label for="content" class="form-label">내용</label>
         <TheEditor
-            v-if="gallery.content"
+            v-if="gallery.title"
             :init-eeditor-data="gallery.content"
             v-model:editorData="gallery.content"
             :isDisabled="false"/>
       </div>
-      <div class="mb-3">
-        <label class="form-label">첨부파일</label>
-        <div>jpg, gif, png 파일만 1mb까지 업로드가 가능합니다.</div>
-        <div>1번째 이미지는 썸네일로 활용됩니다.</div>
-        <div v-for="(input, index) in gallery.files" :key="index" style="padding:30px;">
-          <input type="file" @change="handleFileUpload($event, index)"/>
-          <button class="btn btn-light"><i class="bi bi-x"></i></button>
-        </div>
-
-      </div>
+      <TheFiles :files-by-parent="files"
+                @update:fileData="handleFileData"
+      />
       <div class="pt-4">
         <button
             type="button"
@@ -48,7 +41,7 @@
         >
           목록
         </button>
-        <button class="btn btn-primary" @click="save">저장</button>
+        <button class="btn btn-primary" @click="updateDataAndGolist">저장</button>
       </div>
     </form>
   </div>
@@ -76,6 +69,7 @@ import TheModal from "@/components/common/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
 import TheEditor from "@/components/common/TheEditor.vue";
+import TheFiles from "@/components/common/TheFiles.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -93,10 +87,17 @@ const gallery = reactive({
   modDate: new Date(),
 });
 
+const files = ref([]);
+const formData = new FormData();
+formData.set('bno', Number(bno.value));
+
 onMounted(async ()=>{
   try {
     const {data} = await $axios.get(`/galleries/${bno.value}`)
-    Object.assign(gallery, data);
+    await Object.assign(gallery, data);
+    gallery.files.forEach((file, index) => {
+      files.value.push({id: index, file: file})
+    })
   } catch (e) {
     console.error(e);
   }
@@ -109,28 +110,16 @@ const goGalleryPage = () => {
 async function updateDataAndGolist() {
   try {
     await $axios.put(`/galleries`, {...gallery})
+    await $axios.post('/files/upload', formData);
     router.push({name: 'GalleryRead', params: {bno: bno.value}});
   } catch (e) {
     console.log(e)
   }
 }
 
-const handleFileUpload = (event, index) => {
-  const selectedFile = event.target.files[0];
-
-  if (!isValidateFile(selectedFile)) {
-    show.value = true;
-    return;
-  }
-
-  files.value[index].file = selectedFile;
-  formData.append('files', selectedFile);
-
-  if (index + 1 === files.value.length) {
-    const newInputId = files.value.length; // 새 입력 필드의 고유 ID 생성
-    files.value.push({id: newInputId}); // 배열에 새 입력 필드 정보 추가
-  }
-};
+const handleFileData = (value) => {
+  formData.append('files', value);
+}
 
 const isValidateFile = (file) => {
   if (file.size > 1048576) { // 1mb까지 업로드가능

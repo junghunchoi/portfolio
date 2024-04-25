@@ -76,8 +76,8 @@ const registerMemberHandler = async () => {
     return;
   }
 
-  const res = $axios.post('/auth/members/register', {...memberInform});
-  if (res.status === 200) {
+  const res = await $axios.post('/auth/members/register', {...memberInform});
+  if (res.status  === 200) {
     await router.push('/');
   } else {
     vAlert("회원가입에 실패했습니다. 관리자에게 문의해주세요.")
@@ -87,7 +87,7 @@ const registerMemberHandler = async () => {
 
 const checkValidateId = async () => {
   try {
-    const res = await $axios.post('/auth/members/check', memberInform.userName);
+    const res = await $axios.post('/auth/members/check', { userName: memberInform.userName }, { headers: { 'Content-Type': 'application/json' } });
 
     if (res.data.resultMsg === "validate userName") {
       vAlert("사용가능합니다", "success")

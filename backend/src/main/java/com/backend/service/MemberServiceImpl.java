@@ -57,7 +57,6 @@ public class MemberServiceImpl implements MemberService{
 	 */
 	@Override
 	public Optional<Member> readOne(String userName) {
-
 		return memberRepository.getWithuserName(userName);
 	}
 

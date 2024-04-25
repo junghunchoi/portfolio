@@ -1,21 +1,48 @@
 version: "3.8"
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    ports:
-#       [local port] : [container port]
-      - "9999:3306"
+  mariadb:
+    image: mariadb
+    container_name: mariadb-container
     environment:
-      MYSQL_ROOT_PASSWORD: 12345
       TZ: Asia/Seoul
-      MYSQL_DATABASE: new
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 12345
-    command:
-      - --character-set-server=UTF8MB4
-      - --collation-server=UTF8MB4_UNICODE_CI
+      MARIADB_ROOT_PASSWORD: 12345
+      MARIADB_DATABASE: portfolio
+    ports:
+      - "3307:3306"
     volumes:
-      - ./db/mysql/data:/var/lib/mysql
+      - mariadb-data:/var/lib/mysql
+    networks:
+      - docker-network
+    restart: always
 
 
+  backend:
+    image: backend
+    container_name: backend-container
+    ports:
+      - "1541:1541"
+    networks:
+      - docker-network
+    depends_on:
+      - mariadb
+    environment:
+        SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/portfolio
+
+  frontend:
+     image: frontend
+     container_name: frontend-container
+     ports:
+       - "1542:80"
+
+  nginx:
+    image: nginx
+
+networks:
+  docker-network:
+    driver: bridge
+    external: true
+
+volumes:
+  upload-volume:
+    external: true
+  mariadb-data:

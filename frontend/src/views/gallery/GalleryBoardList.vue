@@ -103,7 +103,6 @@ const goRegisterPage = () => {
 const fetchData = async () => {
   try {
     const {data} = await getGalleries(params);
-    console.log(data);
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);

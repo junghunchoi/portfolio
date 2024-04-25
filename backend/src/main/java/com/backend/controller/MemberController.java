@@ -9,6 +9,7 @@ import com.backend.service.MemberService;
 import com.backend.utils.FileUtils;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,9 +45,9 @@ public class MemberController {
 	}
 
 	@PostMapping("/auth/members/check")
-	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody String userName) {
+	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody Map<String, String> requestBody) {
 		log.info("memberController - checkUserName");
-		log.info(userName);
+		String userName = requestBody.get("userName");
 		Optional<Member> member = memberService.readOne(userName);
 
 		if (member.isEmpty()) {
