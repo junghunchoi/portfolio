@@ -79,7 +79,6 @@
 <script setup>
 import {computed, reactive, watch, inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {getBoards} from "@/api/board.js";
 import ThePagination from "@/components/common/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
 import TheModal from "@/components/common/TheModal.vue";
@@ -148,7 +147,7 @@ const searchBoard = async (searchCondition) => {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
 
-    const {data} = await getBoards(params);
+    await $axios.get('/boards', params);
   } catch (e) {
   }
 }

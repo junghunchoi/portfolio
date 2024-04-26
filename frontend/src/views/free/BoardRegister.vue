@@ -67,7 +67,6 @@
 <script setup>
 import {inject, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import {uploadFile} from "@/api/file.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
@@ -94,7 +93,7 @@ const save = async () => {
     const res = await $axios.post('/boards', board);
 
     formData.append('bno', res.data.resultData);
-    await uploadFile(formData);
+    await $axios.post('/files/upload',formData);
     router.push({name: 'BoardList'});
   } catch (e){
     console.error(e)

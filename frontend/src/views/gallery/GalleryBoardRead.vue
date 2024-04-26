@@ -82,16 +82,16 @@
 </template>
 
 <script setup>
-import {ref, onMounted, reactive} from 'vue';
+import {ref, onMounted, reactive, inject} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import ReplyArea from "@/views/reply/ReplyArea.vue";
-import {getReplies} from "@/api/reply.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery.js";
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
 
+const $axios = inject("$axios")
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -123,7 +123,7 @@ const loadGalleryData = async () => {
 };
 
 const loadReplyDate = async () => {
-  const response = await getReplies(bno.value); // getReplies 호출 시 bno 값 전달 수정
+  const response = await $axios.get(`/replies/${bno.value}`); // getReplies 호출 시 bno 값 전달 수정
   const replyList = response.data.resultData.items.map(reply => ({
     ...reply,
     bno: bno.value

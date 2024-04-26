@@ -2,10 +2,9 @@ import axios from 'axios';
 import router from '@/router'
 
   const axiosInstance = axios.create({
-    baseURL: 'http://localhost:1541/api',
+    baseURL: process.env.VITE_APP_API_URL,
     // 기타 공통 설정 옵션
   });
-
 
   // 요청 인터셉터 설정
   axiosInstance.interceptors.request.use(

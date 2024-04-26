@@ -68,7 +68,6 @@
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {createGallery} from '@/api/gallery.js';
-import {uploadFile} from "@/api/file.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
@@ -94,7 +93,7 @@ const registerGalleryHandler = () => {
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));
-    uploadFile(formData)
+    await $axios.post('/files/upload',formData);
     .then(() => {
       router.push({name: 'GalleryList'});
     })
