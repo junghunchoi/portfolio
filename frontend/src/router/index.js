@@ -19,7 +19,6 @@ import NoticeModify from '@/views/notice/NoticeModify.vue'
 import NoticeRead from '@/views/notice/NoticeRead.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/common/TheMain.vue'
-import {useAuthStore} from '@/store/loginStore.js'
 
 const routes = [
   /*
@@ -153,14 +152,5 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (!useAuthStore.isLoggedIn) {
-//       next({
-//         path: '/login'
-//       })
-//     } else {
-//       next()
-//     }
-// })
 
 export default router;
