@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loginError = ref(null);
   const userName = ref(null);
   const password = ref('');
-  const authoritiesRef = ref();
+  const authoritiesRef = ref([]);
 
   /**
    * 로그인 함수
