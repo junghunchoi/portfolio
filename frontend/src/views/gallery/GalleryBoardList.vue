@@ -29,6 +29,7 @@
       </div>
       <ThePagination :current-page="response.page"
                      :total="response.total"
+                     :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
     </div>
@@ -83,7 +84,7 @@ const params = reactive({
   order: "regDate",
   sort: "desc",
   page: 1, // 현재 페이지
-  size: null,
+  size: 10,
   type: null,
   keyword: null
 });

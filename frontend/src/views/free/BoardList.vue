@@ -52,8 +52,10 @@
           </table>
         </div>
       </div>
-      <ThePagination :current-page="response.page"
+      <ThePagination v-show="params.size>=10"
+                     :current-page="response.page"
                      :total="response.total"
+                     :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
     </div>

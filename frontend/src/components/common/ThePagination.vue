@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import {computed} from "vue";
 
 const props = defineProps({
   currentPage: {
@@ -44,26 +44,27 @@ const props = defineProps({
   total: {
     type: Number,
     required: true,
+  }, size: {
+    type: Number,
+    required: true
   },
 });
 defineEmits(["page"]);
 
-const isPrevPage = computed(() => ({ disabled: !(props.currentPage > 1) }));
-const isNextPage = computed(() => ({
-  disabled: !(props.currentPage < props.total),
-}));
+console.log(props.size)
+const isPrevPage = computed(() => ({disabled: props.currentPage <= 1}));
+const isNextPage = computed(() => ({disabled: props.currentPage * props.size >= props.total}));
 
 const visiblePages = computed(() => {
   const correctedCurrentPage = Math.max(props.currentPage, 1);
-  const startPage = Math.floor((correctedCurrentPage - 1) / 10) * 10 + 1;
-  let endPage = Math.min(startPage + 9, Math.ceil(props.total / 10));
-  // if (endPage > props.total) {
-  //   endPage = props.total;
-  // }
-
-  return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  const startPage = Math.floor((correctedCurrentPage - 1) / props.size) * props.size + 1;
+  let endPage = Math.min(startPage + 9, Math.ceil(props.total / props.size));
+  return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
 });
+
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

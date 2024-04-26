@@ -16,7 +16,7 @@
   </div>
   <div class="d-flex justify-content-between gy-3 mt-2">
     <div class="col-md-3">
-      <select class="form-select" @input="$emit('update:size', $event.target.value)">
+      <select class="form-select" @input="$emit('update:size', Number($event.target.value))">
         <option selected value="10">10개씩 보기</option>
         <option value="25">25개씩 보기</option>
         <option value="50">50개씩 보기</option>
