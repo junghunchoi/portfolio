@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       proxy: {
-        '/api': mode === 'dev' ? 'http://localhost:1541' : 'http://13.211.172.156:1541',
+        '/api': mode === 'dev' ? 'http://localhost:1541' : 'http://13.239.23.91:1541',
       },
     },
     resolve: {
