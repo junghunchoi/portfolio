@@ -11,15 +11,16 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
-group = 'com'
-version = '0.0.1-SNAPSHOT'
 
-
+springBoot {
+	mainClass = 'com.backend.BackendApplication'
+}
 
 java {
 	sourceCompatibility = '14'
 	targetCompatibility = '14'
 }
+
 
 configurations {
 	compileOnly {
@@ -81,11 +82,49 @@ dependencies {
 
 }
 
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
+}
+
+//bootJar {
+//	from('src/main/resources') {
+//		include 'application.properties'
+//		include 'application-dev.properties'
+//		include 'application-prod.properties'
+//	}
+//}
+
+
+processResources {
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+	from('src/main/resources') {
+		include 'application.properties'
+		if (project.hasProperty('profile')) {
+			include "application-${project.profile}.properties"
+		}
+	}
+
+//	if (project.hasProperty('profile') && project.profile == 'prod') {
+//		include '**/application.properties'
+//		include '**/application-prod.properties'
+//	} else {
+//		include '**/application.properties'
+//		include '**/application-dev.properties'
+//	}
+}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+
 sourceSets {
 	main {
-		java {
-			srcDirs = ["$projectDir/src/main/java"]
+		resources{
+			srcDirs "src/main/resources", "src/main/resources-${profile}"
 		}
+//		java {
+//			srcDirs = ["$projectDir/src/main/java"]
+//		}
 	}
 }
 
