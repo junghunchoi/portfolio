@@ -65,16 +65,19 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {createGallery} from '@/api/gallery.js';
+import {uploadFile} from "@/api/file.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
+import axios from "axios";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
+const $axios = inject("$axios")
 const show = ref(false);
 const router = useRouter();
 const form = ref({
@@ -93,7 +96,7 @@ const registerGalleryHandler = () => {
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));
-    await $axios.post('/files/upload',formData);
+    $axios.post('/files/upload',formData)
     .then(() => {
       router.push({name: 'GalleryList'});
     })
