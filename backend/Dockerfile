@@ -5,7 +5,7 @@ FROM adoptopenjdk:14-jdk-hotspot
 WORKDIR /app
 
 # 프로젝트의 JAR 파일을 이미지에 복사
-COPY build/libs/*.jar app.jar
+COPY build/libs/*.jar /app/app.jar
 
 # 애플리케이션 실행 명령
 CMD ["java", "-jar", "app.jar"]
