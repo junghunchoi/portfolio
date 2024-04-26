@@ -134,6 +134,12 @@ export const useAuthStore = defineStore('auth', () => {
     isLoggedIn: computed(() => loginSuccess.value),
     hasLoginErrored: computed(() => loginError.value),
     getUserName: computed(() => userName.value),
-    getAuthorities: computed(() => authoritiesRef.value.length >=2 ? 'ADMIN' : 'USER')
+    getAuthorities: computed(() => {
+      if (authoritiesRef.value === null || authoritiesRef.value === undefined) {
+        return 'USER';
+      } else {
+        return authoritiesRef.value.length >= 2 ? 'ADMIN' : 'USER';
+      }
+    })
   };
 });
