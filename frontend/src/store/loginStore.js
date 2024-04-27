@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
    */
   async function login(inputUsername, inputPassword) {
     try {
-      const result = await axios.post('http://localhost:1541/login', {
+      const result = await axios.post(process.env.VITE_APP_API_LOGIN_URL, {
         username: inputUsername,
         password: inputPassword,
       });
