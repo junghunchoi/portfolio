@@ -29,12 +29,13 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue';
+import {inject, reactive} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
 
+const $axios = inject("$axios")
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -50,13 +51,10 @@ const help = reactive({
   modDate: new Date(),
 });
 
-const save = () => {
+const save = async () => {
   help.isSecret = help.isSecret === true ? 1 : 0;
-  createHelp({
-    ...help,
-  }).then(() => {
-      router.push({name: 'HelpList'});
-    })
+  await $axios.post('/helps', help)
+  await router.push({name: 'HelpList'});
   };
 
 </script>

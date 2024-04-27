@@ -8,7 +8,6 @@ import com.backend.dto.file.FileDTO;
 import com.backend.entity.Board;
 import com.backend.entity.File;
 import com.backend.repository.board.BoardRepository;
-import com.backend.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,6 @@ public class GalleryServiceImpl implements GalleryService {
 
 	private final ModelMapper modelMapper;
 	private final BoardRepository boardRepository;
-	private final FileUtils fileUtils;
 
 	/**
 	 * 갤러리 목록을 페이징 처리하여 조회합니다.

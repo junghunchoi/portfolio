@@ -5,7 +5,6 @@ import com.backend.dto.file.FileResultDTO;
 import com.backend.entity.Board;
 import com.backend.entity.File;
 import com.backend.entity.QBoard;
-//import com.backend.entity.QFiles;
 import com.backend.entity.QFile;
 import com.backend.repository.FilesRepository;
 import com.backend.utils.FileUtils;
@@ -17,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +24,8 @@ import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,7 +36,6 @@ public class FilesServiceImpl implements FilesService {
 	private String uploadPath;
 
 	private final FilesRepository filesRepository;
-	private final ModelMapper modelMapper;
 	private final FileUtils fileUtils;
 	private final JPAQueryFactory queryFactory;
 
