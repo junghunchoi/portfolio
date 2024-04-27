@@ -1,23 +1,21 @@
-import axios from 'axios';
+import axios from '@/plugins/axios.js'
 
 export function getGalleries(params) {
-  return axios.get('http://localhost:1541/api/galleries',{params:params},{headers:{
-      Authorization:`${localStorage.getItem('accessToken')}`
-    }});
+  return axios.get('/galleries',{params:params});
 }
 
 export function getGalleryBybno(bno) {
-  return axios.get(`http://localhost:1541/api/galleries/${bno}`);
+  return axios.get(`/galleries/${bno}`);
 }
 
 export function createGallery(data) {
-  return axios.post('http://localhost:1541/api/galleries', data);
+  return axios.post('/galleries', data);
 }
 
 export function updateGallery(data) {
-  return axios.put('http://localhost:1541/api/galleries', data);
+  return axios.patch('/galleries', data);
 }
 
 export function deleteGallery(bno) {
-  return axios.delete(`http://localhost:1541/api/galleries/${bno}`);
+  return axios.delete(`/galleries/${bno}`);
 }

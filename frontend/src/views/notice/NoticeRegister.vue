@@ -56,9 +56,10 @@ import {storeToRefs} from "pinia";
 import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import TheEditor from "@/components/common/TheEditor.vue";
+import {createNotice} from "@/api/notice";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
-const $axios = inject('$axios');
+
 
 const show = ref(false);
 const router = useRouter();
@@ -76,7 +77,7 @@ const goNoticePage = () => {
 
 const registerNoticeHandler = async () => {
   notice.isMain = notice.isMain === true ? 1 : 0;
-  const res = $axios.post('/notices', {...notice})
+  const res = await createNotice(notice)
   router.push('/notices');
 }
 

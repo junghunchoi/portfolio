@@ -70,8 +70,9 @@ import {useRoute, useRouter} from 'vue-router';
 import TheModal from "@/components/common/TheModal.vue";
 import TheFiles from "@/components/common/TheFiles.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
+import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board.js";
+import {uploadFile} from "@/api/file.js";
 
-const $axios = inject('$axios')
 const route = useRoute();
 const router = useRouter();
 
@@ -85,7 +86,7 @@ formData.set('bno', Number(bno.value));
 
 onMounted(async () => {
   try {
-    const res = await $axios.get(`/boards/${bno.value}`);
+    const res = await getBoardBybno(bno.value)
     Object.assign(board, res.data.resultData);
     board.files.forEach((file, index) => {
       files.value.push({id: index, file: file})
@@ -100,14 +101,14 @@ const goBoardPage = () => {
 };
 
 const clickRemoveHandler = async () => {
-  await $axios.delete(`/boards/${bno.value}`);
+  await deleteBoard(bno.value)
   router.push({name: 'BoardList'});
 }
 
 async function updateDateAndGolist() {
   try {
-    await $axios.patch('/boards', board);
-    await $axios.post('/files/upload', formData);
+    await updateBoard(board)
+    await uploadFile(formData)
     router.push({name: 'BoardRead', params: {bno: bno.value}});
   } catch (e) {
     console.log(e)

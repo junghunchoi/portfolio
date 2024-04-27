@@ -7,11 +7,7 @@
         @update:sort="params.sort=$event"
     />
   </div>
-  <div class="row mt-3">
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <button class="btn btn-primary mb-2" @click="goRegisterPage">게시글 등록</button>
+          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>
           <table class="table">
             <thead>
             <tr>
@@ -50,16 +46,12 @@
             </tr>
             </tbody>
           </table>
-        </div>
-      </div>
       <ThePagination v-show="params.size>=10"
                      :current-page="response.page"
                      :total="response.total"
                      :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
-    </div>
-  </div>
   <Teleport to="#modal">
     <TheModal
         v-model="show"
@@ -84,6 +76,7 @@ import BoardFilter from "@/components/TheFilter.vue";
 import TheModal from "@/components/common/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import {getBoards} from "@/api/board";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -94,7 +87,7 @@ defineProps({
 
 const show = ref(false);
 const router = useRouter();
-const $axios = inject("$axios")
+
 const response = reactive({
   items: [],
   end: 0,
@@ -129,7 +122,7 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-    const {data} = await $axios.get('/boards', {params: params})
+    const {data} = await getBoards(params);
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -138,7 +131,7 @@ const fetchData = async () => {
 
 fetchData();
 
-watch(params, async (newVal, oldVal) => {
+watch(params, async () => {
   await fetchData(params)
 })
 
@@ -146,12 +139,9 @@ const searchBoard = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
-
-    await $axios.get('/boards', params);
   } catch (e) {
   }
 }
-
 // 모달 로직
 
 const doLoginHandler = () => {

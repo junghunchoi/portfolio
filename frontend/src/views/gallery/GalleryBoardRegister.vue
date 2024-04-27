@@ -73,11 +73,10 @@ import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
-import axios from "axios";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
-const $axios = inject("$axios")
+
 const show = ref(false);
 const router = useRouter();
 const form = ref({
@@ -96,7 +95,7 @@ const registerGalleryHandler = () => {
   })
   .then(res => {
     formData.append('bno', Number(res.data.resultData));
-    $axios.post('/files/upload',formData)
+    uploadFile(formData)
     .then(() => {
       router.push({name: 'GalleryList'});
     })

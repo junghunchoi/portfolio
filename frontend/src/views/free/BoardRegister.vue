@@ -65,13 +65,15 @@
 </template>
 
 <script setup>
-import {inject, reactive, ref} from 'vue';
+import { reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
+import {createBoard} from "@/api/board.js";
+import {uploadFile} from "@/api/file.js";
 
-const $axios = inject('$axios')
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -90,10 +92,10 @@ const formData = new FormData();
 const save = async () => {
   try {
     console.log(board);
-    const res = await $axios.post('/boards', board);
+    const res = await createBoard(board)
 
     formData.append('bno', res.data.resultData);
-    await $axios.post('/files/upload',formData);
+    await uploadFile(formData)
     router.push({name: 'BoardList'});
   } catch (e){
     console.error(e)

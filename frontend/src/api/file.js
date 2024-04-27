@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from '@/plugins/axios.js'
 
 
 export function uploadFile(data) {
-  return axios.post('http://localhost:1541/api/files/upload', data);
+  return axios.post('/files/upload', data);
 }
 
 export function downloadFile(data){
-  return axios.post('http://localhost:1541/api/files/download', data,{
+  return axios.post('/files/download', data,{
     responseType: "blob"
   });
 }

@@ -41,16 +41,12 @@ public class CommonServiceImpl implements CommonService {
 	public Map<String, List<?>> listMainPage() {
 
 		Map<String, List<?>> result = new HashMap<>();
-		Pageable pageable = PageRequest.of(0, 5); // 5개의 행만 조회
+		Pageable pageable = PageRequest.of(0, 6); // 5개의 행만 조회
 
-		// 게시글 상위 5개 조회
-		List<BoardMainDTO> boardData = boardRepository.findBoardsTop5(pageable);
-		// 갤러리 상위 3개 조회
+		List<BoardMainDTO> boardData = boardRepository.findBoardsTop6(pageable);
 		List<GalleryListDTO> galleryData = boardRepository.findGalleiesTop3(PageRequest.of(0, 3));
-		// 도움말 상위 5개 조회
-		List<Help> helpData = helpRepository.findHelpsTop5(pageable);
-		// 공지사항 상위 5개 조회
-		List<Notice> noticeData = noticeRepository.findNoticesTop5(pageable);
+		List<Help> helpData = helpRepository.findHelpsTop6(pageable);
+		List<Notice> noticeData = noticeRepository.findNoticesTop6(pageable);
 
 		result.put("boards", boardData);
 		result.put("galleries", galleryData);

@@ -31,9 +31,10 @@
 import {inject, reactive, watch} from 'vue'
 import TheEditor from "@/components/common/TheEditor.vue";
 import {useRouter} from "vue-router";
+import {updateNotice} from "@/api/notice.js";
 
 const router = useRouter();
-const $axios = inject('$axios')
+
 const notice = reactive({
   nno: history.state.nno,
   title: history.state.title,
@@ -44,12 +45,11 @@ const notice = reactive({
 const modifyNoticeHandler = async () => {
   notice.isMain = notice.isMain === true ? 1 : 0;
 
-  console.log(notice)
-  const res = await $axios.patch('/notices', notice)
-  console.log(res)
-  if (res.status === 200) {
+  try{
+    await updateNotice(notice)
     router.push({name: 'NoticeList'})
-  } else {
+  }catch (e) {
+    console.log(e);
   }
 }
 </script>

@@ -32,7 +32,7 @@
               </RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" active-class="active" to="/helps">
+              <RouterLink class="nav-link" active-class="active" to="/helps" >
                 문의 게시판
               </RouterLink>
             </li>

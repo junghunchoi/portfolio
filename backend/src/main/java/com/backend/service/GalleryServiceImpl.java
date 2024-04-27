@@ -125,6 +125,8 @@ public class GalleryServiceImpl implements GalleryService {
 	 */
 	@Override
 	public void modify(BoardDTO boardDTO) {
+
+
 		Optional<Board> result = boardRepository.findById(boardDTO.getBno());
 
 		Board board = result.orElseThrow();

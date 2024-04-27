@@ -1,8 +1,14 @@
 <template>
   <section>
     <div class="titleArea d-flex  mt-5">
-      <p class=" me-4 fw-bold text-start leftArea ps-2 w-25">제목</p>
-      <div >{{help.title}}</div>
+
+      <p class=" fw-bold text-start leftArea ps-2 me-4">제목</p>
+      <input
+          v-model="help.title"
+          type="text"
+          class="form-control"
+          id="title"
+      />
     </div>
     <hr/>
     <div class="contentArea d-flex ">
@@ -35,12 +41,13 @@ import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
+import {getHelpByhno, updateHelp} from "@/api/help.js";
 
 const AUTHORITY = useAuthStore().getAuthorities
 
 const route = useRoute();
 const router = useRouter();
-const $axios = inject('$axios');
+
 const hno = ref(Number(route.params.hno));
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -54,7 +61,7 @@ const help = reactive({
 });
 
 onMounted(async () => {
-  const res = await $axios.get(`/helps/${hno.value}`)
+  const res = await getHelpByhno(hno.value)
   Object.assign(help, res.data.resultData);
 })
 
@@ -62,9 +69,9 @@ const goListPage = () => {
   router.push('/helps');
 };
 
-const modifyHelpHandler = () => {
-  $axios.patch('/helps', help)
-  .then(res => router.push({name: 'HelpList'}))
+const modifyHelpHandler = async () => {
+  await updateHelp(help)
+  router.push({name: 'HelpList'});
 }
 </script>
 

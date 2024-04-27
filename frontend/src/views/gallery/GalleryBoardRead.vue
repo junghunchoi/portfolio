@@ -1,5 +1,6 @@
 <template>
   <section>
+  <section>
     <div class="row">
       <div class="col-12 mb-3">
         <h2>{{ gallery.title }}</h2>
@@ -79,6 +80,7 @@
       </template>
     </TheModal>
   </Teleport>
+  </section>
 </template>
 
 <script setup>
@@ -90,8 +92,9 @@ import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery.js";
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
+import {getReplies} from "@/api/reply.js";
 
-const $axios = inject("$axios")
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -123,7 +126,7 @@ const loadGalleryData = async () => {
 };
 
 const loadReplyDate = async () => {
-  const response = await $axios.get(`/replies/${bno.value}`); // getReplies 호출 시 bno 값 전달 수정
+  const response = await getReplies(bno.value)
   const replyList = response.data.resultData.items.map(reply => ({
     ...reply,
     bno: bno.value

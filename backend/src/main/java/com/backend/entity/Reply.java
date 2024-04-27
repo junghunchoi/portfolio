@@ -23,7 +23,7 @@ public class Reply extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long rno;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE )
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	private Board board;
 
 	private String replyText;

@@ -1,23 +1,21 @@
-import axios from 'axios';
+import axios from '@/plugins/axios.js'
 
 export function getHelps(params) {
-  return axios.get('http://localhost:1541/api/helps',{params:params},{headers:{
-      Authorization:`${localStorage.getItem('accessToken')}`
-    }});
+  return axios.get('/helps',{params:params});
 }
 
 export function getHelpByhno(hno) {
-  return axios.get(`http://localhost:1541/api/helps/${hno}`);
+  return axios.get(`/helps/${hno}`);
 }
 
 export function createHelp(data) {
-  return axios.post('http://localhost:1541/api/helps', data);
+  return axios.post('/helps', data);
 }
 
 export function updateHelp(data) {
-  return axios.put('http://localhost:1541/api/helps', data);
+  return axios.patch('/helps', data);
 }
 
 export function deleteHelp(hno) {
-  return axios.delete(`http://localhost:1541/api/helps/${hno}`);
+  return axios.delete(`/helps/${hno}`);
 }

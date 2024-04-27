@@ -53,7 +53,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:fileData"])
 
-const $axios = inject('$axios')
+
 const clickFileIndex = ref(0);
 
 

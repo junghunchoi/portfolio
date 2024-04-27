@@ -50,8 +50,10 @@ import {downloadFile} from "@/api/file.js"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
+import {getBoardBybno} from "@/api/board.js";
+import {getReplies} from "@/api/reply";
 
-const $axios = inject('$axios');
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -74,12 +76,12 @@ const board = reactive({
 const replies = reactive({list: []});
 
 const loadBoardData = async () => {
-  const res = await $axios.get(`/boards/${bno.value}`)
+  const res = await getBoardBybno(bno.value)
   Object.assign(board, res.data.resultData); // board 객체에 데이터 할당
 };
 
 const loadReplyDate = async () => {
-  const response = await $axios.get(`/replies/${bno.value}`)
+  const response = await getReplies(bno.value);
   const replyList = response.data.resultData.items.map(reply => ({
     ...reply,
     bno: bno.value
@@ -108,7 +110,6 @@ const downloadFileHandler = async (file) => {
     fileName: file.fileName
   }
   const res = await downloadFile(fileInform);
-  console.log(res)
   const name = file.fileName
   const url = window.URL.createObjectURL(new Blob([res.data]));
   const link = document.createElement("a");

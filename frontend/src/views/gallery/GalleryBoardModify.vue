@@ -70,21 +70,17 @@ import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
 import TheEditor from "@/components/common/TheEditor.vue";
 import TheFiles from "@/components/common/TheFiles.vue";
+import {getGalleryBybno, updateGallery} from "@/api/gallery.js";
+import {uploadFile} from "@/api/file.js";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
 const route = useRoute();
 const router = useRouter();
-const $axios = inject('$axios');
+
 const bno = ref(route.params.bno);
 const gallery = reactive({
-  bno: '',
-  title: '',
-  content: '',
-  writer: userName,
-  files: [],
-  modDate: new Date(),
 });
 
 const files = ref([]);
@@ -93,8 +89,9 @@ formData.set('bno', Number(bno.value));
 
 onMounted(async ()=>{
   try {
-    const {data} = await $axios.get(`/galleries/${bno.value}`)
+    const {data} = await getGalleryBybno(bno.value);
     await Object.assign(gallery, data);
+
     gallery.files.forEach((file, index) => {
       files.value.push({id: index, file: file})
     })
@@ -107,10 +104,11 @@ const goGalleryPage = () => {
   router.push({name: 'GalleryList'});
 };
 
-async function updateDataAndGolist() {
+const updateDataAndGolist=  async () => {
   try {
-    await $axios.put(`/galleries`, {...gallery})
-    await $axios.post('/files/upload', formData);
+    console.log(gallery);
+    await updateGallery(gallery);
+    await uploadFile(formData);
     router.push({name: 'GalleryRead', params: {bno: bno.value}});
   } catch (e) {
     console.log(e)

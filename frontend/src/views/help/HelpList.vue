@@ -72,12 +72,13 @@ import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
+import {getHelps} from "@/api/help.js";
 
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
 const show = ref(false);
 const AUTHORITY = getAuthorities.value;
-const $axios = inject("$axios")
+
 const modalText = ref('')
 const router = useRouter();
 const response = reactive({
@@ -115,7 +116,7 @@ const goRegisterPage = () => {
 
 const fetchData = async () => {
   try {
-    const {data} = await $axios.get('/helps', {params: params});
+    const {data} = await getHelps(params);
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -126,7 +127,7 @@ onMounted(() => {
   fetchData();
 })
 
-watch(params, async (newVal, oldVal) => {
+watch(params, async () => {
   await fetchData(params)
 })
 
@@ -134,8 +135,6 @@ const searchHelp = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
-
-    const {data} = await getHelps(params);
   } catch (e) {
     console.log(e);
   }

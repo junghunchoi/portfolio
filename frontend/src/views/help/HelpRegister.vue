@@ -34,8 +34,9 @@ import {useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
+import {createHelp} from "@/api/help.js";
 
-const $axios = inject("$axios")
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -53,7 +54,7 @@ const help = reactive({
 
 const save = async () => {
   help.isSecret = help.isSecret === true ? 1 : 0;
-  await $axios.post('/helps', help)
+  await createHelp(help)
   await router.push({name: 'HelpList'});
   };
 

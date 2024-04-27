@@ -1,5 +1,6 @@
 <template>
   <section>
+  <section>
     <div class="container">
       <div class="row">
         <BoardCard class="col m-4"
@@ -7,11 +8,6 @@
                    :destination="'/notices'">
           <div>
             <table class="table">
-              <thead>
-              <tr>
-                <th scope="col">제목</th>
-              </tr>
-              </thead>
               <tbody>
               <tr v-for="notice in notices" :class="[notice.isMain === 1 ? 'bg-secondary' : '']">
                 <td>
@@ -32,11 +28,6 @@
                    :title="'자유게시판'"
                    :destination="'/boards'">
           <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">제목</th>
-            </tr>
-            </thead>
             <tbody>
             <tr v-for="board in boards">
 
@@ -63,13 +54,11 @@
                    :destination="'/galleries'">
 
           <div v-for="gallery in galleries" class="media mb-3">
-            <div @click="readGalleryHandler(gallery.bno)">
-              <img :src="'http://localhost:1541/api/files/' + gallery.fileName" class="mr-3">
-              <div class="media-body">
-                <h5 class="mt-0">{{ gallery.title }} <span class="ms-1"
-                                                           v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span>
-                </h5>
-              </div>
+            <div @click="readGalleryHandler(gallery.bno)" style="display: flex; align-items: center;">
+              <img :src="'http://localhost:1541/api/files/' + gallery.fileName" class="mr-3 mt-1">
+              <h5 class="mt-0">{{ gallery.title }} <span class="ms-1"
+                                                         v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span>
+              </h5>
             </div>
           </div>
         </BoardCard>
@@ -77,11 +66,6 @@
                    :title="'문의게시판'"
                    :destination="'/helps'">
           <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">제목</th>
-            </tr>
-            </thead>
             <tbody>
             <tr v-for="help in helps">
               <td>
@@ -117,6 +101,7 @@
       </template>
     </TheModal>
   </Teleport>
+  </section>
 </template>
 
 <script setup>
@@ -127,13 +112,14 @@ import {isCreatedWithin7Days} from "@/common/dateUtils.js"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
+import {getMainData} from "@/api/common.js";
 
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
 const show = ref(false);
 const AUTHORITY = getAuthorities.value;
 const router = useRouter();
-const $axios = inject('$axios');
+
 const modalText = ref('')
 
 const boards = reactive({});
@@ -142,12 +128,14 @@ const galleries = reactive({});
 const helps = reactive({});
 
 onMounted(async () => {
-  const res = await $axios.get('/common/main')
+  const res =await getMainData();
 
   Object.assign(boards, res.data.resultData.boards)
   Object.assign(notices, res.data.resultData.notices)
   Object.assign(galleries, res.data.resultData.galleries)
   Object.assign(helps, res.data.resultData.helps)
+
+  console.log(galleries);
 })
 
 const readHelpHandler = (writer, hno, isSecret) => {
@@ -170,14 +158,14 @@ const readHelpHandler = (writer, hno, isSecret) => {
   }
 }
 
-const readGalleryHandler = (gno) => {
+const readGalleryHandler = (bno) => {
   if (userName.value === null) {
     modalText.value = '로그인한 사용자만 조회할 수 있습니다.'
     show.value = true;
     return;
   }
 
-  router.push({name: 'GalleryRead', params: {hno: Number(gno)}})
+  router.push({name: 'GalleryRead', params: {bno: Number(bno)}})
 }
 
 // 모달 로직

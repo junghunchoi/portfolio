@@ -53,6 +53,7 @@
 import {ref, defineProps} from 'vue';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+import {deleteReply, registerReply} from "@/api/reply";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -67,13 +68,13 @@ const emit = defineEmits(['update:replyText', 'replyDelete'])
 
 const registerReplyHandler = async () => {
   // 댓글 내용 , 댓글단 사람
-  const data = {
+  const reply = {
     bno: props.bno,
     replyer: userName._value,
     replyText: replyText._value,
   }
 
-  const res = await $axios.post('/replies/', data);
+  const res = await registerReply(reply)
   if (res.status !== 200) {
     console.log('댓글 등록에 실패했습니다.')
     return;
@@ -82,11 +83,13 @@ const registerReplyHandler = async () => {
   document.getElementById('addReply').textContent = '';
   emit('update:replyText', replyText.value)
 }
+
 const deleteReplyHandler = async (rno) => {
-  const res = await $axios.delete(`/replies/${rno}`);
+  const res = await deleteReply(rno)
 
   if (res.status !== 200) {
     console.log('댓글삭제에 실패했습니다. 잠시 후 확인해주세요.')
+    return;
   }
   emit('replyDelete');
 }

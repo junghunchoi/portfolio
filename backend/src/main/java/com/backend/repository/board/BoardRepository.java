@@ -42,7 +42,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch
 	 * @return BoardMainDTO 리스트
 	 */
 	@Query("SELECT new com.backend.dto.board.BoardMainDTO(b.bno, b.title, COUNT(r.rno) , b.regDate) from Board b LEFT JOIN Reply r on r.board.bno = b.bno  where b.boardType = 1 group by b.bno order by b.bno desc")
-	List<BoardMainDTO> findBoardsTop5(Pageable pageable);
+	List<BoardMainDTO> findBoardsTop6(Pageable pageable);
 
 	/**
 	 * 게시판 타입이 2인 Board 엔티티 중에서 상위 3개를 조회하여 GalleryListDTO 리스트로 반환합니다.
@@ -51,6 +51,11 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch
 	 * @param pageable 페이징 정보
 	 * @return GalleryListDTO 리스트
 	 */
-	@Query("SELECT new com.backend.dto.board.GalleryListDTO(b.bno,b.title,b.content,f.uploadedFileName,b.regDate,b.modDate)  from Board b LEFT JOIN b.files f where b.boardType = 2 order by b.bno desc")
+	@Query("SELECT new com.backend.dto.board.GalleryListDTO(b.bno, b.title, b.content, f.uploadedFileName, b.regDate, b.modDate) " +
+		"FROM Board b " +
+		"LEFT JOIN b.files f " +
+		"WHERE b.boardType = 2 " +
+		"GROUP BY b.bno " +
+		"ORDER BY b.bno DESC")
 	List<GalleryListDTO> findGalleiesTop3(Pageable pageable);
 }

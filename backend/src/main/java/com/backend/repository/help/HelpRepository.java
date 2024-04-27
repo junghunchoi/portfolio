@@ -23,5 +23,5 @@ public interface HelpRepository extends JpaRepository<Help,Long>, HelpSearch {
 	 * @return 최신 도움말 목록
 	 */
 	@Query("SELECT h from Help h order by h.hno desc")
-	List<Help> findHelpsTop5(Pageable pageable);
+	List<Help> findHelpsTop6(Pageable pageable);
 }

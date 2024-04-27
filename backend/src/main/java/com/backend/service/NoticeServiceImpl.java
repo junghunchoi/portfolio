@@ -66,7 +66,6 @@ public class NoticeServiceImpl implements NoticeService{
 
 		Notice notice = modelMapper.map(noticeDTO, Notice.class);
 
-
 		return noticeRepository.save(notice).getNno();
 	}
 
@@ -81,6 +80,10 @@ public class NoticeServiceImpl implements NoticeService{
 		Optional<Notice> noticeOptional = noticeRepository.findById(nno);
 
 		Notice notice = noticeOptional.orElseThrow();
+
+		//조회수증가
+		notice.updateViewCount(notice.getViewCount()+1);
+		noticeRepository.save(notice);
 
 		return modelMapper.map(notice, NoticeDTO.class);
 	}

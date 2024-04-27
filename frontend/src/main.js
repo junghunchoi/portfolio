@@ -7,7 +7,6 @@ import 'bootstrap/dist/js/bootstrap.js';
 import dayjs from "@/plugins/dayjs.js";
 import {createPinia} from "pinia";
 import {createPersistedState} from 'pinia-plugin-persistedstate'
-import axios from '@/plugins/axios.js'
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
@@ -27,5 +26,4 @@ const app = createApp(App)
 .use(CKEditor)
 
 
-app.provide('$axios', axios);
 app.mount('#app');

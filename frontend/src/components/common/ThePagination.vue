@@ -51,7 +51,6 @@ const props = defineProps({
 });
 defineEmits(["page"]);
 
-console.log(props.size)
 const isPrevPage = computed(() => ({disabled: props.currentPage <= 1}));
 const isNextPage = computed(() => ({disabled: props.currentPage * props.size >= props.total}));
 

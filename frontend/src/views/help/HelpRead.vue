@@ -1,8 +1,10 @@
 <template>
   <section>
-    <div class="titleArea d-flex  mt-5">
-      <p class=" me-4 fw-bold text-start leftArea ps-2">제목</p>
-      <div >{{help.title}}</div>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <h2>{{ help.title }}</h2>
+        <p class="text-muted">작성자: {{ help.writer }} | 조회수: {{ help.viewCount }}</p>
+      </div>
     </div>
     <hr/>
     <div class="contentArea d-flex ">
@@ -36,12 +38,12 @@ import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/common/TheEditor.vue";
+import {deleteHelp, getHelpByhno} from "@/api/help.js";
 
-const AUTHORITY = useAuthStore().getAuthorities
 
 const route = useRoute();
 const router = useRouter();
-const $axios = inject('$axios');
+
 const hno = ref(Number(route.params.hno));
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
@@ -52,7 +54,7 @@ const help = reactive({}
 );
 
 onMounted(async ()=>{
-  const res = await $axios.get(`/helps/${hno.value}`)
+  const res = await getHelpByhno(hno.value)
   Object.assign(help, res.data.resultData);
 })
 
@@ -65,17 +67,20 @@ const modifyHelpHandler = () => {
 }
 
 const deleteHelpHandler = async () =>{
-  await $axios.delete(`/helps/${hno.value}`)
+  await deleteHelp(hno.value)
   router.push({name: 'HelpList'});
 }
 
 </script>
 
 <style scoped>
+.container * {
+  border: none !important;
+}
 .leftArea{
   width: 15%;
 }
-.editor-container .ck.ck-editor__main > .ck-editor__editable {
-  border: none;
-}
+/*.editor-container .ck.ck-editor__main > .ck-editor__editable {*/
+/*  border: none;*/
+/*}*/
 </style>

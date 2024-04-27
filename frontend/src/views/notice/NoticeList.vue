@@ -12,7 +12,7 @@
     <thead>
     <tr>
       <th scope="col">제목</th>
-      <th scope="col">조회</th>
+      <th scope="col">조회수</th>
       <th scope="col">등록자</th>
       <th scope="col">등록일시</th>
     </tr>
@@ -69,6 +69,7 @@ import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
 import TheModal from "@/components/common/TheModal.vue";
 import {storeToRefs} from 'pinia'
+import {getNotices} from "@/api/notice.js";
 
 defineProps({
   limit: Number,
@@ -80,7 +81,7 @@ const show = ref(false);
 const AUTHORITY = useAuthStore().getAuthorities
 
 const router = useRouter();
-const $axios = inject('$axios');
+
 
 const response = reactive({
   items: [],
@@ -104,7 +105,7 @@ const params = reactive({
 
 const fetchData = async () => {
   try {
-    const {data} = await $axios.get('/notices', {params: params});
+    const {data} = await getNotices(params)
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -112,21 +113,17 @@ const fetchData = async () => {
 }
 
 watch(params, async () => {
-  console.log(123);
   await fetchData(params)
 })
 
 onMounted(() => {
-  fetchData()
+  fetchData();
 })
 
 const searchBoard = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
-
-    console.log(params);
-    const {data} = await $axios.get('/notices', params);
   } catch (e) {
     console.log(e);
   }
@@ -142,7 +139,6 @@ const goRegisterPage = () => {
 
 
 // 모달로직
-
 const doLoginHandler = () => {
   router.push({name: 'Login'});
 }

@@ -23,6 +23,6 @@ public interface NoticeRepository extends JpaRepository<Notice,Long>, NoticeSear
 	 * @return 주요 공지사항과 최신 공지사항 목록
 	 */
 	@Query("SELECT n from Notice n order by n.isMain desc, n.nno desc")
-	List<Notice> findNoticesTop5(Pageable pageable);
+	List<Notice> findNoticesTop6(Pageable pageable);
 
 }

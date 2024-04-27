@@ -120,15 +120,13 @@ const searchBoard = async (searchCondition) => {
   try {
     params.type = searchCondition.type;
     params.keyword = searchCondition.keyword;
-
-    const {data} = await getGalleries(params);
   } catch (e) {
     console.log(e);
   }
 }
 
 // 모달로직
-const openModal = (index) => {
+const openModal = () => {
   show.value = true;
 };
 

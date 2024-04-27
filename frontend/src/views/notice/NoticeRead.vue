@@ -57,11 +57,11 @@ import {useRoute, useRouter} from "vue-router";
 import {useAuthStore} from "@/store/loginStore.js";
 import TheEditor from "@/components/common/TheEditor.vue";
 import TheModal from "@/components/common/TheModal.vue";
+import {deleteNotice, getNoticeBynno} from "@/api/notice.js";
 
 const AUTHORITY = useAuthStore().getAuthorities
 const route = useRoute();
 const router = useRouter();
-const $axios = inject('$axios');
 const nno = ref(route.params.nno);
 
 const notice = reactive({
@@ -81,19 +81,19 @@ const modifyNoticeHandler = () => {
 }
 
 const deleteNoticeHandler = async () =>{
-  await $axios.delete(`/notices/${nno.value}`)
+  await deleteNotice(nno.value)
+  router.push({name: 'NoticeList'})
 }
 
 onMounted(async () => {
-  const res = await $axios.get(`notices/${nno.value}`)
+  const res = await getNoticeBynno(nno.value)
   Object.assign(notice, res.data.resultData);
-  console.log(notice);
 });
 
 // 모달 로직
 const show = ref(false);
 
-const openModal = (index) => {
+const openModal = () => {
   show.value = true;
 };
 

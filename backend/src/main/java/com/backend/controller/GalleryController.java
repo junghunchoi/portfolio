@@ -18,6 +18,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,15 +76,10 @@ public class GalleryController {
 	}
 
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
-	@PutMapping()
-	public ResponseEntity<?> modify(@RequestBody @Valid BoardDTO boardDTO,
-		BindingResult bindingResult) {
+	@PatchMapping()
+	public ResponseEntity<?> modify(@RequestBody BoardDTO boardDTO) {
 		log.info(" --- gallery modify --- ");
 		log.info(boardDTO);
-
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest().body("wrong parameter");
-		}
 
 		galleryService.modify(boardDTO);
 

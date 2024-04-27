@@ -52,9 +52,10 @@
 import {ref, reactive,inject} from 'vue';
 import AppAlert from "@/components/common/TheAlert.vue";
 import {useRouter} from "vue-router";
+import {checkUserName, registerMember} from "@/api/member.js";
 
 const router = useRouter();
-const $axios = inject('$axios');
+
 
 const isValidateUserName = ref(false);
 const memberInform = reactive({
@@ -76,7 +77,8 @@ const registerMemberHandler = async () => {
     return;
   }
 
-  const res = await $axios.post('/auth/members/register', {...memberInform});
+  const res = await registerMember(memberInform);
+
   if (res.status  === 200) {
     await router.push('/');
   } else {
@@ -87,7 +89,7 @@ const registerMemberHandler = async () => {
 
 const checkValidateId = async () => {
   try {
-    const res = await $axios.post('/auth/members/check', { userName: memberInform.userName }, { headers: { 'Content-Type': 'application/json' } });
+    const res = await checkUserName(memberInform.userName);
 
     if (res.data.resultMsg === "validate userName") {
       vAlert("사용가능합니다", "success")

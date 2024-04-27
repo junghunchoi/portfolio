@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from '@/plugins/axios.js'
 
 export function registerMember(member) {
-  return axios.post('http://localhost:1541/api/members/register', member);
+  return axios.post('/members/register', member);
 }
 
 export function checkUserName(userName) {
-  return axios.post('http://localhost:1541/api/members/check', userName, {
+  return axios.post('/members/check', {'userName': userName}, {
     headers: {
-      'Content-Type': 'text/plain'
+      'Content-Type':'application/json'
     }
   });
 }
