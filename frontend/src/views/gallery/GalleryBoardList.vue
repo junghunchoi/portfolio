@@ -14,7 +14,7 @@
         <div v-for="gallery in response.items" class="">
           <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
             <div class=" d-flex align-items-center mb-3">
-              <img :src="'http://localhost:1541/api/files/' + gallery.fileName"
+              <img :src="'http://process.env.VITE_APP_API_URL/api/files/' + gallery.fileName"
                    class="card-img-top">
               <div class="ms-4">
                 <h5 class="card-title">{{ gallery.title }}</h5>
