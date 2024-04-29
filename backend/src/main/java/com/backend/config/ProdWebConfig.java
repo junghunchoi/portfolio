@@ -12,14 +12,14 @@ public class ProdWebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
-		        .allowedOrigins("http://13.210.55.67:1542")
+		        .allowedOrigins("http://3.106.205.105:1542")
 		        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
 		        .allowedHeaders("*")
 		        .allowCredentials(true);
 
 
 		registry.addMapping("/login")
-		        .allowedOrigins("http://13.210.55.67:1542")
+		        .allowedOrigins("http://3.106.205.105:1542")
 		        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
 		        .allowedHeaders("*")
 		        .allowCredentials(true);
