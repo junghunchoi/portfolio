@@ -51,6 +51,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 		String path = request.getRequestURI();
 		if (path.startsWith("/api/auth/")
+			|| path.startsWith("/api/members")
 			|| path.startsWith("/api/files/")
 			|| path.matches("/api/(galleries|helps)$")
 			|| path.startsWith("/api/boards")
