@@ -14,12 +14,10 @@ export default defineConfig(({ mode }) => {
     base: '/',
     envDir: '.',
     build: {
-      // 개발 환경 빌드 설정
       ...(mode === 'dev' && {
         sourcemap: true,
         minify: false,
       }),
-      // 운영 환경 빌드 설정
       ...(mode === 'prod' && {
         sourcemap: false,
         minify: true,

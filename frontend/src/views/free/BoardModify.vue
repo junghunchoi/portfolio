@@ -1,14 +1,5 @@
 <template>
   <h2 class="mb-3">자유게시판 수정</h2>
-  <div class="float-end">
-    <p class=" fs-6">작성자 : {{
-        board.writer
-      }} | 등록일 : {{
-        $dayjs(board.regDate).format('YYYY.MM.DD')
-      }} | 마지막 수정일: {{
-        $dayjs(board.modDate).format('YYYY.MM.DD')
-      }}</p>
-  </div>
   <form @submit.prevent id="f1">
     <div class="mb-3 mt-5">
       <label for="title" class="form-label">제목</label>

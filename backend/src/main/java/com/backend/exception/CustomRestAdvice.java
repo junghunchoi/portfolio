@@ -44,18 +44,17 @@ public class CustomRestAdvice {
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.error("handleMethodArgumentNotValidException", e);
+	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+		MethodArgumentNotValidException e) {
 		BindingResult bindingResult = e.getBindingResult();
 		StringBuilder stringBuilder = new StringBuilder();
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
-			stringBuilder.append(fieldError.getField()).append(":");
+			stringBuilder.append(fieldError.getField()).append(": ");
 			stringBuilder.append(fieldError.getDefaultMessage());
-			stringBuilder.append(", ");
+			stringBuilder.append("\n ");
 		}
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR, String.valueOf(stringBuilder));
-
-		log.error("MethodArgumentNotValidException"  + stringBuilder);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR,
+			String.valueOf(stringBuilder));
 
 		return ResponseEntity.badRequest().body(response);
 	}
@@ -80,15 +79,18 @@ public class CustomRestAdvice {
 			}
 		}
 
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE, String.valueOf(stringBuilder));
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE,
+			String.valueOf(stringBuilder));
 		log.error("Binding exception occurred: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(response);
 	}
 
 	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
 	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-	public ResponseEntity<ErrorResponse> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e) {
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE, e.getStackTrace().toString());
+	public ResponseEntity<ErrorResponse> handleInvalidDataAccessApiUsageException(
+		InvalidDataAccessApiUsageException e) {
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TYPE_VALUE,
+			e.getStackTrace().toString());
 		log.error("Invalid data access API usage: {}", e.getMessage());
 		return ResponseEntity.badRequest().body(response);
 	}
@@ -127,8 +129,10 @@ public class CustomRestAdvice {
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(MissingRequestHeaderException.class)
-	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
+	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(
+		MissingRequestHeaderException e) {
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR,
+			e.getMessage());
 		log.error("Missing request header: {}", e.getHeaderName());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
@@ -143,7 +147,8 @@ public class CustomRestAdvice {
 	protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
 		HttpMessageNotReadableException e) {
 		log.error("HttpMessageNotReadableException", e);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -157,7 +162,8 @@ public class CustomRestAdvice {
 	protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderExceptionException(
 		MissingServletRequestParameterException e) {
 		log.error("handleMissingServletRequestParameterException", e);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.MISSING_REQUEST_PARAMETER_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -171,7 +177,8 @@ public class CustomRestAdvice {
 	@ExceptionHandler(HttpClientErrorException.BadRequest.class)
 	protected ResponseEntity<ErrorResponse> handleBadRequestException(HttpClientErrorException e) {
 		log.error("HttpClientErrorException.BadRequest", e);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_REQUEST_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_REQUEST_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
@@ -183,7 +190,8 @@ public class CustomRestAdvice {
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(NoHandlerFoundException.class)
-	protected ResponseEntity<ErrorResponse> handleNoHandlerFoundExceptionException(NoHandlerFoundException e) {
+	protected ResponseEntity<ErrorResponse> handleNoHandlerFoundExceptionException(
+		NoHandlerFoundException e) {
 		log.error("handleNoHandlerFoundExceptionException", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_FOUND_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
@@ -224,7 +232,8 @@ public class CustomRestAdvice {
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(JsonParseException.class)
-	protected ResponseEntity<ErrorResponse> handleJsonParseExceptionException(JsonParseException e) {
+	protected ResponseEntity<ErrorResponse> handleJsonParseExceptionException(
+		JsonParseException e) {
 		log.error("handleJsonParseExceptionException", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.JSON_PARSE_ERROR, e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
@@ -237,9 +246,11 @@ public class CustomRestAdvice {
 	 * @return ResponseEntity<ErrorResponse>
 	 */
 	@ExceptionHandler(JsonProcessingException.class)
-	protected ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException e) {
+	protected ResponseEntity<ErrorResponse> handleJsonProcessingException(
+		JsonProcessingException e) {
 		log.error("handleJsonProcessingException", e);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REQUEST_BODY_MISSING_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 
@@ -252,7 +263,8 @@ public class CustomRestAdvice {
 	@ExceptionHandler(BusinessExceptionHandler.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(BusinessExceptionHandler e) {
 		log.error("BusinessExceptionHandler : ", e.getMessage());
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.BUSINESS_EXCEPTION_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -263,20 +275,22 @@ public class CustomRestAdvice {
 	}
 
 	@ExceptionHandler(HttpMessageConversionException.class)
-	public ResponseEntity<String> handleHttpMessageConversionException(HttpMessageConversionException e) {
+	public ResponseEntity<String> handleHttpMessageConversionException(
+		HttpMessageConversionException e) {
 
 		StackTraceElement[] stackTrace = e.getStackTrace();
 		String errorLocation = "";
 		if (stackTrace.length > 0) {
 			StackTraceElement firstElement = stackTrace[0];
-			errorLocation = firstElement.getClassName() + "." + firstElement.getMethodName() +
-				"(" + firstElement.getFileName() + ":" + firstElement.getLineNumber() + ")";
+			errorLocation = firstElement.getClassName() + "." + firstElement.getMethodName() + "("
+				+ firstElement.getFileName() + ":" + firstElement.getLineNumber() + ")";
 		}
 
 		// 예외 메시지와 발생 위치를 응답 본문에 포함시킵니다.
 		String errorMessage = "Error: " + e.getMessage() + "\nLocation: " + errorLocation;
 		log.error("HttpMessageConversionException : " + errorMessage);
-		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("HttpMessageConversionException 에러");
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+		                     .body("HttpMessageConversionException 에러");
 
 	}
 
@@ -297,7 +311,8 @@ public class CustomRestAdvice {
 	@ExceptionHandler(Exception.class)
 	protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
 		log.error("Exception", e);
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR,
+			e.getMessage());
 		return new ResponseEntity<>(response, HTTP_STATUS_OK);
 	}
 

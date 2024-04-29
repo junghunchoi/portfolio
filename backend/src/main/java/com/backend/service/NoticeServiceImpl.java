@@ -77,10 +77,11 @@ public class NoticeServiceImpl implements NoticeService{
 	 */
 	@Override
 	public NoticeDTO readOne(Long nno) {
+		log.info(nno);
 		Optional<Notice> noticeOptional = noticeRepository.findById(nno);
 
 		Notice notice = noticeOptional.orElseThrow();
-
+		log.info(notice);
 		//조회수증가
 		notice.updateViewCount(notice.getViewCount()+1);
 		noticeRepository.save(notice);
@@ -95,6 +96,7 @@ public class NoticeServiceImpl implements NoticeService{
 	 */
 	@Override
 	public void modify(NoticeDTO noticeDTO) {
+
 		Optional<Notice> noticeOptional = noticeRepository.findById(noticeDTO.getNno());
 		Notice notice = noticeOptional.orElseThrow();
 

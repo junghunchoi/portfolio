@@ -82,30 +82,4 @@ public class ReplyController {
 			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Reply SuccessFully"));
 	}
 
-
-	/**
-	 * 특정 댓글을 삭제하는 메서드.
-	 *
-	 * @param rno      삭제할 댓글의 식별자
-	 * @param replyDTO 삭제할 댓글의 정보를 담은 DTO
-	 * @return 삭제 성공 메시지를 포함하는 ResponseEntity
-	 */
-//	@ApiOperation(value = "Modify Reply", notes = "PUT 방식으로 특정 댓글 수정")
-//	@DeleteMapping(value = "/{rno}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<ResultDTO<String>> modify(@PathVariable("rno") Long rno,
-//		@RequestBody ReplyDTO replyDTO) {
-//		log.info("ReplyController");
-//
-//		replyDTO.setRno(rno); //번호를 일치시킴
-//
-//		replyService.modify(replyDTO);
-//
-//		Map<String, Long> resultMap = new HashMap<>();
-//
-//		resultMap.put("rno", rno);
-//
-//		return ResponseEntity.ok(
-//			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Reply SuccessFully"));
-//	}
-
 }

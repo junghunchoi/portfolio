@@ -134,8 +134,6 @@ onMounted(async () => {
   Object.assign(notices, res.data.resultData.notices)
   Object.assign(galleries, res.data.resultData.galleries)
   Object.assign(helps, res.data.resultData.helps)
-
-  console.log(galleries);
 })
 
 const readHelpHandler = (writer, hno, isSecret) => {

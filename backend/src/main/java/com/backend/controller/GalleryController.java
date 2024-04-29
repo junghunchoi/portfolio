@@ -54,7 +54,7 @@ public class GalleryController {
 
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO, BindingResult bindingResult)
+	public ResponseEntity<ResultDTO<Long>> register(@Valid @RequestBody BoardDTO boardDTO)
 		throws BindException {
 		log.info(" --- gallery register --- ");
 		log.info(boardDTO);

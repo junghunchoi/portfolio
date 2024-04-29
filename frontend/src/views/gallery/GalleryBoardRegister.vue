@@ -81,6 +81,7 @@ const show = ref(false);
 const router = useRouter();
 const form = ref({
   title: null,
+  boardType: 2,
   category: {cno: null, content: null},
   content: null,
   cno: null,

@@ -3,7 +3,9 @@ package com.backend.dto.board;
 import com.backend.entity.Category;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +27,9 @@ public class BoardDTO {
 	@NotEmpty
 	private String content;
 
-	@NotEmpty
-	private int boardType;
+	@NotNull
+	@Min(1)
+	private Integer boardType;
 
 	@NotEmpty
 	private String writer;
@@ -39,5 +42,4 @@ public class BoardDTO {
 	private LocalDateTime modDate;
 
 	private List<?> files;
-
 }

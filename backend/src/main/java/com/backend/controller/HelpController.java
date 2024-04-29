@@ -95,7 +95,7 @@ public class HelpController {
 	 * @return 수정 결과 메시지를 포함한 응답 객체
 	 */
 	@PatchMapping("")
-	public ResponseEntity<ResultDTO<String>> modify(@RequestBody @Valid HelpDTO helpDTO) {
+	public ResponseEntity<ResultDTO<String>> modify( @RequestBody @Valid HelpDTO helpDTO) {
 		log.info(" ---help modify --- ");
 		log.info(helpDTO);
 		helpService.modify(helpDTO);

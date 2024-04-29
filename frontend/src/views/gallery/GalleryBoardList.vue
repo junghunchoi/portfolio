@@ -18,7 +18,6 @@
                    class="card-img-top">
               <div class="ms-4">
                 <h5 class="card-title">{{ gallery.title }}</h5>
-                <p class="card-text">{{ gallery.content }}</p>
                 <p class="card-text"><small class="text-muted">
                   {{ $dayjs(gallery.regDate).format('YYYY.MM.DD') }}</small></p>
               </div>

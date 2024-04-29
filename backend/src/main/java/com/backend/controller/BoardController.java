@@ -50,13 +50,11 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
-	public ResponseEntity<ResultDTO<Long>> register(@RequestBody BoardDTO boardDTO)
+	public ResponseEntity<ResultDTO<Long>> register(@Valid @RequestBody BoardDTO boardDTO)
 		throws BindException {
 		log.info(" --- board register --- ");
 		log.info(boardDTO);
-
 		Long bno = boardService.register(boardDTO);
-
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), bno));
 	}
@@ -86,7 +84,7 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PatchMapping("")
-	public ResponseEntity<ResultDTO<String>> modify(@RequestBody BoardDTO boardDTO) {
+	public ResponseEntity<ResultDTO<String>> modify(@Valid @RequestBody BoardDTO boardDTO) {
 		log.info(" --- board modify --- ");
 		log.info(boardDTO);
 		boardService.modify(boardDTO);

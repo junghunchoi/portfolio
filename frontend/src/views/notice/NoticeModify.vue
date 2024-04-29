@@ -38,6 +38,7 @@ const router = useRouter();
 const notice = reactive({
   nno: history.state.nno,
   title: history.state.title,
+  writer: history.state.writer,
   content: history.state.content,
   isMain: history.state.isMain === 1
 });
