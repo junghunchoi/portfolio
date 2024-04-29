@@ -25,10 +25,6 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
-      Components({
-        dirs: ['src/components/app'],
-        dts: true,
-      }),
     ],
     server: {
       proxy: {
