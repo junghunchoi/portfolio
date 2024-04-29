@@ -109,7 +109,7 @@
 #2024.04.29
 
 ##todo
-1. validate, error log 정리 - 해결
-2. 인스턴스 새로 생성
-3. 더미 데이터 말아넣기 (intellij에서 연결)
-4. aws 통합 테스트
+1. validate, error log 정리 - 해결 
+2. 인스턴스 새로 생성 - 해결
+3. 더미 데이터 말아넣기 (intellij에서 연결) - 해결
+4. aws 통합 테스트 - ing
