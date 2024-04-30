@@ -8,7 +8,8 @@ RUN npm run build:prod
 
 # 프로덕션 스테이지
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /etc/nginx/html
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
 COPY ./nginx.conf /etc/nginx/nginx.conf
 EXPOSE 1542
 CMD ["nginx", "-g", "daemon off;"]
