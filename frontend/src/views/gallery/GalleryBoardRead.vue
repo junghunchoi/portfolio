@@ -18,16 +18,16 @@
                    , transition: `${transitionSpeed}ms` }">
             <!-- 마지막 슬라이드를 첫 위치에 복제 -->
             <div class="slide_content" v-if="gallery.files && gallery.files.length > 0">
-              <img :src="'http://localhost:1541/api/files/' +gallery.files[gallery.files.length - 1].uploadedFileName"
+              <img :src="`${BASE_URL}/files/${gallery.files[gallery.files.length - 1].uploadedFileName}`"
                    alt="Slide Image">
             </div>
             <!-- 원본 슬라이드 -->
             <div class="slide_content" v-for="file in gallery.files">
-              <img :src="'http://localhost:1541/api/files/' + file.uploadedFileName">
+              <img :src="`${BASE_URL}/files/${file.uploadedFileName}`">
             </div>
             <!-- 첫 슬라이드를 마지막 위치에 복제 -->
             <div class="slide_content" v-if="gallery.files && gallery.files.length > 0">
-              <img :src="'http://localhost:1541/api/files/' + gallery.files[0].uploadedFileName" alt="Slide Image">
+              <img :src="`${BASE_URL}/files/${gallery.files[0].uploadedFileName}`" >
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ import {getGalleryBybno,deleteGallery} from "@/api/gallery.js";
 import TheModal from "@/components/common/TheModal.vue";
 import TheEditor from "@/components/common/TheEditor.vue";
 import {getReplies} from "@/api/reply.js";
-
+const BASE_URL = process.env.VITE_APP_API_URL;
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

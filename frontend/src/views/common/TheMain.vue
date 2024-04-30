@@ -125,6 +125,7 @@ const boards = reactive({});
 const notices = reactive({});
 const galleries = reactive({});
 const helps = reactive({});
+
 onMounted(async () => {
   const res =await getMainData();
 
