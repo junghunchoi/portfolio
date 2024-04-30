@@ -88,12 +88,10 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 				case "viewCount" -> query.orderBy(board.viewCount.desc());
 			}
 		}
-
 		JPQLQuery<BoardListDTO> dtoQuery = query.select(
 			Projections.bean(BoardListDTO.class, board.bno, category.content.as("category"),
 				board.title, board.writer, board.viewCount, board.regDate, board.modDate,
 				reply.count().as("replyCount"), file.count().as("fileCount")));
-
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<BoardListDTO> dtoList = dtoQuery.fetch();

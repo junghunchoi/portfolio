@@ -94,7 +94,7 @@ public class BoardServiceImpl implements BoardService {
 		Pageable pageable = pageRequestDTO.getPageable(order);
 
 		Page<BoardListDTO> result = boardRepository.searchBoardListWithReplyandFiles(types, keyword,
-			order, sort, pageable);
+			sort, order, pageable);
 
 		return PageResponseDTO.<BoardListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)

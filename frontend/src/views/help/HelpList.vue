@@ -3,7 +3,7 @@
     <BoardFilter
         @search="searchHelp"
         @update:size="params.size=$event"
-        @update:order="params.sort=$event"
+        @update:order="params.order=$event"
         @update:sort="params.sort=$event"
     />
   </div>
@@ -215,11 +215,15 @@ table th:nth-child(1) {
   width: 50%;
 }
 table td:nth-child(1){
-  padding-left: 30px;
+  padding-left: 50px;
   text-align: left;
 }
 table th:nth-child(2), table td:nth-child(2) {
   width: 5%;
+}
+table th:nth-child(3), table td:nth-child(3) {
+  text-align: center !important;
+  width: 10%;
 }
 table th:nth-child(3), table td:nth-child(3) {
   text-align: center !important;

@@ -3,7 +3,7 @@
     <BoardFilter
         @search="searchBoard"
         @update:size="params.size=$event"
-        @update:order="params.sort=$event"
+        @update:order="params.order=$event"
         @update:sort="params.sort=$event"
     />
   </div>
@@ -128,7 +128,6 @@ const fetchData = async () => {
     console.error(e);
   }
 };
-
 fetchData();
 
 watch(params, async () => {
