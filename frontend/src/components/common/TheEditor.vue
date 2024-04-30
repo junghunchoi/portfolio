@@ -1,16 +1,16 @@
 <template>
   <div id="app" style="height: 300px;">
     <ckeditor :editor="editor"
-              v-model="editorDate"
+              v-model="editorData"
               :config="editorConfig"
               :disabled="props.isDisabled"
-                  />
+   />
   </div>
 </template>
 
 <script setup>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {ref, watch, computed} from "vue";
+import {ref, watch} from "vue";
 
 const props = defineProps({
   initEeditorData: String,
@@ -20,7 +20,7 @@ const props = defineProps({
   }
 });
 const emit = defineEmits(["update:editorData"])
-const editorDate = ref(props.initEeditorData);
+const editorData = ref(props.initEeditorData || "");
 const editor = ClassicEditor;
 
 const editorConfig = ref({
@@ -45,18 +45,17 @@ const editorConfig = ref({
       'mergeTableCells'
     ]
   },
+  readOnly: props.isDisabled,
 })
 
-watch(editorDate, async () => {
-  emit('update:editorData', editorDate.value)
+watch(editorData, async () => {
+  emit('update:editorData', editorData.value)
 })
 
 watch(
     () => props.isDisabled,
     (newValue) => {
-      if (newValue) {
-        editorConfig.value = { toolbar: [] };
-      }
+      editorConfig.value = { toolbar: [] };
     },
     { immediate: true }
 );

@@ -21,11 +21,12 @@
       <TheEditor
           v-if="help.content"
           :init-eeditor-data="help.answer"
-          :isDisabled="true"/>
+          :isDisabled="true"
+          />
     </div>
     <div class="float-end">
       <button type="button" class="btn btn-primary me-1" @click="goListPage">목록</button>
-      <button v-if="help.writer === userName" type="button" class="btn btn-secondary me-1" @click="modifyHelpHandler">수정</button>
+      <button v-if="help.writer === userName || AUTHORITY === 'ADMIN'" type="button" class="btn btn-secondary me-1" @click="modifyHelpHandler">수정</button>
       <button v-if="help.writer === userName" type="button" class="btn btn-danger" @click="deleteHelpHandler">삭제</button>
     </div>
 
@@ -46,9 +47,8 @@ const router = useRouter();
 
 const hno = ref(Number(route.params.hno));
 const authStore = useAuthStore();
+const AUTHORITY = useAuthStore().getAuthorities
 const {userName} = storeToRefs(authStore);
-
-
 
 const help = reactive({}
 );
