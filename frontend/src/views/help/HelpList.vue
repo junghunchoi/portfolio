@@ -219,7 +219,7 @@ table td:nth-child(1){
   text-align: left;
 }
 table th:nth-child(2), table td:nth-child(2) {
-  width: 5%;
+  width: 10%;
 }
 table th:nth-child(3), table td:nth-child(3) {
   text-align: center !important;
