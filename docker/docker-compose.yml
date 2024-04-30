@@ -32,7 +32,7 @@ services:
      image: frontend
      container_name: frontend-container
      ports:
-       - "1542:80"
+       - "1542:1542"
      networks:
        - docker-network
 
