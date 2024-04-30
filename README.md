@@ -17,12 +17,12 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 
 사용자 비밀번호 : a1234
 
-<hr>
+
 
 ## <a href="https://documenter.getpostman.com/view/22369547/2sA3BoZWgk"> Api 문서</a>
 - 포트폴리오의 postman 기반 api 문서
+</br>
 
-<hr>
 
 ## ⭐ 주요 기능
 - 사용자 및 관리자의 기능 분기
@@ -31,32 +31,32 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 - JPA를 통해 영속성 관리
 - 첨부파일, 댓글, 정렬 등 게시판이 기본으로 필요로 하는 대부분의 기능 구현
 
-<hr>
+
 
 ## 화면리스트
 화면설명은 동영상으로
 
-<hr>
+
 
 ## 기술 스택
-###백엔드
+### 백엔드
 
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"></br>
 <img src="https://img.shields.io/badge/JPA-59666C?style=flat-square&logo=Hibernate&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=Spring-Security&logoColor=white"></br>
 
-###프론트엔드
+### 프론트엔드
 
 <img src="https://img.shields.io/badge/Vue.js-35495E?style=flat-square&logo=vue.js&logoColor=4FC08D"></br>
 <img src="https://img.shields.io/badge/Pinia-35495E?style=flat-square&logo=vuedotjs&logoColor=4FC08D"></br>
 <img src="https://img.shields.io/badge/Bootstrap--Vue-563D7C?style=flat-square&logo=bootstrap-vue&logoColor=white"></br>
 
-###데이터베이스 
+### 데이터베이스 
 
 <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=mariadb&logoColor=white"></br>
 
 
-###인프라 
+### 인프라 
 
 <img src="https://img.shields.io/badge/Amazon AWS EC2-232F3E?style=flat-square&logo=amazon-aws&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"></br>
@@ -70,7 +70,7 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 - Vue 3 (Composition API)
 - MariaDB 10.11
 
-<hr>
+
 
 ## ERD
 ![](readmeimage/포트폴리오.png)
