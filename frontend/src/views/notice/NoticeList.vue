@@ -159,12 +159,13 @@ a {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+
 }
 
 .table th,
 .table td {
   padding: 12px;
-  text-align: left;
+  text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #ddd;
 }
@@ -196,4 +197,21 @@ a {
   text-decoration: underline;
 }
 
+table th:nth-child(1) {
+  text-align: center !important;
+  width: 40%;
+}
+table td:nth-child(1){
+  padding-left: 50px;
+  text-align: left;
+}
+table th:nth-child(2), table td:nth-child(2) {
+  width: 10%;
+}
+table th:nth-child(3), table td:nth-child(3) {
+  width: 10%;
+}
+table th:nth-child(4), table td:nth-child(4) {
+  width: 10%;
+}
 </style>

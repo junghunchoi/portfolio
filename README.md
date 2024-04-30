@@ -52,6 +52,7 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 <img src="https://img.shields.io/badge/Vue.js-35495E?style=flat-square&logo=vue.js&logoColor=4FC08D"></br>
 <img src="https://img.shields.io/badge/Pinia-35495E?style=flat-square&logo=vuedotjs&logoColor=4FC08D"></br>
 <img src="https://img.shields.io/badge/Bootstrap--Vue-563D7C?style=flat-square&logo=bootstrap-vue&logoColor=white"></br>
+<img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white"></br>
 
 ### 데이터베이스 
 
