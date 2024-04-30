@@ -14,7 +14,7 @@
         <div v-for="gallery in response.items" class="">
           <router-link :to="{ name: 'GalleryRead', params: { bno: gallery.bno }}">
             <div class=" d-flex align-items-center mb-3">
-              <img :src="'http://process.env.VITE_APP_API_URL/api/files/' + gallery.fileName"
+              <img :src="`${BASE_URL}/files/${gallery.fileName}`"
                    class="card-img-top">
               <div class="ms-4">
                 <h5 class="card-title">{{ gallery.title }}</h5>
@@ -58,6 +58,7 @@ import BoardFilter from "@/components/TheFilter.vue";
 import TheModal from "@/components/common/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
+const BASE_URL = process.env.VITE_APP_API_URL;
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

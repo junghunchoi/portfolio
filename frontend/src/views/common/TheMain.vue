@@ -55,7 +55,7 @@
 
           <div v-for="gallery in galleries" class="media mb-3">
             <div @click="readGalleryHandler(gallery.bno)" style="display: flex; align-items: center;">
-              <img :src="'http://localhost:1541/api/files/' + gallery.fileName" class="mr-3 mt-1">
+              <img :src="`${BASE_URL}/files/${gallery.fileName}`" class="mr-3 mt-1">
               <h5 class="mt-0">{{ gallery.title }} <span class="ms-1"
                                                          v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span>
               </h5>
@@ -113,20 +113,18 @@ import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
 import {getMainData} from "@/api/common.js";
-
+const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
 const show = ref(false);
 const AUTHORITY = getAuthorities.value;
 const router = useRouter();
-
 const modalText = ref('')
 
 const boards = reactive({});
 const notices = reactive({});
 const galleries = reactive({});
 const helps = reactive({});
-
 onMounted(async () => {
   const res =await getMainData();
 
