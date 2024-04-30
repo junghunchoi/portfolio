@@ -18,9 +18,11 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 사용자 비밀번호 : a1234
 
 
-</br></br>
+</br>
+
 ## <a href="https://documenter.getpostman.com/view/22369547/2sA3BoZWgk"> Api 문서</a>
 - 포트폴리오의 postman 기반 api 문서
+
 </br>
 
 
@@ -31,16 +33,17 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 - JPA를 통해 영속성 관리
 - 첨부파일, 댓글, 정렬 등 게시판이 기본으로 필요로 하는 대부분의 기능 구현
 
-</br>
+
 ## 화면리스트
 화면설명은 동영상으로
 
 
 </br>
+
 ## 기술 스택
 ### 백엔드
 
-  <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"></br>
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"></br>
 <img src="https://img.shields.io/badge/JPA-59666C?style=flat-square&logo=Hibernate&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=Spring-Security&logoColor=white"></br>
 
@@ -71,6 +74,7 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 
 
 </br>
+
 ## ERD
 ![](readmeimage/포트폴리오.png)
 
