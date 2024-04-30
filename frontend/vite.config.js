@@ -43,6 +43,15 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+      extensions: [
+        '.js',
+        '.json',
+        '.jsx',
+        '.mjs',
+        '.ts',
+        '.tsx',
+        '.vue',
+      ],
     },
     define: {
       'process.env.VITE_APP_API_URL': JSON.stringify(env.VITE_APP_API_URL),
