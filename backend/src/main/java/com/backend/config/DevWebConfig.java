@@ -23,5 +23,6 @@ public class DevWebConfig implements WebMvcConfigurer {
 		        .allowedHeaders("*")
 		        .allowCredentials(true);
 	}
+
 }
 
