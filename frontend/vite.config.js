@@ -23,6 +23,14 @@ export default defineConfig(({ mode }) => {
         minify: true,
       }),
     },
+    rollupOptions: {
+      output: {
+        format: 'es',
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]',
+      },
+    },
     plugins: [
       vue(),
     ],
@@ -42,6 +50,9 @@ export default defineConfig(({ mode }) => {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+    },
+    optimizeDeps: {
+      include: ['@vue/runtime-core', '@vue/shared'],
     },
   };
 });
