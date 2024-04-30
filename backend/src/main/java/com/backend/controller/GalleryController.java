@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
@@ -43,7 +44,6 @@ public class GalleryController {
 	@ApiOperation(value = "get galleryList", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
-		log.info(" --- gallery list --- ");
 		PageResponseDTO<GalleryListDTO> responseDTO =
 			galleryService.list(pageRequestDTO);
 
@@ -56,9 +56,6 @@ public class GalleryController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<Long>> register(@Valid @RequestBody BoardDTO boardDTO)
 		throws BindException {
-		log.info(" --- gallery register --- ");
-		log.info(boardDTO);
-
 		Long bno = galleryService.register(boardDTO);
 
 
@@ -69,7 +66,6 @@ public class GalleryController {
 	@ApiOperation(value = "get board by bno", notes = "특정 게시물 조회")
 	@GetMapping("/{bno}")
 	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
-		log.info(" --- gallery read --- ");
 		BoardDTO boardDTO = galleryService.readOne(bno);
 
 		return ResponseEntity.ok(boardDTO);
@@ -78,23 +74,18 @@ public class GalleryController {
 	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PatchMapping()
 	public ResponseEntity<?> modify(@RequestBody BoardDTO boardDTO) {
-		log.info(" --- gallery modify --- ");
-		log.info(boardDTO);
-
 		galleryService.modify(boardDTO);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Modify Board SuccessFully"));
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.UPDATE_SUCCESS.getMessage()));
 	}
 
 
 	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
 	@DeleteMapping("/{bno}")
 	public ResponseEntity<ResultDTO> remove(@PathVariable("bno") Long bno) {
-		log.info("--- gallery delete ---");
-
 		galleryService.remove(bno);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Board SuccessFully"));
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.DELETE_SUCCESS.getMessage()));
 
 	}
 

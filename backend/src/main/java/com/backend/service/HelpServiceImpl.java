@@ -104,7 +104,6 @@ public class HelpServiceImpl implements HelpService {
 	 */
 	@Override
 	public PageResponseDTO<HelpListDTO> list(PageRequestDTO pageRequestDTO) {
-		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
 		String order = pageRequestDTO.getOrder();

@@ -1,134 +1,115 @@
 buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
+    ext {
+        queryDslVersion = "5.0.0"
+    }
 }
 
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.14'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.14'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 
 springBoot {
-	mainClass = 'com.backend.BackendApplication'
+    mainClass = 'com.backend.BackendApplication'
 }
 
 java {
-	sourceCompatibility = '14'
-	targetCompatibility = '14'
+    sourceCompatibility = '14'
+    targetCompatibility = '14'
 }
 
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	implementation 'org.modelmapper:modelmapper:3.1.0'
-
-
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation 'org.modelmapper:modelmapper:3.1.0'
 
 
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	implementation 'net.coobird:thumbnailator:0.4.16'
 
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
-	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation 'net.coobird:thumbnailator:0.4.16'
 
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-	annotationProcessor(
+    implementation 'com.google.code.gson:gson:2.8.9'
 
-			"javax.persistence:javax.persistence-api",
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-			"javax.annotation:javax.annotation-api",
+    annotationProcessor(
 
-			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+            "javax.persistence:javax.persistence-api",
+
+            "javax.annotation:javax.annotation-api",
+
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
 }
 
 bootRun {
-	String activeProfile = System.properties['spring.profiles.active']
-	systemProperty "spring.profiles.active", activeProfile
+    String activeProfile = System.properties['spring.profiles.active']
+    systemProperty "spring.profiles.active", activeProfile
 }
-
-//bootJar {
-//	from('src/main/resources') {
-//		include 'application.properties'
-//		include 'application-dev.properties'
-//		include 'application-prod.properties'
-//	}
-//}
 
 
 processResources {
-	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-	from('src/main/resources') {
-		include 'application.properties'
-		if (project.hasProperty('profile')) {
-			include "application-${project.profile}.properties"
-		}
-	}
-
-//	if (project.hasProperty('profile') && project.profile == 'prod') {
-//		include '**/application.properties'
-//		include '**/application-prod.properties'
-//	} else {
-//		include '**/application.properties'
-//		include '**/application-dev.properties'
-//	}
+    from('src/main/resources') {
+        include 'application.properties'
+        if (project.hasProperty('profile')) {
+            include "application-${project.profile}.properties"
+        }
+    }
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
 
 sourceSets {
-	main {
-		resources{
-			srcDirs "src/main/resources", "src/main/resources-${profile}"
-		}
-//		java {
-//			srcDirs = ["$projectDir/src/main/java"]
-//		}
-	}
+    main {
+        resources {
+            srcDirs "src/main/resources", "src/main/resources-${profile}"
+        }
+    }
 }
 
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

@@ -106,7 +106,6 @@ const goGalleryPage = () => {
 
 const updateDataAndGolist=  async () => {
   try {
-    console.log(gallery);
     await updateGallery(gallery);
     await uploadFile(formData);
     router.push({name: 'GalleryRead', params: {bno: bno.value}});

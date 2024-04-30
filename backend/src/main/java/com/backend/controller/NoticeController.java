@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
@@ -40,8 +41,6 @@ public class NoticeController {
 	 */
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
-		log.info(" --- notice list --- ");
-		log.info(pageRequestDTO);
 		PageResponseDTO<NoticeListDTO> responseDTO = noticeService.list(pageRequestDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
@@ -56,9 +55,6 @@ public class NoticeController {
 	 */
 	@PostMapping("")
 	public ResponseEntity<ResultDTO<Object>> register(@RequestBody @Valid NoticeDTO noticeDTO) throws BindException {
-		log.info(" --- notice register --- ");
-		log.info(noticeDTO);
-
 		Long bno = noticeService.register(noticeDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), bno));
@@ -72,7 +68,6 @@ public class NoticeController {
 	 */
 	@GetMapping("/{nno}")
 	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("nno") Long nno) {
-		log.info(" --- notice read --- ");
 		NoticeDTO noticeDTO = noticeService.readOne(nno);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), noticeDTO));
@@ -86,11 +81,9 @@ public class NoticeController {
 	 */
 	@PatchMapping("")
 	public ResponseEntity<ResultDTO<String>> modify(@RequestBody @Valid NoticeDTO noticeDTO) {
-		log.info(" --- notice modify --- ");
-		log.info(noticeDTO);
 		noticeService.modify(noticeDTO);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Modify Notice SuccessFully"));
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.UPDATE_SUCCESS.getMessage()));
 	}
 
 	/**
@@ -101,10 +94,8 @@ public class NoticeController {
 	 */
 	@DeleteMapping("/{nno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("nno") Long nno) {
-		log.info("--- notice delete ---");
-
 		noticeService.remove(nno);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Board SuccessFully"));
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.DELETE_SUCCESS.getMessage()));
 	}
 }

@@ -38,8 +38,6 @@ public class Custom403Handler implements AccessDeniedHandler {
 		String contentType = request.getHeader("Content-Type");
 		boolean jsonRequest = contentType != null && contentType.startsWith("application/json");
 
-		log.info("isJson : " + jsonRequest);
-
 		// 일반 요청인 경우
 		if (!jsonRequest) {
 			// 로그인 페이지로 리다이렉트하면서 접근 거부 에러 파라미터 전달

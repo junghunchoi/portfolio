@@ -68,8 +68,6 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 			String userName = (String) payload.get("userName");
 
-			log.info("userName: " + userName);
-
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

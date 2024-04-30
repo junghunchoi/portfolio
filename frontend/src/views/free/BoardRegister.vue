@@ -91,7 +91,6 @@ const formData = new FormData();
 
 const save = async () => {
   try {
-    console.log(board);
     const res = await createBoard(board)
 
     formData.append('bno', res.data.resultData);

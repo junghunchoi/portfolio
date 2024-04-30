@@ -35,7 +35,6 @@ public class MemberController {
 
 	@PostMapping(value = "/auth/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
-		log.info("memberController - registerMember");
 		try {
 			memberService.register(memberJoinDTO);
 			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "member register success"));
@@ -46,7 +45,6 @@ public class MemberController {
 
 	@PostMapping("/auth/members/check")
 	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody Map<String, String> requestBody) {
-		log.info("memberController - checkUserName");
 		String userName = requestBody.get("userName");
 		Optional<Member> member = memberService.readOne(userName);
 

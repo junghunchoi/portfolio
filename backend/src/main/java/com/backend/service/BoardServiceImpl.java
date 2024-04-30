@@ -74,7 +74,6 @@ public class BoardServiceImpl implements BoardService {
 		Optional<Board> result = boardRepository.findById(boardDTO.getBno());
 
 		Board board = result.orElseThrow();
-		log.info("수정 : " + boardDTO);
 		board.change(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
 
 		boardRepository.save(board);
@@ -88,7 +87,6 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO) {
-		log.info(pageRequestDTO);
 		String[] types = pageRequestDTO.getTypes();
 		String keyword = pageRequestDTO.getKeyword();
 		String order = pageRequestDTO.getOrder();

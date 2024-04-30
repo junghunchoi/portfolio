@@ -55,8 +55,6 @@ public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
 		// 요청의 JSON 데이터를 분석하여 사용자 정보 추출
 		Map<String, String> jsonData = parseRequestJson(request);
 
-		log.info(jsonData);
-
 		// 추출한 사용자 정보로 UsernamePasswordAuthenticationToken 생성
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(

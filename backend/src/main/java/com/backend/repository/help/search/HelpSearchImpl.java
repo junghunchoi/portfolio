@@ -98,7 +98,6 @@ public class HelpSearchImpl extends QuerydslRepositorySupport implements HelpSea
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<HelpListDTO> items = dtoQuery.fetch();
-		log.info(items);
 		long count = dtoQuery.fetchCount();
 
 		return new PageImpl<>(items, pageable, count);

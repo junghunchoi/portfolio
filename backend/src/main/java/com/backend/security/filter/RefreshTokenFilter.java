@@ -65,7 +65,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
 		try {
 			refreshClaims = checkRefreshToken(refreshToken);
-			log.info(refreshClaims);
 		} catch (RefreshTokenException refreshTokenException) {
 			refreshTokenException.sendResponseError(response);
 			return;

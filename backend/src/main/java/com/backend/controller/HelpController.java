@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
@@ -48,7 +49,6 @@ public class HelpController {
 	 */
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
-		log.info(" --- board list --- ");
 		PageResponseDTO<HelpListDTO> responseDTO =
 			helpService.list(pageRequestDTO);
 
@@ -65,8 +65,6 @@ public class HelpController {
 	@PostMapping("")
 	public ResponseEntity<ResultDTO<Long>> register(@RequestBody @Valid HelpDTO helpDTO)
 		throws BindException {
-		log.info(" --- help register --- ");
-		log.info(helpDTO);
 		Long bno = helpService.register(helpDTO);
 
 
@@ -82,7 +80,6 @@ public class HelpController {
 	 */
 	@GetMapping("/{bno}")
 	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno) {
-		log.info(" --- help read --- ");
 		HelpDTO helpDTO = helpService.readOne(bno);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), helpDTO));
@@ -96,8 +93,6 @@ public class HelpController {
 	 */
 	@PatchMapping("")
 	public ResponseEntity<ResultDTO<String>> modify( @RequestBody @Valid HelpDTO helpDTO) {
-		log.info(" ---help modify --- ");
-		log.info(helpDTO);
 		helpService.modify(helpDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(),helpDTO.getHno() + "번 문의글글 수정" ));
@@ -111,9 +106,8 @@ public class HelpController {
 	 */
 	@DeleteMapping("/{hno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("hno") Long hno) {
-		log.info("--- board delete ---");
 		helpService.remove(hno);
 
-		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Help SuccessFully"));
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.DELETE_SUCCESS.getMessage()));
 	}
 }

@@ -65,7 +65,6 @@ public class FilesServiceImpl implements FilesService {
 
 	@Override
 	public String registerFiles(FileDTO fileDTO) {
-		log.info(fileDTO);
 		try {
 			File file = File.builder()
 			                .fileSize(fileDTO.getFileSize())

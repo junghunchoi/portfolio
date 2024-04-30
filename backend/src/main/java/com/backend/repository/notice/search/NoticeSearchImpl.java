@@ -40,7 +40,6 @@ public class NoticeSearchImpl extends QuerydslRepositorySupport implements Notic
 		String sort, Pageable pageable) {
 		QNotice notice = QNotice.notice;
 
-		log.info("searchNoticeList");
 		JPQLQuery<Notice> query = from(notice);
 
 		if ((types != null && types.length > 0) && keyword != null) {

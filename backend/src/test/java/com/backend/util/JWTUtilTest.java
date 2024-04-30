@@ -19,8 +19,6 @@ public class JWTUtilTest {
 		Map<String, Object> map = Map.of("username", "abced");
 
 		String jwtStr = jwtUtil.generateToken(map, 1);
-
-		log.info(jwtStr);
 	}
 
 }

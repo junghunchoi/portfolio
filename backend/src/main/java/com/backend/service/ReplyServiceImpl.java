@@ -44,7 +44,6 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public Long Register(ReplyDTO replyDTO) {
 		try {
-			log.info("-- ReplyServiceImpl Register -- ");
 			Reply reply = modelMapper.map(replyDTO, Reply.class);
 
 			return replyRepository.save(reply).getRno();

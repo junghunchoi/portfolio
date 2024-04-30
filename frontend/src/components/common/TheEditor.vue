@@ -1,10 +1,10 @@
 <template>
   <div id="app" style="height: 300px;">
     <ckeditor :editor="editor"
-              v-model="editorData"
+              v-model="editorDate"
               :config="editorConfig"
               :disabled="props.isDisabled"
-   />
+                  />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ const props = defineProps({
   }
 });
 const emit = defineEmits(["update:editorData"])
-const editorData = ref(props.initEeditorData || "");
+const editorDate = ref(props.initEeditorData || "");
 const editor = ClassicEditor;
 
 const editorConfig = ref({
@@ -45,17 +45,19 @@ const editorConfig = ref({
       'mergeTableCells'
     ]
   },
-  readOnly: props.isDisabled,
+  editorDisabled: true
 })
 
-watch(editorData, async () => {
-  emit('update:editorData', editorData.value)
+watch(editorDate, async () => {
+  emit('update:editorData', editorDate.value)
 })
 
 watch(
     () => props.isDisabled,
     (newValue) => {
-      editorConfig.value = { toolbar: [] };
+      if (newValue) {
+        editorConfig.value = { toolbar: [] };
+      }
     },
     { immediate: true }
 );

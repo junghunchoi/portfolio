@@ -55,9 +55,6 @@ public class FileController {
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ResultDTO<String>> upload(FileDTO fileDTO) {
-		log.info("FileController upload ....");
-		log.info(fileDTO);
-
 		if (fileDTO.getFiles() != null) {
 			filesService.uploadFiles(fileDTO);
 
@@ -72,7 +69,6 @@ public class FileController {
 	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> download(@RequestBody FileDTO fileDTO) {
-		log.info("FileController download ....");
 		String contentType = "application/octet-stream";
 
 		String uploadFileName = filesService.uploadFileNameByBnoAndOriginalFileName(fileDTO);
@@ -116,8 +112,6 @@ public class FileController {
 	@ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
 	@DeleteMapping("/remove/{fileName}")
 	public ResponseEntity<ResultDTO<String>> removeFile(@PathVariable String fileName) {
-		log.info("----- fileController removeFile -----");
-		log.info(fileName);
 		filesService.deleteFileByFileName(fileName);
 
 		return ResponseEntity.ok(

@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.reply.ReplyDTO;
@@ -39,9 +40,6 @@ public class ReplyController {
 	@ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글등록")
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> register(@Valid @RequestBody ReplyDTO replyDTO) {
-		log.info("replyController register...");
-		log.info(replyDTO);
-
 		Long rno = replyService.Register(replyDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "register reply success : " + rno));
@@ -58,7 +56,6 @@ public class ReplyController {
 	@GetMapping(value = "/{bno}")
 	public ResponseEntity<ResultDTO<Object>> getList(@PathVariable("bno") Long bno,
 		PageRequestDTO pageRequestDTO) {
-		log.info("replyController register...");
 		PageResponseDTO<ReplyDTO> response = replyService.getListOfBoard(bno, pageRequestDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), response));
@@ -74,12 +71,10 @@ public class ReplyController {
 	@ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
 	@DeleteMapping(value = "/{rno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("rno") Long rno) {
-		log.info("ReplyController remove");
-
 		replyService.remove(rno);
 
 		return ResponseEntity.ok(
-			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "Delete Reply SuccessFully"));
+			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.DELETE_SUCCESS.getMessage()));
 	}
 
 }
