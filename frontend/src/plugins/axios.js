@@ -1,10 +1,13 @@
 import axios from 'axios';
 import router from '@/router'
+import refreshTokenInstance from "@/plugins/refreshToken.js";
 
   const axiosInstance = axios.create({
     baseURL: process.env.VITE_APP_API_URL,
-    // 기타 공통 설정 옵션
   });
+
+  let isRefreshingToken = false;
+  let requestQueue = [];
 
   // 요청 인터셉터 설정
   axiosInstance.interceptors.request.use(
@@ -26,12 +29,50 @@ import router from '@/router'
 
         return response;
       },
-      error => {
+      async error => {
+        // refresh처리
+        const originalRequest = error.config;
+        if (error.response.data.msg === 'Expired Token' && !originalRequest._retry) {
+          if (isRefreshingToken) {
+            try {
+              const queuedRequest = await new Promise((resolve, reject) => {
+                requestQueue.push({ resolve, reject });
+              });
+              return queuedRequest;
+            } catch (error) {
+              return Promise.reject(error);
+            }
+          }
+
+          originalRequest._retry = true;
+          isRefreshingToken = true;
+
+          try {
+            const response = await refreshTokenInstance.post('/refreshToken', {
+              accessToken: localStorage.getItem('accessToken'),
+              refreshToken: localStorage.getItem('refreshToken'),
+            });
+
+            const newAccessToken = response.data.accessToken;
+            localStorage.setItem('accessToken', newAccessToken);
+
+            isRefreshingToken = false;
+            requestQueue.forEach(queuedRequest => queuedRequest.resolve());
+            requestQueue = [];
+
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return axiosInstance(originalRequest);
+          } catch (error) {
+            isRefreshingToken = false;
+            requestQueue.forEach(queuedRequest => queuedRequest.reject(error));
+            requestQueue = [];
+            return Promise.reject(error);
+          }
+        }
+
+
         if (error.response) {
-          // 응답 상태 코드가 200이 아닌 경우 처리
-          if (error.response.status === 401) {
-            // 인증 실패 처리
-          } else if (error.response.status === 404) {
+          if (error.response.status === 404) {
             // 페이지 없음 처리
             console.error('API 요청 실패:', error);
             router.push({name: 'NotFound'});

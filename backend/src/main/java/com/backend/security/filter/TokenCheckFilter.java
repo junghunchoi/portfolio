@@ -35,7 +35,6 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 	private final CustomUserDetailsService userDetailsService;
 	private final JWTUtil jwtUtil;
 
-
 	/**
 	 * 토큰 검사를 수행하는 필터의 내부 로직.
 	 *
@@ -92,6 +91,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 		throws AccessTokenException {
 
 		String headerStr = request.getHeader("Authorization");
+		log.info(headerStr);
 
 		if (headerStr == null || headerStr.length() < 8) {
 			throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);

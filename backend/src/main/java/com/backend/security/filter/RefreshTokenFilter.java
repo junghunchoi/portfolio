@@ -89,7 +89,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		String userName = (String) refreshClaims.get("userName");
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
-		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), 1);
+		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), 3);
 
 		String refreshTokenValue = tokens.get("refreshToken");
 

@@ -40,7 +40,7 @@ public class JWTUtil {
 		Map<String, Object> payloads = new HashMap<>();
 		payloads.putAll(valueMap);
 
-		int time = (60 * 24) * days; // 테스트는 분 단위로 나중엔 60 * 24(일)단위로 변경
+		int time = (60 * 24) * days; // (60 * 24) => 1일
 
 		return Jwts.builder()
 		                    .setHeader(headers)
@@ -63,8 +63,8 @@ public class JWTUtil {
 		Map<String, Object> claim = null;
 
 		claim = Jwts.parser()
-		            .setSigningKey(key.getBytes()) // Set key
-		            .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
+		            .setSigningKey(key.getBytes())
+		            .parseClaimsJws(token)
 		            .getBody();
 
 		return claim;

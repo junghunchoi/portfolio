@@ -8,7 +8,6 @@ import com.backend.security.filter.TokenCheckFilter;
 import com.backend.security.handler.ApiLoginSuccessHandler;
 import com.backend.security.handler.Custom403Handler;
 import com.backend.utils.JWTUtil;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -83,7 +82,7 @@ public class CustomSecurityConfig {
 			UsernamePasswordAuthenticationFilter.class);
 
 		//refreshtoken 호출처리
-		http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),
+		http.addFilterBefore(new RefreshTokenFilter("/api/refreshToken", jwtUtil),
 			TokenCheckFilter.class);
 
 		http.cors()
