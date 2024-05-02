@@ -34,7 +34,6 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -53,7 +52,6 @@ dependencies {
 
 
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     implementation 'net.coobird:thumbnailator:0.4.16'
 
@@ -73,13 +71,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     annotationProcessor(
-
             "javax.persistence:javax.persistence-api",
-
             "javax.annotation:javax.annotation-api",
-
             "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
-
 }
 
 bootRun {

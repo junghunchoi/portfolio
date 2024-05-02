@@ -40,21 +40,169 @@ Restful API를 최대한 준수하여 개발하고자 노력하였습니다. </b
 
 </br>
 
--------------
-핵심 로직 강조: 프로젝트의 핵심 로직이나 중요한 부분을 캡처하여 보여주면 좋습니다. 이를 통해 프로젝트의 핵심 기능을 한눈에 파악할 수 있습니다.
-주석 및 설명 추가: 코드 캡처 사진 옆에 주석이나 설명을 추가하면 코드의 역할과 의미를 이해하기 쉽습니다. 핵심 로직에 대한 간단한 설명을 함께 제공하면 더욱 좋습니다.
-시각적 효과 활용: 코드 하이라이팅, 색상 강조, 화살표 등을 활용하여 특정 부분을 강조하면 시각적으로 더 잘 돋보입니다. 이를 통해 사용자의 주의를 집중시킬 수 있습니다.
-코드 블록 구분: 여러 코드 블록을 캡처할 경우, 각 블록 사이에 공백이나 구분선을 넣어 블록을 명확히 구분해주면 가독성이 높아집니다.
-일관된 스타일 유지: 코드 캡처 사진들의 스타일(폰트, 색상, 배경 등)을 일관되게 유지하면 전체적으로 깔끔하고 통일감 있는 느낌을 줄 수 있습니다.
-실제 실행 결과 포함: 코드 실행 결과(콘솔 출력, GUI 화면 등)를 함께 캡처하여 보여주면 프로젝트의 실제 동작을 쉽게 이해할 수 있습니다.
-중요 부분 명확히 표시: 코드 캡처 사진에서 가장 중요한 부분이 무엇인지 명확히 표시해주면 사용자의 집중도를 높일 수 있습니다.
--------------
+## 코드 간략설명
+
+<details>
+<summary><b>스프링 시큐리티</b></summary>
+<div markdown="1">
+
+```java
+/**
+ * 1. 로그인은 CustomSecurityConfig의 APILoginFilter로부터 시작되며 "/login"으로 시작됩니다.
+ * 2. id,password을 통해 로그인이 진행되며 결과에 따라 처리됩니다.
+ * 3. tokenCheckFilter를 통해 요청의 header의 accessToken을 확인합니다.
+ * 4. 1) accessToken의 유효기간이 만료된 경우 클라이언트에선 /api/refreshToken 요청합니다
+      2) refreshToken이 유효할 경우 accessToken을 재발급하며 기타 정책에 의해 refreshToken를 관리합니다. 
+ */
+class CustomSecurityConfig{
+	
+    ...
+     
+	//ApiLoginFilter
+	APILoginFilter apiLoginFilter = new APILoginFilter("/login");
+		apiLoginFilter.setAuthenticationManager(authenticationManager);
+		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+	//ApiLoginSuccessHandler
+	ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
+		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
+
+	//api로 시작하는 모든 경로는 tokenfilterchain 동작
+    http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService),
+	UsernamePasswordAuthenticationFilter.class);
+
+	//refreshtoken 호출처리
+    http.addFilterBefore(new RefreshTokenFilter("/api/refreshToken", jwtUtil),
+	TokenCheckFilter.class);
+
+		http.cors()
+			.and()
+		    .csrf()
+		    .disable()
+		    .sessionManagement()
+		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		    .and()
+		    .formLogin()
+		    .disable()
+		    .httpBasic()
+		    .disable()
+		    .authorizeRequests()
+		    .antMatchers(PERMIT_URL_ARRAY)
+		    .permitAll()
+		    .anyRequest()
+		    .authenticated();
+
+		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
+
+		return http.build();
+}
+...
+}
+
+```
+</div>
+</details>
+<details>
+<summary><b>JPA</b></summary>
+<div markdown="1">
+
+``` java
+
+/**
+Querydsl로 쿼리를 작성한 영역으로 클라이언트의 요청에 따라
+where, order by 등을 분기하여 조회하고 
+그러한 결과를 반환할 수 있도록 했습니다. 
+*/
+class BoardSearchImpl{
+    ...
+	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,
+		String sort, String order, Pageable pageable) {
+		
+		...
+		
+		QBoard board = QBoard.board;
+		QReply reply = QReply.reply;
+		QFile file = QFile.file;
+		QCategory category = QCategory.category;
+
+		JPQLQuery<Board> query = from(board);
+		query.leftJoin(board.category, category);
+		query.leftJoin(reply).on(reply.board.eq(board));
+		query.leftJoin(file).on(file.board.eq(board));
+
+		query.groupBy(board);
+
+		if ((types != null && types.length > 0) && keyword != null) {
+			BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+			for (String type : types) {
+				switch (type) {
+					case "t" -> booleanBuilder.or(board.title.contains(keyword));
+					case "c" -> booleanBuilder.or(board.content.contains(keyword));
+					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
+				}
+			}
+			query.where(booleanBuilder);
+		}
+		//자유게시판만 조회
+		query.where(board.boardType.eq(1));
+		
+		...
+		
+	}
+        
+        
+        ...
+}
+```
+</div>
+</details>
+<details>
+<summary><b>에러처리</b></summary>
+<div markdown="1">
+
+```java
+
+/**
+ dto 유효성검증에서 잘못될 경우 클라이언트엔 필드와 message를 응답하게되고
+ 서버에선 디테일한 로그를 확인할 수 있게 RestAdvice를 추가하였습니다.
+ */
+
+@RestControllerAdvice
+public class CustomRestAdvice {
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+		MethodArgumentNotValidException e) {
+		BindingResult bindingResult = e.getBindingResult();
+		StringBuilder stringBuilder = new StringBuilder();
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+			stringBuilder.append(fieldError.getField()).append(": ");
+			stringBuilder.append(fieldError.getDefaultMessage());
+			stringBuilder.append("\n ");
+		}
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR,
+			String.valueOf(stringBuilder));
+
+		return ResponseEntity.badRequest().body(response);
+	}
+	
+    ...
+}
+
+```
+</div>
+</details>
+
 
 
 ## ERD
 ![](readmeimage/포트폴리오.png)
 
 </br>
+
+## ⚙️ 아키텍쳐
+![](readmeimage/아키텍쳐.png)
 
 ## 기술 스택
 ### 백엔드
