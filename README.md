@@ -11,7 +11,8 @@
 
 ⚠️ <b>주의: 비용 절감을 위해 t2.micro 인스턴스를 사용하였으므로, 속도가 다소 느릴 수 있습니다. </b>
 ## <a href="http://13.210.146.57:1542" target="_blank"> 포트폴리오 링크 <= </a>
-
+[Google](https://www.google.com target="_blank")
+<a href="https://www.google.com" target="_blank">Google</a>
 사용자 아이디 : user
 
 사용자 비밀번호 : a1234 
