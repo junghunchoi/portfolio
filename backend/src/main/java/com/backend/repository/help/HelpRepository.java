@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface HelpRepository extends JpaRepository<Help,Long>, HelpSearch {
 
 	/**
-	 * 최신 문의글 5개를 조회합니다.
+	 * 최신 문의글 6개를 조회합니다.
 	 *
 	 * @param pageable 페이징 정보
 	 * @return 최신 도움말 목록

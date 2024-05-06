@@ -52,8 +52,7 @@ public class FileController {
 	 * @param fileDTO 파일 업로드 요청 데이터를 담고 있는 DTO
 	 * @return 파일 저장 결과를 담은 FileResultDTO 리스트
 	 */
-	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
-	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/upload")
 	public ResponseEntity<ResultDTO<String>> upload(FileDTO fileDTO) {
 		if (fileDTO.getFiles() != null) {
 			filesService.uploadFiles(fileDTO);
@@ -89,7 +88,6 @@ public class FileController {
 	 * @param fileName 조회할 파일의 이름
 	 * @return 파일 데이터를 담고 있는 Resource와 함께 반환되는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
 	@GetMapping("/{fileName}")
 	public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) {
 		Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);

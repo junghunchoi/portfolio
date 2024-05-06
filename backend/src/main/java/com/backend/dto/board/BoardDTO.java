@@ -1,5 +1,6 @@
 package com.backend.dto.board;
 
+import com.backend.entity.Board;
 import com.backend.entity.Category;
 import java.time.LocalDateTime;
 import java.util.List;

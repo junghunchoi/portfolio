@@ -35,7 +35,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch
 	List<Object[]> findBoardWithFileById(@Param("bno") Long bno);
 
 	/**
-	 * 게시판 타입이 1인 Board 엔티티 중에서 상위 5개를 조회하여 BoardMainDTO 리스트로 반환합니다.
+	 * 게시판 타입이 1인 Board 엔티티 중에서 상위 6개를 조회하여 BoardMainDTO 리스트로 반환합니다.
 	 * 조회 결과에는 Board의 bno, title, 댓글 개수, regDate가 포함됩니다.
 	 *
 	 * @param pageable 페이징 정보

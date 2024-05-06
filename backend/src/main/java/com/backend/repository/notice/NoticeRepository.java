@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface NoticeRepository extends JpaRepository<Notice,Long>, NoticeSearch {
 
 	/**
-	 * 주요 공지사항을 우선적으로 조회하고, 최신 공지사항 5개를 조회합니다.
+	 * 주요 공지사항을 우선적으로 조회하고, 최신 공지사항 6개를 조회합니다.
 	 *
 	 * @param pageable 페이징 정보
 	 * @return 주요 공지사항과 최신 공지사항 목록

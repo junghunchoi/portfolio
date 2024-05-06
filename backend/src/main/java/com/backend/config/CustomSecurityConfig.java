@@ -55,25 +55,21 @@ public class CustomSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		log.info("---- security config ---");
 
-		//AuthenticationManagerBuilder 설정
 		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
 			AuthenticationManagerBuilder.class);
 
 		authenticationManagerBuilder.userDetailsService(userDetailsService)
 		                            .passwordEncoder(passwordEncoder());
 
-		//get AuthenticationManager
 		AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
-		//필터체인에 AuthenticationManager 등록
 		http.authenticationManager(authenticationManager);
 
-		//ApiLoginFilter
+		// 로그인 시작점
 		APILoginFilter apiLoginFilter = new APILoginFilter("/login");
 		apiLoginFilter.setAuthenticationManager(authenticationManager);
 		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-		//ApiLoginSuccessHandler
 		ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
 		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
 

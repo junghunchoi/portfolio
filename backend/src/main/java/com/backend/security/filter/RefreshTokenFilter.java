@@ -38,21 +38,15 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		String path = request.getRequestURI();
 
 		if (!path.equals(refreshPath)) {
-			log.info("skip refresh token filter.....");
 			filterChain.doFilter(request, response);
 			return;
 		}
-
-		log.info("Refresh Token Filter...run..............1");
 
 		// 전송된 JSON에서 accessToken과 refreshToken을 얻어옵니다.
 		Map<String, String> tokens = parseRequestJSON(request);
 
 		String accessToken = tokens.get("accessToken");
 		String refreshToken = tokens.get("refreshToken");
-
-		log.info("accessToken: " + accessToken);
-		log.info("refreshToken: " + refreshToken);
 
 		try {
 			checkAccessToken(accessToken);
@@ -80,12 +74,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		// 만료 시간과 현재 시간의 간격 계산
 		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
 		long gapTime = (expTime.getTime() - current.getTime());
-
-		log.info("-----------------------------------------");
-		log.info("current: " + current);
-		log.info("expTime: " + expTime);
-		log.info("gap: " + gapTime);
-
 		String userName = (String) refreshClaims.get("userName");
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
@@ -98,10 +86,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 			log.info("new Refresh Token required...  ");
 			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), 30);
 		}
-
-		log.info("Refresh Token result....................");
-		log.info("accessToken: " + accessTokenValue);
-		log.info("refreshToken: " + refreshTokenValue);
 
 		sendTokens(accessTokenValue, refreshTokenValue, response);
 	}

@@ -54,7 +54,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 				      .stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name()))
 				      .collect(Collectors.toList())
 			);
-		log.debug("Loaded user: {}", memberSecurityDTO);
 
 		return memberSecurityDTO;
 	}

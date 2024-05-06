@@ -91,7 +91,6 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 		throws AccessTokenException {
 
 		String headerStr = request.getHeader("Authorization");
-		log.info(headerStr);
 
 		if (headerStr == null || headerStr.length() < 8) {
 			throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);

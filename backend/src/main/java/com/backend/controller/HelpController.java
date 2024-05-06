@@ -8,6 +8,7 @@ import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
 import com.backend.service.HelpService;
+import com.backend.utils.JWTUtil;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelpController {
 
 	private final HelpService helpService;
+	private final JWTUtil jwtUtil;
 
 
 	/**
@@ -79,8 +82,12 @@ public class HelpController {
 	 * @return 조회된 문의글 정보를 포함한 응답 객체
 	 */
 	@GetMapping("/{bno}")
-	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno) {
+	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno, @RequestHeader("Authorization") String authorizationHeader) {
 		HelpDTO helpDTO = helpService.readOne(bno);
+
+		String token = authorizationHeader.substring(7); // "Bearer " 부분 제거
+		String username = jwtUtil.getUsernameFromToken(token);
+		log.info(username);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), helpDTO));
 	}

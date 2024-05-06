@@ -31,7 +31,6 @@ public class CommonController {
 	 *
 	 * @return 게시물 리스트를 포함한 응답 객체
 	 */
-	@ApiOperation(value = "get main list", notes = "게시물을 리스트로 조회")
 	@GetMapping("/main")
 	public ResponseEntity<ResultDTO<Object>> listMainPage() {
 

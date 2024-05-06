@@ -35,7 +35,6 @@ public class BoardController {
 	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "get boardlist", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		PageResponseDTO<BoardListDTO> responseDTO = boardService.list(pageRequestDTO);

@@ -52,7 +52,7 @@ public class MemberController {
 			return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "validate userName"));
 		} else {
 			return ResponseEntity.ok()
-			                     .body(ResultDTO.res(HttpStatus.OK, "isn't validate userName"));
+			                     .body(ResultDTO.res(HttpStatus.OK, "userName already exists"));
 		}
 	}
 }
