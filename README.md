@@ -45,11 +45,7 @@
 
 ## 📌코드 간략설명
 
-<details>
-<summary><b>RESTful</b></summary>
-<div markdown="1">
-</div>
-</details>
+
 <details>
 <summary><b>스프링 시큐리티</b></summary>
 <div markdown="1">
@@ -63,50 +59,43 @@
       2) refreshToken이 유효할 경우 accessToken을 재발급하며 기타 정책에 의해 refreshToken를 관리합니다. 
  */
 class CustomSecurityConfig{
-	
     ...
-     
-	//ApiLoginFilter
 	APILoginFilter apiLoginFilter = new APILoginFilter("/login");
 		apiLoginFilter.setAuthenticationManager(authenticationManager);
 		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
-
-	//ApiLoginSuccessHandler
+		
 	ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
 		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
-
-	//api로 시작하는 모든 경로는 tokenfilterchain 동작
+		
     http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService),
 	UsernamePasswordAuthenticationFilter.class);
-
-	//refreshtoken 호출처리
+	
     http.addFilterBefore(new RefreshTokenFilter("/api/refreshToken", jwtUtil),
 	TokenCheckFilter.class);
-
-		http.cors()
-			.and()
-		    .csrf()
-		    .disable()
-		    .sessionManagement()
-		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		    .and()
-		    .formLogin()
-		    .disable()
-		    .httpBasic()
-		    .disable()
-		    .authorizeRequests()
-		    .antMatchers(PERMIT_URL_ARRAY)
-		    .permitAll()
-		    .anyRequest()
-		    .authenticated();
-
-		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
-
-		return http.build();
-}
 ...
 }
 
+```
+
+```java
+
+/*
+    Service에서 권한을 체크할 경우 contextHolder에 저장된 사용자의 권한을 체크할 수 있는 메서드
+ */
+public String getUserAuthority() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+			for (GrantedAuthority authority : authorities) {
+				if (authority.getAuthority().equals("ROLE_ADMIN")) {
+					return "ROLE_ADMIN";
+				}
+			}
+		}
+		return "ROLE_USER";
+	}
 ```
 </div>
 </details>
@@ -119,7 +108,7 @@ class CustomSecurityConfig{
 /**
 Querydsl로 쿼리를 작성한 영역으로 클라이언트의 요청에 따라
 where, order by 등을 분기하여 조회하고 
-그러한 결과를 반환할 수 있도록 했습니다. 
+Pageable을 반환하여 페이징처리를 하였습니다.
 */
 class BoardSearchImpl{
     ...
@@ -156,6 +145,7 @@ class BoardSearchImpl{
 		query.where(board.boardType.eq(1));
 		
 		...
+		return new PageImpl<>(...);
 		
 	}
         
@@ -173,7 +163,7 @@ class BoardSearchImpl{
 
 /**
  dto 유효성검증에서 잘못될 경우 클라이언트엔 필드와 message를 응답하게되고
- 서버에선 디테일한 로그를 확인할 수 있게 RestAdvice를 추가하였습니다.
+ 서버에선 디테일한 로그를 확인할 수 있게 하였습니다.
  */
 
 @RestControllerAdvice
@@ -204,7 +194,17 @@ public class CustomRestAdvice {
 <details>
 <summary><b>JWT 관리</b></summary>
 <div markdown="1">
-</div>
+
+<h4>개요</h4>
+1. AccessToken은 7일, RefreshToken은 30일의 유효기간을 가집니다.
+2. HS256 단방향 암호화 알고리즘을 사용합니다.
+3. MalformedJwtException, SignatureException, ExpiredJwtException 를 체크하여 실패시 에러메세지와 403을 반환합니다.
+4. RefreshToken이 유효할 경우 AccessToken 만료시 재발급하며 3일 이내일 경우 RefreshToken도 재발급합니다.
+
+```java
+
+```
+
 </details>
 
 

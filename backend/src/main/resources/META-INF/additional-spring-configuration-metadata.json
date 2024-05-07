@@ -4,5 +4,15 @@
       "name": "com.backend.upload.path",
       "type": "java.lang.String",
       "description": "Description for com.backend.upload.path."
+    },
+    {
+      "name": "com.backend.jwt.refreshTokenExpiration",
+      "type": "java.lang.String",
+      "description": "Description for com.backend.jwt.refreshTokenExpiration."
+    },
+    {
+      "name": "com.backend.jwt.accessTokenExpiration",
+      "type": "java.lang.String",
+      "description": "Description for com.backend.jwt.accessTokenExpiration."
     }
   ] }

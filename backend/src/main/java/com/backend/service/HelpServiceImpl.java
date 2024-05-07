@@ -7,6 +7,7 @@ import com.backend.dto.help.HelpListDTO;
 import com.backend.entity.Help;
 import com.backend.repository.help.HelpRepository;
 import com.backend.repository.help.search.HelpSearch;
+import com.backend.utils.UserAuthorityUtil;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class HelpServiceImpl implements HelpService {
 
 	private final ModelMapper modelMapper;
 	private final HelpRepository helpRepository;
+	private final UserAuthorityUtil userAuthorityUtil;
 
 	/**
 	 * 문의를 등록하는 메서드.
@@ -61,16 +63,7 @@ public class HelpServiceImpl implements HelpService {
 		/**
 		 * 관리자의 경우 문의에 무조건 접근할 수 있다.
 		 */
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-		String userAuthority = "";
-
-		for (GrantedAuthority authority : authorities) {
-			if (authority.getAuthority().equals("ROLE_ADMIN")) {
-				userAuthority = "ROLE_ADMIN";
-			}
-		}
+		String userAuthority = userAuthorityUtil.getUserAuthority();
 
 		Optional<Help> result = helpRepository.findById(hno);
 		Help help = result.orElseThrow();
@@ -83,7 +76,6 @@ public class HelpServiceImpl implements HelpService {
 			if (!helpDTO.getWriter().equals(username) && helpDTO.getIsSecret() == 1) {
 				throw new AccessDeniedException("unAuthorize user");
 			}
-
 			//조회수 증가
 			help.updateViewCount(help.getViewCount() + 1);
 			helpRepository.save(help);

@@ -19,3 +19,5 @@ export function updateBoard(data) {
 export function deleteBoard(bno) {
     return axios.delete(`/boards/${bno}`);
 }
+
+

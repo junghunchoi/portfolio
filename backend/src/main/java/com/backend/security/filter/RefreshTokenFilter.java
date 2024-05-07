@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,6 +32,12 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 	private final String refreshPath;
 	private final JWTUtil jwtUtil;
 
+	@Value("${com.backend.jwt.accessTokenExpiration}")
+	private int accessTokenExpiration;
+	@Value("${com.backend.jwt.refreshTokenExpiration}")
+	private int refreshTokenExpiration;
+
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
@@ -42,7 +49,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// 전송된 JSON에서 accessToken과 refreshToken을 얻어옵니다.
 		Map<String, String> tokens = parseRequestJSON(request);
 
 		String accessToken = tokens.get("accessToken");
@@ -68,23 +74,21 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		Integer exp = (Integer) refreshClaims.get("exp");
 
 		Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
-
 		Date current = new Date(System.currentTimeMillis());
 
 		// 만료 시간과 현재 시간의 간격 계산
-		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
 		long gapTime = (expTime.getTime() - current.getTime());
 		String userName = (String) refreshClaims.get("userName");
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
-		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), 3);
+		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), accessTokenExpiration);
 
 		String refreshTokenValue = tokens.get("refreshToken");
 
-		// RefreshToken이 3일도 안 남았다면..
+		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
 		if (gapTime < (1000 * 60 * 3)) {
 			log.info("new Refresh Token required...  ");
-			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), 30);
+			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), refreshTokenExpiration);
 		}
 
 		sendTokens(accessTokenValue, refreshTokenValue, response);

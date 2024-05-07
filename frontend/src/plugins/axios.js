@@ -73,15 +73,16 @@ import refreshTokenInstance from "@/plugins/refreshToken.js";
 
         if (error.response) {
           if (error.response.status === 404) {
-            // 페이지 없음 처리
-            console.error('API 요청 실패:', error);
+            await router.push({
+              name: 'NotFound'
+            })
           } else if (error.response.status === 403 && error.response.data.msg === "Malformed Token") {
-            router.push({
+            await router.push({
               name: 'ErrorView',
-              params: { errorMsg: '인증되지 않은 접근입니다. 로그인 후 이용해주세요.' }
+              params: {errorMsg: '인증되지 않은 접근입니다. 로그인 후 이용해주세요.'}
             });
           }else if (error.response.status === 403 || error.response.data === "해당 페이지에 접근권한이 없습니다. 관리자에게 문의하세요") {
-            router.push({
+            await router.push({
               name: 'ErrorView',
               params: { errorMsg: error.response.data }
             });
