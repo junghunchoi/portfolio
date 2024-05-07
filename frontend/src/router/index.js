@@ -33,7 +33,6 @@ const routes = [
   { path: '/error/:errorMsg',
     name: 'ErrorView',
     component: ErrorView,
-
   },
   /*
     [freeBoard router ]

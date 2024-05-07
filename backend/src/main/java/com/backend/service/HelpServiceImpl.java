@@ -7,6 +7,7 @@ import com.backend.dto.help.HelpListDTO;
 import com.backend.entity.Help;
 import com.backend.repository.help.HelpRepository;
 import com.backend.repository.help.search.HelpSearch;
+import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,10 +15,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 /**
- * 공지 관련 서비스를 제공하는 구현 클래스. 공지 등록, 조회, 수정, 삭제 및 목록 조회 기능을 수행합니다.
+ * 문의 관련 서비스를 제공하는 구현 클래스. 문의 등록, 조회, 수정, 삭제 및 목록 조회 기능을 수행합니다.
  */
 @Service
 @Log4j2
@@ -28,10 +33,10 @@ public class HelpServiceImpl implements HelpService {
 	private final HelpRepository helpRepository;
 
 	/**
-	 * 공지를 등록하는 메서드.
+	 * 문의를 등록하는 메서드.
 	 *
-	 * @param helpDTO 등록할 공지 정보를 담고 있는 DTO 객체
-	 * @return 등록된 공지의 식별자(hno)
+	 * @param helpDTO 등록할 문의 정보를 담고 있는 DTO 객체
+	 * @return 등록된 문의의 식별자(hno)
 	 */
 	@Override
 	public Long register(HelpDTO helpDTO) {
@@ -46,32 +51,51 @@ public class HelpServiceImpl implements HelpService {
 	}
 
 	/**
-	 * 특정 공지를 조회하는 메서드.
+	 * 특정 문의를 조회하는 메서드.
 	 *
-	 * @param hno 조회할 공지의 식별자(hno)
-	 * @return 조회된 공지 정보를 담고 있는 DTO 객체
+	 * @param hno 조회할 문의의 식별자(hno)
+	 * @return 조회된 문의 정보를 담고 있는 DTO 객체
 	 */
 	@Override
 	public HelpDTO readOne(Long hno, String username) {
+		/**
+		 * 관리자의 경우 문의에 무조건 접근할 수 있다.
+		 */
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+		String userAuthority = "";
+
+		for (GrantedAuthority authority : authorities) {
+			if (authority.getAuthority().equals("ROLE_ADMIN")) {
+				userAuthority = "ROLE_ADMIN";
+			}
+		}
+
 		Optional<Help> result = helpRepository.findById(hno);
 		Help help = result.orElseThrow();
 		HelpDTO helpDTO = modelMapper.map(help, HelpDTO.class);
 
-		if (!helpDTO.getWriter().equals(username)) {
-			throw new AccessDeniedException("unAuthorize user");
+		if (userAuthority.equals("ROLE_ADMIN")) {
+			return helpDTO;
+		}else{
+			//비밀글에 본인의 문의글이 아닌데 url로 접근할 때
+			if (!helpDTO.getWriter().equals(username) && helpDTO.getIsSecret() == 1) {
+				throw new AccessDeniedException("unAuthorize user");
+			}
+
+			//조회수 증가
+			help.updateViewCount(help.getViewCount() + 1);
+			helpRepository.save(help);
+
+			return helpDTO;
 		}
-
-		//조회수 증가
-		help.updateViewCount(help.getViewCount() + 1);
-		helpRepository.save(help);
-
-		return helpDTO;
 	}
 
 	/**
-	 * 공지를 수정하는 메서드.
+	 * 문의를 수정하는 메서드.
 	 *
-	 * @param helpDTO 수정할 공지 정보를 담고 있는 DTO 객체
+	 * @param helpDTO 수정할 문의 정보를 담고 있는 DTO 객체
 	 */
 	@Override
 	public void modify(HelpDTO helpDTO) {
@@ -86,9 +110,9 @@ public class HelpServiceImpl implements HelpService {
 	}
 
 	/**
-	 * 공지를 삭제하는 메서드.
+	 * 문의를 삭제하는 메서드.
 	 *
-	 * @param bno 삭제할 공지의 식별자(hno)
+	 * @param bno 삭제할 문의의 식별자(hno)
 	 */
 	@Override
 	public void remove(Long bno) {
@@ -100,10 +124,10 @@ public class HelpServiceImpl implements HelpService {
 	}
 
 	/**
-	 * 공지 목록을 페이징하여 조회하는 메서드.
+	 * 문의 목록을 페이징하여 조회하는 메서드.
 	 *
 	 * @param pageRequestDTO 페이징 정보와 검색 조건을 담고 있는 DTO 객체
-	 * @return 조회된 공지 목록과 페이징 정보를 담고 있는 DTO 객체
+	 * @return 조회된 문의 목록과 페이징 정보를 담고 있는 DTO 객체
 	 */
 	@Override
 	public PageResponseDTO<HelpListDTO> list(PageRequestDTO pageRequestDTO) {

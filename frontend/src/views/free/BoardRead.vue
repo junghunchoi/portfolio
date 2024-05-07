@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import {ref, watch, onMounted, reactive, inject} from 'vue';
+import {ref, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import ReplyArea from "@/views/reply/ReplyArea.vue";
 import {downloadFile} from "@/api/file.js"
