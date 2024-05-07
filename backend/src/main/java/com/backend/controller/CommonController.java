@@ -2,7 +2,6 @@ package com.backend.controller;
 
 import com.backend.dto.ResultDTO;
 import com.backend.service.CommonService;
-import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

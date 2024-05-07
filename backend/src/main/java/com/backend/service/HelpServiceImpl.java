@@ -13,11 +13,11 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 /**
- * 공지 관련 서비스를 제공하는 구현 클래스.
- * 공지 등록, 조회, 수정, 삭제 및 목록 조회 기능을 수행합니다.
+ * 공지 관련 서비스를 제공하는 구현 클래스. 공지 등록, 조회, 수정, 삭제 및 목록 조회 기능을 수행합니다.
  */
 @Service
 @Log4j2
@@ -52,11 +52,14 @@ public class HelpServiceImpl implements HelpService {
 	 * @return 조회된 공지 정보를 담고 있는 DTO 객체
 	 */
 	@Override
-	public HelpDTO readOne(Long hno) {
-
+	public HelpDTO readOne(Long hno, String username) {
 		Optional<Help> result = helpRepository.findById(hno);
 		Help help = result.orElseThrow();
 		HelpDTO helpDTO = modelMapper.map(help, HelpDTO.class);
+
+		if (!helpDTO.getWriter().equals(username)) {
+			throw new AccessDeniedException("unAuthorize user");
+		}
 
 		//조회수 증가
 		help.updateViewCount(help.getViewCount() + 1);
@@ -110,8 +113,8 @@ public class HelpServiceImpl implements HelpService {
 		String sort = pageRequestDTO.getSort();
 		Pageable pageable = pageRequestDTO.getPageable(order);
 
-		Page<HelpListDTO> result = helpRepository.searchHelpList(types, keyword,
-			order, sort, pageable);
+		Page<HelpListDTO> result = helpRepository.searchHelpList(types, keyword, order, sort,
+			pageable);
 
 		return PageResponseDTO.<HelpListDTO>withAll()
 		                      .pageRequestDTO(pageRequestDTO)

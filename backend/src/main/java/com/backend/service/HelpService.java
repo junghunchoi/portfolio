@@ -8,7 +8,7 @@ import com.backend.dto.help.HelpListDTO;
 public interface HelpService {
 	Long register(HelpDTO helpDTO);
 
-	HelpDTO readOne(Long hno);
+	HelpDTO readOne(Long hno, String username);
 
 	void modify(HelpDTO helpDTO);
 

@@ -2,7 +2,9 @@
   <div class="text-center py-5">
     <h1>Oops!</h1>
     <div class="text-muted">문제가 발생했습니다!
-      잠시후에 시도해주세요
+    </div>
+    <div class="text-muted">
+      {{errorMsg}}
     </div>
     <div class="mt-4">
       <RouterLink to="/">
@@ -13,7 +15,12 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {computed} from 'vue';
+import {useRoute} from 'vue-router';
+const route = useRoute();
+const errorMsg = computed(() => route.params.errorMsg);
+
+console.log(errorMsg);
 </script>
 
 <style scoped>

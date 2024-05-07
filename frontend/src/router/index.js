@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router';
+import ErrorView from '@/views/common/ErrorView.vue';
 import NotFoundView from '@/views/common/NotFoundView.vue';
 import BoardList from '@/views/free/BoardList.vue';
 import BoardRead from "@/views/free/BoardRead.vue";
@@ -29,7 +30,11 @@ const routes = [
     name: 'NotFound',
     component: NotFoundView,
   },
+  { path: '/error/:errorMsg',
+    name: 'ErrorView',
+    component: ErrorView,
 
+  },
   /*
     [freeBoard router ]
   */
@@ -151,6 +156,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
 
 export default router;

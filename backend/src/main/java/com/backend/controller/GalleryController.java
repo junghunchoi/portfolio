@@ -5,10 +5,8 @@ import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
-import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.service.GalleryService;
-import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,13 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +37,6 @@ public class GalleryController {
 	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
 	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "get galleryList", notes = "게시물을 리스트로 조회")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		PageResponseDTO<GalleryListDTO> responseDTO =
@@ -52,7 +47,6 @@ public class GalleryController {
 	}
 
 
-	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<Long>> register(@Valid @RequestBody BoardDTO boardDTO)
 		throws BindException {
@@ -63,7 +57,6 @@ public class GalleryController {
 	}
 
 
-	@ApiOperation(value = "get board by bno", notes = "특정 게시물 조회")
 	@GetMapping("/{bno}")
 	public ResponseEntity<BoardDTO> read(@PathVariable("bno") Long bno) {
 		BoardDTO boardDTO = galleryService.readOne(bno);
@@ -71,7 +64,6 @@ public class GalleryController {
 		return ResponseEntity.ok(boardDTO);
 	}
 
-	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PatchMapping()
 	public ResponseEntity<?> modify(@RequestBody BoardDTO boardDTO) {
 		galleryService.modify(boardDTO);
@@ -80,7 +72,6 @@ public class GalleryController {
 	}
 
 
-	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
 	@DeleteMapping("/{bno}")
 	public ResponseEntity<ResultDTO> remove(@PathVariable("bno") Long bno) {
 		galleryService.remove(bno);

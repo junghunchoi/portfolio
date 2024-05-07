@@ -3,22 +3,22 @@ package com.backend.controller;
 import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.reply.ReplyDTO;
 import com.backend.dto.ResultDTO;
+import com.backend.dto.reply.ReplyDTO;
 import com.backend.service.ReplyService;
-import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 댓글 관련 HTTP 요청을 처리하는 컨트롤러 클래스.
@@ -37,7 +37,6 @@ public class ReplyController {
 	 * @param replyDTO      등록할 댓글 정보를 담은 DTO
 	 * @return 등록된 댓글의 식별자를 포함하는 ResponseEntity
 	 */
-	@ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글등록")
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> register(@Valid @RequestBody ReplyDTO replyDTO) {
 		Long rno = replyService.Register(replyDTO);
@@ -52,7 +51,6 @@ public class ReplyController {
 	 * @param pageRequestDTO 페이지 요청 정보를 담은 DTO
 	 * @return 페이징 처리된 댓글 목록
 	 */
-	@ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물 댓글목록")
 	@GetMapping(value = "/{bno}")
 	public ResponseEntity<ResultDTO<Object>> getList(@PathVariable("bno") Long bno,
 		PageRequestDTO pageRequestDTO) {
@@ -68,7 +66,6 @@ public class ReplyController {
 	 * @param rno      삭제할 댓글의 식별자
 	 * @return 삭제 성공 메시지를 포함하는 ResponseEntity
 	 */
-	@ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
 	@DeleteMapping(value = "/{rno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("rno") Long rno) {
 		replyService.remove(rno);

@@ -1,22 +1,26 @@
 package com.backend.controller;
 
 import com.backend.common.codes.SuccessCode;
+import com.backend.dto.PageRequestDTO;
+import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
-import com.backend.dto.PageRequestDTO;
-import com.backend.dto.PageResponseDTO;
 import com.backend.service.BoardService;
-import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST API 컨트롤러 클래스로 자유 게시판 관련 HTTP 요청을 처리합니다.
@@ -49,7 +53,6 @@ public class BoardController {
 	 * @param boardDTO 게시물 정보를 담은 DTO
 	 * @return 생성된 게시물의 번호와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "post regist board", notes = "신규 게시물 등록")
 	@PostMapping("")
 	public ResponseEntity<ResultDTO<Long>> register(@Valid @RequestBody BoardDTO boardDTO)
 		throws BindException {
@@ -64,7 +67,6 @@ public class BoardController {
 	 * @param bno 게시물 번호
 	 * @return 조회된 게시물 정보와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "get board by bno", notes = "특정 게시물 조회")
 	@GetMapping("/{bno}")
 	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno) {
 		BoardDTO boardDTO = boardService.readOne(bno);
@@ -78,7 +80,6 @@ public class BoardController {
 	 * @param boardDTO 수정할 게시물 정보
 	 * @return 수정된 게시물 정보와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "modify board by bno", notes = "특정 게시물 수정")
 	@PatchMapping("")
 	public ResponseEntity<ResultDTO<String>> modify(@Valid @RequestBody BoardDTO boardDTO) {
 		boardService.modify(boardDTO);
@@ -93,7 +94,6 @@ public class BoardController {
 	 * @param bno 삭제할 게시물 번호
 	 * @return 삭제 처리된 게시물 번호와 상태 코드를 포함하는 ResponseEntity 객체
 	 */
-	@ApiOperation(value = "delete board by bno", notes = "특정 게시물 삭제")
 	@DeleteMapping("/{bno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("bno") Long bno) {
 		boardService.remove(bno);

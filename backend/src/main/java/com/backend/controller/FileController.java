@@ -2,34 +2,26 @@ package com.backend.controller;
 
 import com.backend.dto.ResultDTO;
 import com.backend.dto.file.FileDTO;
-import com.backend.dto.file.FileResultDTO;
 import com.backend.service.FilesService;
 import com.backend.utils.FileUtils;
-import io.swagger.annotations.ApiOperation;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.nio.file.Files;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.Resource;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 파일 관련 HTTP 요청을 처리하는 컨트롤러 클래스입니다.
@@ -65,7 +57,6 @@ public class FileController {
 			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), "skip this api"));
 	}
 
-	@ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> download(@RequestBody FileDTO fileDTO) {
 		String contentType = "application/octet-stream";
@@ -107,7 +98,6 @@ public class FileController {
 	 * @param fileName 삭제할 파일의 이름
 	 * @return 삭제 성공 여부를 담은 Map 객체
 	 */
-	@ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
 	@DeleteMapping("/remove/{fileName}")
 	public ResponseEntity<ResultDTO<String>> removeFile(@PathVariable String fileName) {
 		filesService.deleteFileByFileName(fileName);
