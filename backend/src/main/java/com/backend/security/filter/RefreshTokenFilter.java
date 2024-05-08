@@ -82,7 +82,6 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
 		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), accessTokenExpiration);
-
 		String refreshTokenValue = tokens.get("refreshToken");
 
 		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성

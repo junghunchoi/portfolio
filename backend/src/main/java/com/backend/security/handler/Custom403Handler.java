@@ -41,8 +41,8 @@ public class Custom403Handler implements AccessDeniedHandler {
 		// 일반 요청인 경우
 		if (!jsonRequest) {
 			// 로그인 페이지로 리다이렉트하면서 접근 거부 에러 파라미터 전달
-			response.sendRedirect("/member/login?error=ACCESS_DENIED");
+			response.getWriter().println("일반 요청은 처리할 수 없습니다.");
 		}
-		// JSON 요청인 경우에 대한 처리는 생략되어 있음
+
 	}
 }

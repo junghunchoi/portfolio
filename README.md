@@ -53,9 +53,8 @@
 ```java
 /**
  * 1. 로그인은 CustomSecurityConfig의 APILoginFilter로부터 시작되며 "/login"으로 시작됩니다.
- * 2. id,password을 통해 로그인이 진행되며 결과에 따라 처리됩니다.
- * 3. tokenCheckFilter를 통해 요청의 header의 accessToken을 확인합니다.
- * 4. 1) accessToken의 유효기간이 만료된 경우 클라이언트에선 /api/refreshToken 요청합니다
+ * 2. tokenCheckFilter를 통해 요청의 header의 accessToken을 확인합니다.
+ * 3. 1) accessToken의 유효기간이 만료된 경우 클라이언트에선 /api/refreshToken 요청합니다
       2) refreshToken이 유효할 경우 accessToken을 재발급하며 기타 정책에 의해 refreshToken를 관리합니다. 
  */
 class CustomSecurityConfig{
@@ -79,7 +78,7 @@ class CustomSecurityConfig{
 
 ```java
 
-/*
+/**
     Service에서 권한을 체크할 경우 contextHolder에 저장된 사용자의 권한을 체크할 수 있는 메서드
  */
 public String getUserAuthority() {
@@ -102,6 +101,8 @@ public String getUserAuthority() {
 <details>
 <summary><b>JPA</b></summary>
 <div markdown="1">
+
+<a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/repository/board/search/BoardSearchImpl.java">BoardSearchImpl</a>
 
 ``` java
 
@@ -159,6 +160,8 @@ class BoardSearchImpl{
 <summary><b>에러처리</b></summary>
 <div markdown="1">
 
+<a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/exception/CustomRestAdvice.java">CustomRestAdvice</a>
+
 ```java
 
 /**
@@ -200,8 +203,50 @@ public class CustomRestAdvice {
 2. HS256 단방향 암호화 알고리즘을 사용합니다.
 3. MalformedJwtException, SignatureException, ExpiredJwtException 를 체크하여 실패시 에러메세지와 403을 반환합니다.
 4. RefreshToken이 유효할 경우 AccessToken 만료시 재발급하며 3일 이내일 경우 RefreshToken도 재발급합니다.
+ 
 
+   <a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/security/filter/RefreshTokenFilter.java">RefreshTokenFilter</a>
 ```java
+
+class RefreshTokenFilter{
+    ...
+    try {
+		checkAccessToken(accessToken);
+	} catch (RefreshTokenException refreshTokenException) {
+		refreshTokenException.sendResponseError(response);
+		return;
+	}
+
+	Map<String, Object> refreshClaims = null;
+
+	try {
+		refreshClaims = checkRefreshToken(refreshToken);
+	} catch (RefreshTokenException refreshTokenException) {
+		refreshTokenException.sendResponseError(response);
+		return;
+	}
+
+	// Refresh Token의 유효시간이 얼마 남지 않은 경우
+	Integer exp = (Integer) refreshClaims.get("exp");
+
+	Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
+	Date current = new Date(System.currentTimeMillis());
+
+	// 만료 시간과 현재 시간의 간격 계산
+	long gapTime = (expTime.getTime() - current.getTime());
+	String userName = (String) refreshClaims.get("userName");
+
+	// 이 상태까지 오면 무조건 AccessToken은 새로 생성
+	String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), accessTokenExpiration);
+	String refreshTokenValue = tokens.get("refreshToken");
+
+	// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
+		if (gapTime < (1000 * 60 * 3)) {
+		log.info("new Refresh Token required...  ");
+		refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), refreshTokenExpiration);
+	}
+    ...	
+}
 
 ```
 
