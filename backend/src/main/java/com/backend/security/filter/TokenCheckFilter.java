@@ -49,10 +49,12 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		String path = request.getRequestURI();
+		log.info(path);
 		if (path.startsWith("/api/auth/")
 			|| path.startsWith("/api/files/")
 			|| path.matches("/api/(galleries|helps)$")
 			|| path.startsWith("/api/boards")
+			|| path.startsWith("/api/replies")
 			|| path.startsWith("/api/notices")
 			|| path.startsWith("/api/common/main")) {
 			log.info("skip token check filter ....");

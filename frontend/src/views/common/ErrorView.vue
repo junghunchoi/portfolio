@@ -16,11 +16,18 @@
 
 <script setup>
 import {computed} from 'vue';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 const route = useRoute();
+const router = useRouter();
 const errorMsg = computed(() => route.params.errorMsg);
 
-console.log(errorMsg);
+window.addEventListener("popstate",  (event) => {
+  if (event.state && event.state.back) {
+     router.push('/');
+  }
+});
+
+
 </script>
 
 <style scoped>
