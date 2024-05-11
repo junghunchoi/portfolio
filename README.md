@@ -38,7 +38,7 @@
 
 
 ## 📺화면리스트
-화면설명은 동영상으로
+[![Video Label](http://img.youtube.com/vi/RQMLf9AyCbY/0.jpg)](https://youtu.be/RQMLf9AyCbY)`
 
 
 </br>

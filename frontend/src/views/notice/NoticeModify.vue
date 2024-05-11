@@ -10,7 +10,7 @@
 
       ></b-form-input>
       <TheEditor
-          v-if="notice.content"
+          v-if="notice.title"
           :init-eeditor-data="notice.content"
           v-model:editorData="notice.content"
           class="mt-3"/>

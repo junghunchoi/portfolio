@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -28,14 +29,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Log4j2
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends OncePerRequestFilter {
+	private static final int ACCESSTOKENEXPIRATION = 7;
+	private static final int REFRESHTOKENEXPIRATION = 30;
 
 	private final String refreshPath;
 	private final JWTUtil jwtUtil;
 
-	@Value("${com.backend.jwt.accessTokenExpiration}")
-	private int accessTokenExpiration;
-	@Value("${com.backend.jwt.refreshTokenExpiration}")
-	private int refreshTokenExpiration;
+
 
 
 	@Override
@@ -81,13 +81,13 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		String userName = (String) refreshClaims.get("userName");
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
-		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), accessTokenExpiration);
+		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), ACCESSTOKENEXPIRATION);
 		String refreshTokenValue = tokens.get("refreshToken");
 
 		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
 		if (gapTime < (1000 * 60 * 3)) {
 			log.info("new Refresh Token required...  ");
-			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), refreshTokenExpiration);
+			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), REFRESHTOKENEXPIRATION);
 		}
 
 		sendTokens(accessTokenValue, refreshTokenValue, response);

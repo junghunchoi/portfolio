@@ -22,7 +22,7 @@
     <div class="mb-3">
       <label class="form-label">내용</label>
       <TheEditor
-          v-if="board.content"
+          v-if="board.title"
           :init-eeditor-data="board.content"
           v-model:editorData="board.content"
           :isDisabled="false"/>

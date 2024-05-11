@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 /**
  * API 로그인 성공 시 처리를 담당하는 핸들러.
@@ -26,13 +27,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Log4j2
 @RequiredArgsConstructor
 public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
+	private static final int ACCESSTOKENEXPIRATION = 7;
+	private static final int REFRESHTOKENEXPIRATION = 30;
 
 	private final JWTUtil jwtUtil;
-
-	@Value("${com.backend.jwt.accessTokenExpiration}")
-	private int accessTokenExpiration;
-	@Value("${com.backend.jwt.refreshTokenExpiration}")
-	private int refreshTokenExpiration;
 
 	/**
 	 * 로그인 성공 시 처리를 수행하는 메서드.
@@ -64,11 +62,10 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
 
 		Map<String, Object> claim = Map.of("userName", authentication.getName());
-
 		//Access Token 유효기간
-		String accessToken = jwtUtil.generateToken(claim, accessTokenExpiration);
+		String accessToken = jwtUtil.generateToken(claim, ACCESSTOKENEXPIRATION);
 		//Refresh Token 유효기간
-		String refreshToken = jwtUtil.generateToken(claim, refreshTokenExpiration);
+		String refreshToken = jwtUtil.generateToken(claim, REFRESHTOKENEXPIRATION);
 
 		Gson gson = new Gson();
 

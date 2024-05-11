@@ -44,7 +44,10 @@
             </button>
 					</div>
           <div class="d-flex justify-content-center" v-else>
-            <div class="pt-lg-1"> {{userName}}님 </div>
+            <div v-if="AUTHORITY === 'ADMIN'">
+              <b>관리자 : </b>
+            </div>
+            <div class="pt-lg-1"><b> {{userName}}님 </b></div>
             <div class="me-2 ms-2" ><button class="btn btn-sm btn-light fw-bold" @click="logoutHandler">로그아웃</button></div>
           </div>
 				</div>
@@ -60,24 +63,12 @@ import { storeToRefs } from 'pinia'
 const authStore = useAuthStore();
 const { userName, loginSuccess} = storeToRefs(authStore);
 
-
+const AUTHORITY = useAuthStore().getAuthorities
 const router = useRouter();
-
-const goPage = () => {
-	router.push({
-		name: 'PostCreate',
-	});
-};
-
+console.log(AUTHORITY)
 const goMemberRegister = () => {
   router.push({
     name: 'MemberRegister',
-  });
-};
-
-const goLogin = () => {
-  router.push({
-    name: 'Login',
   });
 };
 
