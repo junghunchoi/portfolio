@@ -15,11 +15,6 @@ services:
     networks:
       - docker-network
     restart: always
-    command: |
-      bash -c "
-        mysql -u root -p12345 -e 'CREATE DATABASE IF NOT EXISTS portfolio;'
-        mysqld
-      "
 
 
   backend:
