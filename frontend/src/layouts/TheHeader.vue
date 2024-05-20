@@ -47,7 +47,7 @@
             <div v-if="AUTHORITY === 'ADMIN'">
               <b>관리자 : </b>
             </div>
-            <div class="pt-lg-1"><b> {{userName}}님 </b></div>
+            <div class="ms-1"><b> {{userName}}님 </b></div>
             <div class="me-2 ms-2" ><button class="btn btn-sm btn-light fw-bold" @click="logoutHandler">로그아웃</button></div>
           </div>
 				</div>

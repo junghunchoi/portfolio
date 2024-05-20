@@ -34,7 +34,6 @@ export const useAuthStore = defineStore('auth', () => {
         loginSuccess.value = true;
         userName.value = inputUsername;
         password.value = inputPassword;
-
         localStorage.setItem("accessToken", accessToken)
         localStorage.setItem("refreshToken", refreshToken)
       }
