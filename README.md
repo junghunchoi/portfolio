@@ -104,7 +104,7 @@ public String getUserAuthority() {
 <summary><b>JPA</b></summary>
 <div markdown="1">
 
-<a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/repository/board/search/BoardSearchImpl.java">BoardSearchImpl</a>
+<a href="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/repository/board/search/BoardSearchImpl.java">BoardSearchImpl</a>
 
 ``` java
 
@@ -162,7 +162,7 @@ class BoardSearchImpl{
 <summary><b>에러처리</b></summary>
 <div markdown="1">
 
-<a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/exception/CustomRestAdvice.java">CustomRestAdvice</a>
+<a href="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/exception/CustomRestAdvice.java">CustomRestAdvice</a>
 
 ```java
 
@@ -207,7 +207,8 @@ public class CustomRestAdvice {
 4. RefreshToken이 유효할 경우 AccessToken 만료시 재발급하며 3일 이내일 경우 RefreshToken도 재발급합니다.
  
 
-   - <a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/security/filter/RefreshTokenFilter.java" target="_blank">RefreshTokenFilter</a>
+   <a href="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/security/filter/RefreshTokenFilter.java" target="_blank">RefreshTokenFilter</a>
+   
 ```java
 
 class RefreshTokenFilter{
