@@ -257,6 +257,70 @@ class RefreshTokenFilter{
 <details>
 <summary><b>클라이언트 상태관리</b></summary>
 <div markdown="1">
+<a href="https://github.com/junghunchoi/portfolio/blob/master/frontend/src/store/loginStore.js">상태관리</a>
+
+```javascript
+// Vue3 Composition 에서 vuex 대신 가볍고 Vue에서 공식 권장하는 pinia 라이브러리를 사용했습니다.
+import {defineStore} from 'pinia';
+
+...
+
+
+/**
+ * 서버에 정상적인 요청을 했을 경우 token을 클라이언트에 저장합니다.
+ * 
+ * @param inputUsername
+ * @param inputPassword
+ * @returns {Promise<void>}
+ */
+async function login(inputUsername, inputPassword) {
+  try {
+    const result = await axios.post(process.env.VITE_APP_API_LOGIN_URL, {
+      username: inputUsername,
+      password: inputPassword,
+    });
+    if (result.status === 200) {
+      const [userInfo, tokenInfo] = result.data.split('}{');
+      const {authorities, usernameRes} = JSON.parse(userInfo + '}');
+      const {refreshToken, accessToken} = JSON.parse('{' + tokenInfo);
+      authoritiesRef.value = authorities
+      userName.value = usernameRes
+      loginSuccess.value = true;
+      userName.value = inputUsername;
+      password.value = inputPassword;
+      localStorage.setItem("accessToken", accessToken)
+      localStorage.setItem("refreshToken", refreshToken)
+    }
+  } catch (err) {
+    loginError.value = true;
+    userName.value = inputUsername;
+    password.value = inputPassword;
+    throw new Error(err);
+  }
+}
+
+...
+// 필요에 따라 설정한 필드들로 로그인여부, 아이디, 비밀번호, 인가에 필요한 권한을 반환합니다.
+return {
+  loginSuccess,
+  loginError,
+  userName,
+  authoritiesRef,
+  login,
+  logout,
+  isLoggedIn: computed(() => loginSuccess.value),
+  hasLoginErrored: computed(() => loginError.value),
+  getUserName: computed(() => userName.value),
+  getAuthorities: computed(() => {
+    if (authoritiesRef.value === null || authoritiesRef.value === undefined) {
+      return 'USER';
+    } else {
+      return authoritiesRef.value.length >= 2 ? 'ADMIN' : 'USER';
+    }
+  })
+};
+
+```
 
 </div>
 </details>
