@@ -207,7 +207,7 @@ public class CustomRestAdvice {
 4. RefreshToken이 유효할 경우 AccessToken 만료시 재발급하며 3일 이내일 경우 RefreshToken도 재발급합니다.
  
 
-   <a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/security/filter/RefreshTokenFilter.java">RefreshTokenFilter</a>
+   - <a src="https://github.com/junghunchoi/portfolio/blob/master/backend/src/main/java/com/backend/security/filter/RefreshTokenFilter.java" target="_blank">RefreshTokenFilter</a>
 ```java
 
 class RefreshTokenFilter{
@@ -253,7 +253,12 @@ class RefreshTokenFilter{
 ```
 
 </details>
+<details>
+<summary><b>클라이언트 상태관리</b></summary>
+<div markdown="1">
 
+</div>
+</details>
 
 </br>
 
