@@ -50,25 +50,6 @@ public class FileUtils {
 	}
 
 	/**
-	 * 주어진 리소스를 Base64 문자열로 인코딩합니다.
-	 * 리소스에서 데이터를 읽는 데 실패하면 예외를 발생시킵니다.
-	 *
-	 * @param resource 인코딩할 리소스입니다.
-	 * @return 인코딩된 Base64 문자열입니다.
-	 * @throws RuntimeException 파일 읽기에 실패한 경우 발생합니다.
-	 */
-	public String encodeResourceToBase64(Resource resource) {
-		try {
-			// Read all bytes from the resource
-			byte[] data = resource.getInputStream().readAllBytes();
-			// Encode bytes to Base64
-			return Base64.getEncoder().encodeToString(data);
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to read the file", e);
-		}
-	}
-
-	/**
 	 * 주어진 파일명으로 실제 파일을 삭제합니다.
 	 *
 	 * @param fileName 업로드한 파일명입니다.

@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.cache.annotation.Cacheable;
 
 
 /**
@@ -30,6 +30,7 @@ public class CommonController {
 	 *
 	 * @return 게시물 리스트를 포함한 응답 객체
 	 */
+	@Cacheable(cacheNames = "main")
 	@GetMapping("/main")
 	public ResponseEntity<ResultDTO<Object>> listMainPage() {
 
