@@ -174,20 +174,11 @@ class BoardSearchImpl{
 @RestControllerAdvice
 public class CustomRestAdvice {
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-		MethodArgumentNotValidException e) {
-		BindingResult bindingResult = e.getBindingResult();
-		StringBuilder stringBuilder = new StringBuilder();
-		for (FieldError fieldError : bindingResult.getFieldErrors()) {
-			stringBuilder.append(fieldError.getField()).append(": ");
-			stringBuilder.append(fieldError.getDefaultMessage());
-			stringBuilder.append("\n ");
-		}
-		final ErrorResponse response = ErrorResponse.of(ErrorCode.NOT_VALID_ERROR,
-			String.valueOf(stringBuilder));
-
-		return ResponseEntity.badRequest().body(response);
+	@ExceptionHandler(BindException.class)
+	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+	public ResponseEntity<String> handleBindException(BindException e) {
+		log.error("바인딩 예외가 발생했습니다: {}", e.getMessage());
+		return ResponseEntity.badRequest().body("요청 데이터의 바인딩에 실패했습니다. 입력값을 확인해 주세요.");
 	}
 	
     ...
@@ -202,8 +193,11 @@ public class CustomRestAdvice {
 
 <h4>개요</h4>
 1. AccessToken은 7일, RefreshToken은 30일의 유효기간을 가집니다.
+
 2. HS256 단방향 암호화 알고리즘을 사용합니다.
+
 3. MalformedJwtException, SignatureException, ExpiredJwtException 를 체크하여 실패시 에러메세지와 403을 반환합니다.
+
 4. RefreshToken이 유효할 경우 AccessToken 만료시 재발급하며 3일 이내일 경우 RefreshToken도 재발급합니다.
  
 
