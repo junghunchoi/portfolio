@@ -56,12 +56,10 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 			|| path.startsWith("/api/replies")
 			|| path.startsWith("/api/notices")
 			|| path.startsWith("/api/common/main")) {
-			log.info("skip token check filter ....");
 			filterChain.doFilter(request, response);
 			return;
 		}
 
-		log.info("token check filter ....");
 
 		try {
 			Map<String, Object> payload = validateAccessToken(request);

@@ -44,7 +44,6 @@ public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request,
 		HttpServletResponse response)
 		throws AuthenticationException, IOException, ServletException {
-		log.info("ApiLoginFilter......");
 
 		// GET 방식은 지원하지 않음
 		if (request.getMethod().equalsIgnoreCase("GET")) {
