@@ -65,7 +65,7 @@ public class GalleryController {
 	}
 
 	@PatchMapping()
-	public ResponseEntity<?> modify(@RequestBody BoardDTO boardDTO) {
+	public ResponseEntity<ResultDTO<String>> modify(@RequestBody BoardDTO boardDTO) {
 		galleryService.modify(boardDTO);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.UPDATE_SUCCESS.getMessage()));
@@ -73,7 +73,7 @@ public class GalleryController {
 
 
 	@DeleteMapping("/{bno}")
-	public ResponseEntity<ResultDTO> remove(@PathVariable("bno") Long bno) {
+	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("bno") Long bno) {
 		galleryService.remove(bno);
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), SuccessCode.DELETE_SUCCESS.getMessage()));

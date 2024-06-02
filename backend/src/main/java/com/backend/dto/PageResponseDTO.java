@@ -60,4 +60,6 @@ public class PageResponseDTO<E> {
 
 		this.next = total > this.end * this.size;
 	}
+
+
 }
