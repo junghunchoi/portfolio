@@ -34,7 +34,10 @@
 - 백엔드, 프론트엔드 개발 및 운영 환경 분리
 - 프론트의 상태 관리
 - JPA를 통해 영속성 관리
+- 회원의 인증 및 인가 구현
 - 첨부파일, 댓글, 정렬 등 게시판이 기본으로 필요로 하는 대부분의 기능 구현
+- Junit, Mock을 통한 통합 테스트 코드로 테스트 진행
+- 리스트 조회메서드 캐싱 처리로 성능 개선
 
 
 ## 📺화면리스트
@@ -316,6 +319,85 @@ return {
 
 ```
 
+</div>
+</details>
+<details>
+<summary><b>테스트 코드</b></summary>
+<div markdown="1">
+
+```java
+/**
+ 자유게시판의 게시물등록시 성공의 경우와 실패의 경우를 테스트하고
+ 요구사항 변경에 따라 테스트코드를 추가해서 관리가 가능합니다.
+ 1.  
+ */
+
+class BoardControllerTest {
+
+	@Nested
+	class registBoard {
+
+		@Test
+		@DisplayName("게시물 등록 성공했을 때")
+		void boardRegisterSuccess() {
+			// Given
+			BoardDTO boardDTO = BoardDTO.builder().title("Test Title").content("Test Content").build();
+			Long bno = 1L;
+			when(boardService.register(any(BoardDTO.class))).thenReturn(bno);
+
+			// When
+			ResponseEntity<ResultDTO<Long>> result;
+			try {
+				result = boardController.register(boardDTO);
+			} catch (BindException e) {
+				fail("Unexpected BindException occurred: " + e.getMessage());
+				return;
+			}
+
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo(bno);
+		}
+
+		@Test
+		@DisplayName("유효하지 않은 데이터로 등록 실패할 경우")
+		void registerBoardWithInvalidData() throws Exception {
+			// Given
+			BoardDTO boardDTO = BoardDTO.builder().title("").content("").build(); // 유효하지 않은 입력값
+
+			// When
+			ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/boards")
+                                                                    boardDTO)));
+			// Then
+			resultActions
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException() instanceof MethodArgumentNotValidException));
+		}
+	}
+}
+```
+
+```java
+
+/**
+    Service에서 권한을 체크할 경우 contextHolder에 저장된 사용자의 권한을 체크할 수 있는 메서드
+ */
+public String getUserAuthority() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+			for (GrantedAuthority authority : authorities) {
+				if (authority.getAuthority().equals("ROLE_ADMIN")) {
+					return "ROLE_ADMIN";
+				}
+			}
+		}
+		return "ROLE_USER";
+	}
+```
 </div>
 </details>
 
