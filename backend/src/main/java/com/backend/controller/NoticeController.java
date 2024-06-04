@@ -10,6 +10,7 @@ import com.backend.service.NoticeService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -39,6 +40,7 @@ public class NoticeController {
 	 * @param pageRequestDTO 페이지 요청 정보
 	 * @return 공지사항 리스트를 포함한 응답 객체
 	 */
+	@Cacheable(cacheNames = "noticeList")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		PageResponseDTO<NoticeListDTO> responseDTO = noticeService.list(pageRequestDTO);

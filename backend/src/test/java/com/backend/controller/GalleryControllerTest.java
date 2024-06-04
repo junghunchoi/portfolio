@@ -110,7 +110,7 @@ class GalleryControllerTest {
 		Long bno = 1L;
 
 		// When
-		ResponseEntity<ResultDTO> result = galleryController.remove(bno);
+		ResponseEntity<ResultDTO<String>> result = galleryController.remove(bno);
 
 		// Then
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);

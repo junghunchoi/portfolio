@@ -11,6 +11,7 @@ import com.backend.utils.JWTUtil;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -43,6 +44,7 @@ public class HelpController {
 	 * @param pageRequestDTO 페이지 요청 정보
 	 * @return 문의글 리스트를 포함한 응답 객체
 	 */
+	@Cacheable(cacheNames = "helpList")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		PageResponseDTO<HelpListDTO> responseDTO =

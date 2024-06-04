@@ -1,29 +1,42 @@
 package com.backend.controller;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
-import com.backend.dto.help.HelpListDTO;
 import com.backend.service.BoardService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ExtendWith(MockitoExtension.class)
+@Log4j2
 class BoardControllerTest {
 
 	@Mock
@@ -32,85 +45,136 @@ class BoardControllerTest {
 	@InjectMocks
 	private BoardController boardController;
 
-	@Test
-	@DisplayName("게시물 목록 조회 테스트")
-	void testList() {
-		// Given
-		PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
-		List<BoardListDTO> boardListDTOs = new ArrayList<>();
-		PageResponseDTO pageResponseDTO =  PageResponseDTO.<BoardListDTO>withAll()
-		                      .pageRequestDTO(pageRequestDTO)
-		                      .items(boardListDTOs)
-		                      .total((int) boardListDTOs.size())
-		                      .build();
+	private MockMvc mockMvc;
 
-		when(boardService.list(any(PageRequestDTO.class))).thenReturn(pageResponseDTO);
+	private ObjectMapper objectMapper = new ObjectMapper();
 
-		// When
-		ResponseEntity<ResultDTO<Object>> result = boardController.list(pageRequestDTO);
-
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo(pageResponseDTO);
+	@BeforeEach
+	void setUp() {
+		mockMvc = MockMvcBuilders.standaloneSetup(boardController).build();
 	}
 
-	@Test
-	@DisplayName("게시물 등록 테스트")
-	void testRegister() throws BindException {
-		// Given
-		BoardDTO boardDTO = BoardDTO.builder().title("Test Title").content("Test Content").build();
-		Long bno = 1L;
-		when(boardService.register(any(BoardDTO.class))).thenReturn(bno);
+	@Nested
+	class readList{
 
-		// When
-		ResponseEntity<ResultDTO<Long>> result = boardController.register(boardDTO);
+		@Test
+		@DisplayName("게시물 목록 조회 테스트")
+		void testList() {
+			// Given
+			PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+			List<BoardListDTO> boardListDTOs = new ArrayList<>();
+			PageResponseDTO pageResponseDTO =  PageResponseDTO.<BoardListDTO>withAll()
+			                                                  .pageRequestDTO(pageRequestDTO)
+			                                                  .items(boardListDTOs)
+			                                                  .total((int) boardListDTOs.size())
+			                                                  .build();
 
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo(bno);
+			when(boardService.list(any(PageRequestDTO.class))).thenReturn(pageResponseDTO);
+
+			// When
+			ResponseEntity<ResultDTO<Object>> result = boardController.list(pageRequestDTO);
+
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo(pageResponseDTO);
+		}
+
 	}
 
-	@Test
-	@DisplayName("게시물 조회 테스트")
-	void testRead() {
-		// Given
-		Long bno = 1L;
-		BoardDTO boardDTO = BoardDTO.builder().bno(bno).title("Test Title").content("Test Content").build();
-		when(boardService.readOne(any(Long.class))).thenReturn(boardDTO);
+	@Nested
+	class registBoard{
 
-		// When
-		ResponseEntity<ResultDTO<Object>> result = boardController.read(bno);
+		@Test
+		@DisplayName("게시물 등록 성공했을 때")
+		void boardRegisterSuccess() {
+			// Given
+			BoardDTO boardDTO = BoardDTO.builder().title("Test Title").content("Test Content").build();
+			Long bno = 1L;
+			when(boardService.register(any(BoardDTO.class))).thenReturn(bno);
 
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo(boardDTO);
+			// When
+			ResponseEntity<ResultDTO<Long>> result;
+			try {
+				result = boardController.register(boardDTO);
+			} catch (BindException e) {
+				fail("Unexpected BindException occurred: " + e.getMessage());
+				return;
+			}
+
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo(bno);
+		}
+
+		@Test
+		@DisplayName("유효하지 않은 데이터로 등록 실패할 경우")
+		void registerBoardWithInvalidData() throws Exception {
+			// Given
+			BoardDTO boardDTO = BoardDTO.builder().title("").content("").build(); // 유효하지 않은 입력값
+
+			// When
+			ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/boards")
+			                                                                    .contentType(MediaType.APPLICATION_JSON)
+			                                                                    .content(objectMapper.writeValueAsString(boardDTO)));
+			// Then
+			resultActions
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException() instanceof MethodArgumentNotValidException));
+		}
 	}
 
-	@Test
-	@DisplayName("게시물 수정 테스트")
-	void testModify() {
-		// Given
-		BoardDTO boardDTO = BoardDTO.builder().bno(1L).title("Updated Title").content("Updated Content").build();
+	@Nested
+	class readBoard{
+		@Test
+		@DisplayName("게시물 조회 테스트")
+		void testRead() {
+			// Given
+			Long bno = 1L;
+			BoardDTO boardDTO = BoardDTO.builder().bno(bno).title("Test Title").content("Test Content").build();
+			when(boardService.readOne(any(Long.class))).thenReturn(boardDTO);
 
-		// When
-		ResponseEntity<ResultDTO<String>> result = boardController.modify(boardDTO);
-
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo("수정 성공");
+			// When
+			ResponseEntity<ResultDTO<Object>> result = boardController.read(bno);
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo(boardDTO);
+		}
 	}
 
-	@Test
-	@DisplayName("게시물 삭제 테스트")
-	void testRemove() {
-		// Given
-		Long bno = 1L;
+	@Nested
+	class modifyBoard{
 
-		// When
-		ResponseEntity<ResultDTO<String>> result = boardController.remove(bno);
+		@Test
+		@DisplayName("게시물 수정 테스트")
+		void testModify() {
+			// Given
+			BoardDTO boardDTO = BoardDTO.builder().bno(1L).title("Updated Title").content("Updated Content").build();
 
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo("삭제 성공");
+			// When
+			ResponseEntity<ResultDTO<String>> result = boardController.modify(boardDTO);
+
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo("수정 성공");
+		}
+	}
+
+	@Nested
+	class removeBoard{
+
+		@Test
+		@DisplayName("게시물 삭제 테스트")
+		void testRemove() {
+			// Given
+			Long bno = 1L;
+
+			// When
+			ResponseEntity<ResultDTO<String>> result = boardController.remove(bno);
+
+			// Then
+			assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(result.getBody().getResultData()).isEqualTo("삭제 성공");
+		}
 	}
 }

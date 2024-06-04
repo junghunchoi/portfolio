@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.validation.BindException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +61,7 @@ class HelpControllerTest {
 
 	@Test
 	@DisplayName("문의글 등록 테스트")
-	void testRegister() {
+	void testRegister() throws BindException {
 		// Given
 		HelpDTO helpDTO = HelpDTO.builder().title("Test Title").content("Test Content").build();
 		Long hno = 1L;
