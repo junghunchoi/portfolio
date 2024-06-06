@@ -2405,7 +2405,7 @@ var require_bootstrap = __commonJS({
         removeDataAttribute(element, key) {
           element.removeAttribute(`data-bs-${normalizeDataKey(key)}`);
         },
-        getDataAttributes(element) {
+        getResultDataAttributes(element) {
           if (!element) {
             return {};
           }
@@ -2418,7 +2418,7 @@ var require_bootstrap = __commonJS({
           }
           return attributes;
         },
-        getDataAttribute(element, key) {
+        getResultDataAttribute(element, key) {
           return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`));
         }
       };
@@ -2443,11 +2443,11 @@ var require_bootstrap = __commonJS({
           return config;
         }
         _mergeConfigObj(config, element) {
-          const jsonConfig = isElement2(element) ? Manipulator.getDataAttribute(element, "config") : {};
+          const jsonConfig = isElement2(element) ? Manipulator.getResultDataAttribute(element, "config") : {};
           return {
             ...this.constructor.Default,
             ...typeof jsonConfig === "object" ? jsonConfig : {},
-            ...isElement2(element) ? Manipulator.getDataAttributes(element) : {},
+            ...isElement2(element) ? Manipulator.getResultDataAttributes(element) : {},
             ...typeof config === "object" ? config : {}
           };
         }
@@ -3085,7 +3085,7 @@ var require_bootstrap = __commonJS({
           carousel._maybeEnableCycle();
           return;
         }
-        if (Manipulator.getDataAttribute(this, "slide") === "next") {
+        if (Manipulator.getResultDataAttribute(this, "slide") === "next") {
           carousel.next();
           carousel._maybeEnableCycle();
           return;
@@ -3843,7 +3843,7 @@ var require_bootstrap = __commonJS({
         }
         _resetElementAttributes(selector, styleProperty) {
           const manipulationCallBack = (element) => {
-            const value = Manipulator.getDataAttribute(element, styleProperty);
+            const value = Manipulator.getResultDataAttribute(element, styleProperty);
             if (value === null) {
               element.style.removeProperty(styleProperty);
               return;
@@ -4902,7 +4902,7 @@ var require_bootstrap = __commonJS({
           return Object.values(this._activeTrigger).includes(true);
         }
         _getConfig(config) {
-          const dataAttributes = Manipulator.getDataAttributes(this._element);
+          const dataAttributes = Manipulator.getResultDataAttributes(this._element);
           for (const dataAttribute of Object.keys(dataAttributes)) {
             if (DISALLOWED_ATTRIBUTES.has(dataAttribute)) {
               delete dataAttributes[dataAttribute];
