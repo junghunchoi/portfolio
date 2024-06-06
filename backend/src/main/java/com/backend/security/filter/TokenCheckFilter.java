@@ -55,6 +55,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 			|| path.startsWith("/api/boards")
 			|| path.startsWith("/api/replies")
 			|| path.startsWith("/api/notices")
+			|| path.startsWith("/chat")
 			|| path.startsWith("/api/common/main")) {
 			filterChain.doFilter(request, response);
 			return;

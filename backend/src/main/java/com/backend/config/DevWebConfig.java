@@ -22,6 +22,14 @@ public class DevWebConfig implements WebMvcConfigurer {
 		        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
 		        .allowedHeaders("*")
 		        .allowCredentials(true);
+
+		registry.addMapping("*")
+		        .allowedOrigins("http://localhost:1542")
+		        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+		        .allowedHeaders("*")
+		        .allowCredentials(true);
+
+
 	}
 
 }

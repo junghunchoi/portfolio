@@ -18,6 +18,7 @@ import NoticeList from '@/views/notice/NoticeList.vue'
 import NoticeRegister from '@/views/notice/NoticeRegister.vue'
 import NoticeModify from '@/views/notice/NoticeModify.vue'
 import NoticeRead from '@/views/notice/NoticeRead.vue'
+import Chat from '@/views/chat/chat.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/common/TheMain.vue'
 
@@ -147,6 +148,14 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+    /*
+    [Chat 라우터]
+    */
+  {
+    path: '/chat',
+    name: 'chat',
+    component: Chat,
   },
 
 ];

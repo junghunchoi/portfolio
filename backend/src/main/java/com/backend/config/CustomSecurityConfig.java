@@ -48,7 +48,8 @@ public class CustomSecurityConfig {
 		"/api/members/",
 		"/login",
 		"/api/files/**",
-		"/api/**"
+		"/api/**",
+		"/chat"
 	};
 
 	@Bean
