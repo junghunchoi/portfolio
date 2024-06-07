@@ -12,7 +12,7 @@ public class DevWebConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
 				.allowedOrigins("http://localhost:1542")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH",  "OPTIONS")
 				.allowedHeaders("*")
 				.allowCredentials(true);
 
@@ -23,12 +23,11 @@ public class DevWebConfig implements WebMvcConfigurer {
 		        .allowedHeaders("*")
 		        .allowCredentials(true);
 
-		registry.addMapping("*")
+		registry.addMapping("/api/ws/**")
 		        .allowedOrigins("http://localhost:1542")
-		        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-		        .allowedHeaders("*")
-		        .allowCredentials(true);
-
+		        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+		        .allowCredentials(true)
+		        .maxAge(3600);
 
 	}
 

@@ -55,8 +55,8 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 			|| path.startsWith("/api/boards")
 			|| path.startsWith("/api/replies")
 			|| path.startsWith("/api/notices")
-			|| path.startsWith("/chat")
-			|| path.startsWith("/api/common/main")) {
+			|| path.startsWith("/api/gs-guide-websocket")
+			|| path.startsWith("/api/ws")) {
 			filterChain.doFilter(request, response);
 			return;
 		}

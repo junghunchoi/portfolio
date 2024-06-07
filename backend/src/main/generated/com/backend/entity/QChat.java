@@ -10,30 +10,34 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QChatting is a Querydsl query type for Chat
+ * QChat is a Querydsl query type for Chat
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QChatting extends EntityPathBase<Chat> {
+public class QChat extends EntityPathBase<Chat> {
 
-    private static final long serialVersionUID = -441724086L;
+    private static final long serialVersionUID = 152833628L;
 
-    public static final QChatting chatting = new QChatting("chatting");
-
-    public final StringPath content = createString("content");
+    public static final QChat chat = new QChat("chat");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath message = createString("message");
+
     public final StringPath name = createString("name");
 
-    public QChatting(String variable) {
+    public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
+
+    public final StringPath sessionId = createString("sessionId");
+
+    public QChat(String variable) {
         super(Chat.class, forVariable(variable));
     }
 
-    public QChatting(Path<? extends Chat> path) {
+    public QChat(Path<? extends Chat> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QChatting(PathMetadata metadata) {
+    public QChat(PathMetadata metadata) {
         super(Chat.class, metadata);
     }
 

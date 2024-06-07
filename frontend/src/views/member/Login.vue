@@ -3,12 +3,12 @@
       <form @submit.prevent>
         <div class="form-floating">
           <input v-model="username" type="text" class="form-control" placeholder="ID">
-          <label for="floatingInput">ID</label>
+          <label >ID</label>
         </div>
         <div class="form-floating mt-3">
           <input v-model="password" type="password" class="form-control" id="password"
                  placeholder="Password">
-          <label for="floatingPassword">Password</label>
+          <label >Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary mt-3" variant="success" type="submit" @click="login">로그인
         </button>

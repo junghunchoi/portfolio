@@ -102,6 +102,7 @@
     </TheModal>
   </Teleport>
   </section>
+  <ChatButton />
 </template>
 
 <script setup>
@@ -113,6 +114,8 @@ import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheModal from "@/components/common/TheModal.vue";
 import {getMainData} from "@/api/common.js";
+import ChatButton from "@/components/ChatButton.vue";
+
 const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);

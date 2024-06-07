@@ -1,7 +1,8 @@
 import {fileURLToPath, URL} from 'url';
-import Components from 'unplugin-vue-components/vite';
 import {defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
+// import nodePolyfills from 'vite-plugin-node-polyfills'
+import nodeStdlibBrowser from 'vite-plugin-node-stdlib-browser'
 
 import {createRequire} from 'node:module';
 
@@ -25,6 +26,10 @@ export default defineConfig(({ mode }) => {
     },
     rollupOptions: {
       output: {
+        manualChunks: {
+          'sockjs-client': ['sockjs-client'],
+          '@stomp/stompjs': ['@stomp/stompjs']
+        },
         format: 'es',
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
@@ -33,6 +38,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      nodeStdlibBrowser()
     ],
     server: {
       proxy: {
@@ -42,6 +48,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        'util.inherits': 'util.inherits/inherits_browser.js',
       },
       extensions: [
         '.js',
@@ -59,9 +66,14 @@ export default defineConfig(({ mode }) => {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+      'global': {},
     },
     optimizeDeps: {
-      include: ['@vue/runtime-core', '@vue/shared'],
+      include: ['@vue/runtime-core', '@vue/shared','@stomp/stompjs'],
+      node: {
+        polyfillNode: true,
+        global: true
+      }
     },
   };
 });

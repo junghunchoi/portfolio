@@ -1,11 +1,14 @@
 package com.backend.config;
 
 import com.backend.utils.WebSocketHandler;
+import com.backend.utils.WebsocketBrokerInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -13,27 +16,27 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 @Configuration
-@EnableWebSocket
+@EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/topic");
-		config.setApplicationDestinationPrefixes("/app");
-	}
+	private final WebsocketBrokerInterceptor interceptor;
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/gs-guide-websocket");
+		registry.addEndpoint("/api/ws")
+		        .setAllowedOrigins("http://localhost:1542")
+		        .withSockJS();
 	}
 
-//	@Autowired
-//	private WebSocketHandler webSocketHandler;
-//
-//	@Override
-//	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//		registry.addHandler(webSocketHandler, "/chat")
-//		        .setAllowedOrigins("*")
-//		        .addInterceptors(new HttpSessionHandshakeInterceptor());
-//	}
+	@Override
+	public void configureClientInboundChannel(ChannelRegistration registration) {
+		registration.interceptors(interceptor);
+	}
+
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry registry) {
+		registry.enableSimpleBroker("/sub"); //3
+		registry.setApplicationDestinationPrefixes("/pub"); //4
+	}
 }
