@@ -48,6 +48,7 @@ const initWebSocket = () => {
   const socket = new SockJS('http://localhost:1541/api/ws')
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
+    'X-Session-Id': "sessionId"
   }
   stompClient.value = Stomp.over(socket)
   stompClient.value.connect(headers, () => {
