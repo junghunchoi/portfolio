@@ -65,7 +65,6 @@ const { userName, loginSuccess} = storeToRefs(authStore);
 
 const AUTHORITY = useAuthStore().getAuthorities
 const router = useRouter();
-console.log(AUTHORITY)
 const goMemberRegister = () => {
   router.push({
     name: 'MemberRegister',

@@ -28,10 +28,11 @@ public class WebsocketBrokerInterceptor implements ChannelInterceptor {
 		if (StompCommand.SEND == commandType) {
 			//pub 시 메시지 처리할 경우
 			log.info("StompCommand.SEND");
-		} else if (StompCommand.SUBSCRIBE == commandType) {
+		}else if (StompCommand.SUBSCRIBE == commandType) {
 			//sub 시 처리할 코드를 여기서 작성
 			log.info("StompCommand.SUBSCRIBE");
 			log.info(String.valueOf(headerAccessor.getFirstNativeHeader("Authorization")));
+			log.info(headerAccessor.getSessionId());
 		} else if (StompCommand.DISCONNECT == commandType) {
 			log.info("DISCONNECT");
 		}
