@@ -25,21 +25,23 @@
         {{ message.sender }}: {{ message.content }}
       </li>
     </ul>
-    <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="메시지 입력" />
+    <input v-model="newMessage" @keyup.enter="sendMessage(roomID)" placeholder="메시지 입력" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-
 import chatModule from '@/plugins/chat.js'
 
 const { stompClient, messages, newMessage, sessionId, createRoomID,  initWebSocket, sendMessage } = chatModule()
-const roomID = createRoomID()
-console.log(roomID)
+const roomID = ref(null)
+roomID.value =  createRoomID().then(res => {
+  roomID.value = res
+});
 onMounted(() => {
 
-  initWebSocket()
+
+  initWebSocket(roomID.value)
 })
 
 onUnmounted(() => {

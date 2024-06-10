@@ -14,10 +14,10 @@ const chatModule = () => {
 
   const createRoomID = async () => {
     try {
-      const response = await createChatRoom()
-      return response.data.resultData;
-      // const chatRoomId = response.data.chatRoomId
-      // 생성된 채팅방 ID를 사용하여 WebSocket 연결 맺기
+      const response = await createChatRoom();
+      const chatRoomId =  response.data.resultData;
+
+      return chatRoomId;
 
     } catch (error) {
       console.error('Failed to create chat room:', error)
@@ -40,10 +40,10 @@ const chatModule = () => {
     })
   }
 
-  const sendMessage = () => {
+  const sendMessage = (chatRoomId) => {
     if (newMessage.value.trim()) {
       const message = { sender: 'User', content: newMessage.value }
-      stompClient.value.send('/pub/sendMessage', JSON.stringify(message), {})
+      stompClient.value.send(`/pub/chat/${chatRoomId}`, JSON.stringify(message), {})
       newMessage.value = ''
     }
   }

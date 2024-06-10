@@ -1,5 +1,6 @@
 package com.backend.chat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @RequiredArgsConstructor
 @Transactional
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
+
 	private final ModelMapper modelMapper;
 	private final ChatRepository chatRepository;
 
@@ -23,7 +25,13 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	public Long registerChat(ChatDTO chatDTO) {
-		Chat chat = modelMapper.map(chatDTO, Chat.class);
+		chatDTO.setSendDate(LocalDateTime.now());
+		Chat chat = Chat.builder()
+		                .content(chatDTO.getContent())
+		                .room(ChatRoom.builder().id(chatDTO.getRoom().getId()).build())
+		                .sender(chatDTO.getSender())
+		                .sendDate(LocalDateTime.now())
+		                .build();
 
 		return chatRepository.save(chat).getId();
 	}
