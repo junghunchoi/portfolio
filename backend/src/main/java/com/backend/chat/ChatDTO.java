@@ -10,6 +10,7 @@ public class ChatDTO {
 	private ChatRoom room;
 	private String sender;
 	private String content;
+	private String sessionId;
 	private LocalDateTime sendDate;
 
 }
