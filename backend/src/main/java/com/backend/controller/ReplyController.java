@@ -6,7 +6,7 @@ import com.backend.dto.PageResponseDTO;
 import com.backend.dto.ResultDTO;
 import com.backend.dto.reply.ReplyDTO;
 import com.backend.service.ReplyService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

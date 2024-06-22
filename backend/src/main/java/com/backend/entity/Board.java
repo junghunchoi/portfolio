@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * 게시글 entity 클래스

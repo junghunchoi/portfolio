@@ -7,7 +7,7 @@ import com.backend.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.service.BoardService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;

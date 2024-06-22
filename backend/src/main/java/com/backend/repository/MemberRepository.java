@@ -2,8 +2,8 @@ package com.backend.repository;
 
 import com.backend.entity.Member;
 import java.util.Optional;
-import javax.persistence.Entity;
-import javax.transaction.Transactional;
+import jakarta.persistence.Entity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

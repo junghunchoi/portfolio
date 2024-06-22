@@ -8,6 +8,7 @@ import com.backend.security.filter.TokenCheckFilter;
 import com.backend.security.handler.ApiLoginSuccessHandler;
 import com.backend.security.handler.Custom403Handler;
 import com.backend.utils.JWTUtil;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -27,7 +28,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import javax.sql.DataSource;
 
 /**
  * Spring Security 설정을 위한 Configuration 클래스
@@ -92,11 +92,10 @@ public class CustomSecurityConfig {
 		    .disable()
 		    .httpBasic()
 		    .disable()
-		    .authorizeRequests()
-		    .antMatchers(PERMIT_URL_ARRAY)
-		    .permitAll()
-		    .anyRequest()
-		    .authenticated();
+		    .authorizeHttpRequests(authorize -> authorize
+			    .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+			    .anyRequest().authenticated()
+		    );
 
 		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 

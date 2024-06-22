@@ -2,7 +2,7 @@ package com.backend.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * 카테고리 Entity 클래스

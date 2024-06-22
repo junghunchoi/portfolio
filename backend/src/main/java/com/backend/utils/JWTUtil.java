@@ -24,7 +24,7 @@ public class JWTUtil {
 	@Value("${com.backend.jwt.secret}")
 	private String KEY;
 
-	private final String ALGORITHM = "HS256";
+	private final String ALGORITHM = "RS256";
 
 	/**
 	 * JWT 토큰을 생성합니다.
@@ -34,7 +34,6 @@ public class JWTUtil {
 	 * @return 생성된 JWT 토큰 문자열.
 	 */
 	public String generateToken(Map<String, Object> valueMap, int days) {
-
 		//헤더영역
 		Map<String, Object> headers = new HashMap<>();
 		headers.put("typ", "JWT");

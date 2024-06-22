@@ -1,0 +1,39 @@
+server:
+  port: 1541
+
+spring:
+  application:
+    name: "board"
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 12345
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 1MB
+      max-file-size: 1MB
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  profiles:
+    active: dev
+
+logging:
+  level:
+    org.springframework: info
+    com.backend: info
+
+com:
+  backend:
+    upload:
+      path: /app/upload
+
+

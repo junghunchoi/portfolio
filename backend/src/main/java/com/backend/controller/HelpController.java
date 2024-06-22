@@ -8,7 +8,7 @@ import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
 import com.backend.service.HelpService;
 import com.backend.utils.JWTUtil;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
