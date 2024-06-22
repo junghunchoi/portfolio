@@ -3,7 +3,7 @@ package com.backend.controller;
 import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.reply.ReplyDTO;
 import com.backend.service.ReplyService;
 import jakarta.validation.Valid;

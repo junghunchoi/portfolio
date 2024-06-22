@@ -1,6 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.member.MemberJoinDTO;
 import com.backend.entity.Member;
 import com.backend.service.MemberService;

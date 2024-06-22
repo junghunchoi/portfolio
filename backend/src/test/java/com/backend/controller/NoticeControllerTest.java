@@ -1,8 +1,6 @@
 package com.backend.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import org.junit.jupiter.api.Test;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
@@ -10,7 +8,6 @@ import com.backend.dto.notice.NoticeDTO;
 import com.backend.dto.notice.NoticeListDTO;
 import com.backend.service.NoticeService;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

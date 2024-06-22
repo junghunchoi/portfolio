@@ -3,7 +3,7 @@ package com.backend.controller;
 import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.service.GalleryService;

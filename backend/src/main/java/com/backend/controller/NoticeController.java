@@ -3,7 +3,7 @@ package com.backend.controller;
 import com.backend.common.codes.SuccessCode;
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.notice.NoticeDTO;
 import com.backend.dto.notice.NoticeListDTO;
 import com.backend.service.NoticeService;

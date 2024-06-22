@@ -1,6 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.service.CommonService;
 import java.util.List;
 import java.util.Map;
