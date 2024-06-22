@@ -4,7 +4,7 @@ package com.backend.entity;
 import com.backend.entity.common.BaseEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * 댓글 entity 클래스

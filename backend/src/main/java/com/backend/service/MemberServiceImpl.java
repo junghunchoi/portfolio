@@ -7,7 +7,7 @@ import com.backend.repository.MemberRepository;
 import com.backend.security.dto.MemberSecurityDTO;
 import java.util.HashSet;
 import java.util.Optional;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;

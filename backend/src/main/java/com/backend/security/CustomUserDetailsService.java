@@ -5,7 +5,6 @@ import com.backend.repository.MemberRepository;
 import com.backend.security.dto.MemberSecurityDTO;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.swing.text.html.Option;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
