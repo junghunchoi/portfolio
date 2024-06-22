@@ -1,6 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.service.CommonService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

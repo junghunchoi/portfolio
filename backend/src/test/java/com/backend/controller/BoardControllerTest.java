@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.backend.dto.PageRequestDTO;
 import com.backend.dto.PageResponseDTO;
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.board.BoardDTO;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.service.BoardService;

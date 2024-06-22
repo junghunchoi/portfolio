@@ -1,7 +1,7 @@
 package com.backend.controller;
 
 import com.backend.common.codes.SuccessCode;
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.dto.file.FileDTO;
 import com.backend.service.FilesService;
 import com.backend.utils.FileUtils;
