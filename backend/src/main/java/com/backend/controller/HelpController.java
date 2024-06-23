@@ -8,6 +8,11 @@ import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
 import com.backend.service.HelpService;
 import com.backend.utils.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST API 컨트롤러 클래스로 문의글 관련 HTTP 요청을 처리합니다.
  */
+@Tag(name = "CRUD REST APIs for Help", description = "문의글 관리 API")
 @RestController
 @RequestMapping("/api/helps")
 @Log4j2
@@ -44,6 +50,8 @@ public class HelpController {
 	 * @param pageRequestDTO 페이지 요청 정보
 	 * @return 문의글 리스트를 포함한 응답 객체
 	 */
+	@Operation(summary = "문의글 목록 조회", description = "페이지 요청 정보를 기반으로 문의글 목록을 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PageResponseDTO.class)))
 	@Cacheable(cacheNames = "helpList")
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
@@ -60,6 +68,8 @@ public class HelpController {
 	 * @return 등록된 문의글의 식별자를 포함한 응답 객체
 	 * @throws BindException 유효성 검사 오류 시 발생
 	 */
+	@Operation(summary = "문의글 등록", description = "새로운 문의글을 등록합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = Long.class)))
 	@PostMapping("")
 	public ResponseEntity<ResultDTO<Long>> register(@RequestBody @Valid HelpDTO helpDTO)
 		throws BindException {
@@ -76,6 +86,8 @@ public class HelpController {
 	 * @param bno 조회할 문의글의 식별자
 	 * @return 조회된 문의글 정보를 포함한 응답 객체
 	 */
+	@Operation(summary = "문의글 조회", description = "특정 문의글을 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = HelpDTO.class)))
 	@GetMapping("/{bno}")
 	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno, @RequestHeader("Authorization") String authorizationHeader) {
 
@@ -92,6 +104,8 @@ public class HelpController {
 	 * @param helpDTO 수정할 문의글 정보
 	 * @return 수정 결과 메시지를 포함한 응답 객체
 	 */
+	@Operation(summary = "문의글 수정", description = "문의글을 수정합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@PatchMapping("")
 	public ResponseEntity<ResultDTO<String>> modify( @RequestBody @Valid HelpDTO helpDTO) {
 		helpService.modify(helpDTO);
@@ -105,6 +119,8 @@ public class HelpController {
 	 * @param hno 삭제할 문의글의 식별자
 	 * @return 삭제 결과 메시지를 포함한 응답 객체
 	 */
+	@Operation(summary = "문의글 삭제", description = "문의글을 삭제합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@DeleteMapping("/{hno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("hno") Long hno) {
 		helpService.remove(hno);

@@ -4,6 +4,11 @@ import com.backend.common.dto.ResultDTO;
 import com.backend.dto.member.MemberJoinDTO;
 import com.backend.entity.Member;
 import com.backend.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Api about Member", description = "회원 관리 API")
 @RestController
 @RequestMapping("/api")
 @Log4j2
@@ -23,7 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 	private final MemberService memberService;
 
-
+	@Operation(summary = "회원 가입", description = "새로운 회원을 등록합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
+	@ApiResponse(responseCode = "400", description = "실패", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@PostMapping(value = "/auth/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
 		try {
@@ -34,6 +42,8 @@ public class MemberController {
 		}
 	}
 
+	@Operation(summary = "사용자 이름 중복 확인", description = "입력된 사용자 이름의 중복 여부를 확인합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@PostMapping("/auth/members/check")
 	public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody Map<String, String> requestBody) {
 		String userName = requestBody.get("userName");
