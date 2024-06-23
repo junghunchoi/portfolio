@@ -1,10 +1,9 @@
-package com.backend.dto;
+package com.backend.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 결과 데이터를 담는 DTO 클래스입니다.
