@@ -1,0 +1,7 @@
+
+€
+java:S1488m"^Immediately return this expression instead of assigning it to the temporary variable "values".(ÖÎÕˆüÿÿÿÿ8£õ¬òƒ2
+D
+java:S1125h"'Remove the unnecessary boolean literal.(ºã¤Š8¹õ¬òƒ2
+W
+java:S1874r":Remove this use of "SignatureException"; it is deprecated.(ñ‘Ñ8¹õ¬òƒ2
