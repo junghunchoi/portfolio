@@ -13,4 +13,3 @@ COPY --from=build-stage /app/dist /etc/nginx/html
 COPY ./nginx.conf /etc/nginx/nginx.conf
 EXPOSE 1542
 CMD ["nginx", "-g", "daemon off;"]
-
