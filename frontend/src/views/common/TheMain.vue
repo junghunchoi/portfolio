@@ -102,7 +102,6 @@
     </TheModal>
   </Teleport>
   </section>
-  <ChatButton />
 </template>
 
 <script setup>

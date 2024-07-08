@@ -34,19 +34,12 @@ public class SecurityConfig {
 		                                                           .hasRole("CARDS")
 		                                                           .pathMatchers(
 			                                                           "/eazybank/loans/**")
-		                                                           .hasRole("LOANS")).oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(
-			jwtSpec -> jwtSpec.jwtAuthenticationConverter(gratedAuthoritiesExtractor())));
+		                                                           .hasRole("LOANS"));
 
 		serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable());
 
 		return serverHttpSecurity.build();
 	}
 
-	private Converter<Jwt, Mono<AbstractAuthenticationToken>> gratedAuthoritiesExtractor() {
-		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 
-		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
-
-		return new ReactiveJwtAuthenticationConverter();
-	}
 }

@@ -1,8 +1,9 @@
-package com.backend.service;
+package com.securityserver.service;
 
-import com.backend.dto.member.MemberJoinDTO;
-import com.backend.entity.Member;
-import com.backend.security.dto.MemberSecurityDTO;
+
+import com.securityserver.dto.MemberJoinDTO;
+import com.securityserver.dto.MemberSecurityDTO;
+import com.securityserver.entity.Member;
 import java.util.Optional;
 
 public interface MemberService {
