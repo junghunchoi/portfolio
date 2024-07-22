@@ -1,162 +1,155 @@
 package com.securityserver.config;
 
-
-
-import javax.sql.DataSource;
-
-import com.securityserver.filter.APILoginFilter;
-import com.securityserver.filter.RefreshTokenFilter;
-import com.securityserver.filter.TokenCheckFilter;
-import com.securityserver.handler.ApiLoginSuccessHandler;
-import com.securityserver.handler.Custom403Handler;
 import com.securityserver.service.CustomUserDetailsService;
-import com.securityserver.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-/**
- * Spring Security 설정을 위한 Configuration 클래스
- */
+
 @Log4j2
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true) // 필요한 화면에만 보안설정을 할 수있는 어노테이션
 public class CustomSecurityConfig {
 
-	private final DataSource dataSource; // 쿠키와 관련된 정보를 테이블로 보관
-	private final CustomUserDetailsService userDetailsService;
-	private final JWTUtil jwtUtil;
+    private final CustomUserDetailsService userDetailsService;
 
-	private static final String[] PERMIT_URL_ARRAY = {
-		"/swagger-ui/",
-		"/auth/**",
-		"/auth/members/",
-		"/auth/login",
-		"/api/files/**"
-	};
+    private static final String[] PERMIT_URL_ARRAY = {
+            "/swagger-ui/",
+            "/auth/**",
+            "/oauth2/**",
+            "/login"
+    };
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		log.info("---- security config ---");
+    @Bean
+    @Order(1)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                .oidc(Customizer.withDefaults());
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(Customizer.withDefaults()));
+        return http.build();
+    }
 
-		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
-			AuthenticationManagerBuilder.class);
+    @Bean
+    @Order(2)
+    public SecurityFilterChain standardSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(Customizer.withDefaults())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                );
+        return http.build();
+    }
 
-		authenticationManagerBuilder.userDetailsService(userDetailsService)
-		                            .passwordEncoder(passwordEncoder());
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("client-id")
+                .clientSecret(passwordEncoder().encode("client-secret"))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-id")
+                .scope(OidcScopes.OPENID)
+                .scope("read")
+                .scope("write")
+                .build();
 
-		AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+        return new InMemoryRegisteredClientRepository(registeredClient);
+    }
 
-		http.authenticationManager(authenticationManager);
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return userDetailsService;
+    }
 
-		// 로그인 시작점
-		APILoginFilter apiLoginFilter = new APILoginFilter("/login");
-		apiLoginFilter.setAuthenticationManager(authenticationManager);
-		http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-		ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
-		apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
+    @Bean
+    public JWKSource<SecurityContext> jwkSource() {
+        RSAKey rsaKey = generateRsa();
+        JWKSet jwkSet = new JWKSet(rsaKey);
+        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+    }
 
-		//api로 시작하는 모든 경로는 tokenfilterchain 동작
-		http.addFilterBefore(tokenCheckFilter(jwtUtil, userDetailsService),
-			UsernamePasswordAuthenticationFilter.class);
+    private static RSAKey generateRsa() {
+        KeyPair keyPair = generateRsaKey();
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        return new RSAKey.Builder(publicKey)
+                .privateKey(privateKey)
+                .keyID(UUID.randomUUID().toString())
+                .build();
+    }
 
-		//refreshtoken 호출처리
-		http.addFilterBefore(new RefreshTokenFilter("/api/refreshToken", jwtUtil),
-			TokenCheckFilter.class);
+    private static KeyPair generateRsaKey() {
+        KeyPair keyPair;
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            keyPair = keyPairGenerator.generateKeyPair();
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+        return keyPair;
+    }
 
-		http.cors()
-		    .and()
-		    .csrf()
-		    .disable()
-		    .sessionManagement()
-		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		    .and()
-		    .formLogin()
-		    .disable()
-		    .httpBasic()
-		    .disable()
-		    .authorizeHttpRequests(authorize -> authorize
-			    .requestMatchers(PERMIT_URL_ARRAY).permitAll()
-			    .anyRequest().authenticated()
-		    );
+    @Bean
+    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
 
-		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
+    @Bean
+    public AuthorizationServerSettings authorizationServerSettings() {
+        return AuthorizationServerSettings.builder().build();
+    }
 
-		return http.build();
-	}
-
-
-	/**
-	 * 정적 자원에 대한 보안 설정을 무시하는 WebSecurityCustomizer 빈 생성
-	 *
-	 * @return WebSecurityCustomizer 객체
-	 */
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring()
-		                   .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-	}
-
-	/**
-	 * 패스워드 인코더로 BCryptPasswordEncoder 사용
-	 *
-	 * @return PasswordEncoder 객체
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	/**
-	 * 토큰 저장소로 JdbcTokenRepositoryImpl 사용
-	 *
-	 * @return PersistentTokenRepository 객체
-	 */
-	@Bean
-	public PersistentTokenRepository persistentTokenRepository() {
-		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-		repo.setDataSource(dataSource);
-
-		return repo;
-	}
-
-	/**
-	 * 접근 거부 처리를 위한 AccessDeniedHandler로 Custom403Handler 사용
-	 *
-	 * @return AccessDeniedHandler 객체
-	 */
-	@Bean
-	public AccessDeniedHandler accessDeniedHandler() {
-		return new Custom403Handler();
-	}
-
-	/**
-	 * 토큰 검사를 위한 TokenCheckFilter 생성
-	 *
-	 * @param jwtUtil            JWTUtil 객체
-	 * @param userDetailsService CustomUserDetailsService 객체
-	 * @return TokenCheckFilter 객체
-	 */
-	private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil,
-		CustomUserDetailsService userDetailsService) {
-		return new TokenCheckFilter(userDetailsService, jwtUtil);
-	}
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
