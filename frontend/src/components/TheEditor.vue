@@ -4,12 +4,14 @@
               v-model="editorDate"
               :config="editorConfig"
               :disabled="props.isDisabled"
-                  />
+    />
   </div>
 </template>
 
 <script setup>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
+
 import {ref, watch} from "vue";
 
 const props = defineProps({
@@ -25,18 +27,7 @@ const editor = ClassicEditor;
 
 const editorConfig = ref({
   toolbar: {
-    items: [
-      'heading',
-      '|',
-      'bold',
-      'italic',
-      '|',
-      'bulletedList',
-      'numberedList',
-      '|',
-      'undo',
-      'redo'
-    ]
+    items: ['undo', 'redo', '|', 'heading', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'code', '|', 'specialCharacters', 'horizontalLine', 'link', 'insertImage', 'mediaEmbed', 'insertTable', 'highlight', 'blockQuote', 'codeBlock', '|', 'bulletedList', 'numberedList', 'todoList', 'indent', 'outdent'],
   },
   table: {
     contentToolbar: [
@@ -45,6 +36,21 @@ const editorConfig = ref({
       'mergeTableCells'
     ]
   },
+  // plugins: [SimpleUploadAdapter],
+  simpleUpload: {
+    http: '//localhost:8080/api/v1/upload'
+  },
+  image: {
+    toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:alignBlockLeft', 'imageStyle:block', 'imageStyle:alignBlockRight', '|', 'resizeImage'],
+    styles: {options: ['alignBlockLeft', 'block', 'alignBlockRight']}
+  },
+  language: 'ko',
+  link: {
+    addTargetToExternalLinks: true,
+    defaultProtocol: 'https://',
+    decorators: {toggleDownloadable: {mode: 'manual', label: 'Downloadable', attributes: {download: 'file'}}}
+  },
+
   editorDisabled: true
 })
 
@@ -69,8 +75,8 @@ watch(
   width:100%;
 }
 
+
 </style>
-ck-editor__editable_inline
 <style>
 .ck-editor__editable_inline{
   height: 250px;

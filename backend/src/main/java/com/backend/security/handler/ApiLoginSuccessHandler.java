@@ -62,6 +62,7 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
 
 		Map<String, Object> claim = Map.of("userName", authentication.getName());
+		//todo 권한도 토큰에 추가해야한다.
 		//Access Token 유효기간
 		String accessToken = jwtUtil.generateToken(claim, ACCESSTOKENEXPIRATION);
 		//Refresh Token 유효기간

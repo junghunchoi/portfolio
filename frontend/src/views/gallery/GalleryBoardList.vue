@@ -53,9 +53,9 @@
 import {computed, ref, watchEffect, reactive, onMounted, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {getGalleries} from "@/api/gallery.js";
-import ThePagination from "@/components/common/ThePagination.vue";
+import ThePagination from "@/components/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 const BASE_URL = process.env.VITE_APP_API_URL;

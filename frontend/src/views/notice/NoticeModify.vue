@@ -29,7 +29,7 @@
 
 <script setup>
 import {inject, reactive, watch} from 'vue'
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {useRouter} from "vue-router";
 import {updateNotice} from "@/api/notice.js";
 

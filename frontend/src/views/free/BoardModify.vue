@@ -58,9 +58,9 @@
 <script setup>
 import {ref, inject, onMounted, reactive} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import TheModal from "@/components/common/TheModal.vue";
-import TheFiles from "@/components/common/TheFiles.vue";
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheModal from "@/components/TheModal.vue";
+import TheFiles from "@/components/TheFiles.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board.js";
 import {uploadFile} from "@/api/file.js";
 

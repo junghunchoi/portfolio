@@ -9,6 +9,7 @@ import com.securityserver.filter.RefreshTokenFilter;
 import com.securityserver.filter.TokenCheckFilter;
 import com.securityserver.handler.ApiLoginSuccessHandler;
 import com.securityserver.handler.Custom403Handler;
+import com.securityserver.service.CustomUserDetailsService;
 import com.securityserver.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,11 +45,10 @@ public class CustomSecurityConfig {
 
 	private static final String[] PERMIT_URL_ARRAY = {
 		"/swagger-ui/",
-		"/api/auth/**",
-		"/api/members/",
-		"/login",
-		"/api/files/**",
-		"/api/**"
+		"/auth/**",
+		"/auth/members/",
+		"/auth/login",
+		"/api/files/**"
 	};
 
 	@Bean

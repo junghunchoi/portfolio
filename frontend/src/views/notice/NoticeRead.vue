@@ -55,8 +55,8 @@
 import {inject, onMounted, reactive, ref} from 'vue';
 import {useRoute, useRouter} from "vue-router";
 import {useAuthStore} from "@/store/loginStore.js";
-import TheEditor from "@/components/common/TheEditor.vue";
-import TheModal from "@/components/common/TheModal.vue";
+import TheEditor from "@/components/TheEditor.vue";
+import TheModal from "@/components/TheModal.vue";
 import {deleteNotice, getNoticeBynno} from "@/api/notice.js";
 
 const AUTHORITY = useAuthStore().getAuthorities

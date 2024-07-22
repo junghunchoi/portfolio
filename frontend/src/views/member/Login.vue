@@ -34,7 +34,7 @@
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import {useAuthStore} from '@/store/loginStore.js'
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();

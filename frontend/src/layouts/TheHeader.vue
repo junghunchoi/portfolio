@@ -2,7 +2,7 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="/">PORTFOLIO</a>
+				<a class="navbar-brand" href="/">정훈's 사이트</a>
 				<button
 					class="navbar-toggler"
 					type="button"
@@ -60,6 +60,8 @@
 import { useRouter } from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import { storeToRefs } from 'pinia'
+
+//todo 포트폴리오, 블로그, 일기 또는 회고, 로그인
 const authStore = useAuthStore();
 const { userName, loginSuccess} = storeToRefs(authStore);
 

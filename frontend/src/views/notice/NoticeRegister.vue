@@ -50,12 +50,12 @@
 </template>
 
 <script setup>
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
 import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {createNotice} from "@/api/notice";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
