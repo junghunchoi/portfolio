@@ -23,22 +23,15 @@ public class SecurityConfig {
 	 */
 
 	@Bean
-	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
-		serverHttpSecurity.authorizeExchange(exchanges -> exchanges.pathMatchers(HttpMethod.GET)
-		                                                           .permitAll() // anyExchange().authenticated() 모든 요청은 인증되어야한다.
-		                                                           .pathMatchers(
-			                                                           "/eazybank/accounts/**")
-		                                                           .hasRole("ACCOUNTS")
-		                                                           .pathMatchers(
-			                                                           "/eazybank/cards/**")
-		                                                           .hasRole("CARDS")
-		                                                           .pathMatchers(
-			                                                           "/eazybank/loans/**")
-		                                                           .hasRole("LOANS"));
-
-		serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable());
-
-		return serverHttpSecurity.build();
+	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+		return http
+				.authorizeExchange(exchanges -> exchanges
+						.pathMatchers("/auth/**").permitAll() // 인증 서버로의 요청은 모두 허용
+						.anyExchange().authenticated() // 다른 모든 요청은 기본적인 인증만 확인
+				)
+//				.oauth2ResourceServer(OAuth2ResourceServerSpec::jwt) // JWT 토큰 검증
+				.csrf(csrf -> csrf.disable())
+				.build();
 	}
 
 

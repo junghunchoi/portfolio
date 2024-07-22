@@ -49,7 +49,7 @@ import ReplyArea from "@/views/reply/ReplyArea.vue";
 import {downloadFile} from "@/api/file.js"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {getBoardBybno} from "@/api/board.js";
 import {getReplies} from "@/api/reply";
 

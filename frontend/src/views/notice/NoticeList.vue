@@ -64,10 +64,10 @@
 import {inject, onMounted, reactive, ref, watch} from 'vue';
 import BoardFilter from "@/components/TheFilter.vue";
 import {useRouter} from "vue-router";
-import ThePagination from "@/components/common/ThePagination.vue";
+import ThePagination from "@/components/ThePagination.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {storeToRefs} from 'pinia'
 import {getNotices} from "@/api/notice.js";
 

@@ -65,11 +65,11 @@
 <script setup>
 import {inject, onMounted, reactive, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore";
 import {storeToRefs} from "pinia";
-import TheEditor from "@/components/common/TheEditor.vue";
-import TheFiles from "@/components/common/TheFiles.vue";
+import TheEditor from "@/components/TheEditor.vue";
+import TheFiles from "@/components/TheFiles.vue";
 import {getGalleryBybno, updateGallery} from "@/api/gallery.js";
 import {uploadFile} from "@/api/file.js";
 

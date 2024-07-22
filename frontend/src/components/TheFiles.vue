@@ -41,7 +41,7 @@
 
 <script setup>
 import {inject, ref, watch} from 'vue';
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 
 // 컴포넌트로부터 받을 파일리스트
 const props = defineProps({

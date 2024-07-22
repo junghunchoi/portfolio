@@ -102,18 +102,20 @@
     </TheModal>
   </Teleport>
   </section>
+  <Typing :text="typingText" :typingSpeed="50"/>
 </template>
 
 <script setup>
-import BoardCard from "@/components/common/TheMainCard.vue";
+import BoardCard from "@/components/TheMainCard.vue";
 import {useRouter} from 'vue-router';
-import {inject, onMounted, reactive, ref} from "vue";
+import { onMounted, reactive, ref} from "vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils.js"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {getMainData} from "@/api/common.js";
 import ChatButton from "@/components/ChatButton.vue";
+import Typing from "@/components/Typing.vue";
 
 const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
@@ -175,6 +177,10 @@ const doLoginHandler = () => {
 const closeModal = () => {
   show.value = false;
 }
+
+const typingText = ref('Hey there.\nPleased to meet you 👋');
+
+
 </script>
 
 <style scoped>

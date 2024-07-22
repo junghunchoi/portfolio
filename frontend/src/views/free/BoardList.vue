@@ -52,28 +52,28 @@
                      :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
-  <Teleport to="#modal">
-    <TheModal
-        v-model="show"
-        :isPopup="show"
-        :title="'확인'"
-    >
-      <template #default>
-        로그인한 사용자만 등록할 수 있습니다.
-      </template>
-      <template #actions>
-        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>
-        <button class="btn btn-light" @click="closeModal">닫기</button>
-      </template>
-    </TheModal>
-  </Teleport>
+<!--  <Teleport to="#modal">-->
+<!--    <TheModal-->
+<!--        v-model="show"-->
+<!--        :isPopup="show"-->
+<!--        :title="'확인'"-->
+<!--    >-->
+<!--      <template #default>-->
+<!--        로그인한 사용자만 등록할 수 있습니다.-->
+<!--      </template>-->
+<!--      <template #actions>-->
+<!--        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>-->
+<!--        <button class="btn btn-light" @click="closeModal">닫기</button>-->
+<!--      </template>-->
+<!--    </TheModal>-->
+<!--  </Teleport>-->
 </template>
 <script setup>
 import {computed, reactive, watch, inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import ThePagination from "@/components/common/ThePagination.vue";
+import ThePagination from "@/components/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getBoards} from "@/api/board";
@@ -113,10 +113,10 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
-  if (userName.value === null) {
-    show.value = true;
-    return;
-  }
+  // if (userName.value === null) {
+  //   show.value = true;
+  //   return;
+  // }
   router.push('/boards/register');
 };
 
