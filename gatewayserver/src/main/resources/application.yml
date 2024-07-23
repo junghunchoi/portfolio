@@ -62,3 +62,6 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2 # half open 상태를 처리할 때 설정한 요청의 갯수만큼이 올 떄 확안.
       failureRateThreshold: 50 # 숫자만큼 실패하면 open 상태로 바뀐다.
       waitDurationInOpenState: 10000 # 설정한 시간만큼 half open 상태로 둔다.
+
+server:
+  port: 8079

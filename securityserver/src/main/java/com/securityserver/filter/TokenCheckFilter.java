@@ -1,9 +1,9 @@
 package com.securityserver.filter;
 
-import com.backend.security.CustomUserDetailsService;
-import com.backend.security.exception.AccessTokenException;
-import com.backend.security.exception.AccessTokenException.TOKEN_ERROR;
-import com.backend.utils.JWTUtil;
+
+import com.securityserver.exception.AccessTokenException;
+import com.securityserver.service.CustomUserDetailsService;
+import com.securityserver.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;

@@ -5,7 +5,7 @@ package com.securityserver.entity;
  * 추후 구현 예정
  */
 
-import com.backend.entity.common.BaseEntity;
+import com.securityserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
