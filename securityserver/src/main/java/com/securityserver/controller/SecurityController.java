@@ -2,6 +2,7 @@ package com.securityserver.controller;
 
 import com.securityserver.common.dto.ResultDTO;
 import com.securityserver.dto.MemberJoinDTO;
+import com.securityserver.dto.MemberSecurityDTO;
 import com.securityserver.entity.Member;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,16 +27,31 @@ import java.util.Map;
 
 @Tag(name = "Api about Member", description = "회원 관리 API")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth")
 @Log4j2
 @RequiredArgsConstructor
 public class SecurityController {
+    private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
 
     @Operation(summary = "회원 가입", description = "새로운 회원을 등록합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
     @ApiResponse(responseCode = "400", description = "실패", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
-    @PostMapping(value = "/auth/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody MemberSecurityDTO memberDTO) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(memberDTO.getUsername(), memberDTO.getPassword())
+            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResultDTO.res(HttpStatus.BAD_REQUEST, e.getMessage()));
+        }
+    }
+
+    @Operation(summary = "회원 가입", description = "새로운 회원을 등록합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
+    @ApiResponse(responseCode = "400", description = "실패", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
+    @PostMapping(value = "/api/members/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultDTO<String>> registerMember(@RequestBody MemberJoinDTO memberJoinDTO) {
         try {
             memberService.register(memberJoinDTO);

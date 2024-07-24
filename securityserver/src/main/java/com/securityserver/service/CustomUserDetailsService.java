@@ -35,6 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		log.info("loadUserByUsername");
 		Optional<Member> result = memberRepository.getWithRoles(username);
 
 		if (result.isEmpty()) { //해당 아이디를 가진 사용자가 없다면
@@ -52,5 +53,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 				      .collect(Collectors.toList())
 			);
 	}
-
 }
