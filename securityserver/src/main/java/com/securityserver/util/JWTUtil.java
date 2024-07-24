@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class JWTUtil {
 
-	@Value("${com.backend.jwt.secret}")
+	@Value("${com.securityserver.jwt.secret}")
 	private String KEY;
 
 	private final String ALGORITHM = "RS256";

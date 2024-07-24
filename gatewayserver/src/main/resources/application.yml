@@ -12,6 +12,11 @@ spring:
       httpclient:
         connect-timeout: 1000 # 1초동안 응답이 없으면 cirbreaker open 처리함
         response-timeout: 10s # 반응시간이 2초가 넘으면 에러처리
+      routes:
+        - id: auth_route
+          uri: http://localhost:8020
+          predicates:
+            - Path=/auth/**
   rabbitmq:
     host: "localhost"
     port: 5672
@@ -28,7 +33,6 @@ spring:
 #      resourceserver:
 #        jwt:
 #          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
-
 management:
   endpoints:
     web:
@@ -62,6 +66,3 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2 # half open 상태를 처리할 때 설정한 요청의 갯수만큼이 올 떄 확안.
       failureRateThreshold: 50 # 숫자만큼 실패하면 open 상태로 바뀐다.
       waitDurationInOpenState: 10000 # 설정한 시간만큼 half open 상태로 둔다.
-
-server:
-  port: 8079

@@ -41,7 +41,6 @@ logging:
       serviceUrl:
         defaultZone: http://localhost:8070/eureka/ # 해당 ip 서버에 등록한다.
 
-
 com:
   backend:
     upload:

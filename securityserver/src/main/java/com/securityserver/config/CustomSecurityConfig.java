@@ -1,5 +1,6 @@
 package com.securityserver.config;
 
+import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import com.securityserver.filter.TokenCheckFilter;
 import com.securityserver.handler.Custom403Handler;
 import com.securityserver.service.CustomUserDetailsService;
@@ -11,9 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -64,6 +67,7 @@ public class CustomSecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+        log.info("authorizationServerSecurityFilterChain");
         // OAuth2 인증 서버의 기본 보안 설정 적용
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         // OIDC(OpenID Connect) 설정 추가
@@ -81,23 +85,23 @@ public class CustomSecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain standardSecurityFilterChain(HttpSecurity http) throws Exception {
+        log.info("standardSecurityFilterChain");
         http.authorizeHttpRequests(authorize -> authorize
                         // PERMIT_URL_ARRAY에 정의된 URL은 인증 없이 접근 가능
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated())
-                // 기본 로그인 폼 사용
-                .formLogin(Customizer.withDefaults())
                 // JWT를 사용한 리소스 서버 설정
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         http.csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(tokenCheckFilter(), UsernamePasswordAuthenticationFilter.class)
+//            .addFilterBefore(tokenCheckFilter(), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(exceptions -> exceptions
-                    .accessDeniedHandler(accessDeniedHandler())
-            );
+                                .accessDeniedHandler(accessDeniedHandler()))
+                .userDetailsService(userDetailsService)
+                .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
@@ -105,7 +109,18 @@ public class CustomSecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         // OAuth2 클라이언트 등록 정보 설정
-        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString()).clientId("client-id").clientSecret(passwordEncoder().encode("client-secret")).clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC).authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE).authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN).redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-id").scope(OidcScopes.OPENID).scope("read").scope("write").build();
+        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("client-id")
+                .clientSecret(passwordEncoder()
+                        .encode("client-secret"))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-id")
+                .scope(OidcScopes.OPENID)
+                .scope("read")
+                .scope("write")
+                .build();
 
         return new InMemoryRegisteredClientRepository(registeredClient);
     }
@@ -114,6 +129,11 @@ public class CustomSecurityConfig {
     public UserDetailsService userDetailsService() {
         // 커스텀 UserDetailsService 반환
         return userDetailsService;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
