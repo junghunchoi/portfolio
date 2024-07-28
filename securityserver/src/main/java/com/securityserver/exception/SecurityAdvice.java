@@ -1,6 +1,6 @@
 package com.securityserver.exception;
 
-import com.securityserver.common.dto.ErrorResponse;
+import com.securityserver.dto.ErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

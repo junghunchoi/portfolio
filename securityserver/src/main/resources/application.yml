@@ -1,3 +1,5 @@
+server:
+  port: 9000
 spring:
   application:
     name: security
@@ -8,10 +10,8 @@ spring:
 logging:
   level:
     org:
-      springframework:
-        security: DEBUG
-    com:
-      securityserver: info
+      springframework.security: DEBUG
+    com.securityserver: info
 
   endpoints:
     shutdown:
