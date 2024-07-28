@@ -4,7 +4,7 @@
 //import com.securityserver.filter.APILoginFilter;
 //import com.securityserver.filter.RefreshTokenFilter;
 //import com.securityserver.filter.TokenCheckFilter;
-//import com.securityserver.handler.ApiLoginSuccessHandler;
+//import com.securityserver.service.MemberService.AuthenticationSuccessService;
 //import com.securityserver.handler.Custom403Handler;
 //import com.securityserver.service.CustomUserDetailsService;
 //import com.securityserver.util.JWTUtil;
@@ -69,7 +69,7 @@
 //        apiLoginFilter.setAuthenticationManager(authenticationManager);
 //        http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 //
-//        ApiLoginSuccessHandler apiLoginSuccessHandler = new ApiLoginSuccessHandler(jwtUtil);
+//        AuthenticationSuccessService apiLoginSuccessHandler = new AuthenticationSuccessService(jwtUtil);
 //        apiLoginFilter.setAuthenticationSuccessHandler(apiLoginSuccessHandler);
 //
 //        //api로 시작하는 모든 경로는 tokenfilterchain 동작
