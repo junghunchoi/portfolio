@@ -1,6 +1,6 @@
 package com.securityserver.controller;
 
-import com.securityserver.common.dto.ResultDTO;
+import com.securityserver.dto.ResultDTO;
 import com.securityserver.dto.MemberJoinDTO;
 import com.securityserver.dto.MemberSecurityDTO;
 import com.securityserver.entity.Member;
@@ -43,6 +43,7 @@ public class SecurityController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(memberDTO.getUsername(), memberDTO.getPassword())
             );
+            return ResponseEntity.ok("jwt 발급된거 받아오기");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResultDTO.res(HttpStatus.BAD_REQUEST, e.getMessage()));
         }
