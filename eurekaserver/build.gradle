@@ -5,6 +5,7 @@ plugins {
     id 'com.google.cloud.tools.jib' version '3.4.1'
 }
 
+project.name = 'eurekaserver'
 group = 'com.eurekaserver'
 version = '0.0.1-SNAPSHOT'
 
@@ -40,10 +41,10 @@ dependencyManagement {
 
 jib {
     to {
-        image = "junghunchoi/${project.name}:s11"
+        image = "junghunchoi/${project.name}:1.0"
         auth {
-            username = "azzudi@naver.com"
-            password = "chlwjdgns13!"
+            username = System.getProperty('docker.username')
+            password = System.getProperty('docker.password')
         }
     }
 }
