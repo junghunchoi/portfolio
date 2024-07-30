@@ -5,7 +5,7 @@ plugins {
     id 'com.google.cloud.tools.jib' version '3.4.1'
 }
 
-project.name = 'gatewayserver'
+
 group = 'com.eazybytes'
 version = '0.0.1-SNAPSHOT'
 
@@ -48,9 +48,11 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+def projectName = 'gatewayserver'
+
 jib {
     to {
-        image = "junghunchoi/${project.name}:1.0"
+        image = "junghunchoi/${projectName}:1.0"
         auth {
             username = System.getProperty('docker.username')
             password = System.getProperty('docker.password')
