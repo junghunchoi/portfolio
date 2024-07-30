@@ -5,7 +5,7 @@ plugins {
     id 'com.google.cloud.tools.jib' version '3.4.3'
 }
 
-project.name = 'securityserver'
+
 
 java {
     sourceCompatibility = '17'
@@ -77,11 +77,11 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-
+def projectName = 'securityserver'
 
 jib {
     to {
-        image = "junghunchoi/${project.name}:1.0"
+        image = "junghunchoi/${projectName}:1.0"
         auth {
             username = System.getProperty('docker.username')
             password = System.getProperty('docker.password')
