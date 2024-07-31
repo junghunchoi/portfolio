@@ -3,7 +3,6 @@ package com.securityserver.filter;
 
 import com.securityserver.exception.AccessTokenException;
 import com.securityserver.service.CustomUserDetailsService;
-import com.securityserver.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -29,7 +28,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class TokenCheckFilter extends OncePerRequestFilter {
 
 	private final CustomUserDetailsService userDetailsService;
-	private final JWTUtil jwtUtil;
 
 	/**
 	 * 토큰 검사를 수행하는 필터의 내부 로직.
@@ -101,7 +99,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 		}
 
 		try {
-			Map<String, Object> values = jwtUtil.validateToken(tokenStr);
+			Map<String, Object> values = null;//jwtUtil.validateToken(tokenStr);
 			return values;
 		} catch (MalformedJwtException malformedJwtException) {
 			log.error("MalformedJwtException----------------------");
