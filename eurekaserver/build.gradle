@@ -38,15 +38,7 @@ dependencyManagement {
 }
 def projectName = 'eurekaserver'
 
-jib {
-    to {
-        image = "junghunchoi/${projectName}:1.0"
-        auth {
-            username = System.getProperty('docker.username')
-            password = System.getProperty('docker.password')
-        }
-    }
-}
+
 
 tasks.named('test') {
     useJUnitPlatform()

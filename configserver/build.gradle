@@ -15,6 +15,15 @@ configurations {
 	}
 }
 
+bootJar {
+	manifest {
+		attributes(
+				'Git-Username': project.findProperty('GIT_USERNAME') ?: System.getenv('GIT_USERNAME') ?: '',
+				'Git-Token': project.findProperty('GIT_TOKEN') ?: System.getenv('GIT_TOKEN') ?: ''
+		)
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -43,12 +52,12 @@ test {
 
 def projectName = 'configserver'
 
-jib {
-	to {
-		image = "junghunchoi/${projectName}:1.0"
-		auth {
-			username = System.getProperty('docker.username')
-			password = System.getProperty('docker.password')
-		}
-	}
-}
+//jib {
+//	to {
+//		image = "junghunchoi/${projectName}:1.0"
+//		auth {
+//			username = System.getProperty('docker.username')
+//			password = System.getProperty('docker.password')
+//		}
+//	}
+//}
