@@ -4,7 +4,6 @@ import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import com.securityserver.filter.TokenCheckFilter;
 import com.securityserver.handler.Custom403Handler;
 import com.securityserver.service.CustomUserDetailsService;
-import com.securityserver.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -59,7 +58,6 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 public class CustomSecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final JWTUtil jwtUtil;
 
     // 인증없이 접근 가능한 URL 목록
     private static final String[] PERMIT_URL_ARRAY = {"/swagger-ui/", "/auth/**", "/oauth2/**", "/login"};
@@ -196,9 +194,9 @@ public class CustomSecurityConfig {
         return new Custom403Handler();
     }
 
-    private TokenCheckFilter tokenCheckFilter() {
-        return new TokenCheckFilter(userDetailsService, jwtUtil);
-    }
+//    private TokenCheckFilter tokenCheckFilter() {
+//        return new TokenCheckFilter(userDetailsService, jwtUtil);
+//    }
 
     /**
      * 정적 자원에 대한 보안 설정을 무시하는 WebSecurityCustomizer 빈 생성

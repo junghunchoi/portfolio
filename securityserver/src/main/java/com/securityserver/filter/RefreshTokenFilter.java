@@ -4,7 +4,7 @@ package com.securityserver.filter;
 
 import com.google.gson.Gson;
 import com.securityserver.exception.RefreshTokenException;
-import com.securityserver.util.JWTUtil;
+import com.securityserver.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,8 +32,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 	private static final int REFRESHTOKENEXPIRATION = 30;
 
 	private final String refreshPath;
-	private final JWTUtil jwtUtil;
-
+	private final JwtService jwtService;
 
 
 
@@ -80,13 +79,13 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 		String userName = (String) refreshClaims.get("userName");
 
 		// 이 상태까지 오면 무조건 AccessToken은 새로 생성
-		String accessTokenValue = jwtUtil.generateToken(Map.of("userName", userName), ACCESSTOKENEXPIRATION);
+		String accessTokenValue = null;//jwtService.generateAccessToken();
 		String refreshTokenValue = tokens.get("refreshToken");
 
 		// 만일 3일 미만인 경우에는 Refresh Token도 다시 생성
 		if (gapTime < (1000 * 60 * 3)) {
 			log.info("new Refresh Token required...  ");
-			refreshTokenValue = jwtUtil.generateToken(Map.of("userName", userName), REFRESHTOKENEXPIRATION);
+			refreshTokenValue = null;//jwtService.generateRefreshToken(Map.of("userName", userName), REFRESHTOKENEXPIRATION);
 		}
 
 		sendTokens(accessTokenValue, refreshTokenValue, response);
@@ -117,7 +116,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 	 */
 	private void checkAccessToken(String accessToken) throws RefreshTokenException {
 		try {
-			jwtUtil.validateToken(accessToken);
+//			jwtUtil.validateToken(accessToken);
 		} catch (ExpiredJwtException expiredJwtException) {
 			log.info("Access Token has expired");
 		} catch (Exception exception) {
@@ -135,7 +134,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 	private Map<String, Object> checkRefreshToken(String refreshToken)
 		throws RefreshTokenException {
 		try {
-			Map<String, Object> values = jwtUtil.validateToken(refreshToken);
+			Map<String, Object> values = null;//jwtUtil.validateToken(refreshToken);
 			return values;
 		} catch (ExpiredJwtException expiredJwtException) {
 			throw new RefreshTokenException(RefreshTokenException.ErrorCase.OLD_REFRESH);
