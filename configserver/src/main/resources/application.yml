@@ -14,6 +14,19 @@ spring:
           timeout: 5
           clone-on-start: true
           force-pull: true
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          config=DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
