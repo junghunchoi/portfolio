@@ -2,16 +2,15 @@ server:
   port: 9000
 
 spring:
+  config:
+    import: "optional:configserver:http://49.175.22.52:8071/"
   application:
-    name: security
+    name: securityserver
   profiles:
     active: dev
-
-logging:
-  level:
-    org:
-      springframework.security: DEBUG
-    com.securityserver: info
+  cloud:
+    config:
+      label: main
 
 management:
   endpoints:

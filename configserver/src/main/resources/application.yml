@@ -9,7 +9,7 @@ spring:
         git:
           uri: https://github.com/junghunchoi/server-config.git
           username: ${GIT_USERNAME}
-          password: ${GIT_TOKKEN}
+          password: ${GIT_TOKEN}
           default-label: main
           timeout: 5
           clone-on-start: true
@@ -20,13 +20,14 @@ logging:
     org:
       springframework:
         cloud:
-          config=DEBUG
+          config: DEBUG
 
 management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
+
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
