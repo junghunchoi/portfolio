@@ -31,7 +31,7 @@ public class GatewayserverApplication {
         return routeLocatorBuilder.routes()
                 .route(p -> p
                         .path("/board/**")
-                        .filters(f -> f.rewritePath("/eazybank/board/(?<segment>.*)", "/${segment}")
+                        .filters(f -> f.rewritePath("/board/(?<segment>.*)", "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
                                 .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
                                         .setKeyResolver(userKeyResolver()))
@@ -40,7 +40,6 @@ public class GatewayserverApplication {
                                         .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
                                 .circuitBreaker(config -> config.setName("accountsCircuitBreaker")
                                         .setFallbackUri("forward:/contactSupport")))
-
                         .uri("lb://BOARD")).build();
     }
 

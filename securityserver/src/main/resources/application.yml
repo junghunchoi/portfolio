@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: "optional:configserver:http://49.175.22.52:8071/"
+    import: "optional:configserver:http://49.175.22.52:8071/" # http://192.168.219.106/
   application:
     name: securityserver
   profiles:
