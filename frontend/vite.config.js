@@ -1,13 +1,10 @@
-import {fileURLToPath, URL} from 'url';
-import {defineConfig, loadEnv} from 'vite';
+import { fileURLToPath, URL } from 'url';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import nodeStdlibBrowser from 'vite-plugin-node-stdlib-browser'
-import {createRequire} from 'node:module';
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 import path from "path";
 
-const require = createRequire(import.meta.url);
-
-export default defineConfig(({mode}) => {
+export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
@@ -22,22 +19,25 @@ export default defineConfig(({mode}) => {
                 sourcemap: false,
                 minify: true,
             }),
-        },
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    'sockjs-client': ['sockjs-client'],
-                    '@stomp/stompjs': ['@stomp/stompjs']
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        'sockjs-client': ['sockjs-client'],
+                        '@stomp/stompjs': ['@stomp/stompjs']
+                    },
+                    format: 'es',
+                    entryFileNames: '[name].js',
+                    chunkFileNames: '[name].js',
+                    assetFileNames: '[name].[ext]',
                 },
-                format: 'es',
-                entryFileNames: '[name].js',
-                chunkFileNames: '[name].js',
-                assetFileNames: '[name].[ext]',
             },
         },
         plugins: [
             vue(),
-            nodeStdlibBrowser(),
+            nodePolyfills({
+                // 명시적으로 폴리필할 기능을 지정
+                include: ['crypto', 'stream', 'buffer']
+            })
         ],
         server: {
             proxy: {
@@ -47,7 +47,6 @@ export default defineConfig(({mode}) => {
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
-                'util.inherits': 'util.inherits/inherits_browser.js',
             },
             extensions: [
                 '.js',
@@ -61,21 +60,14 @@ export default defineConfig(({mode}) => {
         },
         define: {
             'process.env.VITE_APP_API_URL': JSON.stringify(env.VITE_APP_API_URL),
-            'process.env': env,
+            // 필요한 다른 환경 변수들만 명시적으로 정의
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,
             __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
             'global': {},
         },
         optimizeDeps: {
-            include: ['@vue/runtime-core',
-                    '@vue/shared',
-                    '@stomp/stompjs',
-            ],
-            node: {
-                polyfillNode: true,
-                global: true
-            }
+            include: ['@vue/runtime-core', '@vue/shared', '@stomp/stompjs'],
         },
     };
 });
