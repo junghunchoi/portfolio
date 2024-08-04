@@ -27,20 +27,21 @@ public class GatewayserverApplication {
     }
 
     @Bean
-    public RouteLocator eazyBankRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
+    public RouteLocator RouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
                 .route(p -> p
-                        .path("/board/**")
-                        .filters(f -> f.rewritePath("/board/(?<segment>.*)", "/${segment}")
-                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-                                .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
+                        .path("/board/**") // "/board/"로 오는 모든 요청을 라우팅한다.
+                        .filters(f -> f.rewritePath("/board/(?<segment>.*)", "/${segment}") // "/board/"다음에 오는 경로를 추출하여 대상 서비스로 전달할 떄 "/board"를 제거한다.
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()) // 헤더에 요청시간을 넣는다.
+                                .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter()) // 레디스를 이용해 요청속도를 제한한다.
                                         .setKeyResolver(userKeyResolver()))
                                 .retry(retryConfig -> retryConfig.setRetries(3)
-                                        .setMethods(HttpMethod.GET)
+                                        .setMethods(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.OPTIONS)
                                         .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
-                                .circuitBreaker(config -> config.setName("accountsCircuitBreaker")
-                                        .setFallbackUri("forward:/contactSupport")))
-                        .uri("lb://BOARD")).build();
+                                .circuitBreaker(config -> config.setName("boardsCircuitBreaker") // boardsCircuitBreaker라는 이름으로 서킷 브레이커를 설정한다.
+                                        .setFallbackUri("forward:/contactSupport"))) // 서비스 장애시 해당 url로 포워딩한다.
+                        .uri("lb://BOARD")) // board라는 서비스로 요청을 라우팅한다.
+                .build();
     }
 
     // yml의 설정대신 자바코드로 설정값을 지정하기 위한 메소드

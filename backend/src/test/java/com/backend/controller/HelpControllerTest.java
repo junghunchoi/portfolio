@@ -7,7 +7,6 @@ import com.backend.common.dto.ResultDTO;
 import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
 import com.backend.service.HelpService;
-import com.backend.utils.JWTUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
