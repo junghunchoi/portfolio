@@ -1,85 +1,38 @@
 <template>
-  <div id="app" style="height: 300px;">
-    <ckeditor :editor="editor"
-              v-model="editorDate"
-              :config="editorConfig"
-              :disabled="props.isDisabled"
-    />
+  <div>
+    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
   </div>
 </template>
 
 <script setup>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
+import { ref, onMounted } from 'vue'
+import {ClassicEditor, Base64UploadAdapter } from 'ckeditor5'
+// import CKEditor from '@ckeditor/ckeditor5-vue'
 
-import {ref, watch} from "vue";
+ClassicEditor
+    .create( document.querySelector( '#editor' ), {
+      plugins: [ Base64UploadAdapter, /* ... */ ],
+      toolbar: [ /* ... */ ]
+    } )
+    .then( /* ... */ )
+    .catch( /* ... */ );
 
-const props = defineProps({
-  initEeditorData: String,
-  isDisabled: {
-    type: Boolean,
-    default: false
-  }
-});
-const emit = defineEmits(["update:editorData"])
-const editorDate = ref(props.initEeditorData || "");
-const editor = ClassicEditor;
+// CKEditor 컴포넌트 등록
+const ckeditor = CKEditor.component
 
-const editorConfig = ref({
-  toolbar: {
-    items: ['undo', 'redo', '|', 'heading', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'code', '|', 'specialCharacters', 'horizontalLine', 'link', 'insertImage', 'mediaEmbed', 'insertTable', 'highlight', 'blockQuote', 'codeBlock', '|', 'bulletedList', 'numberedList', 'todoList', 'indent', 'outdent'],
-  },
-  table: {
-    contentToolbar: [
-      'tableColumn',
-      'tableRow',
-      'mergeTableCells'
-    ]
-  },
-  // plugins: [SimpleUploadAdapter],
-  simpleUpload: {
-    http: '//localhost:8080/api/v1/upload'
-  },
-  image: {
-    toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:alignBlockLeft', 'imageStyle:block', 'imageStyle:alignBlockRight', '|', 'resizeImage'],
-    styles: {options: ['alignBlockLeft', 'block', 'alignBlockRight']}
-  },
-  language: 'ko',
-  link: {
-    addTargetToExternalLinks: true,
-    defaultProtocol: 'https://',
-    decorators: {toggleDownloadable: {mode: 'manual', label: 'Downloadable', attributes: {download: 'file'}}}
-  },
+// editor 인스턴스 정의
+const editor = ClassicEditor
 
-  editorDisabled: true
+// 에디터 데이터를 저장할 ref 생성
+const editorData = ref('')
+
+// CKEditor 설정
+const editorConfig = {
+  // CKEditor 설정을 여기에 추가할 수 있습니다.
+}
+
+// 컴포넌트가 마운트되었을 때 실행될 함수
+onMounted(() => {
+  console.log('Editor is ready to use!')
 })
-
-watch(editorDate, async () => {
-  emit('update:editorData', editorDate.value)
-})
-
-watch(
-    () => props.isDisabled,
-    (newValue) => {
-      if (newValue) {
-        editorConfig.value = { toolbar: [] };
-      }
-    },
-    { immediate: true }
-);
-
 </script>
-
-<style scoped>
-#app{
-  width:100%;
-}
-
-
-</style>
-<style>
-.ck-editor__editable_inline{
-  height: 250px;
-  overflow-y: auto;
-}
-</style>

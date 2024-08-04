@@ -2,8 +2,6 @@ package com.backend.controller;
 
 import com.backend.common.dto.ResultDTO;
 import com.backend.dto.member.MemberJoinDTO;
-import com.backend.entity.Member;
-import com.backend.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

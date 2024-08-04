@@ -29,8 +29,6 @@ public class Diary {
 
     private String category;
 
-
-
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<File> files;
+//    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private List<File> files;
 }

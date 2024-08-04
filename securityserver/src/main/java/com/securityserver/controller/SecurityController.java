@@ -45,7 +45,7 @@ public class SecurityController {
     @ApiResponse(responseCode = "400", description = "실패", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultDTO<AuthenticationResponse>> login(@RequestBody MemberSecurityDTO memberDTO) {
-
+        log.info("login : {}", memberDTO);
         AuthenticationResponse response = authenticationService.authenticate(memberDTO);
 
         return ResponseEntity.ok().body(ResultDTO.res(HttpStatus.OK, "login success", response));
@@ -68,6 +68,7 @@ public class SecurityController {
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
     @PostMapping("/check")
     public ResponseEntity<ResultDTO<String>> checkUserName(@RequestBody Map<String, String> requestBody) {
+        log.info("checkUserName");
         String userName = requestBody.get("userName");
         Optional<Member> member = memberService.readOne(userName);
 

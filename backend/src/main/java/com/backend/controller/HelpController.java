@@ -7,7 +7,6 @@ import com.backend.common.dto.ResultDTO;
 import com.backend.dto.help.HelpDTO;
 import com.backend.dto.help.HelpListDTO;
 import com.backend.service.HelpService;
-import com.backend.utils.JWTUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,7 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelpController {
 
 	private final HelpService helpService;
-	private final JWTUtil jwtUtil;
 
 
 	/**
@@ -92,8 +90,7 @@ public class HelpController {
 	public ResponseEntity<ResultDTO<Object>> read(@PathVariable("bno") Long bno, @RequestHeader("Authorization") String authorizationHeader) {
 
 		String token = authorizationHeader.substring(7); // "Bearer " 부분 제거
-		String username = jwtUtil.getUsernameFromToken(token);
-		HelpDTO helpDTO = helpService.readOne(bno, username);
+		HelpDTO helpDTO = helpService.readOne(bno, "username");
 
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), helpDTO));
 	}

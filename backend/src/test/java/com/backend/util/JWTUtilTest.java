@@ -1,6 +1,5 @@
 package com.backend.util;
 
-import com.backend.utils.JWTUtil;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
