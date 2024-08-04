@@ -41,7 +41,6 @@
                   <i class="fas fa-paperclip"></i>
                 </span>
               </td>
-
             </tr>
             </tbody>
           </table>
@@ -52,7 +51,6 @@
         <BoardCard class="col m-4"
                    :title="'갤러리'"
                    :destination="'/galleries'">
-
           <div v-for="gallery in galleries" class="media mb-3">
             <div @click="readGalleryHandler(gallery.bno)" style="display: flex; align-items: center;">
               <img :src="`${BASE_URL}/files/${gallery.fileName}`" class="mr-3 mt-1">
@@ -129,14 +127,15 @@ const boards = reactive({});
 const notices = reactive({});
 const galleries = reactive({});
 const helps = reactive({});
+const records = reactive({});
 
 onMounted(async () => {
   const res =await getMainData();
-
   Object.assign(boards, res.data.resultData.boards)
   Object.assign(notices, res.data.resultData.notices)
   Object.assign(galleries, res.data.resultData.galleries)
   Object.assign(helps, res.data.resultData.helps)
+  Object.assign(records, res.data.resultData.helps)
 })
 
 const readHelpHandler = (writer, hno, isSecret) => {
