@@ -13,7 +13,7 @@ spring:
         connect-timeout: 1000 # 1초동안 응답이 없으면 cirbreaker open 처리함
         response-timeout: 10s # 반응시간이 2초가 넘으면 에러처리
       routes:
-        - id: auth_route
+        - id: securityserver
           uri: http://localhost:8020
           predicates:
             - Path=/auth/**
@@ -55,9 +55,8 @@ info:
 
 logging:
   level:
-    com:
-      eazybytes:
-        gatewayserver: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
 
 resilience4j.circuitbreaker:
   configs:
