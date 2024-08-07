@@ -7,7 +7,6 @@ import com.backend.dto.help.HelpListDTO;
 import com.backend.entity.Help;
 import com.backend.repository.help.HelpRepository;
 import com.backend.repository.help.search.HelpSearch;
-import com.backend.utils.UserAuthorityUtil;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,7 +26,7 @@ public class HelpServiceImpl implements HelpService {
 
 	private final ModelMapper modelMapper;
 	private final HelpRepository helpRepository;
-	private final UserAuthorityUtil userAuthorityUtil;
+//	private final UserAuthorityUtil userAuthorityUtil;
 
 	/**
 	 * 문의를 등록하는 메서드.
@@ -63,25 +57,26 @@ public class HelpServiceImpl implements HelpService {
 		/**
 		 * 관리자의 경우 문의에 무조건 접근할 수 있다.
 		 */
-		String userAuthority = userAuthorityUtil.getUserAuthority();
+//		String userAuthority = userAuthorityUtil.getUserAuthority();
 
 		Optional<Help> result = helpRepository.findById(hno);
 		Help help = result.orElseThrow();
 		HelpDTO helpDTO = modelMapper.map(help, HelpDTO.class);
 
-		if (userAuthority.equals("ROLE_ADMIN")) {
-			return helpDTO;
-		}else{
-			//비밀글에 본인의 문의글이 아닌데 url로 접근할 때
-			if (!helpDTO.getWriter().equals(username) && helpDTO.getIsSecret() == 1) {
-				throw new AccessDeniedException("unAuthorize user");
-			}
-			//조회수 증가
-			help.updateViewCount(help.getViewCount() + 1);
-			helpRepository.save(help);
-
-			return helpDTO;
-		}
+//		if (userAuthority.equals("ROLE_ADMIN")) {
+//			return helpDTO;
+//		}else{
+//			//TODO 비밀글에 본인의 문의글이 아닌데 url로 접근할 때
+////			if (!helpDTO.getWriter().equals(username) && helpDTO.getIsSecret() == 1) {
+////				throw new AccessDeniedException("unAuthorize user");
+////			}
+//			//조회수 증가
+//			help.updateViewCount(help.getViewCount() + 1);
+//			helpRepository.save(help);
+//
+//			return helpDTO;
+//		}
+		return helpDTO;
 	}
 
 	/**

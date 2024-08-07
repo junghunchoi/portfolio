@@ -11,7 +11,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -162,18 +161,6 @@ public class CustomRestAdvice {
 			LocalDateTime.now()
 		);
 		return new ResponseEntity<>(errorResponse, HttpStatus.PAYLOAD_TOO_LARGE);
-	}
-
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e, WebRequest webRequest) {
-		log.error("접근이 거부되었습니다: {}", e.getMessage());
-		ErrorResponse errorResponse = new ErrorResponse(
-			webRequest.getDescription(false),
-			HttpStatus.FORBIDDEN,
-			e.getMessage(),
-			LocalDateTime.now()
-		);
-		return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
 	}
 
 	@ExceptionHandler(Exception.class)
