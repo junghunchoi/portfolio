@@ -18,14 +18,15 @@ import reactor.core.publisher.Mono;
 public class SecurityConfig {
 
 	/**
-	 *  .pathMatchers("/eazybank/accounts/**").authenticated() 해당 url의 모든 요청은 인증되어야한다.
-	 *  .pathMatchers("/eazybank/accounts/**").hasRole("ACCOUNTS") 해당 권한을 가진 사람만 접근할 수 있다.
+	 *  .pathMatchers("/accounts/**").authenticated() 해당 url의 모든 요청은 인증되어야한다.
+	 *  .pathMatchers("/accounts/**").hasRole("ACCOUNTS") 해당 권한을 가진 사람만 접근할 수 있다.
 	 */
 
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		return http
 				.authorizeExchange(exchanges -> exchanges
+						.pathMatchers("/board/**").permitAll()
 						.pathMatchers("/auth/**").permitAll() // 인증 서버로의 요청은 모두 허용
 						.anyExchange().authenticated() // 다른 모든 요청은 기본적인 인증만 확인
 				)
