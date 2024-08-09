@@ -20,6 +20,8 @@ public class FileDTO {
 	@Schema(description = "업로드할 파일 리스트")
 	private List<MultipartFile> files;
 
+	private MultipartFile upload;
+
 	@Schema(description = "연관된 게시글 번호", example = "1")
 	private Long bno;
 

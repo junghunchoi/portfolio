@@ -57,6 +57,7 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
 
 resilience4j.circuitbreaker:
   configs:

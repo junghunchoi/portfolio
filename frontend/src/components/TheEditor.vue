@@ -9,6 +9,7 @@
 
 <script setup>
 import {ref, watch} from 'vue';
+import CustomUploadAdapterPlugin from "@/common/CustomUploadAdapter";
 import {
   ClassicEditor,
   Base64UploadAdapter,
@@ -47,6 +48,7 @@ const editorConfig = {
   plugins: [Bold, Essentials, Italic, Paragraph, Undo, SimpleUploadAdapter , Image,
     ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI,
     MediaEmbed, HtmlEmbed],
+  extraPlugins: [CustomUploadAdapterPlugin],
   toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'imageUpload', 'HtmlEmbed'],
   htmlEmbed: {
     icons: 'media',
@@ -57,9 +59,6 @@ const editorConfig = {
       height: 'auto'
     }
   },
-  simpleUpload:{
-    uploadUrl: 'http://localhost:1541/'
-  }
 };
 
 watch(editorDate, async () => {

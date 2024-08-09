@@ -15,9 +15,8 @@ spring:
     active: dev
 logging:
   level:
-    org.springframework: error
+    org.springframework: info
     com.backend: info
-    root: warn
   pattern:
   endpoints:
     shutdown:
