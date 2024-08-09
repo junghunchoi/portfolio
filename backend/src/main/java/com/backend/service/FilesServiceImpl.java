@@ -26,6 +26,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Repository
 @RequiredArgsConstructor
@@ -123,6 +124,29 @@ public class FilesServiceImpl implements FilesService {
 		});
 		return list;
 
+	}
+
+	@Override
+	public String editorUpload(FileDTO fileDTO) {
+		MultipartFile requestedFile = fileDTO.getUpload();
+		String uuid = UUID.randomUUID().toString();
+		String uploadedFileName = fileDTO.getFileName() +"_"+ uuid;
+		Path savePath = Paths.get(uploadPath, uuid);
+
+		try {
+			requestedFile.transferTo(savePath);
+
+			fileDTO.setFilePath(uploadPath);
+			fileDTO.setUploadedFileName(uploadedFileName);
+			fileDTO.setBno(9999L);
+
+			registerFiles(fileDTO);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return uploadedFileName;
 	}
 
 	@Override
