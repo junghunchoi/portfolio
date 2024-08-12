@@ -15,6 +15,7 @@ class CustomUploadAdapter {
 
             axios.post('http://localhost:8072/board/api/files/editor/upload', data)
                 .then(response => {
+                    console.log(response)
                     resolve({
                         default: response.data.url // 업로드된 이미지 URL
                     });
