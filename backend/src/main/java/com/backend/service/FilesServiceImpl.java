@@ -130,17 +130,17 @@ public class FilesServiceImpl implements FilesService {
 	public String editorUpload(FileDTO fileDTO) {
 		MultipartFile requestedFile = fileDTO.getUpload();
 		String uuid = UUID.randomUUID().toString();
-		String uploadedFileName = fileDTO.getFileName() +"_"+ uuid;
+		String uploadedFileName = uuid+"_"+ fileDTO.getFileName();
 		Path savePath = Paths.get(uploadPath, uuid);
 
 		try {
 			requestedFile.transferTo(savePath);
 
-			fileDTO.setFilePath(uploadPath);
-			fileDTO.setUploadedFileName(uploadedFileName);
-			fileDTO.setBno(9999L);
-
-			registerFiles(fileDTO);
+//			fileDTO.setFilePath(uploadPath);
+//			fileDTO.setUploadedFileName(uploadedFileName);
+//			fileDTO.setBno(9999L);
+//
+//			registerFiles(fileDTO);
 
 		} catch (IOException e) {
 			e.printStackTrace();
