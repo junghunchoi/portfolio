@@ -2,6 +2,19 @@
   <section>
   <section>
     <div class="container">
+      <div class="record">
+        <div class="activity-display">
+          <div class="activity-container" v-for="activity in activities" :key="activity.type">
+            <div class="gif-container">
+              <img :src="activity.gifUrl" :alt="activity.type + ' 애니메이션'" class="activity-gif">
+            </div>
+            <div class="activity-info">
+              <h3>{{ activity.type }}</h3>
+              <p>{{ activity.data }} {{ activity.unit }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <BoardCard class="col m-4"
                    :title="'공지사항'"
@@ -115,6 +128,7 @@ import {getMainData} from "@/api/common.js";
 import ChatButton from "@/components/ChatButton.vue";
 import Typing from "@/components/Typing.vue";
 
+
 const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
@@ -127,7 +141,11 @@ const boards = reactive({});
 const notices = reactive({});
 const galleries = reactive({});
 const helps = reactive({});
-const records = reactive({});
+const activities = reactive([
+  { type: '달리기', gifUrl: './public/running.gif', data: 5, unit: 'km' },
+  { type: '자전거', gifUrl: './public/cycling.gif', data: 20, unit: 'km' },
+  { type: '공부', gifUrl: './public/studying.gif', data: 3, unit: '시간' }
+]);
 
 onMounted(async () => {
   const res =await getMainData();
@@ -183,6 +201,54 @@ const typingText = ref('Hey there.\nPleased to meet you 👋');
 </script>
 
 <style scoped>
+.activity-display {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.activity-container {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.gif-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.activity-gif {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.activity-info {
+  flex-grow: 1;
+  padding: 15px;
+}
+
+h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+p {
+  margin: 0;
+  font-size: 1.1em;
+  color: #666;
+}
 img {
   width: 64px;
   height: 64px;

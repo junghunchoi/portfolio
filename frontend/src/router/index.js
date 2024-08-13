@@ -21,6 +21,10 @@ import NoticeRead from '@/views/notice/NoticeRead.vue'
 import Chat from '@/views/chat/Chat.vue'
 import Login from '@/views/member/Login.vue';
 import TheMain from '@/views/common/TheMain.vue'
+import AdminList from '@/views/admin/AdminList.vue'
+import AdminModify from '@/views/admin/AdminModify.vue'
+import AdminRead from '@/views/admin/AdminRead.vue'
+import AdminRegister from '@/views/admin/AdminRegister.vue'
 
 const routes = [
   /*
@@ -157,7 +161,30 @@ const routes = [
     name: 'Chat',
     component: Chat,
   },
-
+    /*
+    [Admin 라우터]
+    */
+  {
+    path: '/admin/list',
+    name: 'AdminList',
+    component: AdminList,
+  },
+  {
+    path: '/admin/register',
+    name: 'AdminRegister',
+    component: AdminRegister,
+  },
+  {
+    path: '/admin/:bno',
+    name: 'AdminRead',
+    component: AdminRead,
+    props: route => ({id: parseInt(route.params.id)}),
+  },
+  {
+    path: '/admin/modify/:bno',
+    name: 'AdminModify',
+    component: AdminModify,
+  },
 ];
 
 const router = createRouter({
