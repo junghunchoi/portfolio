@@ -20,16 +20,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/notices">공지</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/notices">회고</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/boards">자유게시판</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/boards">블로그</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/galleries">갤러리</RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/helps">문의 게시판</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/galleries">기록</RouterLink>
             </li>
           </ul>
           <div v-if="!loginSuccess" class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
@@ -113,8 +110,7 @@ header {
   left: 0;
   right: 0;
   z-index: 1000;
-  transition: background-color 0.3s ease;
-  padding-bottom: 30px;
+  //transition: background-color 0.3s ease;
 }
 
 .custom-navbar {
@@ -210,5 +206,13 @@ header {
   .logout-btn {
     margin-right: 0.5rem;
   }
+}
+
+header{
+  margin: 10px;
+}
+
+nav{
+  border-radius: 10px;
 }
 </style>

@@ -48,6 +48,7 @@ const record = reactive({
   </div>
   <div style="padding:30px;">
     <input type="file" @change="handleFileUpload($event, 2)"/>
+  </div>
 </template>
 
 <style scoped>
