@@ -39,15 +39,18 @@ public class CustomRestAdvice {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<Object> handleMethodArgumentNotValidException(
 		MethodArgumentNotValidException e) {
-		log.error("유효하지 않은 객체 혹은 파라미터 데이터 값입니다: {}", e.getMessage());
-		Map<String, String> validationErrors = new HashMap<>();
+		StringBuilder errorMessage = new StringBuilder("Validation failed: ");
 		List<ObjectError> validationErrorList = e.getBindingResult().getAllErrors();
+		Map<String, String> validationErrors = new HashMap<>();
 
 		validationErrorList.forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
+			String fieldName = error instanceof FieldError ? ((FieldError) error).getField() : error.getObjectName();
 			String validationMsg = error.getDefaultMessage();
+			errorMessage.append("[").append(fieldName).append(": ").append(validationMsg).append("] ");
 			validationErrors.put(fieldName, validationMsg);
 		});
+
+		log.error("유효하지 않은 객체 혹은 파라미터 데이터 값입니다: {}", errorMessage.toString());
 		return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
 	}
 

@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => {
                 sourcemap: false,
                 minify: true,
             }),
+            ...(mode === 'home' && {
+                sourcemap: false,
+                minify: true,
+            }),
             rollupOptions: {
                 output: {
                     manualChunks: {
@@ -39,11 +43,11 @@ export default defineConfig(({ mode }) => {
                 include: ['crypto', 'stream', 'buffer']
             })
         ],
-        server: {
-            proxy: {
-                '/api': mode === 'dev' ? 'http://localhost:1541' : 'http://13.210.146.57:1541',
-            },
-        },
+        // server: {
+        //     proxy: {
+        //         '/api': mode === 'dev' ? 'http://localhost:1541' : 'http://13.210.146.57:1541',
+        //     },
+        // },
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -60,6 +64,7 @@ export default defineConfig(({ mode }) => {
         },
         define: {
             'process.env.VITE_APP_API_URL': JSON.stringify(env.VITE_APP_API_URL),
+            'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
             // 필요한 다른 환경 변수들만 명시적으로 정의
             __VUE_OPTIONS_API__: true,
             __VUE_PROD_DEVTOOLS__: false,

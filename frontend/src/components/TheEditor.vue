@@ -31,6 +31,7 @@ import {
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+const BASE_URL = process.env.VITE_APP_URL;
 
 const props = defineProps({
   initEeditorData: String,
@@ -89,7 +90,7 @@ class CustomUploadAdapter {
       data.append('fileType', file.type)
       data.append('fileSize', file.size)
 
-      axios.post('http://localhost:8072/board/api/files/editor/upload', data)
+      axios.post(`${BASE_URL}/board/api/files/editor/upload`, data)
           .then(response => {
             console.log(response)
             appendFiles.value.push(response.data.resultData)

@@ -142,9 +142,9 @@ const notices = reactive({});
 const galleries = reactive({});
 const helps = reactive({});
 const activities = reactive([
-  { type: '달리기', gifUrl: './public/running.gif', data: 5, unit: 'km' },
-  { type: '자전거', gifUrl: './public/cycling.gif', data: 20, unit: 'km' },
-  { type: '공부', gifUrl: './public/studying.gif', data: 3, unit: '시간' }
+  { type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km' },
+  { type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km' },
+  { type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간' }
 ]);
 
 onMounted(async () => {
