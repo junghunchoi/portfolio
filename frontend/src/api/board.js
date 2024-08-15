@@ -1,4 +1,5 @@
 import axios from '@/plugins/axios.js'
+const BASE_URL = process.env.VITE_APP_URL;
 
 export function getBoards(params) {
     return axios.get('/boards',{params:params});
@@ -9,7 +10,7 @@ export function getBoardBybno(bno) {
 }
 
 export function createBoard(data) {
-    return axios.post('/boards', data);
+    return axios.post(`${BASE_URL}/board/api/boards`, data);
 }
 
 export function updateBoard(data) {
