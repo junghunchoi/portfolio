@@ -22,7 +22,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -131,17 +130,10 @@ public class FilesServiceImpl implements FilesService {
 		MultipartFile requestedFile = fileDTO.getUpload();
 		String uuid = UUID.randomUUID().toString();
 		String uploadedFileName = uuid+"_"+ fileDTO.getFileName();
-		Path savePath = Paths.get(uploadPath, uuid);
+		Path savePath = Paths.get(uploadPath, uploadedFileName);
 
 		try {
 			requestedFile.transferTo(savePath);
-
-//			fileDTO.setFilePath(uploadPath);
-//			fileDTO.setUploadedFileName(uploadedFileName);
-//			fileDTO.setBno(9999L);
-//
-//			registerFiles(fileDTO);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

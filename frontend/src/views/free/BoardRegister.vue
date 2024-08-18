@@ -73,7 +73,7 @@ import TheEditor from "@/components/TheEditor.vue";
 import {createBoard} from "@/api/board.js";
 import {uploadFile} from "@/api/file.js";
 
-
+const BASE_URL = process.env.VITE_APP_URL;
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -94,6 +94,7 @@ const save = async () => {
     const res = await createBoard(board)
 
     formData.append('bno', res.data.resultData);
+    if(formData)
     await uploadFile(formData)
     router.push({name: 'BoardList'});
   } catch (e){

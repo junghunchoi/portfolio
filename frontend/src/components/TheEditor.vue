@@ -3,7 +3,7 @@
     <ckeditor :editor="editor"
               v-model="editorData"
               :config="editorConfig"
-              :disabled="props.isDisabled"></ckeditor>
+              :disabled="props.isDisabled"/>
   </div>
 </template>
 
@@ -62,8 +62,8 @@ const editorConfig = {
   },
 };
 
-watch(editorDate, async () => {
-  emit('update:editorData', editorDate.value)
+watch(editorData, async () => {
+  emit('update:editorData', editorData.value)
 })
 
 

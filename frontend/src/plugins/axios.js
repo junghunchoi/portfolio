@@ -3,7 +3,7 @@ import router from '@/router'
 import refreshTokenInstance from "@/plugins/refreshToken.js";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VITE_APP_API_URL,
+  baseURL: process.env.VITE_APP_BOARD_URL,
 });
 
 let isRefreshingToken = false;

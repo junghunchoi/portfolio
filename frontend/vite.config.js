@@ -6,6 +6,16 @@ import path from "path";
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
+    let proxyTarget;
+
+    if (mode === 'dev') {
+        proxyTarget = 'http://49.175.22.52:1541';
+    } else if (mode === 'home') {
+        proxyTarget = 'http:// 192.168.219.106:1541'; // 홈 서버 IP로 변경하세요
+    } else if (mode === 'prod') {
+        proxyTarget = 'http://13.210.146.57:1541'; // 프로덕션 서버 IP
+    }
+
 
     return {
         base: '/',
@@ -43,11 +53,11 @@ export default defineConfig(({ mode }) => {
                 include: ['crypto', 'stream', 'buffer']
             })
         ],
-        // server: {
-        //     proxy: {
-        //         '/api': mode === 'dev' ? 'http://localhost:1541' : 'http://13.210.146.57:1541',
-        //     },
-        // },
+        server: {
+            proxy: {
+                proxyTarget
+            },
+        },
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),

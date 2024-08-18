@@ -1,4 +1,4 @@
-package com.junghun.configserver;
+n dpackage com.junghun.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
