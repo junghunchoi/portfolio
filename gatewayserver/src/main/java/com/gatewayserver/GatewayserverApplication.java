@@ -33,8 +33,8 @@ public class GatewayserverApplication {
                         .path("/board/**") // "/board/"로 오는 모든 요청을 라우팅한다.
                         .filters(f -> f.rewritePath("/board/(?<segment>.*)", "/${segment}") // "/board/"다음에 오는 경로를 추출하여 대상 서비스로 전달할 떄 "/board"를 제거한다.
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()) // 헤더에 요청시간을 넣는다.
-                                .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter()) // 레디스를 이용해 요청속도를 제한한다.
-                                        .setKeyResolver(userKeyResolver()))
+//                                .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter()) // 레디스를 이용해 요청속도를 제한한다.
+//                                        .setKeyResolver(userKeyResolver()))
                                 .retry(retryConfig -> retryConfig.setRetries(3)
                                         .setMethods(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.OPTIONS)
                                         .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
@@ -54,10 +54,10 @@ public class GatewayserverApplication {
     }
 
     // 요청처리 갯수에 필요한 셋팅을 한다.
-    @Bean
-    public RedisRateLimiter redisRateLimiter() {
-        return new RedisRateLimiter(1, 1, 1);
-    }
+//    @Bean
+//    public RedisRateLimiter redisRateLimiter() {
+//        return new RedisRateLimiter(1, 1, 1);
+//    }
 
     // 기본설정으로 헤더의 유저에 따라 요청수를 관리한다.
     @Bean
