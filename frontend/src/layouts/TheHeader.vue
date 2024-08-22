@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header ref="header" :class="{ 'dragging': isDragging }">
     <nav class="navbar navbar-expand-lg custom-navbar">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -44,40 +44,38 @@
   </header>
 </template>
 
-<script setup>
-import { useRouter } from 'vue-router';
-import {useAuthStore} from "@/store/loginStore.js";
+<script setup>import { useRouter } from 'vue-router';
+import { useAuthStore } from "@/store/loginStore.js";
 import { storeToRefs } from 'pinia'
 import { Collapse } from 'bootstrap';
 import { onMounted, onUnmounted, ref } from 'vue';
 
-//todo 포트폴리오, 블로그, 일기 또는 회고, 로그인
 const authStore = useAuthStore();
-const { userName, loginSuccess} = storeToRefs(authStore);
+const { userName, loginSuccess } = storeToRefs(authStore);
 
 const header = ref(null);
-const originalBackgroundColor = ref('');
+const isDragging = ref(false);
 
 let collapse;
 const AUTHORITY = useAuthStore().getAuthorities
 const router = useRouter();
+
 const goMemberRegister = () => {
   router.push({
     name: 'MemberRegister',
   });
 };
 
-const logoutHandler = () =>{
+const logoutHandler = () => {
   authStore.logout();
 }
 
 const handleDragStart = () => {
-  originalBackgroundColor.value = header.value.style.backgroundColor;
-  header.value.style.backgroundColor = 'transparent';
+  isDragging.value = true;
 };
 
 const handleDragEnd = () => {
-  header.value.style.backgroundColor = originalBackgroundColor.value;
+  isDragging.value = false;
 };
 
 onMounted(() => {
@@ -110,11 +108,17 @@ header {
   left: 0;
   right: 0;
   z-index: 1000;
-  //transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.5); // 반투명 배경
+  backdrop-filter: blur(10px); // 배경 흐림 효과
+}
+
+.dragging {
+  background-color: rgba(0, 0, 0, 0.8); // 드래그 중 더 불투명한 배경
 }
 
 .custom-navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: none; // 그림자 제거
   padding: 0.5rem 1rem;
 }
 
@@ -212,7 +216,8 @@ header{
   margin: 10px;
 }
 
-nav{
+nav {
   border-radius: 10px;
+  background-color: transparent; // nav의 배경을 투명하게
 }
 </style>
