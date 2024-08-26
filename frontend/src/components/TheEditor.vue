@@ -10,7 +10,6 @@
 <script setup>
 import {ref, watch} from 'vue';
 import axios from "axios";
-// import CustomUploadAdapterPlugin from "@/common/CustomUploadAdapter";
 import {
   ClassicEditor,
   Bold,
@@ -31,6 +30,7 @@ import {
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+
 const BASE_URL = process.env.VITE_APP_URL;
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const editorDate = ref(props.initEeditorData || "");
 const editor = ClassicEditor;
 const editorData = ref('');
 const editorConfig = {
-  plugins: [Bold, Essentials, Italic, Paragraph, Undo, SimpleUploadAdapter , Image,
+  plugins: [Bold, Essentials, Italic, Paragraph, Undo, SimpleUploadAdapter, Image,
     ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI,
     MediaEmbed, HtmlEmbed],
   extraPlugins: [CustomUploadAdapterPlugin],
@@ -92,8 +92,19 @@ class CustomUploadAdapter {
 
       axios.post(`${BASE_URL}/board/api/files/editor/upload`, data)
           .then(response => {
-            console.log(response)
-            appendFiles.value.push(response.data.resultData)
+            console.log('Server response:', response.data);
+
+            const imageUrl = response.data.resultData;
+
+            // URL이 상대 경로인 경우 전체 URL로 변환
+            const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}/board/api/files/${imageUrl}`;
+
+            appendFiles.value.push(response.data.resultData);
+
+            resolve({
+              default: fullImageUrl,
+              alt: file.name
+            });
           })
           .catch(error => {
             console.log(error);
@@ -118,8 +129,13 @@ function CustomUploadAdapterPlugin(editor) {
 const onReady = (editorInstance) => {
   editor.value = editorInstance;
 
+  // 초기 데이터 설정
+  if (props.initEditorData) {
+    editor.value.setData(props.initEditorData);
+  }
+
   // 파일 업로드 완료 이벤트 리스너
-  editor.value.plugins.get('FileRepository').on('uploadComplete', (evt, { data }) => {
+  editor.value.plugins.get('FileRepository').on('uploadComplete', (evt, {data}) => {
     console.log('File upload complete:', data.url);
     // 여기서 추가적인 로직을 구현할 수 있습니다.
   });

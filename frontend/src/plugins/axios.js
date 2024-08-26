@@ -71,31 +71,31 @@ axiosInstance.interceptors.response.use(
       }
 
 
-      if (error.response) {
-        if (error.response.status === 404) {
-          await router.push({
-            name: 'NotFound'
-          })
-        } else if (error.response.status === 403 && error.response.data.msg === "Malformed Token") {
-          await router.push({
-            name: 'ErrorView',
-            params: {errorMsg: '인증되지 않은 접근입니다. 로그인 후 이용해주세요.'}
-          });
-        }else if (error.response.status === 403 || error.response.data === "해당 페이지에 접근권한이 없습니다. 관리자에게 문의하세요") {
-          await router.push({
-            name: 'ErrorView',
-            params: { errorMsg: error.response.data }
-          });
-        }
-        else {
-          // 기타 상태 코드 처리
-          console.error('API 요청 실패:', error.response.status);
-        }
-      } else {
-        // 네트워크 에러 등 처리
-        console.error('API 요청 실패:', error.message);
-      }
-      return Promise.reject(error);
+    //   if (error.response) {
+    //     if (error.response.status === 404) {
+    //       await router.push({
+    //         name: 'NotFound'
+    //       })
+    //     } else if (error.response.status === 403 && error.response.data.msg === "Malformed Token") {
+    //       await router.push({
+    //         name: 'ErrorView',
+    //         params: {errorMsg: '인증되지 않은 접근입니다. 로그인 후 이용해주세요.'}
+    //       });
+    //     }else if (error.response.status === 403 || error.response.data === "해당 페이지에 접근권한이 없습니다. 관리자에게 문의하세요") {
+    //       await router.push({
+    //         name: 'ErrorView',
+    //         params: { errorMsg: error.response.data }
+    //       });
+    //     }
+    //     else {
+    //       // 기타 상태 코드 처리
+    //       console.error('API 요청 실패:', error.response.status);
+    //     }
+    //   } else {
+    //     // 네트워크 에러 등 처리
+    //     console.error('API 요청 실패:', error.message);
+    //   }
+    //   return Promise.reject(error);
     }
 );
 export default axiosInstance;
