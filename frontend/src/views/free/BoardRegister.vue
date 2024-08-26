@@ -10,7 +10,7 @@
             type="text"
             class="form-control"
             id="writer"
-            readonly
+
         >
       </div>
       <div class="mb-3">
