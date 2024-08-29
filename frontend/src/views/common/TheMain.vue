@@ -126,38 +126,7 @@
 				</div>
 			</div>
 		</section>
-
-		<!-- Skills Section -->
-		<section class="skills">
-			<div class="container">
-				<h2>기술 스택</h2>
-				<div class="skills-grid">
-					<div v-for="skill in skills" :key="skill.name" class="skill-item">
-						<img :src="skill.icon" :alt="skill.name" />
-						<span>{{ skill.name }}</span>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Contact Section -->
-		<section class="contact">
-			<div class="container">
-				<h2>연락처</h2>
-				<p>{{ email }}</p>
-				<div class="social-links">
-					<a
-						v-for="link in socialLinks"
-						:key="link.name"
-						:href="link.url"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<i :class="link.icon"></i>
-					</a>
-				</div>
-			</div>
-		</section>
+<HorizonLayout/>
 	</div>
 
 	<!-- Modal -->
@@ -190,7 +159,34 @@ import { getMainData } from '@/api/common.js';
 import BoardCard from '@/components/TheMainCard.vue';
 import TheModal from '@/components/TheModal.vue';
 import Typing from '@/components/Typing.vue';
-
+import HorizonLayout from "@/components/HorizonLayout.vue";
+const posts = ref([
+  {
+    id: 1,
+    title: '첫 번째 프로젝트: 포트폴리오 웹사이트 만들기',
+    excerpt: '부트스트랩과 Vue.js를 활용하여 반응형 포트폴리오 사이트를 제작한 과정을 소개합니다.',
+    image: '/api/placeholder/400/220',
+    date: '2023-08-15',
+    link: '/posts/1'
+  },
+  {
+    id: 2,
+    title: 'JavaScript ES6+ 주요 기능 정리',
+    excerpt: 'ES6 이후 추가된 JavaScript의 주요 기능들을 정리하고 실무에서의 활용 방법을 설명합니다.',
+    image: '/api/placeholder/400/220',
+    date: '2023-09-01',
+    link: '/posts/2'
+  },
+  {
+    id: 3,
+    title: 'Vue 3 Composition API 실전 가이드',
+    excerpt: 'Vue 3의 Composition API를 활용한 효율적인 상태 관리와 로직 재사용 방법을 소개합니다.',
+    image: '/api/placeholder/400/220',
+    date: '2023-09-20',
+    link: '/posts/3'
+  },
+  // 추가 포스트...
+]);
 const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
 const { userName, getAuthorities } = storeToRefs(authStore);
@@ -216,12 +212,7 @@ const activities = reactive([
 	{ type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간' },
 ]);
 
-const skills = reactive([
-	{ name: 'Vue.js', icon: '/vue-icon.png' },
-	{ name: 'JavaScript', icon: '/js-icon.png' },
-	{ name: 'Node.js', icon: '/nodejs-icon.png' },
-	// 추가 기술 스택을 여기에 넣어주세요
-]);
+
 
 const socialLinks = reactive([
 	{
@@ -389,28 +380,6 @@ const closeModal = () => {
 	padding: 2px 5px;
 	border-radius: 3px;
 	margin-left: 5px;
-}
-
-.skills {
-	padding: 60px 0;
-	background-color: #ffffff;
-}
-
-.skills-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-	gap: 20px;
-	justify-items: center;
-}
-
-.skill-item {
-	text-align: center;
-}
-
-.skill-item img {
-	width: 50px;
-	height: 50px;
-	margin-bottom: 10px;
 }
 
 .contact {

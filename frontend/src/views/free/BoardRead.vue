@@ -13,7 +13,7 @@
     <div class="mainArea d-flex flex-column">
       <TheEditor
           v-if="board.content"
-          :init-eeditor-data="board.content"
+          :init-editor-data="board.content"
           v-model:editorData="board.content"
           :isDisabled="true"/>
       <div class="d-flex flex-column mt-5">
