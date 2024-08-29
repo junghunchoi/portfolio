@@ -1,14 +1,15 @@
 <template>
-  <div class="bi-app">
+  <div class="bi-app" :class="{ 'disabled-editor': props.isDisabled }">
     <ckeditor :editor="editor"
               v-model="editorData"
               :config="editorConfig"
-              :disabled="props.isDisabled"/>
+              :disabled="props.isDisabled"
+              />
   </div>
 </template>
 
 <script setup>
-import {ref, watch} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import {
   ClassicEditor,
@@ -34,7 +35,7 @@ import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
 const BASE_URL = process.env.VITE_APP_URL;
 
 const props = defineProps({
-  initEeditorData: String,
+  initEditorData: String,
   isDisabled: {
     type: Boolean,
     default: false
@@ -42,9 +43,8 @@ const props = defineProps({
 });
 const appendFiles = ref([]);
 const emit = defineEmits(["update:editorData"])
-const editorDate = ref(props.initEeditorData || "");
+const editorData = ref(props.initEditorData || '');
 const editor = ClassicEditor;
-const editorData = ref('');
 const editorConfig = {
   plugins: [Bold, Essentials, Italic, Paragraph, Undo, SimpleUploadAdapter, Image,
     ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI,
@@ -60,6 +60,10 @@ const editorConfig = {
       height: 'auto'
     }
   },
+  autogrow: {
+    minHeight: '250px',
+    maxHeight: '600px'
+  }
 };
 
 watch(editorData, async () => {
@@ -125,27 +129,13 @@ function CustomUploadAdapterPlugin(editor) {
   };
 }
 
-// 에디터가 준비되었을 때 호출되는 함수
-const onReady = (editorInstance) => {
-  editor.value = editorInstance;
 
-  // 초기 데이터 설정
-  if (props.initEditorData) {
-    editor.value.setData(props.initEditorData);
+onMounted((editorInstance)=>{
+  if (props.isDisabled) {
+    const editorElement = editorInstance.ui.getEditableElement();
+    editorElement.style.border = 'none';
   }
-
-  // 파일 업로드 완료 이벤트 리스너
-  editor.value.plugins.get('FileRepository').on('uploadComplete', (evt, {data}) => {
-    console.log('File upload complete:', data.url);
-    // 여기서 추가적인 로직을 구현할 수 있습니다.
-  });
-};
-
-// 에디터 내용이 변경되었을 때 호출되는 함수
-const onEditorChange = (event, editorInstance) => {
-  editorData.value = editorInstance.getData();
-};
-
+})
 
 </script>
 
@@ -154,11 +144,35 @@ const onEditorChange = (event, editorInstance) => {
   width: 100%;
 }
 
+.disabled-editor :deep(.ck-editor__top) {
+  display: none;
+}
 
+.disabled-editor :deep(.ck-editor__main) {
+  border: none;
+}
+
+.disabled-editor :deep(.ck-editor__editable) {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.disabled-editor :deep(.ck-editor__editable.ck-read-only) {
+  border: none !important;
+}
 </style>
 <style>
 .ck-editor__editable_inline {
-  height: 250px;
-  overflow-y: auto;
+  min-height: 250px;
+  max-height: 600px;
+  overflow-y: hidden !important;
+}
+
+.ck-editor__editable_inline > :first-child {
+  margin-top: 0;
+}
+
+.ck-editor__editable_inline > :last-child {
+  margin-bottom: 0;
 }
 </style>

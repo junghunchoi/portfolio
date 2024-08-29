@@ -4,9 +4,11 @@
 			<RouterView></RouterView>
 		</div>
 	</main>
+  <TheFooter/>
 </template>
 
 <script setup>
+import TheFooter from "@/layouts/TheFooter.vue";
 </script>
 
 <style lang="scss" scoped>
