@@ -1,5 +1,5 @@
 <template>
-  <header ref="header" :class="{ 'dragging': isDragging }">
+  <header ref="header" class="korean-font-component" :class="{ 'dragging': isDragging }">
     <nav class="navbar navbar-expand-lg custom-navbar">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -8,8 +8,6 @@
         <button
             class="navbar-toggler custom-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
@@ -17,7 +15,11 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div
+            class="navbar-collapse custom-collapse"
+            :class="{ 'show': isNavbarOpen }"
+            id="navbarSupportedContent"
+        >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/notices">회고</RouterLink>
@@ -29,8 +31,11 @@
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/galleries">기록</RouterLink>
             </li>
           </ul>
-          <div v-if="!loginSuccess" class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
-            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">Login</router-link>
+          <div v-if="!loginSuccess"
+               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
+            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">
+              Login
+            </router-link>
             <button class="btn custom-btn-secondary" type="button" @click="goMemberRegister">회원가입</button>
           </div>
           <div v-else class="d-flex flex-wrap align-items-center mt-3 mt-lg-0">
@@ -44,19 +49,20 @@
   </header>
 </template>
 
-<script setup>import { useRouter } from 'vue-router';
-import { useAuthStore } from "@/store/loginStore.js";
-import { storeToRefs } from 'pinia'
-import { Collapse } from 'bootstrap';
-import { onMounted, onUnmounted, ref } from 'vue';
+<script setup>
+import {useRouter} from 'vue-router';
+import {useAuthStore} from "@/store/loginStore.js";
+import {storeToRefs} from 'pinia'
+import {onMounted, onUnmounted, ref, watch} from 'vue';
 
 const authStore = useAuthStore();
-const { userName, loginSuccess } = storeToRefs(authStore);
+const {userName, loginSuccess} = storeToRefs(authStore);
 
 const header = ref(null);
 const isDragging = ref(false);
+const isNavbarOpen = ref(false);
+const navbarContent = ref(null);
 
-let collapse;
 const AUTHORITY = useAuthStore().getAuthorities
 const router = useRouter();
 
@@ -78,30 +84,48 @@ const handleDragEnd = () => {
   isDragging.value = false;
 };
 
+const toggleNavbar = () => {
+  isNavbarOpen.value = !isNavbarOpen.value;
+};
+
 onMounted(() => {
-  collapse = new Collapse(document.getElementById('navbarSupportedContent'), {
-    toggle: false
-  });
   document.addEventListener('dragstart', handleDragStart);
   document.addEventListener('dragend', handleDragEnd);
+  navbarContent.value = document.getElementById('navbarSupportedContent');
 });
 
 onUnmounted(() => {
-  if (collapse) {
-    collapse.dispose();
-  }
-
   document.removeEventListener('dragstart', handleDragStart);
   document.removeEventListener('dragend', handleDragEnd);
 });
 
-const toggleNavbar = () => {
-  collapse.toggle();
-};
+watch(isNavbarOpen, (newValue) => {
+  if (navbarContent.value) {
+    if (newValue) {
+      navbarContent.value.style.maxHeight = `${navbarContent.value.scrollHeight}px`;
+    } else {
+      navbarContent.value.style.maxHeight = '0';
+    }
+  }
+});
 </script>
 
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
+
+.korean-font-component {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+p {
+  font-weight: 400;
+}
+
 header {
   position: fixed;
   top: 0;
@@ -144,6 +168,7 @@ header {
 .custom-btn-outline {
   color: #fff;
   border-color: #fff;
+
   &:hover {
     background-color: #fff;
     color: #007bff;
@@ -153,6 +178,7 @@ header {
 .custom-btn-secondary {
   background-color: #6c757d;
   color: #fff;
+
   &:hover {
     background-color: #5a6268;
   }
@@ -161,13 +187,15 @@ header {
 .custom-btn-light {
   background-color: #f8f9fa;
   color: #007bff;
+
   &:hover {
     background-color: #e2e6ea;
   }
 }
 
 .custom-toggler {
-  border-color: rgba(255,255,255,0.5);
+  border-color: rgba(255, 255, 255, 0.5);
+
   .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
@@ -212,12 +240,29 @@ header {
   }
 }
 
-header{
+header {
   margin: 10px;
 }
 
 nav {
   border-radius: 10px;
   background-color: transparent; // nav의 배경을 투명하게
+}
+
+.navbar-collapse {
+  transition: max-height 0.35s ease-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.navbar-collapse.show {
+  max-height: 500px; // This can be adjusted based on your content
+}
+
+@media (min-width: 992px) {
+  .custom-collapse {
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 </style>

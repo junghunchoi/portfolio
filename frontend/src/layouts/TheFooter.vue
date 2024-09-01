@@ -1,10 +1,6 @@
 <template>
-  <div class="page-container">
-    <div class="content-wrap">
-      <!-- 여기에 페이지의 주요 콘텐츠가 들어갑니다 -->
-    </div>
     <footer class="footer">
-      <div class="container">
+      <div class=" footer-content">
         <ul class="nav justify-content-center">
           <li class="nav-item">
             <a class="nav-link" href="https://github.com/your-github-username" target="_blank" rel="noopener noreferrer">
@@ -30,7 +26,6 @@
         </ul>
       </div>
     </footer>
-  </div>
 </template>
 
 <script setup>
@@ -38,23 +33,17 @@ import { ref } from 'vue';
 </script>
 
 <style scoped>
-.page-container {
-  position: relative;
-  min-height: 100vh;
-}
-
-.content-wrap {
-  padding-bottom: 60px; /* 푸터의 높이 */
-}
-
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
   height: 60px; /* 푸터의 높이 */
   background-color: #f8f9fa;
   display: flex;
   align-items: center;
+  justify-content: center; /* 가운데 정렬을 위해 추가 */
+  //z-index: 1000;
 }
 
 .container {
@@ -92,6 +81,12 @@ svg {
 
 .nav-link:hover svg {
   fill: #0056b3;
+}
+
+.footer-content {
+  text-align: center;
+  width: 100%;
+  padding: 0 20px; /* 좌우 여백 추가 */
 }
 
 @media (max-width: 767.98px) {

@@ -28,104 +28,104 @@
 		</section>
 
 		<!-- Main Content -->
-		<section class="main-content">
-			<div class="container">
-				<div class="grid">
-					<!-- Notice Board -->
-					<BoardCard title="공지사항" :destination="'/notices'">
-						<ul class="notice-list">
-							<li
-								v-for="notice in notices"
-								:key="notice.nno"
-								:class="{ important: notice.isMain === 1 }"
-							>
-								<router-link
-									:to="{ name: 'NoticeRead', params: { nno: notice.nno } }"
-								>
-									{{ notice.title }}
-								</router-link>
-								<span
-									v-if="isCreatedWithin7Days(notice.regDate)"
-									class="new-badge"
-									>NEW</span
-								>
-							</li>
-						</ul>
-					</BoardCard>
+<!--		<section class="main-content">-->
+<!--			<div class="container">-->
+<!--				<div class="grid">-->
+<!--					&lt;!&ndash; Notice Board &ndash;&gt;-->
+<!--					<BoardCard title="공지사항" :destination="'/notices'">-->
+<!--						<ul class="notice-list">-->
+<!--							<li-->
+<!--								v-for="notice in notices"-->
+<!--								:key="notice.nno"-->
+<!--								:class="{ important: notice.isMain === 1 }"-->
+<!--							>-->
+<!--								<router-link-->
+<!--									:to="{ name: 'NoticeRead', params: { nno: notice.nno } }"-->
+<!--								>-->
+<!--									{{ notice.title }}-->
+<!--								</router-link>-->
+<!--								<span-->
+<!--									v-if="isCreatedWithin7Days(notice.regDate)"-->
+<!--									class="new-badge"-->
+<!--									>NEW</span-->
+<!--								>-->
+<!--							</li>-->
+<!--						</ul>-->
+<!--					</BoardCard>-->
 
-					<!-- Free Board -->
-					<BoardCard title="자유게시판" :destination="'/boards'">
-						<ul class="board-list">
-							<li v-for="board in boards" :key="board.bno">
-								<router-link
-									:to="{ name: 'BoardRead', params: { bno: board.bno } }"
-								>
-									{{ board.title }}
-								</router-link>
-								<span class="reply-count">[{{ board.replyCount }}]</span>
-								<span
-									v-if="isCreatedWithin7Days(board.regDate)"
-									class="new-badge"
-									>NEW</span
-								>
-								<i v-if="board.fileCount >= 1" class="fas fa-paperclip"></i>
-							</li>
-						</ul>
-					</BoardCard>
+<!--					&lt;!&ndash; Free Board &ndash;&gt;-->
+<!--					<BoardCard title="자유게시판" :destination="'/boards'">-->
+<!--						<ul class="board-list">-->
+<!--							<li v-for="board in boards" :key="board.bno">-->
+<!--								<router-link-->
+<!--									:to="{ name: 'BoardRead', params: { bno: board.bno } }"-->
+<!--								>-->
+<!--									{{ board.title }}-->
+<!--								</router-link>-->
+<!--								<span class="reply-count">[{{ board.replyCount }}]</span>-->
+<!--								<span-->
+<!--									v-if="isCreatedWithin7Days(board.regDate)"-->
+<!--									class="new-badge"-->
+<!--									>NEW</span-->
+<!--								>-->
+<!--								<i v-if="board.fileCount >= 1" class="fas fa-paperclip"></i>-->
+<!--							</li>-->
+<!--						</ul>-->
+<!--					</BoardCard>-->
 
-					<!-- Gallery -->
-					<BoardCard title="갤러리" :destination="'/galleries'">
-						<div class="gallery-grid">
-							<div
-								v-for="gallery in galleries"
-								:key="gallery.bno"
-								class="gallery-item"
-								@click="readGalleryHandler(gallery.bno)"
-							>
-								<img
-									:src="`${BASE_URL}/files/${gallery.fileName}`"
-									:alt="gallery.title"
-								/>
-								<div class="gallery-info">
-									<h4>{{ gallery.title }}</h4>
-									<span
-										v-if="isCreatedWithin7Days(gallery.regDate)"
-										class="new-badge"
-										>NEW</span
-									>
-								</div>
-							</div>
-						</div>
-					</BoardCard>
+<!--					&lt;!&ndash; Gallery &ndash;&gt;-->
+<!--					<BoardCard title="갤러리" :destination="'/galleries'">-->
+<!--						<div class="gallery-grid">-->
+<!--							<div-->
+<!--								v-for="gallery in galleries"-->
+<!--								:key="gallery.bno"-->
+<!--								class="gallery-item"-->
+<!--								@click="readGalleryHandler(gallery.bno)"-->
+<!--							>-->
+<!--								<img-->
+<!--									:src="`${BASE_URL}/files/${gallery.fileName}`"-->
+<!--									:alt="gallery.title"-->
+<!--								/>-->
+<!--								<div class="gallery-info">-->
+<!--									<h4>{{ gallery.title }}</h4>-->
+<!--									<span-->
+<!--										v-if="isCreatedWithin7Days(gallery.regDate)"-->
+<!--										class="new-badge"-->
+<!--										>NEW</span-->
+<!--									>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</BoardCard>-->
 
-					<!-- Help Board -->
-					<BoardCard title="문의게시판" :destination="'/helps'">
-						<ul class="help-list">
-							<li v-for="help in helps" :key="help.hno">
-								<span
-									@click="readHelpHandler(help.writer, help.hno, help.isSecret)"
-								>
-									{{ help.title }}
-									<span
-										:class="
-											help.answer ? 'status answered' : 'status unanswered'
-										"
-									>
-										{{ help.answer ? '답변완료' : '미답변' }}
-									</span>
-									<span
-										v-if="isCreatedWithin7Days(help.regDate)"
-										class="new-badge"
-										>NEW</span
-									>
-									<i v-if="help.isSecret === 1" class="bi bi-lock"></i>
-								</span>
-							</li>
-						</ul>
-					</BoardCard>
-				</div>
-			</div>
-		</section>
+<!--					&lt;!&ndash; Help Board &ndash;&gt;-->
+<!--					<BoardCard title="문의게시판" :destination="'/helps'">-->
+<!--						<ul class="help-list">-->
+<!--							<li v-for="help in helps" :key="help.hno">-->
+<!--								<span-->
+<!--									@click="readHelpHandler(help.writer, help.hno, help.isSecret)"-->
+<!--								>-->
+<!--									{{ help.title }}-->
+<!--									<span-->
+<!--										:class="-->
+<!--											help.answer ? 'status answered' : 'status unanswered'-->
+<!--										"-->
+<!--									>-->
+<!--										{{ help.answer ? '답변완료' : '미답변' }}-->
+<!--									</span>-->
+<!--									<span-->
+<!--										v-if="isCreatedWithin7Days(help.regDate)"-->
+<!--										class="new-badge"-->
+<!--										>NEW</span-->
+<!--									>-->
+<!--									<i v-if="help.isSecret === 1" class="bi bi-lock"></i>-->
+<!--								</span>-->
+<!--							</li>-->
+<!--						</ul>-->
+<!--					</BoardCard>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</section>-->
 <HorizonLayout/>
 	</div>
 
@@ -210,6 +210,7 @@ const activities = reactive([
 	{ type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km' },
 	{ type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km' },
 	{ type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간' },
+  { type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권' },
 ]);
 
 
@@ -229,11 +230,11 @@ const socialLinks = reactive([
 ]);
 
 onMounted(async () => {
-	// const res = await getMainData();
+	const res = await getMainData();
 	// Object.assign(boards, res.data.resultData.boards);
-	// Object.assign(notices, res.data.resultData.notices);
-	// Object.assign(galleries, res.data.resultData.galleries);
-	// Object.assign(helps, res.data.resultData.helps);
+  console.log(res)
+  
+
 });
 
 const readHelpHandler = (writer, hno, isSecret) => {
@@ -303,22 +304,26 @@ const closeModal = () => {
 }
 
 .activity-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	gap: 20px;
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem;
 }
 
 .activity-card {
-	background-color: #f8f9fa;
-	border-radius: 10px;
-	padding: 20px;
-	text-align: center;
+  flex: 0 0 auto;
+  width: 200px; /* 카드의 너비를 조절하세요 */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
 }
 
 .activity-card img {
-	width: 64px;
-	height: 64px;
-	margin-bottom: 10px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .main-content {
@@ -399,8 +404,13 @@ const closeModal = () => {
 }
 
 @media (max-width: 768px) {
-	.grid {
-		grid-template-columns: 1fr;
-	}
+  .activity-grid {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .activity-card {
+    width: calc(50% - 1rem);
+  }
 }
 </style>
