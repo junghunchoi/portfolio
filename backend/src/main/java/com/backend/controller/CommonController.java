@@ -43,7 +43,7 @@ public class CommonController {
 	@Cacheable(cacheNames = "main")
 	@GetMapping("/main")
 	public ResponseEntity<ResultDTO<Object>> listMainPage() {
-
+		log.info("CommonController: listMainPage");
 		Map<String, List<?>> response = commonService.listMainPage();
 
 

@@ -24,11 +24,10 @@
       </div>
       <div class="mb-3">
         <label for="title" class="form-label">카테고리</label>
-        <select v-model="board.category.cno" class="form-control">
-          <option value="1">java</option>
-          <option value="2">javascript</option>
-          <option value="3">sql</option>
-        </select>
+        <TheCategorySelect
+            :categories="categories"
+            v-model:selectedCategory="board.category.cno"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label">내용</label>
@@ -65,13 +64,14 @@
 </template>
 
 <script setup>
-import { reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import TheEditor from "@/components/TheEditor.vue";
 import {createBoard} from "@/api/board.js";
 import {uploadFile} from "@/api/file.js";
+import TheCategorySelect from "@/components/TheCategorySelect.vue";
 
 const BASE_URL = process.env.VITE_APP_URL;
 const authStore = useAuthStore();
@@ -79,6 +79,7 @@ const {userName} = storeToRefs(authStore);
 
 const router = useRouter();
 
+// 변수
 const board = reactive({
   title: null,
   category:{cno: null, content: null},
@@ -88,7 +89,10 @@ const board = reactive({
 });
 const files = ref([null, null, null]);
 const formData = new FormData();
+const categories = ref([]);
 
+
+// 함수
 const save = async () => {
   try {
     const res = await createBoard(board)
@@ -113,6 +117,21 @@ const handleFileUpload = (event, index) => {
   }
   formData.append('files', files.value[index]);
 };
+
+const fetchCategories = async () => {
+  // API를 통해 카테고리를 가져오는 로직
+  // 예시 데이터:
+  categories.value = [
+    { id: 1, content: 'Board' },
+    { id: 2, content: 'Diary' },
+    { id: 3, content: 'cate' },
+  ];
+};
+
+//hook
+onMounted(async () => {
+  await fetchCategories();
+});
 </script>
 
 <style scoped>
