@@ -1,5 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import {ref, computed, onMounted, defineProps} from 'vue';
+import TheStrava from "@/components/TheStrava.vue";
+
+const props = defineProps({
+  stravaList: Object,
+})
+
 
 const posts = ref([
   {
@@ -74,8 +80,8 @@ const posts = ref([
     date: '2023-09-20',
     link: '/posts/3'
   },
-  // 추가 포스트...
 ]);
+
 
 const scrollContainer = ref(null);
 const scrollPosition = ref(0);
@@ -87,13 +93,13 @@ const displayedPosts = computed(() => {
 
 const scrollLeft = () => {
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: -300, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({left: -300, behavior: 'smooth'});
   }
 };
 
 const scrollRight = () => {
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 300, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({left: 300, behavior: 'smooth'});
   }
 };
 
@@ -110,27 +116,20 @@ onMounted(() => {
     updateScrollPosition();
   }
 });
+
 </script>
 
 <template>
+  <h2>자전거 주행기록</h2>
   <div class="post-list-container my-5">
-    <h1 class="text-center mb-4">내 글 목록</h1>
     <div class="post-list-wrapper">
       <button @click="scrollLeft" class="scroll-button left" :disabled="scrollPosition <= 0">&lt;</button>
       <div class="post-list-scroll" ref="scrollContainer">
-        <div v-for="post in displayedPosts" :key="post.id" class="post-card">
-          <div class="card h-100 shadow-sm">
-            <img :src="post.image" class="card-img-top" :alt="post.title">
-            <div class="card-body">
-              <h5 class="card-title">{{ post.title }}</h5>
-              <p class="card-text">{{ post.excerpt }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-muted">{{ post.date }}</small>
-                <a :href="post.link" class="btn btn-sm btn-outline-primary">자세히 보기</a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TheStrava
+            v-for="strava in props.stravaList"
+            :key="strava.regDate"
+            :strava="strava"
+        />
         <div v-if="posts.length > 7" class="post-card more-card">
           <div class="card h-100 shadow-sm d-flex justify-content-center align-items-center">
             <a href="/all-posts" class="btn btn-lg btn-primary">더보기</a>
@@ -178,22 +177,28 @@ onMounted(() => {
   background-color: #f8f9fa;
 }
 
-.card-img-top {
-  height: 200px;
-  object-fit: cover;
-}
-
 .scroll-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   border: none;
   padding: 10px;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.scroll-button:hover {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 .scroll-button.left {

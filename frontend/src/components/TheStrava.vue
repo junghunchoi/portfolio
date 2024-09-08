@@ -1,23 +1,22 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import {ref, onMounted, watch, computed, onBeforeUnmount} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 const props = defineProps({
+  strava: Object,
   summaryPolyline: String
 });
 
-const emit = defineEmits(['update:summaryPolyline']);
+const emit = defineEmits(['update:strava']);
 
 const mapContainer = ref(null);
 let map = null;
 
-// 여러 루트 옵션을 제공합니다. 실제 사용 시 이 부분을 동적으로 가져올 수 있습니다.
-const routes = ref([
-  { id: 1, name: 'Route 1', polyline: props.summaryPolyline },
-]);
+const summaryPolyline = computed(() => props.strava.map.summary_polyline);
 
-const selectedRoute = ref(props.summaryPolyline);
+
+const selectedRoute = ref(summaryPolyline.value);
 
 const decodePolyline = (encoded) => {
   const points = [];
@@ -51,7 +50,13 @@ const renderMap = () => {
     map.remove();
   }
 
+  if (!mapContainer.value) return;
   const decodedCoordinates = decodePolyline(selectedRoute.value);
+
+  if (decodedCoordinates.length === 0) {
+    console.error('No valid coordinates found');
+    return;
+  }
 
   map = L.map(mapContainer.value).setView(decodedCoordinates[0], 13);
 
@@ -59,7 +64,7 @@ const renderMap = () => {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  const polyline = L.polyline(decodedCoordinates, { color: 'red' }).addTo(map);
+  const polyline = L.polyline(decodedCoordinates, {color: 'red'}).addTo(map);
 
   map.fitBounds(polyline.getBounds());
 
@@ -67,28 +72,41 @@ const renderMap = () => {
   L.marker(decodedCoordinates[decodedCoordinates.length - 1]).addTo(map).bindPopup('End');
 };
 
-const handleRouteChange = (event) => {
-  selectedRoute.value = event.target.value;
-  emit('update:summaryPolyline', selectedRoute.value);
-};
+const formattedDate = computed(() => {
+  return new Date(props.strava.start_date_local).toLocaleDateString();
+});
+
 
 onMounted(() => {
   renderMap();
 });
 
-watch(selectedRoute, () => {
+watch(summaryPolyline, (newValue) => {
+  selectedRoute.value = newValue;
   renderMap();
+});
+
+onBeforeUnmount(() => {
+  if (map) {
+    map.remove();
+  }
 });
 </script>
 
+
 <template>
-  <div>
-    <select v-model="selectedRoute" @change="handleRouteChange">
-      <option v-for="route in routes" :key="route.id" :value="route.polyline">
-        {{ route.name }}
-      </option>
-    </select>
-    <div ref="mapContainer" style="height: 400px;"></div>
+  <div class="col">
+    <div class="card h-100 shadow-sm strava-card">
+      <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
+      <div class="card-body d-flex flex-column">
+        <!--        <h5 class="card-title">{{ activityTitle }}</h5>-->
+        <!--        <p class="card-text flex-grow-1">{{ activityExcerpt }}</p>-->
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <small class="text-muted">{{ formattedDate }}</small>
+          <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -96,17 +114,19 @@ watch(selectedRoute, () => {
 select {
   margin-bottom: 10px;
 }
+
+.card-img-top {
+  overflow: hidden;
+}
+
+.card-body {
+  min-height: 150px;
+}
+
+.strava-card {
+  flex: 0 0 auto;
+  width: 300px;
+  margin-right: 20px;
+  scroll-snap-align: start;
+}
 </style>
-
-/* 부모컴포넌트에선 아래와 같이 사용할 수 있다.
-<template>
-  <TheStrava v-model:summaryPolyline="currentPolyline" />
-</template>
-
-<script setup>
-import { ref } from 'vue';
-import TheStrava from './TheStrava.vue';
-
-const currentPolyline = ref('initial_polyline_here');
-</script>
-*/
