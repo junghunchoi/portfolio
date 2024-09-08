@@ -42,7 +42,7 @@ public class CommonServiceImpl implements CommonService {
 	public Map<String, List<?>> listMainPage() {
 
 		Map<String, List<?>> result = new HashMap<>();
-		Pageable pageable = PageRequest.of(0, 7); // 5개의 행만 조회
+		Pageable pageable = PageRequest.of(0, 7); // 7개의 행만 조회
 
 		List<BoardMainDTO> boardData = boardRepository.findBoardsTop6(pageable);
 		List<Strava> stravaList = stravaRepository.findStravaTop7(pageable);

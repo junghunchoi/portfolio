@@ -4,11 +4,17 @@ import com.backend.entity.common.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "Strava")
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class Strava extends BaseEntity {
 
     @Id
@@ -23,17 +29,6 @@ public class Strava extends BaseEntity {
     @Embedded
     @JsonProperty("map")
     private Map map;
-
-    public Strava() {
-        this(0L, "", "", new Map());
-    }
-
-    public Strava(Long id, String distance, String startDateLocal, Map map) {
-        this.id = id;
-        this.distance = distance;
-        this.startDateLocal = startDateLocal;
-        this.map = map;
-    }
 
     @Embeddable
     @JsonIgnoreProperties(ignoreUnknown = true)
