@@ -22,13 +22,13 @@
         >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/notices">회고</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/retrospects">회고</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/boards">블로그</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/galleries">기록</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/records">기록</RouterLink>
             </li>
           </ul>
           <div v-if="!loginSuccess"
@@ -112,18 +112,10 @@ watch(isNavbarOpen, (newValue) => {
 
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 .korean-font-component {
-  font-family: 'Nanum Gothic', sans-serif;
-}
-
-h1 {
-  font-weight: 700;
-}
-
-p {
-  font-weight: 400;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 header {
@@ -132,87 +124,108 @@ header {
   left: 0;
   right: 0;
   z-index: 1000;
-  transition: background-color 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.5); // 반투명 배경
-  backdrop-filter: blur(10px); // 배경 흐림 효과
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  margin: 15px;
+  border-radius: 20px;
 }
 
 .dragging {
-  background-color: rgba(0, 0, 0, 0.8); // 드래그 중 더 불투명한 배경
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 .custom-navbar {
-  box-shadow: none; // 그림자 제거
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.5rem;
 }
 
 .site-title {
-  font-weight: bold;
-  font-size: 1.3rem;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.7px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .custom-nav-link {
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  margin: 0 0.2rem;
+  border-radius: 15px;
 
   &:hover {
-    color: purple !important;
+    color: #fff !important;
+    background-color: rgba(255,255,255,0.1);
   }
 
   &.active {
-    border-bottom: 2px solid #fff;
+    background-color: rgba(255,255,255,0.2);
+    color: #fff !important;
   }
 }
 
 .custom-btn-outline {
   color: #fff;
-  border-color: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #fff;
-    color: #007bff;
+    color: #000;
   }
 }
 
 .custom-btn-secondary {
   background-color: #6c757d;
   color: #fff;
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 }
 
 .custom-btn-light {
   background-color: #f8f9fa;
   color: #007bff;
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #e2e6ea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 }
 
 .custom-toggler {
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.7);
 
   .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
 }
 
 .admin-badge {
   background-color: #ffc107;
   color: #000;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.9rem;
   font-weight: bold;
   white-space: nowrap;
 }
 
 .user-name {
-  font-weight: bold;
+  font-weight: 500;
   white-space: nowrap;
   color: #fff;
 }
@@ -220,6 +233,8 @@ header {
 .logout-btn {
   &:hover {
     background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 }
 
@@ -229,8 +244,7 @@ header {
   }
 
   .custom-nav-link.active {
-    border-bottom: none;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
   }
 
   .admin-badge,
@@ -240,15 +254,6 @@ header {
   }
 }
 
-header {
-  margin: 10px;
-}
-
-nav {
-  border-radius: 10px;
-  background-color: transparent; // nav의 배경을 투명하게
-}
-
 .navbar-collapse {
   transition: max-height 0.35s ease-out;
   max-height: 0;
@@ -256,7 +261,7 @@ nav {
 }
 
 .navbar-collapse.show {
-  max-height: 500px; // This can be adjusted based on your content
+  max-height: 500px;
 }
 
 @media (min-width: 992px) {
