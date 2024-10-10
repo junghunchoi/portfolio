@@ -3,26 +3,26 @@
     <b-form inline>
       <label class="sr-only" for="inline-form-input-name">제목</label>
       <b-form-input
-          v-model="notice.title"
+          v-model="retrospect.title"
           id="inline-form-input-name"
           class="mb-2 mr-sm-2 mb-sm-0 mb-3"
           placeholder="제목을 입력해 주세요."
 
       ></b-form-input>
       <TheEditor
-          v-if="notice.title"
-          :init-eeditor-data="notice.content"
-          v-model:editorData="notice.content"
+          v-if="retrospect.title"
+          :init-eeditor-data="retrospect.content"
+          v-model:editorData="retrospect.content"
           class="mt-3"/>
       <label>
       <input type="checkbox" class="mb-2 mr-sm-2 mb-sm-0 mt-2"
              :checked="true"
-             v-model="notice.isMain"
+             v-model="retrospect.isMain"
       />
       상단고정</label>
     </b-form>
     <button class="btn btn-primary me-auto mt-2"
-            @click="modifyNoticeHandler">저장
+            @click="modifyretrospectHandler">저장
     </button>
   </section>
 </template>
@@ -31,11 +31,11 @@
 import {inject, reactive, watch} from 'vue'
 import TheEditor from "@/components/TheEditor.vue";
 import {useRouter} from "vue-router";
-import {updateNotice} from "@/api/notice.js";
+import {updateRetrospect} from "@/api/retrospect.js";
 
 const router = useRouter();
 
-const notice = reactive({
+const retrospect = reactive({
   nno: history.state.nno,
   title: history.state.title,
   writer: history.state.writer,
@@ -43,12 +43,12 @@ const notice = reactive({
   isMain: history.state.isMain === 1
 });
 
-const modifyNoticeHandler = async () => {
-  notice.isMain = notice.isMain === true ? 1 : 0;
+const modifyretrospectHandler = async () => {
+  retrospect.isMain = retrospect.isMain === true ? 1 : 0;
 
   try{
-    await updateNotice(notice)
-    router.push({name: 'NoticeList'})
+    await updateretrospect(retrospect)
+    router.push({name: 'retrospectList'})
   }catch (e) {
     console.log(e);
   }

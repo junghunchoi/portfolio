@@ -6,7 +6,7 @@
       <div class="mb-3">
         <label for="title" class="form-label">작성자</label>
         <input
-            v-model="notice.writer"
+            v-model="retrospect.writer"
             type="text"
             class="form-control"
             id="writer"
@@ -16,7 +16,7 @@
       <div class="mb-3">
         <label for="title" class="form-label">제목</label>
         <input
-            v-model="notice.title"
+            v-model="retrospect.title"
             type="text"
             class="form-control"
             id="title"
@@ -25,25 +25,25 @@
       <div class="mb-3">
         <label  class="form-label">내용</label>
         <TheEditor
-            :init-eeditor-data="notice.content"
-            v-model:editorData="notice.content"
+            :init-eeditor-data="retrospect.content"
+            v-model:editorData="retrospect.content"
             :isDisabled="false"/>
       </div>
       <div class="mb-3">
         <label class="form-label">상단고정</label>
         <input type="checkbox"
-               v-model="notice.isMain"
+               v-model="retrospect.isMain"
         />
       </div>
       <div class="pt-4">
         <button
             type="button"
             class="btn btn-outline-dark me-2"
-            @click="goNoticePage"
+            @click="goretrospectPage"
         >
           목록
         </button>
-        <button class="btn btn-primary" @click="registerNoticeHandler">저장</button>
+        <button class="btn btn-primary" @click="registerretrospectHandler">저장</button>
       </div>
     </form>
   </div>
@@ -56,7 +56,7 @@ import {storeToRefs} from "pinia";
 import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import TheEditor from "@/components/TheEditor.vue";
-import {createNotice} from "@/api/notice";
+import {createRetrospect} from "@/api/retrospect";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -64,21 +64,21 @@ const {userName} = storeToRefs(authStore);
 const show = ref(false);
 const router = useRouter();
 
-const notice = reactive({
+const retrospect = reactive({
   title: null,
   content: null,
   isMain: 0,
   writer: userName
 });
 
-const goNoticePage = () => {
-  router.push('/notices');
+const goretrospectPage = () => {
+  router.push('/retrospects');
 };
 
-const registerNoticeHandler = async () => {
-  notice.isMain = notice.isMain === true ? 1 : 0;
-  const res = await createNotice(notice)
-  router.push('/notices');
+const registerretrospectHandler = async () => {
+  retrospect.isMain = retrospect.isMain === true ? 1 : 0;
+  const res = await createretrospect(retrospect)
+  router.push('/retrospects');
 }
 
 const closeModal = () => {

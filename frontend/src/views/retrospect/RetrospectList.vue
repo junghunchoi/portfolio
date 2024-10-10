@@ -69,7 +69,7 @@ import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
 import TheModal from "@/components/TheModal.vue";
 import {storeToRefs} from 'pinia'
-import {getNotices} from "@/api/notice.js";
+import {getRetrospects} from "@/api/retrospect.js";
 
 defineProps({
   limit: Number,
@@ -105,7 +105,7 @@ const params = reactive({
 
 const fetchData = async () => {
   try {
-    const {data} = await getNotices(params)
+    const {data} = await getretrospects(params)
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -134,7 +134,7 @@ const goRegisterPage = () => {
     show.value = true;
     return;
   }
-  router.push('/notices/register');
+  router.push('/retrospects/register');
 };
 
 

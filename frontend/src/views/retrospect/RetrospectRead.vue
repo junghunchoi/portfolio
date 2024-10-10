@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-12 mb-3">
         <h2>{{
-            notice.title
+            retrospect.title
           }}</h2>
         <p class="text-muted">작성자: {{
-            notice.writer
+            retrospect.writer
           }} | 조회수: {{
-            notice.viewCount
+            retrospect.viewCount
           }}</p>
         <hr>
       </div>
@@ -17,15 +17,15 @@
   </section>
   <section>
     <TheEditor
-        v-if="notice.content"
-        :init-eeditor-data="notice.content"
-        v-model:editorData="notice.content"
+        v-if="retrospect.content"
+        :init-eeditor-data="retrospect.content"
+        v-model:editorData="retrospect.content"
         :isDisabled="true"/>
     <div class="float-end m-1">
-      <button class="btn btn-primary" @click="goNoticeBoardList">목록</button>
+      <button class="btn btn-primary" @click="goretrospectBoardList">목록</button>
       <button v-if="AUTHORITY === 'ADMIN'"
               class="btn btn-secondary ms-1"
-              @click="modifyNoticeHandler">수정
+              @click="modifyretrospectHandler">수정
       </button>
       <button v-if="AUTHORITY === 'ADMIN'"
               class="btn btn-danger ms-1"
@@ -44,7 +44,7 @@
         정말로 삭제하시겠습니까?
       </template>
       <template #actions>
-        <button class="btn btn-danger" @click="deleteNoticeHandler">삭제</button>
+        <button class="btn btn-danger" @click="deleteretrospectHandler">삭제</button>
         <button class="btn btn-light" @click="closeModal">닫기</button>
       </template>
     </TheModal>
@@ -57,14 +57,14 @@ import {useRoute, useRouter} from "vue-router";
 import {useAuthStore} from "@/store/loginStore.js";
 import TheEditor from "@/components/TheEditor.vue";
 import TheModal from "@/components/TheModal.vue";
-import {deleteNotice, getNoticeBynno} from "@/api/notice.js";
+import {deleteRetrospect, getRetrospectById} from "@/api/retrospect.js";
 
 const AUTHORITY = useAuthStore().getAuthorities
 const route = useRoute();
 const router = useRouter();
 const nno = ref(route.params.nno);
 
-const notice = reactive({
+const retrospect = reactive({
   title: '',
   content: '',
   writer: '',
@@ -72,22 +72,22 @@ const notice = reactive({
   viewCount: 0,
 });
 
-const goNoticeBoardList = () => {
-  router.push('/notices');
+const goretrospectBoardList = () => {
+  router.push('/retrospects');
 };
 
-const modifyNoticeHandler = () => {
-  router.push({name: 'NoticeModify', state: {...notice}});
+const modifyretrospectHandler = () => {
+  router.push({name: 'retrospectModify', state: {...retrospect}});
 }
 
-const deleteNoticeHandler = async () =>{
-  await deleteNotice(nno.value)
-  router.push({name: 'NoticeList'})
+const deleteretrospectHandler = async () =>{
+  await deleteretrospect(nno.value)
+  router.push({name: 'retrospectList'})
 }
 
 onMounted(async () => {
-  const res = await getNoticeBynno(nno.value)
-  Object.assign(notice, res.data.resultData);
+  const res = await getretrospectBynno(nno.value)
+  Object.assign(retrospect, res.data.resultData);
 });
 
 // 모달 로직
