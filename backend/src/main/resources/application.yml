@@ -33,3 +33,10 @@ spring:
     import: "optional:configserver:http://192.168.219.106:8071/"
     activate:
       on-profile: home
+
+---
+spring:
+  config:
+    import: "optional:configserver:http://49.175.22.52:8071/"
+    activate:
+      on-profile: out
