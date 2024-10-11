@@ -123,6 +123,8 @@ const goRegisterPage = () => {
 const fetchData = async () => {
   try {
     const {data} = await getBoards(params);
+
+
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);

@@ -9,6 +9,6 @@ public class FallBackController {
 
 	@RequestMapping("/contactSupport")
 	public Mono<String> contactSupport() {
-		return Mono.just("error occured. contact support team!");
+		return Mono.just("gateway 오류");
 	}
 }

@@ -36,6 +36,13 @@ spring:
       on-profile: dev
     import: "optional:configserver:http://49.175.22.52:8071/"
 
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: "optional:configserver:http://localhost:8071/"
+
 management:
   endpoints:
     web:
