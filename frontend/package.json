@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite --port 1542 --mode dev",
     "home": "vite --port 1542 --mode home",
+    "prod": "vite --port 1542 --mode prod",
     "build": "vite build",
     "build:dev": "vite build --mode dev",
     "build:prod": "vite build --mode prod",
