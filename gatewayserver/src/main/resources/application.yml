@@ -12,11 +12,7 @@ spring:
       httpclient:
         connect-timeout: 1000
         response-timeout: 10s
-      routes:
-        - id: securityserver
-          uri: http://localhost:8020
-          predicates:
-            - Path=/auth/**
+
   rabbitmq:
     host: "localhost"
     port: 5672
@@ -57,9 +53,9 @@ management:
 
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.cloud.netflix: DEBUG
+    org.springframework.cloud.gateway: info
+    org.springframework.web: info
+    org.springframework.cloud.netflix: info
 
 resilience4j.circuitbreaker:
   configs:

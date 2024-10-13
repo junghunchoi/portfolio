@@ -16,13 +16,14 @@ spring:
 
 logging:
   level:
-    org.springframework: info
+    org:
+      springframework:
+        core.LocalVariableTableParameterNameDiscoverer: error
     com.backend: info
   pattern:
   endpoints:
     shutdown:
       enabled: true
-
 com:
   backend:
     upload:

@@ -35,4 +35,7 @@ public interface BoardSearch {
 	 */
 	Page<GalleryListDTO> searchGalleryList(String[] types, String keyword,
 		String order, String sort, Pageable pageable);
+
+	Page<BoardListDTO> searchRetrospectList(String[] types, String keyword,
+										   String order, String sort, Pageable pageable);
 }
