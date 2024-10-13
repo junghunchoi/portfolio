@@ -8,32 +8,34 @@
 
   <button v-if="AUTHORITY === 'ADMIN'" class="btn btn-primary m-2" @click="goRegisterPage">공지 등록
   </button>
-  <table class="table mt-3">
+  <table class="table">
     <thead>
     <tr>
       <th scope="col">제목</th>
       <th scope="col">조회수</th>
-      <th scope="col">등록자</th>
       <th scope="col">등록일시</th>
+      <th scope="col">수정일시</th>
     </tr>
     </thead>
     <tbody>
-    <tr v-for="notice in response.items" :class="[notice.isMain === 1 ? 'bg-secondary' : '']">
+    <tr v-for="board in response.items">
+
       <td>
-        <span v-if="notice.isMain === 1">
-          <b class="me-2">[공지]</b>
-        </span>
-        <router-link :to="{ name: 'NoticeRead', params: { nno: notice.nno }}">
-          {{ notice.title }}
+        <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
+          {{ board.title }}
         </router-link>
-        <span class="ms-1" v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
+        <span>[{{ board.replyCount }}]</span>
+      </td>
+      <td>{{ board.writer }}
       </td>
       <td>
-        {{ notice.viewCount }}
+        {{ board.viewCount }}
       </td>
-      <td>{{ notice.writer }}
+      <td>
+        {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
       </td>
-      <td> {{ $dayjs(notice.regDate).format('YYYY.MM.DD') }}
+      <td>
+        {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
       </td>
     </tr>
     </tbody>
@@ -105,7 +107,8 @@ const params = reactive({
 
 const fetchData = async () => {
   try {
-    const {data} = await getretrospects(params)
+    const {data} = await getRetrospects(params)
+    console.log(data)
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -148,70 +151,148 @@ const closeModal = () => {
 }
 </script>
 
-<style scoped>
-a {
-  color: inherit;
-  text-decoration: none;
+<style>
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #f8f9fa;
+  --text-color: #333;
+  --border-color: #e0e0e0;
+  --hover-color: #f1f3f5;
+  --header-bg-color: #f1f8ff;
 }
 
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
-.table th,
-.table td {
-  padding: 12px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  color: var(--secondary-color);
   text-align: center;
-  vertical-align: middle;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
 }
 
-.table th {
-  background-color: #f8f9fa;
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+.table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+thead {
+  background-color: var(--header-bg-color);
+}
+
+th {
+  padding: 15px;
+  text-align: left;
   font-weight: bold;
+  color: var(--secondary-color);
+  border-bottom: 2px solid var(--primary-color);
+  text-transform: uppercase;
+  font-size: 0.9em;
 }
 
-.table tr:hover {
-  background-color: #f5f5f5;
+tbody tr {
+  transition: background-color 0.3s ease;
 }
 
-.table .attachment-icon {
-  margin-left: 5px;
-  color: #007bff;
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.table .attachment-icon.show {
-  display: inline;
+tbody tr:hover {
+  background-color: var(--hover-color);
 }
 
-.table .router-link {
-  color: #007bff;
+td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+a {
+  color: var(--primary-color);
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.table .router-link:hover {
+a:hover {
+  color: #2980b9;
   text-decoration: underline;
 }
 
-table th:nth-child(1) {
-  text-align: center !important;
-  width: 40%;
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
-table td:nth-child(1){
-  padding-left: 50px;
-  text-align: left;
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-table th:nth-child(2), table td:nth-child(2) {
-  width: 10%;
+
+.pagination button:hover, .pagination button.active {
+  background-color: var(--primary-color);
+  color: white;
 }
-table th:nth-child(3), table td:nth-child(3) {
-  width: 10%;
-}
-table th:nth-child(4), table td:nth-child(4) {
-  width: 10%;
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 }
 </style>

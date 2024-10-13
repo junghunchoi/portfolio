@@ -26,25 +26,6 @@ public class Strava extends BaseEntity {
     @JsonProperty("start_date_local")
     private String startDateLocal;
 
-    @Embedded
-    @JsonProperty("map")
-    private Map map;
+    private StravaMap map;
 
-    @Embeddable
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @Getter
-    public static class Map {
-        @JsonProperty("summary_polyline")
-        @Lob
-        @Column(columnDefinition = "TEXT")
-        private String summaryPolyline;
-
-        public Map() {
-            this("");
-        }
-
-        public Map(String summaryPolyline) {
-            this.summaryPolyline = summaryPolyline;
-        }
-    }
 }

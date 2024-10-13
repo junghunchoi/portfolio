@@ -42,7 +42,7 @@ public class NoticeDTO {
 
 	@PositiveOrZero(message = "조회수는 0 이상이어야 합니다.")
 	@Schema(description = "조회수", example = "100")
-	private Long viewCount = 0L;
+	private final Long viewCount = 0L;
 
 	@Schema(description = "등록일시", example = "2023-06-30T10:30:00")
 	private LocalDateTime regDate;

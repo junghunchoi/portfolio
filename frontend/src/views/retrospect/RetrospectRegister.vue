@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>공지글 등록</h2>
+    <h2>회고 등록</h2>
     <hr class="my-4"/>
     <form @submit.prevent>
       <div class="mb-3">
@@ -29,12 +29,6 @@
             v-model:editorData="retrospect.content"
             :isDisabled="false"/>
       </div>
-      <div class="mb-3">
-        <label class="form-label">상단고정</label>
-        <input type="checkbox"
-               v-model="retrospect.isMain"
-        />
-      </div>
       <div class="pt-4">
         <button
             type="button"
@@ -57,6 +51,8 @@ import {inject, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import TheEditor from "@/components/TheEditor.vue";
 import {createRetrospect} from "@/api/retrospect";
+import {createBoard} from "@/api/board";
+
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 
@@ -67,8 +63,9 @@ const router = useRouter();
 const retrospect = reactive({
   title: null,
   content: null,
-  isMain: 0,
-  writer: userName
+  category:{cno: 4, content: 'restrospect'},
+  writer: userName,
+  boardType: 3
 });
 
 const goretrospectPage = () => {
@@ -77,7 +74,7 @@ const goretrospectPage = () => {
 
 const registerretrospectHandler = async () => {
   retrospect.isMain = retrospect.isMain === true ? 1 : 0;
-  const res = await createretrospect(retrospect)
+  const res = await createBoard(retrospect)
   router.push('/retrospects');
 }
 

@@ -34,7 +34,7 @@ public class LogTraceAspect {
     /**
      * 모든 메소드 실행을 추적하고 로깅하는 AOP 어드바이스
      */
-    @Around("execution(* com.backend.controller..*(..))")
+    @Around("execution(* com.backend..*(..))")
     public Object doTrace(ProceedingJoinPoint joinPoint) throws Throwable {
         TraceStatus status = null;
         boolean hasError = false;
@@ -150,6 +150,10 @@ public class LogTraceAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String[] parameterNames = signature.getParameterNames();
         Object[] args = joinPoint.getArgs();
+
+        if (parameterNames == null || parameterNames.length == 0) {
+            return " ";
+        }
 
         Map<String, Object> paramMap = new HashMap<>();
         IntStream.range(0, parameterNames.length)

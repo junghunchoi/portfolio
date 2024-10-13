@@ -55,7 +55,6 @@ public class BoardController {
 	@GetMapping()
 	public ResponseEntity<ResultDTO<Object>> list(PageRequestDTO pageRequestDTO) {
 		PageResponseDTO<BoardListDTO> responseDTO = boardService.list(pageRequestDTO);
-
 		return ResponseEntity.ok(
 			ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
 	}

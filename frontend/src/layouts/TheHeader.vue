@@ -31,18 +31,18 @@
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/records">기록</RouterLink>
             </li>
           </ul>
-          <div v-if="!loginSuccess"
-               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
-            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">
-              Login
-            </router-link>
-            <button class="btn custom-btn-secondary" type="button" @click="goMemberRegister">회원가입</button>
-          </div>
-          <div v-else class="d-flex flex-wrap align-items-center mt-3 mt-lg-0">
-            <div v-if="AUTHORITY === 'ADMIN'" class="admin-badge me-2 mb-2 mb-sm-0">관리자</div>
-            <div class="user-name me-2 mb-2 mb-sm-0">{{ userName }}님</div>
-            <button class="btn btn-sm custom-btn-light fw-bold logout-btn" @click="logoutHandler">로그아웃</button>
-          </div>
+<!--          <div v-if="!loginSuccess"-->
+<!--               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">-->
+<!--            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">-->
+<!--              Login-->
+<!--            </router-link>-->
+<!--            <button class="btn custom-btn-secondary" type="button" @click="goMemberRegister">회원가입</button>-->
+<!--          </div>-->
+<!--          <div v-else class="d-flex flex-wrap align-items-center mt-3 mt-lg-0">-->
+<!--            <div v-if="AUTHORITY === 'ADMIN'" class="admin-badge me-2 mb-2 mb-sm-0">관리자</div>-->
+<!--            <div class="user-name me-2 mb-2 mb-sm-0">{{ userName }}님</div>-->
+<!--            <button class="btn btn-sm custom-btn-light fw-bold logout-btn" @click="logoutHandler">로그아웃</button>-->
+<!--          </div>-->
         </div>
       </div>
     </nav>
