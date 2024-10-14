@@ -4,16 +4,6 @@
     <hr class="my-4"/>
     <form @submit.prevent>
       <div class="mb-3">
-        <label for="title" class="form-label">작성자</label>
-        <input
-            v-model="retrospect.writer"
-            type="text"
-            class="form-control"
-            id="writer"
-            readonly
-        >
-      </div>
-      <div class="mb-3">
         <label for="title" class="form-label">제목</label>
         <input
             v-model="retrospect.title"
@@ -54,7 +44,7 @@ import {createRetrospect} from "@/api/retrospect";
 import {createBoard} from "@/api/board";
 
 const authStore = useAuthStore();
-const {userName} = storeToRefs(authStore);
+// const {userName} = storeToRefs(authStore);
 
 
 const show = ref(false);
@@ -64,7 +54,7 @@ const retrospect = reactive({
   title: null,
   content: null,
   category:{cno: 4, content: 'restrospect'},
-  writer: userName,
+  writer: '최정훈',
   boardType: 3
 });
 
