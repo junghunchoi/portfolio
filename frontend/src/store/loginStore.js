@@ -3,7 +3,7 @@
  * @module useAuthStore
  */
 import {defineStore} from 'pinia';
-import axios from 'axios';
+import axios from 'axios/dist/axios';
 import {ref, computed} from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {

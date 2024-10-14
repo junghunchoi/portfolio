@@ -30,8 +30,6 @@ class HelpControllerTest {
 	@Mock
 	private HelpService helpService;
 
-	@Mock
-	private JWTUtil jwtUtil;
 
 	@InjectMocks
 	private HelpController helpController;
