@@ -9,4 +9,6 @@ import TheView from '@/layouts/TheView.vue';
 </script>
 
 
-<style></style>
+<style scoped>
+
+</style>

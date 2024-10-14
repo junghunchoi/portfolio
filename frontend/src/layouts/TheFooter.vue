@@ -38,7 +38,7 @@ import { ref } from 'vue';
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px; /* 푸터의 높이 */
+  height: 45px; /* 푸터의 높이 */
   background-color: #f8f9fa;
   display: flex;
   align-items: center;

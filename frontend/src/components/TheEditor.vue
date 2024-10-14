@@ -41,6 +41,8 @@ const props = defineProps({
     default: false
   }
 });
+
+
 const appendFiles = ref([]);
 const emit = defineEmits(["update:editorData"])
 const editorData = ref(props.initEditorData || '');
@@ -59,10 +61,6 @@ const editorConfig = {
       width: '100%',
       height: 'auto'
     }
-  },
-  autogrow: {
-    minHeight: '250px',
-    maxHeight: '600px'
   }
 };
 
@@ -130,16 +128,33 @@ function CustomUploadAdapterPlugin(editor) {
 }
 
 
-onMounted((editorInstance)=>{
+onMounted(() => {
   if (props.isDisabled) {
-    const editorElement = editorInstance.ui.getEditableElement();
-    editorElement.style.border = 'none';
+    const editorElement = document.querySelector('.ck-editor__editable');
+    if (editorElement) {
+      editorElement.style.border = 'none';
+      editorElement.style.boxShadow = 'none';
+    }
   }
-})
+});
 
 </script>
 
-<style scoped>
+<style>
+.ck-editor__editable_inline {
+  height: 600px !important; /* 기본 높이 설정 */
+  max-height: 600px !important; /* 최대 높이 제한 */
+  overflow-y: auto !important; /* 세로 스크롤 허용 */
+}
+
+/* 읽기 전용 모드일 때도 같은 크기 유지 */
+.disabled-editor .ck-editor__editable_inline {
+  height: 600px !important;
+  max-height: 500px !important;
+  overflow-y: auto !important;
+}
+
+
 #app {
   width: 100%;
 }
@@ -160,19 +175,33 @@ onMounted((editorInstance)=>{
 .disabled-editor :deep(.ck-editor__editable.ck-read-only) {
   border: none !important;
 }
-</style>
-<style>
-.ck-editor__editable_inline {
-  min-height: 250px;
-  max-height: 600px;
-  overflow-y: hidden !important;
+
+/* 추가된 스타일 */
+.disabled-editor :deep(.ck-widget) {
+  outline: none !important;
 }
 
-.ck-editor__editable_inline > :first-child {
-  margin-top: 0;
+.disabled-editor :deep(.ck-widget__type-around) {
+  display: none !important;
 }
 
-.ck-editor__editable_inline > :last-child {
-  margin-bottom: 0;
+.disabled-editor :deep(.ck-widget__resizer) {
+  display: none !important;
 }
+
+.disabled-editor :deep(.image) {
+  margin: 0 !important;
+}
+
+.disabled-editor :deep(.image img) {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.disabled-editor :deep(.ck-reset_all *) {
+  all: revert;
+}
+
 </style>
