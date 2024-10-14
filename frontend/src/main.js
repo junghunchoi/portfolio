@@ -13,7 +13,6 @@ import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap/dist/css/bootstrap.css'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-
 const pinia = createPinia()
 pinia.use(createPersistedState({
   storage: localStorage,

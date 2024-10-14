@@ -2,7 +2,9 @@ import { fileURLToPath, URL } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import nodePolyfills from 'rollup-plugin-polyfill-node'
-import path from "path";
+import { createRequire } from 'node:module';
+const require = createRequire( import.meta.url );
+import commonjs from '@rollup/plugin-commonjs'
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
@@ -11,11 +13,10 @@ export default defineConfig(({ mode }) => {
     if (mode === 'dev') {
         proxyTarget = 'http://localhost:1541';
     } else if (mode === 'home') {
-        proxyTarget = 'http:// 192.168.219.106:1541'; // 홈 서버 IP로 변경하세요
+        proxyTarget = 'http://192.168.219.106:1541';
     } else if (mode === 'prod') {
-        proxyTarget = 'http://49.175.22.52:1541'; // 프로덕션 서버 IP
+        proxyTarget = 'http://49.175.22.52:1541';
     }
-
 
     return {
         base: '/',
@@ -34,33 +35,44 @@ export default defineConfig(({ mode }) => {
                 minify: true,
             }),
             rollupOptions: {
+                external: [/@ckeditor/],
                 output: {
                     manualChunks: {
-                        'sockjs-client': ['sockjs-client'],
-                        '@stomp/stompjs': ['@stomp/stompjs']
-                    },
-                    format: 'es',
-                    entryFileNames: '[name].js',
-                    chunkFileNames: '[name].js',
-                    assetFileNames: '[name].[ext]',
-                },
+                        ckeditor: ['@ckeditor/ckeditor5-vue']
+                    }
+                }
             },
+            commonjsOptions: {
+                include: [/node_modules/],
+                transformMixedEsModules: true
+            },
+            sourcemap: false,
+
         },
         plugins: [
             vue(),
             nodePolyfills({
-                // 명시적으로 폴리필할 기능을 지정
-                include: ['crypto', 'stream', 'buffer']
+                include: ['crypto', 'stream', 'buffer'],
+            }),
+            commonjs({
+                include: [/node_modules/],
+                transformMixedEsModules: true
             })
         ],
         server: {
             proxy: {
-                proxyTarget
+                '/api': {
+                    target: proxyTarget,
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/api/, '')
+                }
             },
         },
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
+                '@ckeditor/ckeditor5-build-classic': '@ckeditor/ckeditor5-build-classic/build/ckeditor.js'
+
             },
             extensions: [
                 '.js',
@@ -81,7 +93,11 @@ export default defineConfig(({ mode }) => {
             'global': {},
         },
         optimizeDeps: {
-            include: ['@vue/runtime-core', '@vue/shared', '@stomp/stompjs'],
+            include: ['@vue/runtime-core', '@vue/shared', '@stomp/stompjs', 'axios'],
+            exclude: [/@ckeditor/]
         },
+        esbuild: {
+            target: 'es2015'
+        }
     };
 });
