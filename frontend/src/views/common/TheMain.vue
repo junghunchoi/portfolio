@@ -87,9 +87,6 @@ const activities = reactive([
 onMounted(async () => {
 	const res = await getStravaDataForMain();
 	Object.assign(stravaList, res.data.resultData);
-  console.log(res)
-  
-
 });
 
 const readHelpHandler = (writer, hno, isSecret) => {
