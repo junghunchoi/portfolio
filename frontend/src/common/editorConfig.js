@@ -1,30 +1,30 @@
-// import {
-//     ClassicEditor,
-//     Bold,
-//     Essentials,
-//     Italic,
-//     Paragraph,
-//     Undo,
-//     Image,
-//     ImageCaption,
-//     ImageStyle,
-//     ImageToolbar,
-//     ImageUpload,
-//     ImageResize,
-//     ImageInsertUI,
-//     MediaEmbed,
-//     HtmlEmbed,
-//     SimpleUploadAdapter
-// } from 'ckeditor5';
-import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
-import { Essentials } from '@ckeditor/ckeditor5-essentials';
-import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
-import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-import { Undo } from '@ckeditor/ckeditor5-undo';
-import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI } from '@ckeditor/ckeditor5-image';
-import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
-import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
-import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
+import {
+    ClassicEditor,
+    Bold,
+    Essentials,
+    Italic,
+    Paragraph,
+    Undo,
+    Image,
+    ImageCaption,
+    ImageStyle,
+    ImageToolbar,
+    ImageUpload,
+    ImageResize,
+    ImageInsertUI,
+    MediaEmbed,
+    HtmlEmbed,
+    SimpleUploadAdapter
+} from 'ckeditor5';
+// import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
+// import { Essentials } from '@ckeditor/ckeditor5-essentials';
+// import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
+// import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
+// import { Undo } from '@ckeditor/ckeditor5-undo';
+// import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI } from '@ckeditor/ckeditor5-image';
+// import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
+// import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
+// import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
 
 import axios from "axios";
 
