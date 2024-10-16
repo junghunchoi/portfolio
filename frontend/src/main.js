@@ -11,20 +11,22 @@ import {createPinia} from "pinia";
 import {createPersistedState} from 'pinia-plugin-persistedstate'
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap/dist/css/bootstrap.css'
-import CKEditor from '@ckeditor/ckeditor5-vue';
+// import * as CKEditor from '@ckeditor/ckeditor5-vue';
+import CkeditorPlugin from '@ckeditor/ckeditor5-vue';
 
 const pinia = createPinia()
 pinia.use(createPersistedState({
-  storage: localStorage,
-  auto: true,
+    storage: localStorage,
+    auto: true,
 }))
 
 const app = createApp(App)
-.use(router)
-.use(pinia)
-.use(dayjs)
-.use(BootstrapVue3)
-.use(CKEditor)
+    .use(router)
+    .use(pinia)
+    .use(dayjs)
+    .use(BootstrapVue3)
+    // .use(CkeditorPlugin)
+// .use(CKEditor)
 
 
 app.mount('#app');
