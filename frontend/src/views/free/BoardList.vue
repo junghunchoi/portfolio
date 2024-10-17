@@ -7,7 +7,7 @@
         @update:sort="params.sort=$event"
     />
   </div>
-          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>
+<!--          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>-->
           <table class="table">
             <thead>
             <tr>

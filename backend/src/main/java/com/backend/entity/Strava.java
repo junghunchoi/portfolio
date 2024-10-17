@@ -23,7 +23,6 @@ public class Strava extends BaseEntity {
 
     private String distance;
 
-    @JsonProperty("start_date_local")
     private String startDateLocal;
 
     private StravaMap map;

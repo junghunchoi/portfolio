@@ -95,12 +95,10 @@ onBeforeUnmount(() => {
 
 
 <template>
-  <div class="col">
+  <div class="col d-flex justify-content-center align-items-center">
     <div class="card h-100 shadow-sm strava-card">
       <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
       <div class="card-body d-flex flex-column">
-        <!--        <h5 class="card-title">{{ activityTitle }}</h5>-->
-        <!--        <p class="card-text flex-grow-1">{{ activityExcerpt }}</p>-->
         <div class="d-flex justify-content-between align-items-center mt-auto">
           <small class="text-muted">{{ formattedDate }}</small>
           <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>

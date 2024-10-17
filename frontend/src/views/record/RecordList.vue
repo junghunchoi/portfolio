@@ -1,72 +1,5 @@
 <template>
-  <div class="row mt-3">
-    <BoardFilter
-        @search="searchBoard"
-        @update:size="params.size=$event"
-        @update:order="params.order=$event"
-        @update:sort="params.sort=$event"
-    />
-  </div>
-          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>
-          <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">카테고리</th>
-              <th scope="col">제목</th>
-              <th scope="col">작성자</th>
-              <th scope="col">조회수</th>
-              <th scope="col">등록일시</th>
-              <th scope="col">수정일시</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="board in response.items">
-              <td>{{ board.category }}
-              </td>
-              <td>
-                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
-                  {{ board.title }}
-                </router-link>
-                <span>[{{ board.replyCount }}]</span>
-                <span v-if="board.fileCount>=1" class="attachment-icon show">
-                  <i class="fas fa-paperclip"></i>
-                </span>
-              </td>
-              <td>{{ board.writer }}
-              </td>
-              <td>
-                {{ board.viewCount }}
-              </td>
-              <td>
-                {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
-              </td>
-              <td>
-                {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
-              </td>
-            </tr>
-            </tbody>
-          </table>
-      <ThePagination v-show="params.size>=10"
-                     :current-page="response.page"
-                     :total="response.total"
-                     :size="params.size"
-                     @page="page => (params.page = page)"
-                     class="flex-md-grow-0"/>
-<!--  <Teleport to="#modal">-->
-<!--    <TheModal-->
-<!--        v-model="show"-->
-<!--        :isPopup="show"-->
-<!--        :title="'확인'"-->
-<!--    >-->
-<!--      <template #default>-->
-<!--        로그인한 사용자만 등록할 수 있습니다.-->
-<!--      </template>-->
-<!--      <template #actions>-->
-<!--        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>-->
-<!--        <button class="btn btn-light" @click="closeModal">닫기</button>-->
-<!--      </template>-->
-<!--    </TheModal>-->
-<!--  </Teleport>-->
+  <ThePostCardGrid apiEndpoint="https://api.example.com/posts" />
 </template>
 <script setup>
 import {computed, reactive, watch, inject, ref} from 'vue';
@@ -77,6 +10,7 @@ import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getBoards} from "@/api/board";
+import ThePostCardGrid from "@/components/ThePostCardGrid.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
