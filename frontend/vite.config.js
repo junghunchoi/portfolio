@@ -10,10 +10,16 @@ const require = createRequire( import.meta.url );
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
+
     let proxyTarget = 'http://localhost:1541';
+    const defineOptions = {
+        'process.env.VITE_APP_API_URL': JSON.stringify(env.VITE_APP_API_URL),
+        'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
+    };
 
     if (mode === 'dev') {
         proxyTarget = 'http://localhost:1541';
+        defineOptions['global'] = {};
     } else if (mode === 'home') {
         proxyTarget = 'http://192.168.219.106:1541';
     } else if (mode === 'prod') {
@@ -39,9 +45,6 @@ export default defineConfig(({ mode }) => {
         },
         plugins: [
             vue(),
-            // nodePolyfills({
-            //     global: true,
-            // }),
         ],
         server: {
             proxy: {
@@ -67,14 +70,7 @@ export default defineConfig(({ mode }) => {
                 '.vue',
             ],
         },
-        define: {
-            'process.env.VITE_APP_API_URL': JSON.stringify(env.VITE_APP_API_URL),
-            'process.env.VITE_APP_URL': JSON.stringify(env.VITE_APP_URL),
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: false,
-            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
-            // 'global': {},
-        },
+        define: defineOptions,
         optimizeDeps: {
             include:['@ckeditor'],
             exclude:[],

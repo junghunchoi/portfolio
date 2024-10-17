@@ -17,8 +17,6 @@ public interface BoardService {
 	void remove(Long bno);
 
 	/**
-	 * 게시물별 댓글의 갯수를 함께 반환
-	 * 추후 썸네일, 파일여부 등 추가시 변경해야함
 	 * @param pageRequestDTO
 	 * @return PageResponseDTO
 	 */

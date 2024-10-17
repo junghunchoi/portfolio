@@ -3,6 +3,7 @@ package com.backend.service;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.BoardMainDTO;
 import com.backend.dto.board.GalleryListDTO;
+import com.backend.dto.strava.StravaDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Help;
 import com.backend.entity.Notice;

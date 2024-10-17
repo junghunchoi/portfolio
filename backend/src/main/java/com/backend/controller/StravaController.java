@@ -1,6 +1,8 @@
 package com.backend.controller;
 
 import com.backend.common.dto.ResultDTO;
+import com.backend.dto.PageRequestDTO;
+import com.backend.dto.strava.StravaDTO;
 import com.backend.entity.Strava;
 import com.backend.service.StravaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,8 +27,16 @@ public class StravaController {
 
     @GetMapping("/main")
     public ResponseEntity<ResultDTO<Object>> getStravaDataForMainView() {
-        List<Strava> stravaList = stravaService.getStravaList();
+        List<StravaDTO> stravaList = stravaService.getStravaList();
 
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getStravaList(PageRequestDTO pageRequestDTO) {
+
+        return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaService.getStravaList(pageRequestDTO)));
+    }
+
+
 }

@@ -1,68 +1,69 @@
 <template>
-	<div class="portfolio-main">
-		<!-- Hero Section -->
-		<section class="hero">
-			<div class="container">
-				<Typing :text="heroText" :typingSpeed="50" />
-				<h1>{{ fullName }}</h1>
-				<p>{{ jobTitle }}</p>
-			</div>
-		</section>
+  <div class="portfolio-main">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <Typing :text="heroText" :typingSpeed="50"/>
+        <h1>{{ fullName }}</h1>
+        <p>{{ jobTitle }}</p>
+      </div>
+    </section>
 
-		<!-- Activity Tracker -->
-		<section class="activity-tracker">
-			<div class="container">
-				<h2>최근 활동</h2>
-				<div class="activity-grid">
-					<div
-						v-for="activity in activities"
-						:key="activity.type"
-						class="activity-card"
-					>
-						<img :src="activity.gifUrl" :alt="activity.type + ' 애니메이션'" />
-						<h3>{{ activity.type }}</h3>
-						<p>{{ activity.data }} {{ activity.unit }}</p>
-					</div>
-				</div>
-			</div>
-		</section>
+    <!-- Activity Tracker -->
+    <section class="activity-tracker">
+      <div class="container">
+        <h2>최근 활동</h2>
+        <div class="activity-grid">
+          <div
+              v-for="activity in activities"
+              :key="activity.type"
+              class="activity-card"
+          >
+            <img :src="activity.gifUrl" :alt="activity.type + ' 애니메이션'"/>
+            <h3>{{ activity.type }}</h3>
+            <p>{{ activity.data }} {{ activity.unit }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
     <section>
       <HorizonLayout :strava-list="stravaList"/>
     </section>
-	</div>
+  </div>
 
-	<!-- Modal -->
-	<Teleport to="#modal">
-		<TheModal v-model="show" :isPopup="show" :title="'확인'">
-			<template #default>
-				{{ modalText }}
-			</template>
-			<template #actions>
-				<button
-					v-if="userName === null"
-					class="btn btn-primary"
-					@click="doLoginHandler"
-				>
-					로그인
-				</button>
-				<button class="btn btn-light" @click="closeModal">닫기</button>
-			</template>
-		</TheModal>
-	</Teleport>
+  <!-- Modal -->
+  <Teleport to="#modal">
+    <TheModal v-model="show" :isPopup="show" :title="'확인'">
+      <template #default>
+        {{ modalText }}
+      </template>
+      <template #actions>
+        <button
+            v-if="userName === null"
+            class="btn btn-primary"
+            @click="doLoginHandler"
+        >
+          로그인
+        </button>
+        <button class="btn btn-light" @click="closeModal">닫기</button>
+      </template>
+    </TheModal>
+  </Teleport>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/store/loginStore.js';
-import { getStravaDataForMain } from '@/api/strava.js';
+import {ref, reactive, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
+import {storeToRefs} from 'pinia';
+import {useAuthStore} from '@/store/loginStore.js';
+import {getStravaDataForMain} from '@/api/strava.js';
 import TheModal from '@/components/TheModal.vue';
 import Typing from '@/components/Typing.vue';
 import HorizonLayout from "@/components/HorizonLayout.vue";
+import ThePostCardGrid from "@/components/ThePostCardGrid.vue";
 
 const authStore = useAuthStore();
-const { userName, getAuthorities } = storeToRefs(authStore);
+const {userName, getAuthorities} = storeToRefs(authStore);
 const AUTHORITY = getAuthorities.value;
 const router = useRouter();
 
@@ -77,89 +78,89 @@ const email = ref('example@email.com');
 const stravaList = reactive([]);
 
 const activities = reactive([
-	{ type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km' },
-	{ type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km' },
-	{ type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간' },
-  { type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권' },
+  {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
+  {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
+  {type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간'},
+  {type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권'},
 ]);
 
 
 onMounted(async () => {
-	const res = await getStravaDataForMain();
-	Object.assign(stravaList, res.data.resultData);
+  const res = await getStravaDataForMain();
+  console.log(res)
+  Object.assign(stravaList, res.data.resultData);
 });
 
 const readHelpHandler = (writer, hno, isSecret) => {
-	if (userName.value === null) {
-		modalText.value = '로그인한 사용자만 조회할 수 있습니다.';
-		show.value = true;
-		return;
-	}
+  if (userName.value === null) {
+    modalText.value = '로그인한 사용자만 조회할 수 있습니다.';
+    show.value = true;
+    return;
+  }
 
-	if (isSecret === 0 || AUTHORITY === 'ADMIN') {
-		router.push({ name: 'HelpRead', params: { hno: Number(hno) } });
-		return;
-	}
+  if (isSecret === 0 || AUTHORITY === 'ADMIN') {
+    router.push({name: 'HelpRead', params: {hno: Number(hno)}});
+    return;
+  }
 
-	if (userName.value === writer) {
-		router.push({ name: 'HelpRead', params: { hno: Number(hno) } });
-	} else {
-		modalText.value = '비밀글은 작성한 사용자만 확인할 수 있습니다.';
-		show.value = true;
-	}
+  if (userName.value === writer) {
+    router.push({name: 'HelpRead', params: {hno: Number(hno)}});
+  } else {
+    modalText.value = '비밀글은 작성한 사용자만 확인할 수 있습니다.';
+    show.value = true;
+  }
 };
 
-
 const doLoginHandler = () => {
-	router.push({ name: 'Login' });
+  router.push({name: 'Login'});
 };
 
 const closeModal = () => {
-	show.value = false;
+  show.value = false;
 };
 </script>
 
 <style scoped>
 .portfolio-main {
-	font-family: 'Arial', sans-serif;
+  font-family: 'Arial', sans-serif;
 }
 
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .hero {
-	background-color: #f8f9fa;
-	padding: 80px 0;
-	text-align: center;
+  background-color: #f8f9fa;
+  padding: 80px 0;
+  text-align: center;
 }
 
 .hero h1 {
-	font-size: 3em;
-	margin-bottom: 10px;
+  font-size: 3em;
+  margin-bottom: 10px;
 }
 
 
 .notice-list li,
 .board-list li,
 .help-list li {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .gallery-item img {
-	width: 100%;
-	height: 150px;
-	object-fit: cover;
-	border-radius: 5px;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 
 .social-links a {
-	font-size: 24px;
-	margin: 0 10px;
-	color: #333;
+  font-size: 24px;
+  margin: 0 10px;
+  color: #333;
 }
 
 .activity-tracker {

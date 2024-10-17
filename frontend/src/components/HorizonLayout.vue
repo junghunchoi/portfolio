@@ -7,80 +7,7 @@ const props = defineProps({
 })
 
 
-const posts = ref([
-  {
-    id: 1,
-    title: '첫 번째 프로젝트: 포트폴리오 웹사이트 만들기',
-    excerpt: '부트스트랩과 Vue.js를 활용하여 반응형 포트폴리오 사이트를 제작한 과정을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-08-15',
-    link: '/posts/1'
-  },
-  {
-    id: 2,
-    title: 'JavaScript ES6+ 주요 기능 정리',
-    excerpt: 'ES6 이후 추가된 JavaScript의 주요 기능들을 정리하고 실무에서의 활용 방법을 설명합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-01',
-    link: '/posts/2'
-  },
-  {
-    id: 3,
-    title: 'Vue 3 Composition API 실전 가이드',
-    excerpt: 'Vue 3의 Composition API를 활용한 효율적인 상태 관리와 로직 재사용 방법을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-20',
-    link: '/posts/3'
-  },
-  {
-    id: 4,
-    title: '첫 번째 프로젝트: 포트폴리오 웹사이트 만들기',
-    excerpt: '부트스트랩과 Vue.js를 활용하여 반응형 포트폴리오 사이트를 제작한 과정을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-08-15',
-    link: '/posts/1'
-  },
-  {
-    id: 5,
-    title: 'JavaScript ES6+ 주요 기능 정리',
-    excerpt: 'ES6 이후 추가된 JavaScript의 주요 기능들을 정리하고 실무에서의 활용 방법을 설명합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-01',
-    link: '/posts/2'
-  },
-  {
-    id: 6,
-    title: 'Vue 3 Composition API 실전 가이드',
-    excerpt: 'Vue 3의 Composition API를 활용한 효율적인 상태 관리와 로직 재사용 방법을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-20',
-    link: '/posts/3'
-  },
-  {
-    id: 7,
-    title: '첫 번째 프로젝트: 포트폴리오 웹사이트 만들기',
-    excerpt: '부트스트랩과 Vue.js를 활용하여 반응형 포트폴리오 사이트를 제작한 과정을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-08-15',
-    link: '/posts/1'
-  },
-  {
-    id: 8,
-    title: 'JavaScript ES6+ 주요 기능 정리',
-    excerpt: 'ES6 이후 추가된 JavaScript의 주요 기능들을 정리하고 실무에서의 활용 방법을 설명합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-01',
-    link: '/posts/2'
-  },
-  {
-    id: 9,
-    title: 'Vue 3 Composition API 실전 가이드',
-    excerpt: 'Vue 3의 Composition API를 활용한 효율적인 상태 관리와 로직 재사용 방법을 소개합니다.',
-    image: '/api/placeholder/400/220',
-    date: '2023-09-20',
-    link: '/posts/3'
-  },
-]);
+const posts = ref([]);
 
 
 const scrollContainer = ref(null);
@@ -132,7 +59,7 @@ onMounted(() => {
         />
         <div v-if="posts.length > 7" class="post-card more-card">
           <div class="card h-100 shadow-sm d-flex justify-content-center align-items-center">
-            <a href="/all-posts" class="btn btn-lg btn-primary">더보기</a>
+            <a href="/records" class="btn btn-lg btn-primary">더보기</a>
           </div>
         </div>
       </div>
