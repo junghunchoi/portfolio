@@ -8,7 +8,6 @@ import com.backend.entity.Board;
 import com.backend.entity.Category;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.CategoryRepository;
-import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,6 @@ public class BoardServiceImpl implements BoardService {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-
 		Board board = modelMapper.map(boardDTO, Board.class);
 		return boardRepository.save(board).getBno();
 	}

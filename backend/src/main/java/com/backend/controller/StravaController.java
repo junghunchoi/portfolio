@@ -27,14 +27,14 @@ public class StravaController {
 
     @GetMapping("/main")
     public ResponseEntity<ResultDTO<Object>> getStravaDataForMainView() {
-        List<StravaDTO> stravaList = stravaService.getStravaList();
+        List<StravaDTO> stravaList = stravaService.getMainStravaList();
 
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getStravaList(PageRequestDTO pageRequestDTO) {
-
+        stravaService.getStravaList();
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaService.getStravaList(pageRequestDTO)));
     }
 
