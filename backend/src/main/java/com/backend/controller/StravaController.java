@@ -34,8 +34,8 @@ public class StravaController {
 
     @GetMapping("/")
     public ResponseEntity<?> getStravaList(PageRequestDTO pageRequestDTO) {
-        stravaService.getStravaList();
-        return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaService.getStravaList(pageRequestDTO)));
+        List<StravaDTO> stravaList= stravaService.getStravaList(pageRequestDTO);
+        return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));
     }
 
 

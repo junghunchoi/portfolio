@@ -46,7 +46,7 @@ public class CommonServiceImpl implements CommonService {
 		Pageable pageable = PageRequest.of(0, 7); // 7개의 행만 조회
 
 		List<BoardMainDTO> boardData = boardRepository.findBoardsTop6(pageable);
-		List<Strava> stravaList = stravaRepository.findStravaTop7(pageable);
+		List<Strava> stravaList = stravaRepository.findStrava(pageable);
 
 
 		result.put("boards", boardData);
