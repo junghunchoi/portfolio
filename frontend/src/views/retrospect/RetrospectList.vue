@@ -152,6 +152,12 @@ const closeModal = () => {
 </script>
 
 <style>
+a {
+  color: inherit;
+  text-decoration: none;
+
+}
+
 :root {
   --primary-color: #3498db;
   --secondary-color: #2c3e50;

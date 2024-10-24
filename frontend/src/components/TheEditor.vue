@@ -65,9 +65,16 @@ onMounted(() => {
 
 /* 읽기 전용 모드일 때도 같은 크기 유지 */
 .disabled-editor .ck-editor__editable_inline {
-  height: 600px !important;
-  max-height: 500px !important;
+  height: 700px !important;
+  max-height: 600px !important;
   overflow-y: auto !important;
+}
+
+.disabled-editor .ck-editor__editable_inline {
+  min-height: 0 !important; /* 최소 높이 제거 */
+  max-height: none !important; /* 최대 높이 제한 제거 */
+  height: auto !important; /* 높이를 콘텐츠에 맞게 자동 조절 */
+  overflow-y: visible !important; /* 스크롤 제거 */
 }
 
 

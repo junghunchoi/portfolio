@@ -122,9 +122,10 @@ const fetchCategories = async () => {
   // API를 통해 카테고리를 가져오는 로직
   // 예시 데이터:
   categories.value = [
-    { id: 1, content: 'Board' },
-    { id: 2, content: 'Diary' },
-    { id: 3, content: 'cate' },
+    { id: 1, content: '회고' },
+    { id: 2, content: '블로그' },
+    { id: 3, content: '기록' },
+    { id: 4, content: '독서' },
   ];
 };
 

@@ -80,7 +80,7 @@ const stravaList = reactive([]);
 const activities = reactive([
   {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
   {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
-  {type: '공부', gifUrl: '/studying.gif', data: 3, unit: '시간'},
+  {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
   {type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권'},
 ]);
 
