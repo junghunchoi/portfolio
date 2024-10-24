@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.dto.PageRequestDTO;
 import com.backend.dto.strava.StravaDTO;
 import com.backend.entity.Strava;
 import com.backend.repository.StravaRepository;
@@ -29,7 +30,7 @@ public class StravaService {
                 .toList();
     }
 
-    public List<StravaDTO> getStravaList() {
+    public List<StravaDTO> getStravaList(PageRequestDTO pageRequestDTO) {
         List<Strava> stravaList = stravaRepository.findAll();
 
         return stravaList.stream()

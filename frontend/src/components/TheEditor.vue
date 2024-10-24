@@ -1,15 +1,15 @@
 <template>
-  <div id="app" class="bi-app" :class="{ 'disabled-editor': props.isDisabled }">
+  <div id="app" :class="{ 'disabled-editor': props.isDisabled }">
     <ckeditor :editor="editor"
               v-model="editorData"
-              :config="editorConfig"
+              :config="computeEditorConfig"
               :disabled="props.isDisabled"
     />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import { editor, editorConfig } from '@/common/editorConfig';
 import 'ckeditor5/ckeditor5.css';
 
@@ -24,14 +24,20 @@ const props = defineProps({
 const emit = defineEmits(["update:editorData"])
 const editorData = ref(props.initEditorData || '');
 
-watch(editorData, async () => {
-  emit('update:editorData', editorData.value)
+const computeEditorConfig = computed(()=>{
+  return props.isDisabled
+      ? { ...editorConfig, toolbar: [] }
+      : editorConfig;
 })
+
+// watch(editorData, async () => {
+//   emit('update:editorData', editorData.value)
+// })
 
 watch(
     () => props.isDisabled,
     (newValue) => {
-      if (newValue) {
+      if (newValue === true) {
         editorConfig.value = {toolbar: []};
       }
     },
@@ -39,7 +45,7 @@ watch(
 );
 
 onMounted(() => {
-  if (props.isDisabled) {
+  if (props.isDisabled === true) {
     const editorElement = document.querySelector('.ck-editor__editable');
     if (editorElement) {
       editorElement.style.border = 'none';
@@ -50,6 +56,7 @@ onMounted(() => {
 </script>
 
 <style>
+
 .ck-editor__editable_inline {
   height: 600px !important; /* 기본 높이 설정 */
   max-height: 600px !important; /* 최대 높이 제한 */
@@ -111,6 +118,14 @@ onMounted(() => {
 
 .disabled-editor :deep(.ck-reset_all *) {
   all: revert;
+}
+
+.ck-sticky-panel__content :deep(.ck-toolbar__items) {
+  display: none !important;
+}
+
+.disabled-editor :deep(.ck-editor__top) {
+  display: none !important;
 }
 
 </style>
