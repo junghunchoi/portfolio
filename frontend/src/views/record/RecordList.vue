@@ -1,15 +1,15 @@
 <template>
-  <ThePostCardGrid apiEndpoint="https://api.example.com/posts" />
+  <ThePostCardGrid :api="getStravaList" />
 </template>
 <script setup>
-import {computed, reactive, watch, inject, ref} from 'vue';
+import {computed, reactive, watch, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import ThePagination from "@/components/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
 import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import {getBoards} from "@/api/board";
+import {getStravaList} from "@/api/record.js";
 import ThePostCardGrid from "@/components/ThePostCardGrid.vue";
 
 const authStore = useAuthStore();
@@ -46,35 +46,11 @@ const pageCount = computed(() =>
     Math.ceil(response.total / params.size)
 );
 
-const goRegisterPage = () => {
-  // if (userName.value === null) {
-  //   show.value = true;
-  //   return;
-  // }
-  router.push('/boards/register');
-};
 
-const fetchData = async () => {
-  try {
-    const {data} = await getBoards(params);
-    Object.assign(response, data.resultData);
-  } catch (e) {
-    console.error(e);
-  }
-};
-fetchData();
 
 watch(params, async () => {
-  await fetchData(params)
 })
 
-const searchBoard = async (searchCondition) => {
-  try {
-    params.type = searchCondition.type;
-    params.keyword = searchCondition.keyword;
-  } catch (e) {
-  }
-}
 // 모달 로직
 
 const doLoginHandler = () => {

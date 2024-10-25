@@ -57,10 +57,10 @@ import {useRouter} from 'vue-router';
 import {storeToRefs} from 'pinia';
 import {useAuthStore} from '@/store/loginStore.js';
 import {getStravaDataForMain} from '@/api/strava.js';
+import {getMainRecords} from '@/api/main.js';
 import TheModal from '@/components/TheModal.vue';
 import Typing from '@/components/Typing.vue';
 import HorizonLayout from "@/components/HorizonLayout.vue";
-import ThePostCardGrid from "@/components/ThePostCardGrid.vue";
 
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
@@ -76,6 +76,7 @@ const heroText = ref('안녕하세요.\n제 포트폴리오에 오신 것을 환
 const email = ref('example@email.com');
 
 const stravaList = reactive([]);
+const mainRecords = reactive([]);
 
 const activities = reactive([
   {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
@@ -84,32 +85,13 @@ const activities = reactive([
   {type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권'},
 ]);
 
-
 onMounted(async () => {
   const res = await getStravaDataForMain();
-  console.log(res)
+  const res2 = await getMainRecords();
   Object.assign(stravaList, res.data.resultData);
+  Object.assign(mainRecords, res2.data.resultData);
 });
 
-const readHelpHandler = (writer, hno, isSecret) => {
-  if (userName.value === null) {
-    modalText.value = '로그인한 사용자만 조회할 수 있습니다.';
-    show.value = true;
-    return;
-  }
-
-  if (isSecret === 0 || AUTHORITY === 'ADMIN') {
-    router.push({name: 'HelpRead', params: {hno: Number(hno)}});
-    return;
-  }
-
-  if (userName.value === writer) {
-    router.push({name: 'HelpRead', params: {hno: Number(hno)}});
-  } else {
-    modalText.value = '비밀글은 작성한 사용자만 확인할 수 있습니다.';
-    show.value = true;
-  }
-};
 
 const doLoginHandler = () => {
   router.push({name: 'Login'});

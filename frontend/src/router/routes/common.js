@@ -1,6 +1,7 @@
 import ErrorView from '@/views/common/ErrorView.vue';
 import NotFoundView from '@/views/common/NotFoundView.vue';
 import TheMain from '@/views/common/TheMain.vue';
+import PatchNote from "@/views/common/PatchNote.vue";
 
 export default [
     {
@@ -17,5 +18,10 @@ export default [
         path: '/',
         name: 'TheMain',
         component: TheMain,
+    },
+    {
+        path: '/patch-note',
+        name: 'PatchNote',
+        component: PatchNote,
     },
 ];

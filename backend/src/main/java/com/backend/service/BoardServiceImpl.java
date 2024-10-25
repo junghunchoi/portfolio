@@ -100,5 +100,11 @@ public class BoardServiceImpl implements BoardService {
 		                      .total((int) result.getTotalElements())
 		                      .build();
 	}
+
+	@Override
+	public List<Map<String, Integer>> getMainPageRecords() {
+
+		return boardRepository.getMainRecords();
+	}
 }
 
