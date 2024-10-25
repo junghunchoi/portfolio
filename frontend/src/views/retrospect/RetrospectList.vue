@@ -108,7 +108,6 @@ const params = reactive({
 const fetchData = async () => {
   try {
     const {data} = await getRetrospects(params)
-    console.log(data)
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);

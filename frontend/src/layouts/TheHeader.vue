@@ -30,6 +30,9 @@
             <li class="nav-item">
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/records">기록</RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/patch-note">패치노트</RouterLink>
+            </li>
           </ul>
 <!--          <div v-if="!loginSuccess"-->
 <!--               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">-->

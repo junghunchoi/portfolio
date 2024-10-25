@@ -6,6 +6,9 @@ import com.backend.dto.PageResponseDTO;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.entity.Board;
 
+import java.util.List;
+import java.util.Map;
+
 public interface BoardService {
 
 	Long register(BoardDTO boardDTO);
@@ -21,5 +24,7 @@ public interface BoardService {
 	 * @return PageResponseDTO
 	 */
 	PageResponseDTO<BoardListDTO> list(PageRequestDTO pageRequestDTO);
+
+	List<Map<String, Integer>> getMainPageRecords();
 
 }

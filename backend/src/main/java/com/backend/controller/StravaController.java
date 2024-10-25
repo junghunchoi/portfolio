@@ -32,7 +32,7 @@ public class StravaController {
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getStravaList(PageRequestDTO pageRequestDTO) {
         List<StravaDTO> stravaList= stravaService.getStravaList(pageRequestDTO);
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));

@@ -1,82 +1,69 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { usePolyline } from '@/composables/usePolyline';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
 const props = defineProps({
-  apiEndpoint: {
-    type: String,
+  api: {
+    type: Function,
     required: true
   }
 });
 
+// Polyline 유틸리티 함수 가져오기
+const { decodePolyline, getPolylineFromStrava } = usePolyline();
+
+
 const page = ref(0);
 const loading = ref(false);
 const hasMore = ref(true);
-const posts = ref([
-  {
-    id: 1,
-    title: "Vue.js로 시작하는 웹 개발",
-    excerpt: "Vue.js는 사용자 인터페이스를 구축하기 위한 진보적인 프레임워크입니다. 다른 모놀리식 프레임워크와 달리 Vue는 점진적으로 채택할 수 있도록 설계되었습니다.",
-    author: "김개발",
-    date: "2023-05-15T09:00:00Z",
-    likes: 120,
-    tags: ["Vue", "JavaScript", "웹개발"],
-    thumbnail: "https://picsum.photos/id/1/300/200"
-  },
-  {
-    id: 2,
-    title: "React vs Vue: 프론트엔드 프레임워크 비교",
-    excerpt: "React와 Vue는 현대 웹 개발에서 가장 인기 있는 두 프레임워크입니다. 이 글에서는 두 프레임워크의 주요 특징과 차이점을 비교해 봅니다.",
-    author: "이프론트",
-    date: "2023-05-20T10:30:00Z",
-    likes: 85,
-    tags: ["React", "Vue", "프론트엔드"],
-    thumbnail: "https://picsum.photos/id/2/300/200"
-  },
-  {
-    id: 3,
-    title: "JavaScript 비동기 프로그래밍 마스터하기",
-    excerpt: "비동기 프로그래밍은 현대 JavaScript 개발의 핵심입니다. Promise, async/await를 활용한 효과적인 비동기 코드 작성법을 알아봅시다.",
-    author: "박자바",
-    date: "2023-05-25T14:15:00Z",
-    likes: 150,
-    tags: ["JavaScript", "비동기", "Promise"],
-    thumbnail: "https://picsum.photos/id/3/300/200"
-  },
-  {
-    id: 4,
-    title: "CSS Grid로 반응형 레이아웃 구현하기",
-    excerpt: "CSS Grid는 웹 페이지의 레이아웃을 쉽고 효과적으로 구현할 수 있게 해줍니다. 이 글에서는 Grid를 활용한 반응형 디자인 테크닉을 소개합니다.",
-    author: "최디자인",
-    date: "2023-05-30T11:45:00Z",
-    likes: 95,
-    tags: ["CSS", "Grid", "반응형웹"],
-    thumbnail: "https://picsum.photos/id/4/300/200"
-  },
-  {
-    id: 5,
-    title: "TypeScript: JavaScript의 강력한 동료",
-    excerpt: "TypeScript는 JavaScript에 정적 타입을 추가한 언어입니다. 큰 규모의 애플리케이션 개발에서 TypeScript가 어떤 이점을 제공하는지 알아봅시다.",
-    author: "정타입",
-    date: "2023-06-05T13:20:00Z",
-    likes: 110,
-    tags: ["TypeScript", "JavaScript", "정적타입"],
-    thumbnail: "https://picsum.photos/id/5/300/200"
-  }
-]);
+const posts = ref([])
+
+const maps = ref({});
+
+const initializeMap = (element, post) => {
+  const polyline = getPolylineFromStrava(post);
+  const coordinates = decodePolyline(polyline);
+
+  if (coordinates.length === 0) return;
+
+  const map = L.map(element).setView(coordinates[0], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const routePolyline = L.polyline(coordinates, { color: 'red' }).addTo(map);
+  map.fitBounds(routePolyline.getBounds());
+
+  // 시작점과 끝점 마커
+  L.marker(coordinates[0]).addTo(map).bindPopup('Start');
+  L.marker(coordinates[coordinates.length - 1]).addTo(map).bindPopup('End');
+
+  return map;
+};
 
 const fetchPosts = async () => {
   if (loading.value || !hasMore.value) return;
 
   loading.value = true;
   try {
-    const response = await axios.get('/api/posts', {
-      params: { page: page.value, size: 10 }
-    });
-    const newPosts = response.data;
-    posts.value = [...posts.value, ...newPosts];
+
+    const response = await props.api()
+    const newPosts = response.data.resultData;
+    posts.value = newPosts;
     page.value++;
     hasMore.value = newPosts.length === 10;
+
+    nextTick(() => {
+      newPosts.forEach((post, index) => {
+        const mapElement = document.getElementById(`map-${posts.value.length - newPosts.length + index}`);
+        if (mapElement && !maps.value[index]) {
+          maps.value[index] = initializeMap(mapElement, post);
+        }
+      });
+    });
   } catch (error) {
     console.error('Failed to fetch posts:', error);
   } finally {
@@ -99,23 +86,22 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  Object.values(maps.value).forEach(map => map.remove());
 });
 </script>
 
 <template>
   <div class="post-grid">
-    <article v-for="post in posts" :key="post.id" class="post-card">
-      <img v-if="post.thumbnail" :src="post.thumbnail" :alt="post.title" class="post-card-image">
+    <article v-for="(post, index) in posts" :key="index" class="post-card">
+      <div class="post-card-map">
+        <!-- 지도를 표시할 div에 고유 ID 부여 -->
+        <div :id="'map-' + index" class="map-container"></div>
+      </div>
       <div class="post-card-content">
-        <h2 class="post-card-title">{{ post.title }}</h2>
-        <p class="post-card-excerpt">{{ post.excerpt }}</p>
+        <h2 class="post-card-title">Distance: {{ (post.distance / 1000).toFixed(2) }}km</h2>
         <div class="post-card-meta">
-          <span>{{ post.author }}</span>
-          <span>{{ post.date }}</span>
-          <span>❤️ {{ post.likes }}</span>
-        </div>
-        <div class="post-card-tags">
-          <span v-for="tag in post.tags" :key="tag" class="tag">{{ tag }}</span>
+          <span>{{ $dayjs(post.regDate).format('YYYY.MM.DD') }}</span>
+          <span v-if="post.start_date_local">시작일: {{ $dayjs(board.start_date_local).format('YYYY.MM.DD') }}</span>
         </div>
       </div>
     </article>
@@ -123,6 +109,12 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.map-container {
+  width: 100%;
+  height: 300px;
+  background: #f5f5f5;
+}
+
 .post-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
