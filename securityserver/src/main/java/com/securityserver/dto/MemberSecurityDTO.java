@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.securityserver.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,42 +23,39 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @ToString
 public class MemberSecurityDTO extends User implements OAuth2User {
 
-	private String username;
-	private String password;
-	private String email;
-	private String userRealName;
+	private final Member member;
+	private final Map<String, Object> attributes;
+	private final Collection<? extends GrantedAuthority> authorities;
 
-	private Map<String, Object> props;
-
-	@JsonCreator
-	public MemberSecurityDTO(@JsonProperty("username") String username,
-							 @JsonProperty("password") String password,
-							 @JsonProperty("email") String email,
-							 @JsonProperty("authorities") Collection<? extends GrantedAuthority> authorities) {
-
-		super(username,
-				password,
-				authorities != null ? authorities : Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.props = new HashMap<>();
-	}
-
-	// 기본 생성자 추가
-	public MemberSecurityDTO() {
-		super("default", "default", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-		this.props = new HashMap<>();
+	public MemberSecurityDTO(Member member, Map<String, Object> attributes) {
+        super();
+        this.member = member;
+		this.attributes = attributes;
+		this.authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")); // 기본 권한 설정
 	}
 
 	@Override
 	public Map<String, Object> getAttributes() {
-		return this.getProps();
+		return attributes;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
 	}
 
 	@Override
 	public String getName() {
-		return this.username;
+		// OAuth2 제공자로부터 받은 고유 식별자 또는 사용자 이름 반환
+		return member.getId().toString(); // 또는 다른 식별 가능한 필드
+	}
+
+	// 추가적으로 필요한 메서드
+	public Member getMember() {
+		return member;
+	}
+
+	public Long getId() {
+		return member.getId();
 	}
 }
