@@ -4,6 +4,7 @@ import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import com.securityserver.filter.TokenCheckFilter;
 import com.securityserver.handler.Custom403Handler;
 import com.securityserver.service.CustomUserDetailsService;
+import com.securityserver.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -58,6 +59,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 public class CustomSecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final JWTUtil jwtUtil;
 
     // 인증없이 접근 가능한 URL 목록
     private static final String[] PERMIT_URL_ARRAY = {"/swagger-ui/", "/auth/**", "/oauth2/**", "/login"};
@@ -82,24 +84,32 @@ public class CustomSecurityConfig {
 
     @Bean
     @Order(2)
+    // 개인 security 설정 빈
     public SecurityFilterChain standardSecurityFilterChain(HttpSecurity http) throws Exception {
         log.info("standardSecurityFilterChain");
-        http.authorizeHttpRequests(authorize -> authorize
-                        // PERMIT_URL_ARRAY에 정의된 URL은 인증 없이 접근 가능
-                        .requestMatchers(PERMIT_URL_ARRAY).permitAll()
-                        // 그 외 모든 요청은 인증 필요
-                        .anyRequest().authenticated())
-                // JWT를 사용한 리소스 서버 설정
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-
-        http.csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults())
+        http
+            .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//            .addFilterBefore(tokenCheckFilter(), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(exceptions -> exceptions
-                                .accessDeniedHandler(accessDeniedHandler()))
-                .userDetailsService(userDetailsService)
-                .authenticationProvider(authenticationProvider());
+            .authorizeHttpRequests(authorize -> authorize
+                    // PERMIT_URL_ARRAY에 정의된 URL은 인증 없이 접근 가능
+                    .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                    // 그 외 모든 요청은 인증 필요
+                    .anyRequest().authenticated())
+            // JWT를 사용한 리소스 서버 설정
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(userDetailsService)
+                        )
+                        .successHandler(oAuth2SuccessHandler())
+                )
+          .addFilterBefore(tokenCheckFilter(), UsernamePasswordAuthenticationFilter.class)
+
+            .authenticationProvider(authenticationProvider())
+                .cors(Customizer.withDefaults())
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedHandler(accessDeniedHandler()))
+        ;
 
         return http.build();
     }
@@ -194,9 +204,9 @@ public class CustomSecurityConfig {
         return new Custom403Handler();
     }
 
-//    private TokenCheckFilter tokenCheckFilter() {
-//        return new TokenCheckFilter(userDetailsService, jwtUtil);
-//    }
+    private TokenCheckFilter tokenCheckFilter() {
+        return new TokenCheckFilter(userDetailsService, jwtUtil);
+    }
 
     /**
      * 정적 자원에 대한 보안 설정을 무시하는 WebSecurityCustomizer 빈 생성
