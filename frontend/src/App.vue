@@ -8,7 +8,14 @@ import TheHeader from '@/layouts/TheHeader.vue';
 import TheView from '@/layouts/TheView.vue';
 </script>
 
+<style>
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-<style scoped>
-
+a:hover {
+  text-decoration: underline;
+  color: inherit;
+}
 </style>

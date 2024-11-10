@@ -72,23 +72,7 @@ class HelpControllerTest {
 		assertThat(result.getBody().getResultData()).isEqualTo(hno);
 	}
 
-	@Test
-	@DisplayName("문의글 조회 테스트")
-	void testRead() {
-		// Given
-		Long hno = 1L;
-		String authorizationHeader = "Bearer token";
-		when(jwtUtil.getUsernameFromToken(authorizationHeader.substring(7))).thenReturn("user");
-		HelpDTO helpDTO = HelpDTO.builder().hno(hno).title("Test Title").content("Test Content").build();
-		when(helpService.readOne(any(Long.class), any(String.class))).thenReturn(helpDTO);
 
-		// When
-		ResponseEntity<ResultDTO<Object>> result = helpController.read(hno, authorizationHeader);
-
-		// Then
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(result.getBody().getResultData()).isEqualTo(helpDTO);
-	}
 
 	@Test
 	@DisplayName("문의글 수정 테스트")

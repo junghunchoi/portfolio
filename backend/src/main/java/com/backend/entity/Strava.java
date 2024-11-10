@@ -14,6 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Getter
 @ToString
 public class Strava extends BaseEntity {
 
@@ -22,6 +23,8 @@ public class Strava extends BaseEntity {
     private Long id;
 
     private String distance;
+
+    private String type;
 
     private String startDateLocal;
 
