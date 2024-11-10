@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { usePolyline } from '@/composables/usePolyline';
+import {ref, onMounted, onUnmounted, nextTick} from 'vue';
+import {usePolyline} from '@/composables/usePolyline';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 // Polyline 유틸리티 함수 가져오기
-const { decodePolyline, getPolylineFromStrava } = usePolyline();
+const {decodePolyline, getPolylineFromStrava} = usePolyline();
 
 
 const page = ref(0);
@@ -34,7 +34,7 @@ const initializeMap = (element, post) => {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  const routePolyline = L.polyline(coordinates, { color: 'red' }).addTo(map);
+  const routePolyline = L.polyline(coordinates, {color: 'red'}).addTo(map);
   map.fitBounds(routePolyline.getBounds());
 
   // 시작점과 끝점 마커
@@ -49,7 +49,6 @@ const fetchPosts = async () => {
 
   loading.value = true;
   try {
-
     const response = await props.api()
     const newPosts = response.data.resultData;
     posts.value = newPosts;
@@ -83,11 +82,6 @@ onMounted(() => {
   fetchPosts();
   window.addEventListener('scroll', handleScroll);
 });
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-  Object.values(maps.value).forEach(map => map.remove());
-});
 </script>
 
 <template>
@@ -98,10 +92,9 @@ onUnmounted(() => {
         <div :id="'map-' + index" class="map-container"></div>
       </div>
       <div class="post-card-content">
-        <h2 class="post-card-title">Distance: {{ (post.distance / 1000).toFixed(2) }}km</h2>
+        <h2 class="post-card-title">거리: {{ (post.distance / 1000).toFixed(2) }}km</h2>
         <div class="post-card-meta">
-          <span>{{ $dayjs(post.regDate).format('YYYY.MM.DD') }}</span>
-          <span v-if="post.start_date_local">시작일: {{ $dayjs(board.start_date_local).format('YYYY.MM.DD') }}</span>
+          <span v-if="post.start_date_local">{{ $dayjs(post.start_date_local).format('YYYY-MM-DD') }}</span>
         </div>
       </div>
     </article>

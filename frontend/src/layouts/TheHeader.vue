@@ -22,7 +22,7 @@
         >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/retrospects">회고</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active"  to="/retrospects">회고</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/boards">블로그</RouterLink>
@@ -246,9 +246,11 @@ header {
     margin-bottom: 1rem;
   }
 
-  .custom-nav-link.active {
+  .custom-nav-link {
     background-color: rgba(255, 255, 255, 0.2);
   }
+
+
 
   .admin-badge,
   .user-name,

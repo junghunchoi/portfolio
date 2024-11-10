@@ -151,12 +151,6 @@ const closeModal = () => {
 </script>
 
 <style>
-a {
-  color: inherit;
-  text-decoration: none;
-
-}
-
 :root {
   --primary-color: #3498db;
   --secondary-color: #2c3e50;
@@ -254,11 +248,6 @@ a {
   color: var(--primary-color);
   text-decoration: none;
   transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #2980b9;
-  text-decoration: underline;
 }
 
 .pagination {

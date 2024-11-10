@@ -166,11 +166,6 @@ const closeModal = () => {
   content: '\f0c6';
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 .table {
   width: 100%;
   border-collapse: collapse;

@@ -49,6 +49,28 @@
           </ul>
         </div>
       </div>
+
+      <!-- 11월 섹션 -->
+      <div class="month-section">
+        <div class="month-header" @click="toggleMonth('november')">
+          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.future }]"></i>
+          <i class="fas fa-calendar"></i>
+          <h2>추가예정</h2>
+        </div>
+
+        <div class="feature-section" v-show="openMonths.future">
+          <h3>기능 추가</h3>
+          <ul>
+            <li v-for="(feature, index) in futureFeature"
+                :key="index"
+                @click="showDetail(feature)"
+                :class="{ 'active': selectedFeature === feature }">
+              <i class="fas fa-code-branch"></i>
+              <span>{{ feature.title }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- 상세 설명 모달 -->
@@ -71,8 +93,9 @@ import {ref} from "vue";
 const selectedFeature = ref(null)
 const showModal = ref(false)
 const openMonths = ref({
-  october: true,
-  // november: true
+  october: false,
+  november: true,
+  future:true
 })
 
 const octoberFeatures = ref([
@@ -96,11 +119,17 @@ const octoberFeatures = ref([
 
 const novemberFeatures = ref([
   {
+    title: '소소한 디자인 수정',
+    description: '전반적인 사용자 경험 개선을 위한 디자인 요소들이 수정되었습니다.'
+  }
+])
+
+const futureFeature = ref([
+  {
     title: '카카오톡 로그인 버튼 붙이기',
     description: '사용자 편의성 향상을 위해 카카오톡 소셜 로그인 기능이 추가되었습니다.'
   }
 ])
-
 const showDetail = (feature) => {
   selectedFeature.value = feature
   showModal.value = true

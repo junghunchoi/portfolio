@@ -140,11 +140,6 @@ const doLoginHandler = () => {
 </script>
 
 <style scoped>
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 img {
   width: 200px;
   height: 200px;

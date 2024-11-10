@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +36,13 @@ public class StravaService {
         List<Strava> stravaList = stravaRepository.findAll();
 
         return stravaList.stream()
-                .map(strava -> modelMapper.map(strava, StravaDTO.class))
+                .map(strava -> StravaDTO.builder()
+                        .distance(strava.getDistance())
+                        .map(strava.getMap())
+                        .startDateLocal(LocalDateTime.parse(strava.getStartDateLocal(), DateTimeFormatter.ISO_DATE_TIME))
+                        .regDate(strava.getRegDate())
+                        .modDate(strava.getModDate())
+                        .build())
                 .toList();
     }
 }
