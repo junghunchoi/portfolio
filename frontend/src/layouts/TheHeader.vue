@@ -275,4 +275,14 @@ header {
     overflow: visible !important;
   }
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: inherit;
+}
 </style>
