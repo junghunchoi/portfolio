@@ -14,17 +14,15 @@ import {
     ImageInsertUI,
     MediaEmbed,
     HtmlEmbed,
-    SimpleUploadAdapter
+    SimpleUploadAdapter,
+    Alignment,
+    List,
+    BlockQuote,
+    Heading,
+    Highlight,
+    FontColor,
+    FontBackgroundColor
 } from 'ckeditor5';
-// import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
-// import { Essentials } from '@ckeditor/ckeditor5-essentials';
-// import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
-// import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
-// import { Undo } from '@ckeditor/ckeditor5-undo';
-// import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI } from '@ckeditor/ckeditor5-image';
-// import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
-// import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
-// import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
 
 import axios from "axios";
 
@@ -32,11 +30,75 @@ const BASE_URL = process.env.VITE_APP_URL;
 
 export const editor = ClassicEditor;
 export const editorConfig = {
-    plugins: [Bold, Essentials, Italic, Paragraph, Undo, SimpleUploadAdapter, Image,
-        ImageCaption, ImageStyle, ImageToolbar, ImageUpload, ImageResize, ImageInsertUI,
-        MediaEmbed, HtmlEmbed],
+    plugins: [
+        Bold,
+        Essentials,
+        Italic,
+        Paragraph,
+        Undo,
+        SimpleUploadAdapter,
+        Image,
+        ImageCaption,
+        ImageStyle,
+        ImageToolbar,
+        ImageUpload,
+        ImageResize,
+        ImageInsertUI,
+        MediaEmbed,
+        HtmlEmbed,
+        // 새로 추가하는 플러그인들
+        Alignment,
+        List,
+        BlockQuote,
+        Heading,
+        Highlight,
+        FontColor,
+        FontBackgroundColor
+    ],
     extraPlugins: [CustomUploadAdapterPlugin],
-    toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'imageUpload', 'HtmlEmbed'],
+    toolbar: {
+        items: [
+            'undo', 'redo',
+            '|',
+            'heading',
+            '|',
+            'bold', 'italic',
+            '|',
+            'alignment',
+            'bulletedList',
+            'blockQuote',
+            '|',
+            'highlight',
+            'fontColor',
+            'fontBackgroundColor',
+            '|',
+            'imageUpload',
+            'HtmlEmbed'
+        ]
+    },
+    heading: {
+        options: [
+            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+        ]
+    },
+    fontColor: {
+        colors: [
+            { color: 'rgb(0, 0, 0)', label: 'Black' },
+            { color: 'rgb(230, 0, 0)', label: 'Red' },
+            { color: 'rgb(0, 112, 0)', label: 'Green' },
+            { color: 'rgb(0, 0, 230)', label: 'Blue' }
+        ]
+    },
+    fontBackgroundColor: {
+        colors: [
+            { color: 'rgb(255, 255, 0)', label: 'Yellow marker' },
+            { color: 'rgb(255, 128, 0)', label: 'Orange marker' },
+            { color: 'rgb(0, 255, 0)', label: 'Green marker' }
+        ]
+    },
     htmlEmbed: {
         icons: 'media',
         showPreviews: true,
