@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     } else if (mode === 'home') {
         proxyTarget = 'http://192.168.219.106:1541';
     } else if (mode === 'prod') {
-        proxyTarget = 'http://49.175.22.52:1541';
+        proxyTarget = ['http://49.175.22.52:1541', 'https://junghun.site'];
     }
 
     return {
