@@ -16,7 +16,6 @@
               <th scope="col">작성자</th>
               <th scope="col">조회수</th>
               <th scope="col">등록일시</th>
-              <th scope="col">수정일시</th>
             </tr>
             </thead>
             <tbody>
@@ -39,9 +38,6 @@
               </td>
               <td>
                 {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
-              </td>
-              <td>
-                {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
               </td>
             </tr>
             </tbody>

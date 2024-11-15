@@ -250,8 +250,6 @@ header {
     background-color: rgba(255, 255, 255, 0.2);
   }
 
-
-
   .admin-badge,
   .user-name,
   .logout-btn {

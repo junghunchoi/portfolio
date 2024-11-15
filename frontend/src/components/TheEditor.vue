@@ -30,9 +30,9 @@ const computeEditorConfig = computed(()=>{
       : editorConfig;
 })
 
-// watch(editorData, async () => {
-//   emit('update:editorData', editorData.value)
-// })
+watch(editorData, async () => {
+  emit('update:editorData', editorData.value)
+})
 
 watch(
     () => props.isDisabled,

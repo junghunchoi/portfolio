@@ -14,7 +14,6 @@
       <th scope="col">제목</th>
       <th scope="col">조회수</th>
       <th scope="col">등록일시</th>
-      <th scope="col">수정일시</th>
     </tr>
     </thead>
     <tbody>
@@ -24,18 +23,13 @@
         <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
           {{ board.title }}
         </router-link>
-        <span>[{{ board.replyCount }}]</span>
       </td>
-      <td>{{ board.writer }}
-      </td>
+
       <td>
         {{ board.viewCount }}
       </td>
       <td>
         {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
-      </td>
-      <td>
-        {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
       </td>
     </tr>
     </tbody>
@@ -81,10 +75,7 @@ const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 const show = ref(false);
 const AUTHORITY = useAuthStore().getAuthorities
-
 const router = useRouter();
-
-
 const response = reactive({
   items: [],
   end: 0,

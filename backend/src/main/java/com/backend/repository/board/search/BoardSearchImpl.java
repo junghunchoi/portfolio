@@ -3,8 +3,8 @@ package com.backend.repository.board.search;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.entity.Board;
-import com.backend.entity.QBoard;
 import com.backend.entity.QCategory;
+import com.backend.entity.QBoard;
 import com.backend.entity.QFile;
 import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
@@ -91,7 +91,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		JPQLQuery<BoardListDTO> dtoQuery = query.select(
 			Projections.bean(BoardListDTO.class, board.bno, category.content.as("category"),
 				board.title, board.writer, board.viewCount, board.regDate, board.modDate,
-				reply.count().as("replyCount"), file.count().as("fileCount")));
+				reply.count().coalesce(0L).as("replyCount"), file.count().as("fileCount")));
 		this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
 		List<BoardListDTO> dtoList = dtoQuery.fetch();

@@ -10,12 +10,12 @@ import TheView from '@/layouts/TheView.vue';
 
 <style>
 a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 a:hover {
-  text-decoration: underline;
-  color: inherit;
+  text-decoration: none !important;
+  color: inherit !important;
 }
 </style>
