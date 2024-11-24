@@ -3,9 +3,12 @@ package com.backend.service;
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.BoardMainDTO;
 import com.backend.dto.board.GalleryListDTO;
+import com.backend.dto.strava.StravaDTO;
 import com.backend.entity.Board;
 import com.backend.entity.Help;
 import com.backend.entity.Notice;
+import com.backend.entity.Strava;
+import com.backend.repository.StravaRepository;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.help.HelpRepository;
 import com.backend.repository.notice.NoticeRepository;
@@ -28,8 +31,7 @@ import org.springframework.stereotype.Service;
 public class CommonServiceImpl implements CommonService {
 
 	private final BoardRepository boardRepository;
-	private final HelpRepository helpRepository;
-	private final NoticeRepository noticeRepository;
+	private final StravaRepository stravaRepository;
 
 
 	/**
@@ -41,17 +43,14 @@ public class CommonServiceImpl implements CommonService {
 	public Map<String, List<?>> listMainPage() {
 
 		Map<String, List<?>> result = new HashMap<>();
-		Pageable pageable = PageRequest.of(0, 6); // 5개의 행만 조회
+		Pageable pageable = PageRequest.of(0, 7); // 7개의 행만 조회
 
 		List<BoardMainDTO> boardData = boardRepository.findBoardsTop6(pageable);
-		List<GalleryListDTO> galleryData = boardRepository.findGalleiesTop3(PageRequest.of(0, 3));
-		List<Help> helpData = helpRepository.findHelpsTop6(pageable);
-		List<Notice> noticeData = noticeRepository.findNoticesTop6(pageable);
+		List<Strava> stravaList = stravaRepository.findStrava(pageable);
+
 
 		result.put("boards", boardData);
-		result.put("galleries", galleryData);
-		result.put("helps", helpData);
-		result.put("notices", noticeData);
+		result.put("strava", stravaList);
 
 		return result;
 	}

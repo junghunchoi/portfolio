@@ -33,7 +33,7 @@ import {inject, reactive} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {createHelp} from "@/api/help.js";
 
 

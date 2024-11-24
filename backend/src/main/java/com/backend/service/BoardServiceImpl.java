@@ -8,7 +8,6 @@ import com.backend.entity.Board;
 import com.backend.entity.Category;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.CategoryRepository;
-import com.querydsl.core.Tuple;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -41,7 +40,6 @@ public class BoardServiceImpl implements BoardService {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-
 		Board board = modelMapper.map(boardDTO, Board.class);
 		return boardRepository.save(board).getBno();
 	}
@@ -101,6 +99,12 @@ public class BoardServiceImpl implements BoardService {
 		                      .items(result.getContent())
 		                      .total((int) result.getTotalElements())
 		                      .build();
+	}
+
+	@Override
+	public List<Map<String, Integer>> getMainPageRecords() {
+
+		return boardRepository.getMainRecords();
 	}
 }
 

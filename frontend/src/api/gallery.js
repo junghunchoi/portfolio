@@ -1,7 +1,8 @@
 import axios from '@/plugins/axios.js'
+const BASE_URL = import.meta.env.VITE_APP_BOARD_API_URL;
 
 export function getGalleries(params) {
-  return axios.get('/galleries',{params:params});
+  return axios.get(`${BASE_URL}/galleries`,{params:params});
 }
 
 export function getGalleryBybno(bno) {
@@ -9,7 +10,7 @@ export function getGalleryBybno(bno) {
 }
 
 export function createGallery(data) {
-  return axios.post('/galleries', data);
+  return axios.post(`${BASE_URL}/galleries`, data);
 }
 
 export function updateGallery(data) {

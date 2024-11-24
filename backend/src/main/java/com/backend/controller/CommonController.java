@@ -1,6 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dto.ResultDTO;
+import com.backend.common.dto.ResultDTO;
 import com.backend.service.CommonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,7 +43,7 @@ public class CommonController {
 	@Cacheable(cacheNames = "main")
 	@GetMapping("/main")
 	public ResponseEntity<ResultDTO<Object>> listMainPage() {
-
+		log.info("CommonController: listMainPage");
 		Map<String, List<?>> response = commonService.listMainPage();
 
 

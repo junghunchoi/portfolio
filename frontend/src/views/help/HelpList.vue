@@ -66,12 +66,12 @@
 <script setup>
 import {computed, inject, onMounted, reactive, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import ThePagination from "@/components/common/ThePagination.vue";
+import ThePagination from "@/components/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
 import {isCreatedWithin7Days} from "@/common/dateUtils"
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {getHelps} from "@/api/help.js";
 
 const authStore = useAuthStore();

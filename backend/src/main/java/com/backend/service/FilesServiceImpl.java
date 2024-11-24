@@ -22,10 +22,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Repository
 @RequiredArgsConstructor
@@ -123,6 +123,22 @@ public class FilesServiceImpl implements FilesService {
 		});
 		return list;
 
+	}
+
+	@Override
+	public String editorUpload(FileDTO fileDTO) {
+		MultipartFile requestedFile = fileDTO.getUpload();
+		String uuid = UUID.randomUUID().toString();
+		String uploadedFileName = uuid+"_"+ fileDTO.getFileName();
+		Path savePath = Paths.get(uploadPath, uploadedFileName);
+
+		try {
+			requestedFile.transferTo(savePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return uploadedFileName;
 	}
 
 	@Override

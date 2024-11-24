@@ -1,191 +1,193 @@
 <template>
-  <section>
-  <section>
-    <div class="container">
-      <div class="row">
-        <BoardCard class="col m-4"
-                   :title="'공지사항'"
-                   :destination="'/notices'">
-          <div>
-            <table class="table">
-              <tbody>
-              <tr v-for="notice in notices" :class="[notice.isMain === 1 ? 'bg-secondary' : '']">
-                <td>
-                  <span v-if="notice.isMain === 1">
-                    [공지]
-                  </span>
-                  <router-link :to="{ name: 'NoticeRead', params: { nno: notice.nno }}">
-                    {{ notice.title }}
-                  </router-link>
-                  <span class="ms-1" v-if="isCreatedWithin7Days(notice.regDate)"><b>new</b></span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </BoardCard>
-        <BoardCard class="col m-4"
-                   :title="'자유게시판'"
-                   :destination="'/boards'">
-          <table class="table">
-            <tbody>
-            <tr v-for="board in boards">
-
-              <td>
-                <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
-                  {{ board.title }}
-                </router-link>
-                <span>[{{ board.replyCount }}]</span>
-                <span class="ms-1" v-if="isCreatedWithin7Days(board.regDate)"><b>new</b></span>
-                <span v-if="board.fileCount>=1" class="ms-1 attachment-icon show">
-                  <i class="fas fa-paperclip"></i>
-                </span>
-              </td>
-
-            </tr>
-            </tbody>
-          </table>
-        </BoardCard>
+  <div class="portfolio-main">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <Typing :text="heroText" :typingSpeed="50"/>
+        <h1>{{ fullName }}</h1>
+        <p>{{ jobTitle }}</p>
       </div>
+    </section>
 
-      <div class="row">
-        <BoardCard class="col m-4"
-                   :title="'갤러리'"
-                   :destination="'/galleries'">
-
-          <div v-for="gallery in galleries" class="media mb-3">
-            <div @click="readGalleryHandler(gallery.bno)" style="display: flex; align-items: center;">
-              <img :src="`${BASE_URL}/files/${gallery.fileName}`" class="mr-3 mt-1">
-              <h5 class="mt-0">{{ gallery.title }} <span class="ms-1"
-                                                         v-if="isCreatedWithin7Days(gallery.regDate)"><b>new</b></span>
-              </h5>
-            </div>
+    <!-- Activity Tracker -->
+    <section class="activity-tracker">
+      <div class="container">
+        <h2>최근 활동</h2>
+        <div class="activity-grid">
+          <div
+              v-for="activity in activities"
+              :key="activity.type"
+              class="activity-card"
+          >
+            <img :src="activity.gifUrl" :alt="activity.type + ' 애니메이션'"/>
+            <h3>{{ activity.type }}</h3>
+            <p>{{ activity.data }} {{ activity.unit }}</p>
           </div>
-        </BoardCard>
-        <BoardCard class="col m-4"
-                   :title="'문의게시판'"
-                   :destination="'/helps'">
-          <table class="table">
-            <tbody>
-            <tr v-for="help in helps">
-              <td>
-                <label @click="readHelpHandler(help.writer, help.hno, help.isSecret)">
-                  <span>{{ help.title }}</span>
-                  <span v-if="help.answer">(답변완료)</span>
-                  <span v-else>(미답변)</span>
-                  <span class="ms-1" v-if="isCreatedWithin7Days(help.regDate)"><b>new</b></span>
-                  <span v-if="help.isSecret===1" class="ms-1 attachment-icon show">
-                  <i class="bi bi-lock"></i>
-                </span>
-                </label>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </BoardCard>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <section>
+      <HorizonLayout :strava-list="stravaList"/>
+    </section>
+  </div>
+
+  <!-- Modal -->
   <Teleport to="#modal">
-    <TheModal
-        v-model="show"
-        :isPopup="show"
-        :title="'확인'"
-    >
+    <TheModal v-model="show" :isPopup="show" :title="'확인'">
       <template #default>
         {{ modalText }}
       </template>
       <template #actions>
-        <button v-if="userName===null" class="btn btn-primary" @click="doLoginHandler">로그인</button>
+        <button
+            v-if="userName === null"
+            class="btn btn-primary"
+            @click="doLoginHandler"
+        >
+          로그인
+        </button>
         <button class="btn btn-light" @click="closeModal">닫기</button>
       </template>
     </TheModal>
   </Teleport>
-  </section>
-  <ChatButton />
 </template>
 
 <script setup>
-import BoardCard from "@/components/common/TheMainCard.vue";
+import {ref, reactive, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
-import {inject, onMounted, reactive, ref} from "vue";
-import {isCreatedWithin7Days} from "@/common/dateUtils.js"
-import {useAuthStore} from "@/store/loginStore.js";
-import {storeToRefs} from 'pinia'
-import TheModal from "@/components/common/TheModal.vue";
-import {getMainData} from "@/api/common.js";
-import ChatButton from "@/components/ChatButton.vue";
+import {storeToRefs} from 'pinia';
+import {useAuthStore} from '@/store/loginStore.js';
+import {getStravaDataForMain} from '@/api/strava.js';
+import {getMainRecords} from '@/api/main.js';
+import TheModal from '@/components/TheModal.vue';
+import Typing from '@/components/Typing.vue';
+import HorizonLayout from "@/components/HorizonLayout.vue";
 
-const BASE_URL = process.env.VITE_APP_API_URL;
 const authStore = useAuthStore();
 const {userName, getAuthorities} = storeToRefs(authStore);
-const show = ref(false);
 const AUTHORITY = getAuthorities.value;
 const router = useRouter();
-const modalText = ref('')
 
-const boards = reactive({});
-const notices = reactive({});
-const galleries = reactive({});
-const helps = reactive({});
+const show = ref(false);
+const modalText = ref('');
+
+// const fullName = ref('최정훈');
+// const jobTitle = ref('풀스택 개발자');
+const heroText = ref('안녕하세요.\n제 포트폴리오에 오신 것을 환영합니다 👋');
+const email = ref('example@email.com');
+
+const stravaList = reactive([]);
+const mainRecords = reactive([]);
+
+const activities = reactive([
+  {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
+  {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
+  {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
+  {type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권'},
+]);
 
 onMounted(async () => {
-  const res =await getMainData();
+  const res = await getStravaDataForMain();
+  const res2 = await getMainRecords();
+  Object.assign(stravaList, res.data.resultData);
+  Object.assign(mainRecords, res2.data.resultData);
+});
 
-  Object.assign(boards, res.data.resultData.boards)
-  Object.assign(notices, res.data.resultData.notices)
-  Object.assign(galleries, res.data.resultData.galleries)
-  Object.assign(helps, res.data.resultData.helps)
-})
 
-const readHelpHandler = (writer, hno, isSecret) => {
-  if (userName.value === null) {
-    modalText.value = '로그인한 사용자만 조회할 수 있습니다.'
-    show.value = true;
-    return;
-  }
-
-  if (isSecret === 0 || AUTHORITY === 'ADMIN') {
-    router.push({name: 'HelpRead', params: {hno: Number(hno)}})
-    return;
-  }
-
-  if (userName._value === writer) {
-    router.push({name: 'HelpRead', params: {hno: Number(hno)}})
-  } else {
-    modalText.value = '비밀글은 작성한 사용자만 확인할 수 있습니다.'
-    show.value = true
-  }
-}
-
-const readGalleryHandler = (bno) => {
-  if (userName.value === null) {
-    modalText.value = '로그인한 사용자만 조회할 수 있습니다.'
-    show.value = true;
-    return;
-  }
-
-  router.push({name: 'GalleryRead', params: {bno: Number(bno)}})
-}
-
-// 모달 로직
 const doLoginHandler = () => {
   router.push({name: 'Login'});
-}
+};
 
 const closeModal = () => {
   show.value = false;
-}
+};
 </script>
 
 <style scoped>
-img {
-  width: 64px;
-  height: 64px;
+.portfolio-main {
+  font-family: 'Arial', sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero {
+  background-color: #f8f9fa;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+
+.notice-list li,
+.board-list li,
+.help-list li {
+  margin-bottom: 10px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+
+.social-links a {
+  font-size: 24px;
+  margin: 0 10px;
+  color: #333;
+}
+
+.activity-tracker {
+  padding: 2rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.activity-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-5px);
+}
+
+.activity-card img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .activity-grid {
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .activity-card {
+    width: 100%;
+  }
 }
 </style>

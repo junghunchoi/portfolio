@@ -25,18 +25,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/api/ws")
-		        .setAllowedOrigins("http://localhost:1542")
+		        .setAllowedOriginPatterns("*")
 		        .withSockJS();
+
+		registry.addEndpoint("/api/ws")
+		        .setAllowedOriginPatterns("*");
 	}
 
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
 		registration.interceptors(interceptor);
+
 	}
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/sub"); //3
-		registry.setApplicationDestinationPrefixes("/pub"); //4
+		registry.enableSimpleBroker("/sub");
+		registry.setApplicationDestinationPrefixes("/pub");
 	}
 }

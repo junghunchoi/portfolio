@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb-container
+    environment:
+      TZ: Asia/Seoul
+      MARIADB_ROOT_PASSWORD: 12345
+      MARIADB_DATABASE: portfolio
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - docker-network
+    restart: always
+
+
+  backend:
+    image: backend
+    container_name: backend-container
+    ports:
+      - "1541:1541"
+    networks:
+      - docker-network
+    depends_on:
+      - mariadb
+    environment:
+        SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/portfolio
+
+  frontend:
+     image: frontend
+     container_name: frontend-container
+     ports:
+       - "1542:1542"
+     networks:
+       - docker-network
+
+  nginx:
+    image: nginx
+
+networks:
+  docker-network:
+    driver: bridge
+    external: true
+
+volumes:
+  upload-volume:
+    external: true
+  mariadb-data:

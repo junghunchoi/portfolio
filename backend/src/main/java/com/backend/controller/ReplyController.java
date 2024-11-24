@@ -6,6 +6,11 @@ import com.backend.dto.PageResponseDTO;
 import com.backend.common.dto.ResultDTO;
 import com.backend.dto.reply.ReplyDTO;
 import com.backend.service.ReplyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 댓글 관련 HTTP 요청을 처리하는 컨트롤러 클래스.
  */
+@Tag(name = "CRUD REST APIs for Replys", description = "댓글 관리 API")
 @RestController
 @RequestMapping("/api/replies")
 @Log4j2
@@ -37,6 +43,8 @@ public class ReplyController {
 	 * @param replyDTO      등록할 댓글 정보를 담은 DTO
 	 * @return 등록된 댓글의 식별자를 포함하는 ResponseEntity
 	 */
+	@Operation(summary = "댓글 등록", description = "새 댓글을 등록합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultDTO<String>> register(@Valid @RequestBody ReplyDTO replyDTO) {
 		Long rno = replyService.Register(replyDTO);
@@ -51,6 +59,8 @@ public class ReplyController {
 	 * @param pageRequestDTO 페이지 요청 정보를 담은 DTO
 	 * @return 페이징 처리된 댓글 목록
 	 */
+	@Operation(summary = "댓글 목록 조회", description = "특정 게시물에 대한 댓글 목록을 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PageResponseDTO.class)))
 	@GetMapping(value = "/{bno}")
 	public ResponseEntity<ResultDTO<Object>> getList(@PathVariable("bno") Long bno,
 		PageRequestDTO pageRequestDTO) {
@@ -66,6 +76,8 @@ public class ReplyController {
 	 * @param rno      삭제할 댓글의 식별자
 	 * @return 삭제 성공 메시지를 포함하는 ResponseEntity
 	 */
+	@Operation(summary = "댓글 삭제", description = "특정 댓글을 삭제합니다.")
+	@ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
 	@DeleteMapping(value = "/{rno}")
 	public ResponseEntity<ResultDTO<String>> remove(@PathVariable("rno") Long rno) {
 		replyService.remove(rno);

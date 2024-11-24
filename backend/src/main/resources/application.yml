@@ -1,0 +1,50 @@
+server:
+  port: 1541
+
+spring:
+  application:
+    name: "board"
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 1MB
+      max-file-size: 1MB
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  profiles:
+    active: dev
+
+logging:
+  level:
+    org:
+      springframework:
+        core.LocalVariableTableParameterNameDiscoverer: error
+    com.backend: info
+  pattern:
+  endpoints:
+    shutdown:
+      enabled: true
+com:
+  backend:
+    upload:
+      path: /app/upload
+---
+spring:
+  config:
+    import: "optional:configserver:http://192.168.219.106:8071/"
+    activate:
+      on-profile: home
+
+---
+spring:
+  config:
+    import: "optional:configserver:http://49.175.22.52:8071/"
+    activate:
+      on-profile: out
+
+---
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+    activate:
+      on-profile: prod

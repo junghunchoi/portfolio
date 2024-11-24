@@ -90,8 +90,8 @@ import ReplyArea from "@/views/reply/ReplyArea.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getGalleryBybno,deleteGallery} from "@/api/gallery.js";
-import TheModal from "@/components/common/TheModal.vue";
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheModal from "@/components/TheModal.vue";
+import TheEditor from "@/components/TheEditor.vue";
 import {getReplies} from "@/api/reply.js";
 const BASE_URL = process.env.VITE_APP_API_URL;
 

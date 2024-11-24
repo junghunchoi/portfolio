@@ -71,8 +71,8 @@ import {createGallery} from '@/api/gallery.js';
 import {uploadFile} from "@/api/file.js";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
-import TheModal from "@/components/common/TheModal.vue";
-import TheEditor from "@/components/common/TheEditor.vue";
+import TheModal from "@/components/TheModal.vue";
+import TheEditor from "@/components/TheEditor.vue";
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
 

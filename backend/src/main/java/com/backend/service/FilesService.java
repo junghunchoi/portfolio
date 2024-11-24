@@ -20,6 +20,8 @@ public interface FilesService {
 
 	List<FileResultDTO> uploadFiles(FileDTO fileDTO);
 
+	String editorUpload(FileDTO fileDTO);
+
 	String uploadFileNameByBnoAndOriginalFileName(FileDTO fileDTO);
 
 	String deleteFileByFileName(String fileName);

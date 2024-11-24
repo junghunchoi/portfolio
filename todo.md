@@ -121,4 +121,22 @@
 2. 리드미 영상 추가 - 금욜날 녹화해서 넣기
 3. 구조 이미지로 만들어서 올리기 - 해결
 4. 내용정리
-5. 
+
+
+#2024.07.05
+Spring Cloud Kubernetes
+
+Kubernetes와의 통합
+클라우드 네이티브 배포 지원
+
+
+Prometheus + Grafana
+
+모니터링 및 알림 시스템
+실시간 성능 지표 시각화
+
+
+ELK Stack (Elasticsearch, Logstash, Kibana)
+
+중앙 집중식 로깅
+로그 분석 및 시각화

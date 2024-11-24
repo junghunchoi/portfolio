@@ -7,7 +7,7 @@
         @update:sort="params.sort=$event"
     />
   </div>
-          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>
+<!--          <button class="btn btn-primary mb-2 mt-2" @click="goRegisterPage">게시글 등록</button>-->
           <table class="table">
             <thead>
             <tr>
@@ -16,7 +16,6 @@
               <th scope="col">작성자</th>
               <th scope="col">조회수</th>
               <th scope="col">등록일시</th>
-              <th scope="col">수정일시</th>
             </tr>
             </thead>
             <tbody>
@@ -40,9 +39,6 @@
               <td>
                 {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
               </td>
-              <td>
-                {{ $dayjs(board.modDate).format('YYYY.MM.DD') }}
-              </td>
             </tr>
             </tbody>
           </table>
@@ -52,28 +48,28 @@
                      :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
-  <Teleport to="#modal">
-    <TheModal
-        v-model="show"
-        :isPopup="show"
-        :title="'확인'"
-    >
-      <template #default>
-        로그인한 사용자만 등록할 수 있습니다.
-      </template>
-      <template #actions>
-        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>
-        <button class="btn btn-light" @click="closeModal">닫기</button>
-      </template>
-    </TheModal>
-  </Teleport>
+<!--  <Teleport to="#modal">-->
+<!--    <TheModal-->
+<!--        v-model="show"-->
+<!--        :isPopup="show"-->
+<!--        :title="'확인'"-->
+<!--    >-->
+<!--      <template #default>-->
+<!--        로그인한 사용자만 등록할 수 있습니다.-->
+<!--      </template>-->
+<!--      <template #actions>-->
+<!--        <button class="btn btn-primary" @click="doLoginHandler">로그인</button>-->
+<!--        <button class="btn btn-light" @click="closeModal">닫기</button>-->
+<!--      </template>-->
+<!--    </TheModal>-->
+<!--  </Teleport>-->
 </template>
 <script setup>
 import {computed, reactive, watch, inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import ThePagination from "@/components/common/ThePagination.vue";
+import ThePagination from "@/components/ThePagination.vue";
 import BoardFilter from "@/components/TheFilter.vue";
-import TheModal from "@/components/common/TheModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getBoards} from "@/api/board";
@@ -113,16 +109,18 @@ const pageCount = computed(() =>
 );
 
 const goRegisterPage = () => {
-  if (userName.value === null) {
-    show.value = true;
-    return;
-  }
+  // if (userName.value === null) {
+  //   show.value = true;
+  //   return;
+  // }
   router.push('/boards/register');
 };
 
 const fetchData = async () => {
   try {
     const {data} = await getBoards(params);
+
+
     Object.assign(response, data.resultData);
   } catch (e) {
     console.error(e);
@@ -162,11 +160,6 @@ const closeModal = () => {
   display: inline-block;
   font-family: 'Font Awesome 5 Free';
   content: '\f0c6';
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 .table {
