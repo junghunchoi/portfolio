@@ -87,8 +87,6 @@ dependencyManagement {
     }
 }
 
-def projectName = 'backendserver'
-
 //jib {
 //    to {
 //        image = "junghunchoi/${projectName}:1.0"

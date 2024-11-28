@@ -72,7 +72,7 @@ const modalText = ref('');
 
 // const fullName = ref('최정훈');
 // const jobTitle = ref('풀스택 개발자');
-const heroText = ref('안녕하세요.\n제 포트폴리오에 오신 것을 환영합니다 👋');
+const heroText = ref('안녕하세요 👋 \n 다양한 것들을 공유하기 위해 만들었습니다 :)');
 const email = ref('example@email.com');
 
 const stravaList = reactive([]);
