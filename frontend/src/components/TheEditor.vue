@@ -20,7 +20,7 @@ const props = defineProps({
     default: false
   }
 });
-
+console.log(props)
 const emit = defineEmits(["update:editorData"])
 const editorData = ref(props.initEditorData || '');
 
@@ -79,7 +79,8 @@ onMounted(() => {
 
 
 #app {
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .disabled-editor :deep(.ck-editor__top) {

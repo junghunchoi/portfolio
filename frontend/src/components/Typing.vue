@@ -1,4 +1,3 @@
-5 20 60 120 240 볼린저
 <script setup>
 import {ref, onMounted, watch} from 'vue';
 
@@ -60,6 +59,10 @@ onMounted(() => {
 /* 이전 스타일 유지 */
 .blink_animate {
   animation: blink 0.7s infinite;
+}
+
+.blinking__txt {
+  white-space: pre-line;
 }
 
 @keyframes blink {

@@ -22,8 +22,8 @@
     <div class="mb-3">
       <label class="form-label">내용</label>
       <TheEditor
-          v-if="board.title"
-          :init-eeditor-data="board.content"
+          v-if="isEditorReady"
+          :init-editor-data="board.content"
           v-model:editorData="board.content"
           :isDisabled="false"/>
     </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import {ref, inject, onMounted, reactive} from 'vue';
+import {ref, inject, onMounted, reactive, watch} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import TheModal from "@/components/TheModal.vue";
 import TheFiles from "@/components/TheFiles.vue";
@@ -66,13 +66,12 @@ import {uploadFile} from "@/api/file.js";
 
 const route = useRoute();
 const router = useRouter();
-
 const bno = ref(route.params.bno);
-
 const board = reactive({});
-
 const files = ref([]);
 const formData = new FormData();
+const isEditorReady = ref(false);
+
 formData.set('bno', Number(bno.value));
 
 onMounted(async () => {
@@ -109,6 +108,12 @@ async function updateDateAndGolist() {
 const handleFileData = (value) => {
   formData.append('files', value);
 }
+
+watch(() => board.content, (newContent) => {
+  if (newContent) {
+    isEditorReady.value = true;
+  }
+}, { immediate: true });
 
 // 모달관리
 const show = ref(false);

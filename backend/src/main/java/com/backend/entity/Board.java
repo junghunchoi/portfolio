@@ -45,6 +45,12 @@ public class Board extends BaseEntity {
 
 	private long viewCount;
 
+	@Column(length = 255)
+	private String thumbnailPath;
+
+	@Column(length = 255)
+	private String thumbTitle;
+
 	/**
 	 * 변경이 가능한 컬럼을 메소드로 처리해 영속성을 관리한다.
 	 *

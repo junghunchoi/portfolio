@@ -12,9 +12,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import java.util.Objects;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
@@ -48,8 +46,8 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 		QReply reply = QReply.reply;
 		QFile file = QFile.file;
 		QCategory category = QCategory.category;
-
 		JPQLQuery<Board> query = from(board);
+		
 		query.leftJoin(board.category, category);
 		query.leftJoin(reply).on(reply.board.eq(board));
 		query.leftJoin(file).on(file.board.eq(board));

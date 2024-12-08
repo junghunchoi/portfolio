@@ -23,6 +23,21 @@
         />
       </div>
       <div class="mb-3">
+        <label class="form-label">썸네일</label>
+        <div style="padding:30px;">
+          <input type="file" @change="handleThumbNailUpload($event, 0)"/>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">썸타이틀</label>
+        <input
+            v-model="board.thumbTitle"
+            type="text"
+            class="form-control"
+            id="thumbTitle"
+        />
+      </div>
+      <div class="mb-3">
         <label for="title" class="form-label">카테고리</label>
         <TheCategorySelect
             :categories="categories"
@@ -85,7 +100,9 @@ const board = reactive({
   category:{cno: null, content: null},
   content: null,
   writer: userName,
-  boardType: 1
+  boardType: 1,
+  thumbnailPath: null,
+  thumbTitle: null,
 });
 const files = ref([null, null, null]);
 const formData = new FormData();
@@ -116,6 +133,14 @@ const handleFileUpload = (event, index) => {
     files.value[index] = selectedFile;
   }
   formData.append('files', files.value[index]);
+};
+
+const handleThumbNailUpload = (event, index) => {
+  const selectedFile = event.target.files[0];
+  if (selectedFile) {
+    files.value[index] = selectedFile;
+  }
+  formData.append('thumbnailPath', files.value[index]);
 };
 
 const fetchCategories = async () => {

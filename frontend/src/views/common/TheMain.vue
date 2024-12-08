@@ -72,8 +72,7 @@ const modalText = ref('');
 
 // const fullName = ref('최정훈');
 // const jobTitle = ref('풀스택 개발자');
-const heroText = ref('안녕하세요 👋 \n 다양한 것들을 공유하기 위해 만들었습니다 :)');
-const email = ref('example@email.com');
+const heroText = ref('안녕하세요 👋 \n 다양한 것들을 공유하기 위해 \n 만들었습니다 :)');
 
 const stravaList = reactive([]);
 const mainRecords = reactive([]);
@@ -81,8 +80,8 @@ const mainRecords = reactive([]);
 const activities = reactive([
   {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
   {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
-  {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
-  {type: '독서', gifUrl: '/reading.gif', data: 3, unit: '권'},
+  // {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
+  {type: '독서', gifUrl: '/reading.gif', data: mainRecords.독서, unit: '권'},
 ]);
 
 onMounted(async () => {

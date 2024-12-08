@@ -2,12 +2,23 @@
 import {ref, onMounted, watch, computed, onBeforeUnmount} from 'vue';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const props = defineProps({
   strava: Object,
   summaryPolyline: String
 });
-
 const emit = defineEmits(['update:strava']);
 
 const mapContainer = ref(null);
@@ -100,8 +111,8 @@ onBeforeUnmount(() => {
       <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
       <div class="card-body d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center mt-auto">
-          <small class="text-muted">{{ formattedDate }}</small>
-          <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>
+          <small class="text-muted">{{ $dayjs(props.strava.regDate).format('YYYY.MM.DD') }}</small>
+<!--          <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>-->
         </div>
       </div>
     </div>

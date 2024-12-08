@@ -34,6 +34,7 @@ const updateScrollPosition = () => {
   if (scrollContainer.value) {
     scrollPosition.value = scrollContainer.value.scrollLeft;
     maxScroll.value = scrollContainer.value.scrollWidth - scrollContainer.value.clientWidth;
+    console.log()
   }
 };
 
@@ -43,11 +44,11 @@ onMounted(() => {
     updateScrollPosition();
   }
 });
-
+// console.log(scrollPosition, maxScroll)
 </script>
 
 <template>
-  <h2>자전거 주행기록</h2>
+  <h2>최근 기록</h2>
   <div class="post-list-container my-5">
     <div class="post-list-wrapper">
       <button @click="scrollLeft" class="scroll-button left" :disabled="scrollPosition <= 0">&lt;</button>
@@ -57,13 +58,13 @@ onMounted(() => {
             :key="strava.regDate"
             :strava="strava"
         />
-        <div v-if="posts.length > 7" class="post-card more-card">
+        <div v-if="props.stravaList && props.stravaList.length > 0" class="post-card more-card">
           <div class="card h-100 shadow-sm d-flex justify-content-center align-items-center">
             <a href="/records" class="btn btn-lg btn-primary">더보기</a>
           </div>
         </div>
       </div>
-      <button @click="scrollRight" class="scroll-button right" :disabled="scrollPosition >= maxScroll">&gt;</button>
+      <button @click="scrollRight" class="scroll-button right" >&gt;</button>
     </div>
   </div>
 </template>

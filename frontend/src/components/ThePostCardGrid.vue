@@ -5,96 +5,38 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 const props = defineProps({
-  api: {
+  data: {
     type: Function,
     required: true
   }
 });
 
-// Polyline 유틸리티 함수 가져오기
-const {decodePolyline, getPolylineFromStrava} = usePolyline();
-
-
-const page = ref(0);
-const loading = ref(false);
-const hasMore = ref(true);
-const posts = ref([])
-
-const maps = ref({});
-
-const initializeMap = (element, post) => {
-  const polyline = getPolylineFromStrava(post);
-  const coordinates = decodePolyline(polyline);
-
-  if (coordinates.length === 0) return;
-
-  const map = L.map(element).setView(coordinates[0], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
-
-  const routePolyline = L.polyline(coordinates, {color: 'red'}).addTo(map);
-  map.fitBounds(routePolyline.getBounds());
-
-  // 시작점과 끝점 마커
-  L.marker(coordinates[0]).addTo(map).bindPopup('Start');
-  L.marker(coordinates[coordinates.length - 1]).addTo(map).bindPopup('End');
-
-  return map;
-};
-
-const fetchPosts = async () => {
-  if (loading.value || !hasMore.value) return;
-
-  loading.value = true;
-  try {
-    const response = await props.api()
-    const newPosts = response.data.resultData;
-    posts.value = newPosts;
-    page.value++;
-    hasMore.value = newPosts.length === 10;
-
-    nextTick(() => {
-      newPosts.forEach((post, index) => {
-        const mapElement = document.getElementById(`map-${posts.value.length - newPosts.length + index}`);
-        if (mapElement && !maps.value[index]) {
-          maps.value[index] = initializeMap(mapElement, post);
-        }
-      });
-    });
-  } catch (error) {
-    console.error('Failed to fetch posts:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleScroll = () => {
-  const scrollPosition = window.innerHeight + window.scrollY;
-  const bodyHeight = document.body.offsetHeight;
-  if (scrollPosition >= bodyHeight - 500) {
-    fetchPosts();
-  }
-};
-
-onMounted(() => {
-  fetchPosts();
-  window.addEventListener('scroll', handleScroll);
-});
 </script>
 
 <template>
   <div class="post-grid">
-    <article v-for="(post, index) in posts" :key="index" class="post-card">
-      <div class="post-card-map">
-        <!-- 지도를 표시할 div에 고유 ID 부여 -->
-        <div :id="'map-' + index" class="map-container"></div>
-      </div>
+    <article v-for="(post, index) in props.data" :key="index" class="post-card">
       <div class="post-card-content">
-        <h2 class="post-card-title">거리: {{ (post.distance / 1000).toFixed(2) }}km</h2>
+        <!-- 썸네일 이미지 -->
+        <div class="post-card-thumbnail">
+          <img :src="post.thumbnail || '/default-thumbnail.png'"
+               :alt="post.title"
+               class="thumbnail-img">
+        </div>
+
+        <!-- 제목 -->
+        <h3 class="post-card-title">{{ post.title }}</h3>
+
+        <!-- 간략 내용 -->
+        <p class="post-card-excerpt">
+          {{ post.thumbTitle }}
+        </p>
+
+        <!-- 메타 정보 (작성일 등) -->
         <div class="post-card-meta">
-          <span v-if="post.start_date_local">{{ $dayjs(post.start_date_local).format('YYYY-MM-DD') }}</span>
+          <div class="post-date">
+            {{ new Date(post.regDate).toLocaleDateString() }}
+          </div>
         </div>
       </div>
     </article>
@@ -102,94 +44,84 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.map-container {
-  width: 100%;
-  height: 300px;
-  background: #f5f5f5;
-}
+/* 기존 스타일 유지 */
 
-.post-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 2rem;
-  padding: 2rem;
-
-}
-
-.post-card {
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.post-card-thumbnail {
+  margin: -1rem -1rem 1rem -1rem;
+  position: relative;
   overflow: hidden;
-  transition: box-shadow 0.3s ease, transform 0.3s ease; /* transition 속성 수정 */
-  transform: translateY(0); /* 초기 위치 설정 */
 }
 
-.post-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transform: translateY(-5px); /* 마우스 오버시 5px 위로 이동 */
-}
-
-.post-card-image {
+.thumbnail-img {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-.post-card-content {
-  padding: 1rem;
+.post-card:hover .thumbnail-img {
+  transform: scale(1.05);
 }
 
 .post-card-title {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
   margin: 0.5rem 0;
+  color: #333;
 }
 
 .post-card-excerpt {
   font-size: 0.9rem;
   color: #666;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .post-card-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
-  color: #999;
-  margin-bottom: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
 }
 
-.post-card-tags {
+.post-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.post-stats {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag {
-  background: #f0f0f0;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  gap: 1rem;
+  font-size: 0.85rem;
   color: #666;
 }
 
-@media (min-width: 768px) {
-  .post-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.distance, .duration {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-@media (min-width: 1024px) {
-  .post-grid {
-    grid-template-columns: repeat(3, 1fr);
+@media (max-width: 768px) {
+  .post-card-content {
+    padding: 0.75rem;
   }
-}
 
-@media (min-width: 1440px) {
-  .post-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .post-card-title {
+    font-size: 1.1rem;
+  }
+
+  .thumbnail-img {
+    height: 160px;
+  }
+
+  .post-card-excerpt {
+    -webkit-line-clamp: 2;
   }
 }
 </style>

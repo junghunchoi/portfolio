@@ -1,8 +1,7 @@
 <template>
   <section>
     <div class="row">
-      <div class="col-12 mb-3">
-
+      <div class="col-12 mb-2">
         <h3><b>[{{ board.category.content }}]</b> {{ board.title }}</h3>
         <p class="text-muted">작성자: {{ board.writer }} | 조회수: {{ board.viewCount }} | {{
             $dayjs(board.regDate).format('YYYY.MM.DD HH:mm:ss') }}</p>
