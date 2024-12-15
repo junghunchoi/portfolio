@@ -8,32 +8,11 @@
 
   <button v-if="AUTHORITY === 'ADMIN'" class="btn btn-primary m-2" @click="goRegisterPage">공지 등록
   </button>
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">제목</th>
-      <th scope="col">조회수</th>
-      <th scope="col">등록일시</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="board in response.items">
-
-      <td>
-        <router-link :to="{ name: 'BoardRead', params: { bno: board.bno }}">
-          {{ board.title }}
-        </router-link>
-      </td>
-
-      <td>
-        {{ board.viewCount }}
-      </td>
-      <td>
-        {{ $dayjs(board.regDate).format('YYYY.MM.DD') }}
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <TheListCardGrid :list="response.items"
+                   :domain="'board'"
+                   :routeName="'BoardRead'"
+                   :routeParamKey="'bno'"
+  />
   <ThePagination :current-page="response.page"
                  :total="response.total"
                  :size="params.size"
@@ -66,6 +45,7 @@ import {useAuthStore} from "@/store/loginStore.js";
 import TheModal from "@/components/TheModal.vue";
 import {storeToRefs} from 'pinia'
 import {getRetrospects} from "@/api/retrospect.js";
+import TheListCardGrid from "@/components/TheListCardGrid.vue";
 
 defineProps({
   limit: Number,
@@ -91,7 +71,7 @@ const params = reactive({
   order: "regDate",
   sort: "asc",
   page: 1, // 현재 페이지
-  size: 10,
+  size: 9,
   type: null,
   keyword: null
 });

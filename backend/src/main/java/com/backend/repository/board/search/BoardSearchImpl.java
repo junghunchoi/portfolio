@@ -10,8 +10,11 @@ import com.backend.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+
 import java.util.Objects;
+
 import lombok.extern.log4j.Log4j2;
+import org.jsoup.Jsoup;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -24,204 +27,207 @@ import java.util.List;
  */
 @Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch {
-	public BoardSearchImpl() {
-		super(Board.class);
-	}
+    public BoardSearchImpl() {
+        super(Board.class);
+    }
 
-	/**
-	 * 게시판 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
-	 *
-	 * @param types    검색할 필드 유형 배열
-	 * @param keyword  검색 키워드
-	 * @param sort     정렬 방향 (asc 또는 desc)
-	 * @param order    정렬 기준 필드
-	 * @param pageable 페이징 정보
-	 * @return 검색된 게시판 목록 페이지
-	 */
-	@Override
-	public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,
-		String sort, String order, Pageable pageable) {
+    /**
+     * 게시판 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
+     *
+     * @param types    검색할 필드 유형 배열
+     * @param keyword  검색 키워드
+     * @param sort     정렬 방향 (asc 또는 desc)
+     * @param order    정렬 기준 필드
+     * @param pageable 페이징 정보
+     * @return 검색된 게시판 목록 페이지
+     */
+    @Override
+    public Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,
+                                                               String sort, String order, Pageable pageable) {
 
-		QBoard board = QBoard.board;
-		QReply reply = QReply.reply;
-		QFile file = QFile.file;
-		QCategory category = QCategory.category;
-		JPQLQuery<Board> query = from(board);
-		
-		query.leftJoin(board.category, category);
-		query.leftJoin(reply).on(reply.board.eq(board));
-		query.leftJoin(file).on(file.board.eq(board));
+        QBoard board = QBoard.board;
+        QReply reply = QReply.reply;
+        QFile file = QFile.file;
+        QCategory category = QCategory.category;
+        JPQLQuery<Board> query = from(board);
 
-		query.groupBy(board);
+        query.leftJoin(board.category, category);
+        query.leftJoin(reply).on(reply.board.eq(board));
+        query.leftJoin(file).on(file.board.eq(board));
 
-		if ((types != null && types.length > 0) && keyword != null) {
-			BooleanBuilder booleanBuilder = new BooleanBuilder();
+        query.groupBy(board);
 
-			for (String type : types) {
-				switch (type) {
-					case "t" -> booleanBuilder.or(board.title.contains(keyword));
-					case "c" -> booleanBuilder.or(board.content.contains(keyword));
-					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
-				}
-			}
-			query.where(booleanBuilder);
-		}
+        if ((types != null && types.length > 0) && keyword != null) {
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-		//bno > 0
-		query.where(board.bno.gt(0L));
+            for (String type : types) {
+                switch (type) {
+                    case "t" -> booleanBuilder.or(board.title.contains(keyword));
+                    case "c" -> booleanBuilder.or(board.content.contains(keyword));
+                    case "w" -> booleanBuilder.or(board.writer.contains(keyword));
+                }
+            }
+            query.where(booleanBuilder);
+        }
 
-		//자유게시판만 조회
-		query.where(board.boardType.eq(1));
+        //bno > 0
+        query.where(board.bno.gt(0L));
 
-		if (Objects.equals(sort, "asc")) {
-			switch (order) {
-				case "regDate" -> query.orderBy(board.regDate.asc());
-				case "title" -> query.orderBy(board.title.asc());
-				case "viewCount" -> query.orderBy(board.viewCount.asc());
-			}
-		} else {
-			switch (order) {
-				case "regDate" -> query.orderBy(board.regDate.desc());
-				case "title" -> query.orderBy(board.title.desc());
-				case "viewCount" -> query.orderBy(board.viewCount.desc());
-			}
-		}
-		JPQLQuery<BoardListDTO> dtoQuery = query.select(
-			Projections.bean(BoardListDTO.class, board.bno, category.content.as("category"), board.content,
-				board.title, board.writer, board.viewCount, board.regDate, board.modDate,
-				reply.count().coalesce(0L).as("replyCount"), file.count().as("fileCount")));
-		this.getQuerydsl().applyPagination(pageable, dtoQuery);
+        //자유게시판만 조회
+        query.where(board.boardType.eq(1));
 
-		List<BoardListDTO> dtoList = dtoQuery.fetch();
+        if (Objects.equals(sort, "asc")) {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.asc());
+                case "title" -> query.orderBy(board.title.asc());
+                case "viewCount" -> query.orderBy(board.viewCount.asc());
+            }
+        } else {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.desc());
+                case "title" -> query.orderBy(board.title.desc());
+                case "viewCount" -> query.orderBy(board.viewCount.desc());
+            }
+        }
+        JPQLQuery<BoardListDTO> dtoQuery = query.select(
+                Projections.bean(BoardListDTO.class, board.bno.as("id"), category.content.as("category"), board.content,
+                        board.title, board.writer, board.viewCount, board.regDate, board.modDate,
+                        reply.count().coalesce(0L).as("replyCount"), file.count().as("fileCount")));
 
-		long count = dtoQuery.fetchCount();
+        this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
-		return new PageImpl<>(dtoList, pageable, count);
-	}
+        List<BoardListDTO> dtoList = dtoQuery.fetch();
 
-	/**
-	 * 갤러리 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
-	 *
-	 * @param types    검색할 필드 유형 배열
-	 * @param keyword  검색 키워드
-	 * @param order    정렬 기준 필드
-	 * @param sort     정렬 방향 (asc 또는 desc)
-	 * @param pageable 페이징 정보
-	 * @return 검색된 갤러리 목록 페이지
-	 */
-	@Override
-	public Page<GalleryListDTO> searchGalleryList(String[] types, String keyword, String order,
-		String sort, Pageable pageable) {
+        dtoList.forEach(dto -> dto.setContent(Jsoup.parse(dto.getContent()).text()));
 
-		QBoard board = QBoard.board;
-		QFile file = QFile.file;
+        long count = dtoQuery.fetchCount();
 
-		JPQLQuery<Board> query = from(board);
-		query.leftJoin(file).on(file.board.eq(board));
+        return new PageImpl<>(dtoList, pageable, count);
+    }
 
-		query.groupBy(board);
+    /**
+     * 갤러리 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
+     *
+     * @param types    검색할 필드 유형 배열
+     * @param keyword  검색 키워드
+     * @param order    정렬 기준 필드
+     * @param sort     정렬 방향 (asc 또는 desc)
+     * @param pageable 페이징 정보
+     * @return 검색된 갤러리 목록 페이지
+     */
+    @Override
+    public Page<GalleryListDTO> searchGalleryList(String[] types, String keyword, String order,
+                                                  String sort, Pageable pageable) {
 
-		if ((types != null && types.length > 0) && keyword != null) {
+        QBoard board = QBoard.board;
+        QFile file = QFile.file;
 
-			BooleanBuilder booleanBuilder = new BooleanBuilder();
+        JPQLQuery<Board> query = from(board);
+        query.leftJoin(file).on(file.board.eq(board));
 
-			for (String type : types) {
+        query.groupBy(board);
 
-				switch (type) {
-					case "t" -> booleanBuilder.or(board.title.contains(keyword));
-					case "c" -> booleanBuilder.or(board.content.contains(keyword));
-					case "w" -> booleanBuilder.or(board.writer.contains(keyword));
+        if ((types != null && types.length > 0) && keyword != null) {
 
-				}
-			}
-			query.where(booleanBuilder);
-		}
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-		//bno > 0
-		query.where(board.bno.gt(0L));
-		//갤러리만 조회
-		query.where(board.boardType.eq(2));
+            for (String type : types) {
 
-		if (sort.equals("asc")) {
-			switch (order) {
-				case "regDate" -> query.orderBy(board.regDate.asc());
-				case "title" -> query.orderBy(board.title.asc());
-				case "viewCount" -> query.orderBy(board.viewCount.asc());
-			}
-		} else {
-			switch (order) {
-				case "regDate" -> query.orderBy(board.regDate.desc());
-				case "title" -> query.orderBy(board.title.desc());
-				case "viewCount" -> query.orderBy(board.viewCount.desc());
-			}
-		}
+                switch (type) {
+                    case "t" -> booleanBuilder.or(board.title.contains(keyword));
+                    case "c" -> booleanBuilder.or(board.content.contains(keyword));
+                    case "w" -> booleanBuilder.or(board.writer.contains(keyword));
 
-		JPQLQuery<GalleryListDTO> dtoQuery = query.select(
-			Projections.bean(GalleryListDTO.class, board.bno, board.title, board.content,
-				board.regDate, board.modDate, file.uploadedFileName.as("fileName")));
+                }
+            }
+            query.where(booleanBuilder);
+        }
 
-		this.getQuerydsl().applyPagination(pageable, dtoQuery);
+        //bno > 0
+        query.where(board.bno.gt(0L));
+        //갤러리만 조회
+        query.where(board.boardType.eq(2));
 
-		List<GalleryListDTO> items = dtoQuery.fetch();
-		long count = dtoQuery.fetchCount();
+        if (sort.equals("asc")) {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.asc());
+                case "title" -> query.orderBy(board.title.asc());
+                case "viewCount" -> query.orderBy(board.viewCount.asc());
+            }
+        } else {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.desc());
+                case "title" -> query.orderBy(board.title.desc());
+                case "viewCount" -> query.orderBy(board.viewCount.desc());
+            }
+        }
 
-		return new PageImpl<>(items, pageable, count);
-	}
+        JPQLQuery<GalleryListDTO> dtoQuery = query.select(
+                Projections.bean(GalleryListDTO.class, board.bno, board.title, board.content,
+                        board.regDate, board.modDate, file.uploadedFileName.as("fileName")));
 
-	@Override
-	public Page<BoardListDTO> searchRetrospectList(String[] types, String keyword, String order, String sort, Pageable pageable) {
+        this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
-			QBoard board = QBoard.board;
+        List<GalleryListDTO> items = dtoQuery.fetch();
+        long count = dtoQuery.fetchCount();
 
-			JPQLQuery<Board> query = from(board);
+        return new PageImpl<>(items, pageable, count);
+    }
 
-			query.groupBy(board);
+    @Override
+    public Page<BoardListDTO> searchRetrospectList(String[] types, String keyword, String order, String sort, Pageable pageable) {
 
-			if ((types != null && types.length > 0) && keyword != null) {
+        QBoard board = QBoard.board;
 
-				BooleanBuilder booleanBuilder = new BooleanBuilder();
+        JPQLQuery<Board> query = from(board);
 
-				for (String type : types) {
+        query.groupBy(board);
 
-					switch (type) {
-						case "t" -> booleanBuilder.or(board.title.contains(keyword));
-						case "c" -> booleanBuilder.or(board.content.contains(keyword));
-						case "w" -> booleanBuilder.or(board.writer.contains(keyword));
+        if ((types != null && types.length > 0) && keyword != null) {
 
-					}
-				}
-				query.where(booleanBuilder);
-			}
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-			//bno > 0
-			query.where(board.bno.gt(0L));
+            for (String type : types) {
 
-			//회고만 조회
-			query.where(board.boardType.eq(3));
+                switch (type) {
+                    case "t" -> booleanBuilder.or(board.title.contains(keyword));
+                    case "c" -> booleanBuilder.or(board.content.contains(keyword));
+                    case "w" -> booleanBuilder.or(board.writer.contains(keyword));
 
-			if (sort.equals("asc")) {
-				switch (order) {
-					case "regDate" -> query.orderBy(board.regDate.asc());
-					case "title" -> query.orderBy(board.title.asc());
-					case "viewCount" -> query.orderBy(board.viewCount.asc());
-				}
-			} else {
-				switch (order) {
-					case "regDate" -> query.orderBy(board.regDate.desc());
-					case "title" -> query.orderBy(board.title.desc());
-					case "viewCount" -> query.orderBy(board.viewCount.desc());
-				}
-			}
+                }
+            }
+            query.where(booleanBuilder);
+        }
 
-			JPQLQuery<BoardListDTO> dtoQuery = query.select(
-					Projections.bean(BoardListDTO.class, board.bno, board.title, board.content, board.viewCount,
-							board.regDate, board.modDate));
+        //bno > 0
+        query.where(board.bno.gt(0L));
 
-			this.getQuerydsl().applyPagination(pageable, dtoQuery);
+        //회고만 조회
+        query.where(board.boardType.eq(3));
 
-			List<BoardListDTO> items = dtoQuery.fetch();
-			long count = dtoQuery.fetchCount();
+        if (sort.equals("asc")) {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.asc());
+                case "title" -> query.orderBy(board.title.asc());
+                case "viewCount" -> query.orderBy(board.viewCount.asc());
+            }
+        } else {
+            switch (order) {
+                case "regDate" -> query.orderBy(board.regDate.desc());
+                case "title" -> query.orderBy(board.title.desc());
+                case "viewCount" -> query.orderBy(board.viewCount.desc());
+            }
+        }
 
-			return new PageImpl<>(items, pageable, count);
-	}
+        JPQLQuery<BoardListDTO> dtoQuery = query.select(
+                Projections.bean(BoardListDTO.class, board.bno, board.title, board.content, board.viewCount,
+                        board.regDate, board.modDate));
+
+        this.getQuerydsl().applyPagination(pageable, dtoQuery);
+
+        List<BoardListDTO> items = dtoQuery.fetch();
+        long count = dtoQuery.fetchCount();
+
+        return new PageImpl<>(items, pageable, count);
+    }
 }

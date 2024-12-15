@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class BoardListDTO {
 
-	private Long bno;
+	private Long id;
 	private String category;
 	private String content;
 	private String title;

@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive, onMounted, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {storeToRefs} from 'pinia';
 import {useAuthStore} from '@/store/loginStore.js';
@@ -76,12 +76,17 @@ const heroText = ref('안녕하세요 👋 \n 다양한 것들을 공유하기 �
 
 const stravaList = reactive([]);
 const mainRecords = reactive([]);
+console.log(mainRecords)
+
+const getRecordValue = (type) => {
+  return computed(() => mainRecords.find(record => record.key === type)?.value || 0);
+};
 
 const activities = reactive([
-  {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
-  {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
+  // {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
+  // {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
   // {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
-  {type: '독서', gifUrl: '/reading.gif', data: mainRecords.독서, unit: '권'},
+  {type: '독서', gifUrl: '/reading.gif', data: getRecordValue('독서'), unit: '권'},
 ]);
 
 onMounted(async () => {
@@ -90,6 +95,7 @@ onMounted(async () => {
   Object.assign(stravaList, res.data.resultData);
   Object.assign(mainRecords, res2.data.resultData);
 });
+
 
 
 const doLoginHandler = () => {

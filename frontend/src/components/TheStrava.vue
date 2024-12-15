@@ -111,7 +111,7 @@ onBeforeUnmount(() => {
       <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
       <div class="card-body d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center mt-auto">
-          <small class="text-muted">{{ $dayjs(props.strava.regDate).format('YYYY.MM.DD') }}</small>
+          <small class="text-muted">{{ $dayjs(props.strava.start_date_local).format('YYYY.MM.DD') }}</small>
 <!--          <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>-->
         </div>
       </div>

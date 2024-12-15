@@ -7,14 +7,18 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  domain: String
+  routeName: {
+    type: String,
+    required: true
+  },
+  routeParamKey: {
+    type: String,
+  },
 });
 console.log(props)
 
 
-const posts = ref([]);
 const loading = ref(false);
-const hasMore = ref(true);
 const page = ref(1);
 const maps = ref({});
 
@@ -22,7 +26,7 @@ const params = reactive({
   order: "regDate",
   sort: "desc",
   page: 1,
-  size: 10,
+  size: 9,
   type: null,
   keyword: null
 });
@@ -31,37 +35,11 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString();
 };
 
-// const fetchPosts = async () => {
-//   if (loading.value || !hasMore.value) return;
-//
-//   loading.value = true;
-//   try {
-//     const response = await props.api()
-//     const newPosts = response.data.resultData;
-//     posts.value = [...posts.value, ...newPosts];
-//     page.value++;
-//     hasMore.value = newPosts.length === 10;
-//
-//     nextTick(() => {
-//       newPosts.forEach((post, index) => {
-//         const mapElement = document.getElementById(`map-${posts.value.length - newPosts.length + index}`);
-//         if (mapElement && !maps.value[index]) {
-//           maps.value[index] = initializeMap(mapElement, post);
-//         }
-//       });
-//     });
-//   } catch (error) {
-//     console.error('Failed to fetch posts:', error);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
 
 const handleScroll = () => {
   const scrollPosition = window.innerHeight + window.scrollY;
   const bodyHeight = document.body.offsetHeight;
   if (scrollPosition >= bodyHeight - 500) {
-    fetchPosts();
   }
 };
 
@@ -75,16 +53,15 @@ onUnmounted(() => {
   console.log('Mounted list:', props)
 });
 </script>
-
 <template>
   <div class="post-grid">
     <div v-for="(post, index) in props.list"
          :key="post.id"
          class="post-card">
+      <router-link :to="{ name: props.routeName,  params: { [props.routeParamKey]: post.id }}">
       <div class="thumbnail">
-<!--        <img v-if="post.thumbnailUrl"-->
-<!--             :src="post.thumbnailUrl"-->
-<!--             :alt="post.title">-->
+        <img :src="post.thumbnailUrl || '/default-thumbnail.png'"
+             :alt="post.title">
         <div
              class="map-container"
              :id="`map-${index}`"></div>
@@ -93,7 +70,7 @@ onUnmounted(() => {
         <h2 class="title">{{ post.title }}</h2>
         <p class="content">{{ post.content }}</p>
         <div class="meta">
-          <span class="date">{{ formatDate(post.regdate) }}</span>
+          <span class="date">{{ $dayjs(post.regDate).format('YYYY.MM.DD') }}</span>
           <div class="tags">
             <span v-for="tag in post.tags"
                   :key="tag"
@@ -103,6 +80,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
+      </router-link>
     </div>
     <div v-if="loading" class="loading">
       Loading...
@@ -133,7 +111,7 @@ onUnmounted(() => {
 
 .thumbnail {
   width: 100%;
-  height: 200px;
+  height: 300px;
   overflow: hidden;
 }
 
