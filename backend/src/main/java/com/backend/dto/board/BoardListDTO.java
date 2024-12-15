@@ -9,6 +9,7 @@ public class BoardListDTO {
 
 	private Long bno;
 	private String category;
+	private String content;
 	private String title;
 	private String writer;
 	private Long viewCount;

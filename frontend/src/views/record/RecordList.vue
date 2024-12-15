@@ -1,5 +1,5 @@
 <template>
-  <ThePostCardGrid :api="getStravaList" />
+  <TheRecordCard :api="getStravaList" />
 </template>
 <script setup>
 import {computed, reactive, watch, ref} from 'vue';
@@ -10,7 +10,7 @@ import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getStravaList} from "@/api/record.js";
-import ThePostCardGrid from "@/components/ThePostCardGrid.vue";
+import TheRecordCard from "@/views/record/TheRecordCard.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);

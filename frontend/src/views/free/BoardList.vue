@@ -48,6 +48,8 @@
                      :size="params.size"
                      @page="page => (params.page = page)"
                      class="flex-md-grow-0"/>
+  <TheListCardGrid :list="response.items"
+                   :domain="'board'"></TheListCardGrid>
 <!--  <Teleport to="#modal">-->
 <!--    <TheModal-->
 <!--        v-model="show"-->
@@ -73,6 +75,7 @@ import TheModal from "@/components/TheModal.vue";
 import {useAuthStore} from "@/store/loginStore.js";
 import {storeToRefs} from 'pinia'
 import {getBoards} from "@/api/board";
+import TheListCardGrid from "@/components/TheListCardGrid.vue";
 
 const authStore = useAuthStore();
 const {userName} = storeToRefs(authStore);
