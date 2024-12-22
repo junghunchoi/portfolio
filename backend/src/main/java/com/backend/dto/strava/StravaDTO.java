@@ -26,6 +26,8 @@ public class StravaDTO {
     @JsonProperty("regDate")
     private LocalDateTime regDate;
 
-    @JsonProperty("start_date_local")
+//    @JsonProperty("start_date_local")
     private LocalDateTime startDateLocal;
+
+
 }

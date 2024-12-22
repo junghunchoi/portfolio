@@ -15,10 +15,10 @@ export default [
         component: RetrospectRegister,
     },
     {
-        path: '/retrospects/:nno',
+        path: '/retrospects/:id',
         name: 'RetrospectRead',
         component: RetrospectRead,
-        props: route => ({nno: parseInt(route.params.nno)}),
+        props: route => ({id: parseInt(route.params.id)}),
     },
     {
         path: '/retrospects/modify/:nno',

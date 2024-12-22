@@ -13,12 +13,11 @@
         <hr>
       </div>
     </div>
-
   </section>
   <section>
     <TheEditor
         v-if="retrospect.content"
-        :init-eeditor-data="retrospect.content"
+        :init-editor-data="retrospect.content"
         v-model:editorData="retrospect.content"
         :isDisabled="true"/>
     <div class="float-end m-1">
@@ -62,7 +61,7 @@ import {deleteRetrospect, getRetrospectById} from "@/api/retrospect.js";
 const AUTHORITY = useAuthStore().getAuthorities
 const route = useRoute();
 const router = useRouter();
-const nno = ref(route.params.nno);
+const id = ref(route.params.id);
 
 const retrospect = reactive({
   title: '',
@@ -81,13 +80,14 @@ const modifyretrospectHandler = () => {
 }
 
 const deleteretrospectHandler = async () =>{
-  await deleteretrospect(nno.value)
+  await deleteretrospect(id.value)
   router.push({name: 'retrospectList'})
 }
 
 onMounted(async () => {
-  const res = await getretrospectBynno(nno.value)
+  const res = await getRetrospectById(id.value)
   Object.assign(retrospect, res.data.resultData);
+
 });
 
 // 모달 로직

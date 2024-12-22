@@ -14,24 +14,24 @@
       <b-button variant="primary" @click="$emit('search', searchCondition)" class="search-button">검색</b-button>
     </div>
     <div class="filter-bar">
-      <b-form-select
-          v-model="searchCondition.size"
-          :options="sizeOptions"
-          @input="$emit('update:size', Number($event))"
-          class="me-2 filter-select"
-      ></b-form-select>
-      <b-form-select
-          v-model="searchCondition.order"
-          :options="orderOptions"
-          @input="$emit('update:order', $event)"
-          class="me-2 filter-select"
-      ></b-form-select>
-      <b-form-select
-          v-model="searchCondition.sort"
-          :options="sortOptions"
-          @input="$emit('update:sort', $event)"
-          class="filter-select"
-      ></b-form-select>
+<!--      <b-form-select-->
+<!--          v-model="searchCondition.size"-->
+<!--          :options="sizeOptions"-->
+<!--          @input="$emit('update:size', Number($event))"-->
+<!--          class="me-2 filter-select"-->
+<!--      ></b-form-select>-->
+<!--      <b-form-select-->
+<!--          v-model="searchCondition.order"-->
+<!--          :options="orderOptions"-->
+<!--          @input="$emit('update:order', $event)"-->
+<!--          class="me-2 filter-select"-->
+<!--      ></b-form-select>-->
+<!--      <b-form-select-->
+<!--          v-model="searchCondition.sort"-->
+<!--          :options="sortOptions"-->
+<!--          @input="$emit('update:sort', $event)"-->
+<!--          class="filter-select"-->
+<!--      ></b-form-select>-->
     </div>
   </div>
 </template>
@@ -60,9 +60,9 @@ const searchCondition = reactive({
 const options = ref([
   { value: 't', text: '제목' },
   { value: 'c', text: '내용' },
-  { value: 'w', text: '작성자' },
-  { value: 'tc', text: '제목+내용' },
-  { value: 'tcw', text: '제목+내용+작성자' }
+  // { value: 'w', text: '작성자' },
+  // { value: 'tc', text: '제목+내용' },
+  { value: 'tcw', text: '전체' }
 ]);
 
 const sizeOptions = [

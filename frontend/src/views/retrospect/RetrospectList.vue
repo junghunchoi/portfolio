@@ -9,9 +9,9 @@
   <button v-if="AUTHORITY === 'ADMIN'" class="btn btn-primary m-2" @click="goRegisterPage">공지 등록
   </button>
   <TheListCardGrid :list="response.items"
-                   :domain="'board'"
-                   :routeName="'BoardRead'"
-                   :routeParamKey="'bno'"
+                   :domain="'retrospect'"
+                   :routeName="'RetrospectRead'"
+                   :routeParamKey="'id'"
   />
   <ThePagination :current-page="response.page"
                  :total="response.total"
@@ -85,8 +85,8 @@ const fetchData = async () => {
   }
 }
 
-watch(params, async () => {
-  await fetchData(params)
+watch(params,  async () => {
+   await fetchData(params)
 })
 
 onMounted(() => {
