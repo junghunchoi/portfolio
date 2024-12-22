@@ -1,0 +1,27 @@
+name: Deploy Spring Boot to Windows
+on:
+  push:
+    branches: [ main ]  # main 브랜치에 push될 때 실행
+
+jobs:
+  build:
+    runs-on: windows-latest  # 윈도우 환경에서 실행
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'  # 사용하는 자바 버전
+          distribution: 'adopt'
+
+      - name: Build with Gradle
+        run: ./gradlew build  # 또는 Maven을 사용한다면 'mvn package'
+
+      # JAR 파일 전송 (비밀번호 사용)
+      - name: Transfer JAR file
+        env:
+          SSH_PASS: ${{ secrets.SSH_PASSWORD }}  # GitHub secrets에 비밀번호 설정 필요
+        run: |
+          sshpass -p $SSH_PASS scp -o StrictHostKeyChecking=no ./build/libs/*.jar junghun@49.192.55.52:/path/to/deploy
