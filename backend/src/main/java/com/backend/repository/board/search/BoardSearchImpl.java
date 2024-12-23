@@ -54,7 +54,6 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         query.leftJoin(board.category, category);
         query.leftJoin(reply).on(reply.board.eq(board));
         query.leftJoin(file).on(file.board.eq(board));
-
         query.groupBy(board);
 
         if ((types != null && types.length > 0) && keyword != null) {
