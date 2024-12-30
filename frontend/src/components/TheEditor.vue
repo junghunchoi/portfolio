@@ -10,7 +10,7 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from 'vue';
-import { editor, editorConfig } from '@/common/editorConfig';
+import { editor, editorConfig, uploadPath } from '@/common/editorConfig';
 import 'ckeditor5/ckeditor5.css';
 
 const props = defineProps({
@@ -20,8 +20,7 @@ const props = defineProps({
     default: false
   }
 });
-console.log(props)
-const emit = defineEmits(["update:editorData"])
+const emit = defineEmits(["update:editorData", "imageUploaded"])
 const editorData = ref(props.initEditorData || '');
 
 const computeEditorConfig = computed(()=>{
@@ -29,6 +28,14 @@ const computeEditorConfig = computed(()=>{
       ? { ...editorConfig, toolbar: [] }
       : editorConfig;
 })
+
+
+
+watch(uploadPath, async (newPath) => {
+  if (newPath) {
+    emit('imageUploaded', newPath);
+  }
+});
 
 watch(editorData, async () => {
   emit('update:editorData', editorData.value)

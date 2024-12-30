@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, onUnmounted, nextTick, reactive} from 'vue';
 import 'leaflet/dist/leaflet.css';
-
+const BASE_URL = import.meta.env.VITE_APP_URL;
 const props = defineProps({
   list: {
     type: Object,
@@ -15,7 +15,6 @@ const props = defineProps({
     type: String,
   },
 });
-console.log(props)
 
 
 const loading = ref(false);
@@ -60,7 +59,7 @@ onUnmounted(() => {
          class="post-card">
       <router-link :to="{ name: props.routeName,  params: { [props.routeParamKey]: post.id }}">
       <div class="thumbnail">
-        <img :src="post.thumbnailUrl || '/default-thumbnail.png'"
+        <img :src="post.thumbnailPath ? `${BASE_URL}/board/api/files/${post.thumbnailPath}` : '/default-thumbnail.png'"
              :alt="post.title">
         <div
              class="map-container"

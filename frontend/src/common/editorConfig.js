@@ -25,8 +25,10 @@ import {
 } from 'ckeditor5';
 
 import axios from "axios";
+import {ref} from 'vue';
 
 const BASE_URL = process.env.VITE_APP_URL;
+export const uploadPath = ref('');
 
 export const editor = ClassicEditor;
 export const editorConfig = {
@@ -78,25 +80,25 @@ export const editorConfig = {
     },
     heading: {
         options: [
-            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+            {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+            {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+            {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+            {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
         ]
     },
     fontColor: {
         colors: [
-            { color: 'rgb(0, 0, 0)', label: 'Black' },
-            { color: 'rgb(230, 0, 0)', label: 'Red' },
-            { color: 'rgb(0, 112, 0)', label: 'Green' },
-            { color: 'rgb(0, 0, 230)', label: 'Blue' }
+            {color: 'rgb(0, 0, 0)', label: 'Black'},
+            {color: 'rgb(230, 0, 0)', label: 'Red'},
+            {color: 'rgb(0, 112, 0)', label: 'Green'},
+            {color: 'rgb(0, 0, 230)', label: 'Blue'}
         ]
     },
     fontBackgroundColor: {
         colors: [
-            { color: 'rgb(255, 255, 0)', label: 'Yellow marker' },
-            { color: 'rgb(255, 128, 0)', label: 'Orange marker' },
-            { color: 'rgb(0, 255, 0)', label: 'Green marker' }
+            {color: 'rgb(255, 255, 0)', label: 'Yellow marker'},
+            {color: 'rgb(255, 128, 0)', label: 'Orange marker'},
+            {color: 'rgb(0, 255, 0)', label: 'Green marker'}
         ]
     },
     htmlEmbed: {
@@ -125,10 +127,8 @@ class CustomUploadAdapter {
 
             axios.post(`${BASE_URL}/board/api/files/editor/upload`, data)
                 .then(response => {
-                    console.log('Server response:', response.data);
-
                     const imageUrl = response.data.resultData;
-
+                    uploadPath.value = imageUrl
                     // URL이 상대 경로인 경우 전체 URL로 변환
                     const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}/board/api/files/${imageUrl}`;
 
@@ -138,7 +138,7 @@ class CustomUploadAdapter {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error(error);
                     reject(error);
                 });
         }));

@@ -72,7 +72,7 @@ public class FileController {
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = ResultDTO.class)))
     @PostMapping(value = "/editor/upload")
     public ResponseEntity<ResultDTO<String>> editorUpload(FileDTO fileDTO) {
-        log.info("upload : {}", fileDTO.toString());
+        log.info("editorUpload : {}", fileDTO.toString());
 
         String fileName = filesService.editorUpload(fileDTO);
 

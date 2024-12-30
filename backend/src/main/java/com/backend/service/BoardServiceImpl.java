@@ -80,7 +80,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void remove(Long bno) {
 		boardRepository.deleteById(bno);
-
 	}
 
 	@Override

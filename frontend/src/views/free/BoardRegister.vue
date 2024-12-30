@@ -10,7 +10,6 @@
             type="text"
             class="form-control"
             id="writer"
-
         >
       </div>
       <div class="mb-3">
@@ -20,21 +19,6 @@
             type="text"
             class="form-control"
             id="title"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">썸네일</label>
-        <div style="padding:30px;">
-          <input type="file" @change="handleThumbNailUpload($event, 0)"/>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="title" class="form-label">썸타이틀</label>
-        <input
-            v-model="board.thumbTitle"
-            type="text"
-            class="form-control"
-            id="thumbTitle"
         />
       </div>
       <div class="mb-3">
@@ -49,6 +33,7 @@
         <TheEditor
             :init-eeditor-data="board.content"
             v-model:editorData="board.content"
+            @imageUploaded="handleThumbNailUpload"
             :isDisabled="false"/>
       </div>
       <div class="mb-3">
@@ -97,28 +82,26 @@ const router = useRouter();
 // 변수
 const board = reactive({
   title: null,
-  category:{cno: null, content: null},
+  category: {cno: null, content: null},
   content: null,
   writer: userName,
   boardType: 1,
   thumbnailPath: null,
-  thumbTitle: null,
 });
 const files = ref([null, null, null]);
 const formData = new FormData();
 const categories = ref([]);
 
 
-// 함수
 const save = async () => {
   try {
     const res = await createBoard(board)
 
     formData.append('bno', res.data.resultData);
-    if(formData)
-    await uploadFile(formData)
+    if (formData)
+      await uploadFile(formData)
     router.push({name: 'BoardList'});
-  } catch (e){
+  } catch (e) {
     console.error(e)
   }
 };
@@ -129,28 +112,25 @@ const goBoardPage = () => {
 
 const handleFileUpload = (event, index) => {
   const selectedFile = event.target.files[0];
+
   if (selectedFile) {
     files.value[index] = selectedFile;
   }
   formData.append('files', files.value[index]);
 };
 
-const handleThumbNailUpload = (event, index) => {
-  const selectedFile = event.target.files[0];
-  if (selectedFile) {
-    files.value[index] = selectedFile;
+const handleThumbNailUpload = (event) => {
+  if (board.thumbnailPath === null) {
+    board.thumbnailPath = event;
   }
-  formData.append('thumbnailPath', files.value[index]);
 };
 
 const fetchCategories = async () => {
-  // API를 통해 카테고리를 가져오는 로직
-  // 예시 데이터:
   categories.value = [
-    { id: 1, content: '회고' },
-    { id: 2, content: '블로그' },
-    { id: 3, content: '기록' },
-    { id: 4, content: '독서' },
+    {id: 1, content: '회고'},
+    {id: 2, content: '블로그'},
+    {id: 3, content: '기록'},
+    {id: 4, content: '독서'},
   ];
 };
 

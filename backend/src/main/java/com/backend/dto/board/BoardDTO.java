@@ -56,4 +56,7 @@ public class BoardDTO {
 
 	@Schema(description = "첨부 파일 목록")
 	private List<?> files;
+
+	@Schema(description = "썸네일 경로")
+	private String thumbnailPath;
 }

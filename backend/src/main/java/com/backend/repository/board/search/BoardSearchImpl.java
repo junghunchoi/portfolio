@@ -90,7 +90,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         }
         JPQLQuery<BoardListDTO> dtoQuery = query.select(
                 Projections.bean(BoardListDTO.class, board.bno.as("id"), category.content.as("category"), board.content,
-                        board.title, board.writer, board.viewCount, board.regDate, board.modDate,
+                        board.title, board.writer, board.viewCount, board.regDate, board.modDate, board.thumbnailPath,
                         reply.count().coalesce(0L).as("replyCount"), file.count().as("fileCount")));
 
         this.getQuerydsl().applyPagination(pageable, dtoQuery);
@@ -219,14 +219,15 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         }
 
         JPQLQuery<BoardListDTO> dtoQuery = query.select(
-                Projections.bean(BoardListDTO.class, board.bno.as("id"), board.title, board.content, board.viewCount,
+                Projections.bean(BoardListDTO.class, board.bno.as("id"), board.title, board.content, board.viewCount, board.thumbnailPath,
                         board.regDate, board.modDate));
 
         this.getQuerydsl().applyPagination(pageable, dtoQuery);
 
-        List<BoardListDTO> items = dtoQuery.fetch();
+        List<BoardListDTO> dtoList = dtoQuery.fetch();
+        dtoList.forEach(dto -> dto.setContent(Jsoup.parse(dto.getContent()).text()));
         long count = dtoQuery.fetchCount();
 
-        return new PageImpl<>(items, pageable, count);
+        return new PageImpl<>(dtoList, pageable, count);
     }
 }

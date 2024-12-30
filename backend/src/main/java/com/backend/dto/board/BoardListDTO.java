@@ -17,4 +17,5 @@ public class BoardListDTO {
 	private Long fileCount;
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
+	private String thumbnailPath;
 }
