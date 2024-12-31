@@ -34,16 +34,13 @@ import { ref } from 'vue';
 
 <style scoped>
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
-  height: 45px; /* 푸터의 높이 */
+  height: 45px;
   background-color: #f8f9fa;
   display: flex;
   align-items: center;
-  justify-content: center; /* 가운데 정렬을 위해 추가 */
-  z-index: 9999;
+  justify-content: center;
+  margin-top: auto;
 }
 
 .nav {

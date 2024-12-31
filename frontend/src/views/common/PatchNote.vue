@@ -6,84 +6,19 @@
     </div>
 
     <div class="patch-content">
-      <!-- 10월 섹션 -->
-      <div class="month-section">
-        <div class="month-header" @click="toggleMonth('october')">
-          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.october }]"></i>
+      <div v-for="section in visiblePatchNotes"
+           :key="`${section.year}-${section.month}`"
+           class="month-section">
+        <div class="month-header" @click="toggleMonth(`${section.year}-${section.month}`)">
+          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths[`${section.year}-${section.month}`] }]"></i>
           <i class="fas fa-calendar"></i>
-          <h2>2024년 10월</h2>
+          <h2>{{ formatDate(section.year, section.month) }}</h2>
         </div>
 
-        <div class="feature-section" v-show="openMonths.october">
+        <div class="feature-section" v-show="openMonths[`${section.year}-${section.month}`]">
           <h3>기능 추가</h3>
           <ul>
-            <li v-for="(feature, index) in octoberFeatures"
-                :key="index"
-                @click="showDetail(feature)"
-                :class="{ 'active': selectedFeature === feature }">
-              <i class="fas fa-code-branch"></i>
-              <span>{{ feature.title }}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 12월 섹션 -->
-      <div class="month-section">
-        <div class="month-header" @click="toggleMonth('november')">
-          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.november }]"></i>
-          <i class="fas fa-calendar"></i>
-          <h2>2024년 11월</h2>
-        </div>
-
-        <div class="feature-section" v-show="openMonths.november">
-          <h3>기능 추가</h3>
-          <ul>
-            <li v-for="(feature, index) in novemberFeatures"
-                :key="index"
-                @click="showDetail(feature)"
-                :class="{ 'active': selectedFeature === feature }">
-              <i class="fas fa-code-branch"></i>
-              <span>{{ feature.title }}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 12월 섹션 -->
-      <div class="month-section">
-        <div class="month-header" @click="toggleMonth('december')">
-          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.december }]"></i>
-          <i class="fas fa-calendar"></i>
-          <h2>2024년 12월</h2>
-        </div>
-
-        <div class="feature-section" v-show="openMonths.december">
-          <h3>기능 추가</h3>
-          <ul>
-            <li v-for="(feature, index) in decemberFeatures"
-                :key="index"
-                @click="showDetail(feature)"
-                :class="{ 'active': selectedFeature === feature }">
-              <i class="fas fa-code-branch"></i>
-              <span>{{ feature.title }}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 추가예정 섹션 -->
-      <div class="month-section">
-        <div class="month-header" @click="toggleMonth('future')">
-          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.future }]"></i>
-          <i class="fas fa-calendar"></i>
-          <h2>추가예정</h2>
-        </div>
-
-        <div class="feature-section" v-show="openMonths.future">
-          <h3>기능 추가</h3>
-          <ul>
-            <li v-for="(feature, index) in futureFeature"
+            <li v-for="(feature, index) in section.features"
                 :key="index"
                 @click="showDetail(feature)"
                 :class="{ 'active': selectedFeature === feature }">
@@ -95,7 +30,7 @@
       </div>
     </div>
 
-    <!-- 상세 설명 모달 -->
+    <!-- 모달은 동일하게 유지 -->
     <transition name="fade">
       <div v-if="showModal" class="detail-modal" @click.self="closeModal">
         <div class="modal-content">
@@ -109,58 +44,38 @@
 </template>
 
 <script setup>
-
 import {ref} from "vue";
+import {patchData} from "@/common/patchData";
 
 const selectedFeature = ref(null)
 const showModal = ref(false)
-const openMonths = ref({
-  october: false,
-  november: false,
-  december: true,
-  future:true
-})
+const openMonths = ref({})
 
-const octoberFeatures = ref([
-  {
-    title: '헤더에 패치노트 탭추가',
-    description: '사용자들이 업데이트 내역을 쉽게 확인할 수 있도록 헤더에 패치노트 탭이 추가되었습니다.'
-  },
-  {
-    title: '메인페이지 4개탭 조회가져오기',
-    description: '메인 페이지의 사용성 개선을 위해 4개의 주요 탭 데이터를 효율적으로 조회하는 기능이 추가되었습니다.'
-  },
-  {
-    title: '스트라바 무한 스크롤 및 조회추가',
-    description: '스트라바 데이터를 더욱 쾌적하게 탐색할 수 있도록 무한 스크롤 기능이 도입되었습니다.'
-  },
-  {
-    title: '소소한 디자인 수정',
-    description: '전반적인 사용자 경험 개선을 위한 디자인 요소들이 수정되었습니다.'
-  }
-])
+// 현재 날짜 정보
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
+const currentMonth = currentDate.getMonth() + 1;
 
-const novemberFeatures = ref([
-  {
-    title: '소소한 디자인 수정',
-    description: '전반적인 사용자 경험 개선을 위한 디자인 요소들이 수정되었습니다.'
-  },
+// 보여질 패치노트 필터링
+const visiblePatchNotes = computed(() => {
+  return patchData.filter(patch => {
+    // 현재 년도의 데이터만 표시
+    return patch.year <= currentYear &&
+        // 현재 월 이전의 데이터만 표시
+        (patch.year < currentYear || patch.month <= currentMonth);
+  }).sort((a, b) => {
+    // 최신 순으로 정렬
+    if (a.year !== b.year) return b.year - a.year;
+    return b.month - a.month;
+  });
+});
 
-])
+// 날짜 포맷팅 함수
+const formatDate = (year, month) => {
+  return `${year}년 ${month}월`;
+};
 
-const decemberFeatures = ref([
-  {
-    title: '게시글 조회 형식 변경',
-    description: '카드 그리드 변경 및 무한 스크롤 지원'
-  },
-])
 
-const futureFeature = ref([
-  {
-    title: '주가 정보 정리 및 공유',
-    description: '다양한 곳에 있는 주식 정보를 정리하여 포스팅할 예정'
-  }
-])
 const showDetail = (feature) => {
   selectedFeature.value = feature
   showModal.value = true
