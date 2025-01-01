@@ -6,7 +6,8 @@
     </div>
 
     <div class="patch-content">
-      <div v-for="section in visiblePatchNotes"
+      <!-- 일반 패치노트 섹션 -->
+      <div v-for="section in regularPatchNotes"
            :key="`${section.year}-${section.month}`"
            class="month-section">
         <div class="month-header" @click="toggleMonth(`${section.year}-${section.month}`)">
@@ -28,9 +29,31 @@
           </ul>
         </div>
       </div>
+
+      <!-- 추가예정 섹션 -->
+      <div v-if="futurePatchNotes.length" class="month-section future-section">
+        <div class="month-header" @click="toggleMonth('future')">
+          <i :class="['fas', 'fa-chevron-right', { 'rotate': openMonths.future }]"></i>
+          <i class="fas fa-calendar"></i>
+          <h2>추가예정</h2>
+        </div>
+
+        <div class="feature-section" v-show="openMonths.future">
+          <h3>기능 추가</h3>
+          <ul>
+            <li v-for="(feature, index) in futurePatchNotes[0].features"
+                :key="index"
+                @click="showDetail(feature)"
+                :class="{ 'active': selectedFeature === feature }">
+              <i class="fas fa-code-branch"></i>
+              <span>{{ feature.title }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <!-- 모달은 동일하게 유지 -->
+    <!-- 모달은 동일 -->
     <transition name="fade">
       <div v-if="showModal" class="detail-modal" @click.self="closeModal">
         <div class="modal-content">
@@ -44,52 +67,56 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref, computed} from 'vue';
 import {patchData} from "@/common/patchData";
 
-const selectedFeature = ref(null)
-const showModal = ref(false)
-const openMonths = ref({})
+const selectedFeature = ref(null);
+const showModal = ref(false);
+const openMonths = ref({
+  future: true  // 추가예정 섹션 기본적으로 열어두기
+});
 
-// 현재 날짜 정보
+// 일반 패치노트 (9999년이 아닌 것들)
+const regularPatchNotes = computed(() => {
+  return patchData
+      .filter(patch => {
+        return patch.year !== 9999 && // 추가예정 제외
+            patch.year <= currentYear &&
+            (patch.year < currentYear || patch.month <= currentMonth);
+      })
+      .sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        return b.month - a.month;
+      });
+});
+
+// 추가예정 패치노트 (9999년인 것들)
+const futurePatchNotes = computed(() => {
+  return patchData.filter(patch => patch.year === 9999);
+});
+
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth() + 1;
 
-// 보여질 패치노트 필터링
-const visiblePatchNotes = computed(() => {
-  return patchData.filter(patch => {
-    // 현재 년도의 데이터만 표시
-    return patch.year <= currentYear &&
-        // 현재 월 이전의 데이터만 표시
-        (patch.year < currentYear || patch.month <= currentMonth);
-  }).sort((a, b) => {
-    // 최신 순으로 정렬
-    if (a.year !== b.year) return b.year - a.year;
-    return b.month - a.month;
-  });
-});
-
-// 날짜 포맷팅 함수
 const formatDate = (year, month) => {
+  if (year === 9999) return '추가예정';
   return `${year}년 ${month}월`;
 };
 
-
 const showDetail = (feature) => {
-  selectedFeature.value = feature
-  showModal.value = true
-}
+  selectedFeature.value = feature;
+  showModal.value = true;
+};
 
 const closeModal = () => {
-  showModal.value = false
-  selectedFeature.value = null
-}
+  showModal.value = false;
+  selectedFeature.value = null;
+};
 
-const toggleMonth = (month) => {
-  openMonths.value[month] = !openMonths.value[month];
-}
-
+const toggleMonth = (monthKey) => {
+  openMonths.value[monthKey] = !openMonths.value[monthKey];
+};
 </script>
 
 <style scoped>
@@ -231,5 +258,13 @@ const toggleMonth = (month) => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.future-section {
+  border-left-color: #10b981; /* 추가예정 섹션 다른 색상으로 구분 */
+}
+
+.future-section .feature-section h3 {
+  color: #10b981;
 }
 </style>

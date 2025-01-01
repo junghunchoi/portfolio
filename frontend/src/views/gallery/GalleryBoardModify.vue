@@ -26,7 +26,7 @@
         <label for="content" class="form-label">내용</label>
         <TheEditor
             v-if="gallery.title"
-            :init-eeditor-data="gallery.content"
+            :init-editor-data="gallery.content"
             v-model:editorData="gallery.content"
             :isDisabled="false"/>
       </div>

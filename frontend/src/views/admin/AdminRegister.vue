@@ -37,7 +37,7 @@ const record = reactive({
   </div>
   <label class="form-label">내용</label>
   <TheEditor
-      :init-eeditor-data="board.content"
+      :init-editor-data="board.content"
       v-model:editorData="board.content"
       :isDisabled="false"/>
   <div style="padding:30px;">

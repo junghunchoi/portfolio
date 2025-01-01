@@ -11,7 +11,7 @@
       ></b-form-input>
       <TheEditor
           v-if="retrospect.title"
-          :init-eeditor-data="retrospect.content"
+          :init-editor-data="retrospect.content"
           v-model:editorData="retrospect.content"
           class="mt-3"/>
       <label>
@@ -28,20 +28,23 @@
 </template>
 
 <script setup>
-import {inject, reactive, watch} from 'vue'
+import { onMounted, reactive, ref, watch} from 'vue'
 import TheEditor from "@/components/TheEditor.vue";
-import {useRouter} from "vue-router";
-import {updateRetrospect} from "@/api/retrospect.js";
-
+import {useRoute, useRouter} from "vue-router";
+import {getRetrospectById, updateRetrospect} from "@/api/retrospect.js";
+const route = useRoute();
 const router = useRouter();
+const retrospect = reactive({});
+const id = ref(route.params.nno);
 
-const retrospect = reactive({
-  nno: history.state.nno,
-  title: history.state.title,
-  writer: history.state.writer,
-  content: history.state.content,
-  isMain: history.state.isMain === 1
-});
+onMounted(async () =>{
+  try {
+    const res = await getRetrospectById(id.value);
+    Object.assign(retrospect, res.data.resultData);
+  } catch (e) {
+    console.log(e);
+  }
+})
 
 const modifyretrospectHandler = async () => {
   retrospect.isMain = retrospect.isMain === true ? 1 : 0;

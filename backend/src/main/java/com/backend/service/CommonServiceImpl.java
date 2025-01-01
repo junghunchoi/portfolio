@@ -4,10 +4,8 @@ import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.BoardMainDTO;
 import com.backend.dto.board.GalleryListDTO;
 import com.backend.dto.strava.StravaDTO;
-import com.backend.entity.Board;
-import com.backend.entity.Help;
-import com.backend.entity.Notice;
-import com.backend.entity.Strava;
+import com.backend.entity.*;
+import com.backend.repository.CategoryRepository;
 import com.backend.repository.StravaRepository;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.help.HelpRepository;
@@ -32,7 +30,7 @@ public class CommonServiceImpl implements CommonService {
 
 	private final BoardRepository boardRepository;
 	private final StravaRepository stravaRepository;
-
+	private final CategoryRepository categoryRepository;
 
 	/**
 	 * 메인 페이지에 필요한 데이터를 조회하는 메서드.
@@ -48,10 +46,14 @@ public class CommonServiceImpl implements CommonService {
 		List<BoardMainDTO> boardData = boardRepository.findBoardsTop6(pageable);
 		List<Strava> stravaList = stravaRepository.findStrava(pageable);
 
-
 		result.put("boards", boardData);
 		result.put("strava", stravaList);
 
 		return result;
+	}
+
+	@Override
+	public List<Category> getCategoryList() {
+		return categoryRepository.findAll();
 	}
 }

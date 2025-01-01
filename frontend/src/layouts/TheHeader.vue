@@ -1,5 +1,9 @@
 <template>
-  <header ref="header" class="korean-font-component" :class="{ 'dragging': isDragging }">
+  <header
+      ref="header"
+      class="korean-font-component"
+      :class="{'dragging': isDragging,'header-hidden': !isVisible}"
+  >
     <nav class="navbar navbar-expand-lg custom-navbar">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">
@@ -22,7 +26,7 @@
         >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <RouterLink class="nav-link custom-nav-link" active-class="active"  to="/retrospects">회고</RouterLink>
+              <RouterLink class="nav-link custom-nav-link" active-class="active" to="/retrospects">회고</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/boards">블로그</RouterLink>
@@ -34,18 +38,18 @@
               <RouterLink class="nav-link custom-nav-link" active-class="active" to="/patch-note">패치노트</RouterLink>
             </li>
           </ul>
-<!--          <div v-if="!loginSuccess"-->
-<!--               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">-->
-<!--            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">-->
-<!--              Login-->
-<!--            </router-link>-->
-<!--            <button class="btn custom-btn-secondary" type="button" @click="goMemberRegister">회원가입</button>-->
-<!--          </div>-->
-<!--          <div v-else class="d-flex flex-wrap align-items-center mt-3 mt-lg-0">-->
-<!--            <div v-if="AUTHORITY === 'ADMIN'" class="admin-badge me-2 mb-2 mb-sm-0">관리자</div>-->
-<!--            <div class="user-name me-2 mb-2 mb-sm-0">{{ userName }}님</div>-->
-<!--            <button class="btn btn-sm custom-btn-light fw-bold logout-btn" @click="logoutHandler">로그아웃</button>-->
-<!--          </div>-->
+          <!--          <div v-if="!loginSuccess"-->
+          <!--               class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">-->
+          <!--            <router-link v-if="!loginSuccess" to="/login" class="btn custom-btn-outline me-0 me-lg-2 mb-2 mb-lg-0">-->
+          <!--              Login-->
+          <!--            </router-link>-->
+          <!--            <button class="btn custom-btn-secondary" type="button" @click="goMemberRegister">회원가입</button>-->
+          <!--          </div>-->
+          <!--          <div v-else class="d-flex flex-wrap align-items-center mt-3 mt-lg-0">-->
+          <!--            <div v-if="AUTHORITY === 'ADMIN'" class="admin-badge me-2 mb-2 mb-sm-0">관리자</div>-->
+          <!--            <div class="user-name me-2 mb-2 mb-sm-0">{{ userName }}님</div>-->
+          <!--            <button class="btn btn-sm custom-btn-light fw-bold logout-btn" @click="logoutHandler">로그아웃</button>-->
+          <!--          </div>-->
         </div>
       </div>
     </nav>
@@ -111,6 +115,46 @@ watch(isNavbarOpen, (newValue) => {
     }
   }
 });
+
+// 스크롤 로직 추가
+const isVisible = ref(true);
+const lastScrollPosition = ref(0);
+const SCROLL_THRESHOLD = 70; // 스크롤 감지 임계값
+
+// 스크롤 핸들러 함수
+const handleScroll = () => {
+  const currentScrollPosition = window.scrollY;
+
+  // 스크롤 방향 확인 및 임계값 이상일 때만 처리
+  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < SCROLL_THRESHOLD) {
+    return;
+  }
+
+  // 스크롤 다운 -> 헤더 숨김
+  // 스크롤 업 -> 헤더 보임
+  isVisible.value =
+      currentScrollPosition < lastScrollPosition.value || // 위로 스크롤
+      currentScrollPosition < SCROLL_THRESHOLD; // 페이지 최상단
+
+  lastScrollPosition.value = currentScrollPosition;
+};
+
+// mounted에 스크롤 이벤트 리스너 추가
+onMounted(() => {
+  // 기존 이벤트 리스너들 유지
+  document.addEventListener('dragstart', handleDragStart);
+  document.addEventListener('dragend', handleDragEnd);
+  document.addEventListener('scroll', handleScroll); // 스크롤 이벤트 추가
+  navbarContent.value = document.getElementById('navbarSupportedContent');
+});
+
+// unmounted에서 스크롤 이벤트 리스너 제거
+onUnmounted(() => {
+  // 기존 이벤트 리스너 제거 유지
+  document.removeEventListener('dragstart', handleDragStart);
+  document.removeEventListener('dragend', handleDragEnd);
+  document.removeEventListener('scroll', handleScroll); // 스크롤 이벤트 제거
+});
 </script>
 
 
@@ -119,19 +163,6 @@ watch(isNavbarOpen, (newValue) => {
 
 .korean-font-component {
   font-family: 'Noto Sans KR', sans-serif;
-}
-
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  margin: 15px;
-  border-radius: 20px;
 }
 
 .dragging {
@@ -147,7 +178,7 @@ header {
   font-size: 1.5rem;
   letter-spacing: 0.7px;
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .custom-nav-link {
@@ -159,11 +190,11 @@ header {
 
   &:hover {
     color: #fff !important;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   &.active {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     color: #fff !important;
   }
 }
@@ -191,7 +222,7 @@ header {
   &:hover {
     background-color: #5a6268;
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -205,7 +236,7 @@ header {
   &:hover {
     background-color: #e2e6ea;
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -237,7 +268,7 @@ header {
   &:hover {
     background-color: #e9ecef;
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -282,5 +313,24 @@ a {
 a:hover {
   text-decoration: underline;
   color: inherit;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  margin: 15px;
+  border-radius: 20px;
+  transform: translateY(0);
+}
+
+// 헤더 숨김 클래스 추가
+.header-hidden {
+  transform: translateY(calc(-100% - 15px));
 }
 </style>

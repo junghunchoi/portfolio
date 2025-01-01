@@ -24,14 +24,15 @@
       <div class="mb-3">
         <label for="title" class="form-label">카테고리</label>
         <TheCategorySelect
-            :categories="categories"
-            v-model:selectedCategory="board.category.cno"
+            v-if="board?.category?.cno !== undefined"
+            :cno="board.category.cno"
+            v-model:selectedCategory="board.category"
         />
       </div>
       <div class="mb-3">
         <label class="form-label">내용</label>
         <TheEditor
-            :init-eeditor-data="board.content"
+            :init-editor-data="board.content"
             v-model:editorData="board.content"
             @imageUploaded="handleThumbNailUpload"
             :isDisabled="false"/>
@@ -72,6 +73,7 @@ import TheEditor from "@/components/TheEditor.vue";
 import {createBoard} from "@/api/board.js";
 import {uploadFile} from "@/api/file.js";
 import TheCategorySelect from "@/components/TheCategorySelect.vue";
+import {getCategoryList} from "@/api/common";
 
 const BASE_URL = process.env.VITE_APP_URL;
 const authStore = useAuthStore();
@@ -124,20 +126,6 @@ const handleThumbNailUpload = (event) => {
     board.thumbnailPath = event;
   }
 };
-
-const fetchCategories = async () => {
-  categories.value = [
-    {id: 1, content: '회고'},
-    {id: 2, content: '블로그'},
-    {id: 3, content: '기록'},
-    {id: 4, content: '독서'},
-  ];
-};
-
-//hook
-onMounted(async () => {
-  await fetchCategories();
-});
 </script>
 
 <style scoped>

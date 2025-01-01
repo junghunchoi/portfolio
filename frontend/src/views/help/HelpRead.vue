@@ -11,7 +11,7 @@
       <p class=" me-4 fw-bold text-start leftArea ps-2">내용</p>
       <TheEditor
           v-if="help.content"
-          :init-eeditor-data="help.content"
+          :init-editor-data="help.content"
           v-model:editorData="help.content"
           :isDisabled="true"/>
     </div>
@@ -20,7 +20,7 @@
       <p class=" me-4 fw-bold text-start leftArea ps-2">답변</p>
       <TheEditor
           v-if="help.content"
-          :init-eeditor-data="help.answer"
+          :init-editor-data="help.answer"
           :isDisabled="true"
           />
     </div>

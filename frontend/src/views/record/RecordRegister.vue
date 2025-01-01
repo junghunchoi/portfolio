@@ -25,14 +25,15 @@
       <div class="mb-3">
         <label for="title" class="form-label">카테고리</label>
         <TheCategorySelect
-            :categories="categories"
-            v-model:selectedCategory="board.category.cno"
+            v-if="board?.category?.cno !== undefined"
+            :cno="board.category.cno"
+            v-model:selectedCategory="board.category"
         />
       </div>
       <div class="mb-3">
         <label class="form-label">내용</label>
         <TheEditor
-            :init-eeditor-data="board.content"
+            :init-editor-data="board.content"
             v-model:editorData="board.content"
             :isDisabled="false"/>
       </div>

@@ -60,10 +60,13 @@ export const patchData = [
         month: 0,
         features: [
             {
-                title: '게시글 조회 형식 변경',
-                description: '카드 그리드 변경 및 무한 스크롤 지원'
+                title: '운동 기록 정보 추가',
+                description: '운동 기록, 타입, 날짜추가'
+            },
+            {
+                title: '카테고리 api 추가',
+                description: ''
             },
         ]
     }
-
 ];

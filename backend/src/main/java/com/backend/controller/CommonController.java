@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.common.dto.ResultDTO;
+import com.backend.entity.Category;
 import com.backend.service.CommonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,8 +46,18 @@ public class CommonController {
 	public ResponseEntity<ResultDTO<Object>> listMainPage() {
 		log.info("CommonController: listMainPage");
 		Map<String, List<?>> response = commonService.listMainPage();
+		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), response));
+	}
 
-
+	/**
+	 * 카테고리 목록을 조회합니다.
+	 *
+	 * @return 카테고리 목록을 포함한 응답 객체
+	 */
+	@GetMapping("/category")
+	public ResponseEntity<ResultDTO<Object>> getCategoryList() {
+		log.info("CommonController: getCategoryList");
+		List<Category> response = commonService.getCategoryList();
 		return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), response));
 	}
 

@@ -15,7 +15,7 @@
       <div class="mb-3">
         <label  class="form-label">내용</label>
         <TheEditor
-            :init-eeditor-data="retrospect.content"
+            :init-editor-data="retrospect.content"
             v-model:editorData="retrospect.content"
             :isDisabled="false"/>
       </div>

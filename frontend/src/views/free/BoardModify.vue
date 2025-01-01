@@ -12,12 +12,11 @@
     </div>
     <div class="mb-3">
       <label for="title" class="form-label">카테고리</label>
-      <select v-if="board.category && board.category.cno" v-model="board.category.cno"
-              class="form-control">
-        <option value="1">java</option>
-        <option value="2">javascript</option>
-        <option value="3">sql</option>
-      </select>
+      <TheCategorySelect
+          v-if="board?.category?.cno !== undefined"
+          :cno="board.category.cno"
+          v-model:selectedCategory="board.category"
+      />
     </div>
     <div class="mb-3">
       <label class="form-label">내용</label>
@@ -63,6 +62,7 @@ import TheFiles from "@/components/TheFiles.vue";
 import TheEditor from "@/components/TheEditor.vue";
 import {deleteBoard, getBoardBybno, updateBoard} from "@/api/board.js";
 import {uploadFile} from "@/api/file.js";
+import TheCategorySelect from "@/components/TheCategorySelect.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -71,6 +71,7 @@ const board = reactive({});
 const files = ref([]);
 const formData = new FormData();
 const isEditorReady = ref(false);
+const categories = ref([]);
 
 formData.set('bno', Number(bno.value));
 

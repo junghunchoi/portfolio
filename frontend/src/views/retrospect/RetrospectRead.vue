@@ -87,7 +87,6 @@ const deleteretrospectHandler = async () =>{
 onMounted(async () => {
   const res = await getRetrospectById(id.value)
   Object.assign(retrospect, res.data.resultData);
-
 });
 
 // 모달 로직

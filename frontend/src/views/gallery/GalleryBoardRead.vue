@@ -53,7 +53,7 @@
     <div class="row">
           <TheEditor
               v-if="gallery.content"
-              :init-eeditor-data="gallery.content"
+              :init-editor-data="gallery.content"
               v-model:editorData="gallery.content"
               :isDisabled="true"/>
     </div>

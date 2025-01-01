@@ -15,7 +15,7 @@
       <div class="mb-3">
         <label for="content" class="form-label">내용*</label>
         <TheEditor
-            :init-eeditor-data="help.content"
+            :init-editor-data="help.content"
             v-model:editorData="help.content"
             :isDisabled="false"/>
       </div>
