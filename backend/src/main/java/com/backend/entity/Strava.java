@@ -29,5 +29,13 @@ public class Strava extends BaseEntity {
     private String startDateLocal;
 
     private StravaMap map;
+    private int movingTime;
+    private int elapsedTime;
+    private float  totalElevationGain;
+    private float  averageSpeed;
+    private float  maxSpeed;
+    private Float  averageHeartrate;
+    private Float maxHeartrate;
+    private Float averageCadence;
 
 }

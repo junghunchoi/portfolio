@@ -21,10 +21,19 @@ public class StravaDTO {
     private LocalDateTime modDate;
 
     @JsonProperty("type")
-    private LocalDateTime type;
+    private String type;
 
     @JsonProperty("regDate")
     private LocalDateTime regDate;
+
+    @JsonProperty("average_speed")
+    private String averageSpeed;
+
+    @JsonProperty("average_heartrate")
+    private String averageHeartrate;
+
+    @JsonProperty("max_heartrate")
+    private String maxHeartrate;
 
 //    @JsonProperty("start_date_local")
     private LocalDateTime startDateLocal;

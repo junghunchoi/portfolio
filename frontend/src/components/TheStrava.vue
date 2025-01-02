@@ -26,6 +26,16 @@ let map = null;
 
 const summaryPolyline = computed(() => props.strava.map.summary_polyline);
 
+function createSpeedMessage(distance, type, averageSpeed) {
+  if (type === 'Ride') {
+    return `${(distance/1000).toFixed(2)} km를 자전거로 ${averageSpeed * 3.6} km/h 만큼 탔어요`;
+  } else if (type === 'Run') {
+    const pace = 1000 / (averageSpeed * 3600) * 60;
+    const minutes = Math.floor(pace);
+    const seconds = Math.round((pace - minutes) * 60);
+    return `${(distance/1000).toFixed(2)} km를 ${minutes}:${seconds.toString().padStart(2, '0')}/km 페이스로 달렸어요`;
+  }
+}
 
 const selectedRoute = ref(summaryPolyline.value);
 
@@ -83,11 +93,6 @@ const renderMap = () => {
   L.marker(decodedCoordinates[decodedCoordinates.length - 1]).addTo(map).bindPopup('End');
 };
 
-const formattedDate = computed(() => {
-  return new Date(props.strava.start_date_local).toLocaleDateString();
-});
-
-
 onMounted(() => {
   renderMap();
 });
@@ -102,6 +107,8 @@ onBeforeUnmount(() => {
     map.remove();
   }
 });
+
+console.log(props.strava)
 </script>
 
 
@@ -110,9 +117,9 @@ onBeforeUnmount(() => {
     <div class="card h-100 shadow-sm strava-card">
       <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
       <div class="card-body d-flex flex-column">
+        {{createSpeedMessage(props.strava.distance, props.strava.type, props.strava.average_speed)}}
         <div class="d-flex justify-content-between align-items-center mt-auto">
           <small class="text-muted">{{ $dayjs(props.strava.start_date_local).format('YYYY.MM.DD') }}</small>
-<!--          <a href="#" class="btn btn-sm btn-outline-primary">자세히 보기</a>-->
         </div>
       </div>
     </div>

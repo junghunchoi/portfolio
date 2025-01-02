@@ -76,7 +76,6 @@ const heroText = ref('안녕하세요 👋 \n 다양한 것들을 공유하기 �
 
 const stravaList = reactive([]);
 const mainRecords = reactive([]);
-console.log(mainRecords)
 
 const getRecordValue = (type) => {
   return computed(() => mainRecords.find(record => record.key === type)?.value || 0);
@@ -93,6 +92,7 @@ onMounted(async () => {
   const res = await getStravaDataForMain();
   const res2 = await getMainRecords();
   Object.assign(stravaList, res.data.resultData);
+  console.log(stravaList)
   Object.assign(mainRecords, res2.data.resultData);
 });
 

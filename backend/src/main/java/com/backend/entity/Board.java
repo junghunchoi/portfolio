@@ -30,7 +30,7 @@ public class Board extends BaseEntity {
 	@Column(length = 500, nullable = false)
 	private String title;
 
-	@Column(length = 2000, nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
 
 	@Column(length = 50, nullable = false)
