@@ -14,6 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -44,7 +45,6 @@ public class LogTraceAspect {
             status = begin(joinPoint, message);
 
             Object result = joinPoint.proceed();
-            end(status, result);
             return result;
         } catch (Exception e) {
             hasError = true;
@@ -58,8 +58,6 @@ public class LogTraceAspect {
             }
         }
     }
-
-
 
     private TraceStatus begin(ProceedingJoinPoint joinPoint, String message) {
         syncTraceId();
@@ -112,7 +110,6 @@ public class LogTraceAspect {
                 addFilteredStackTraceToBuffer(e);
             }
         }
-
     }
 
     private String createCompleteLogMessage(TraceStatus status, Exception e, long resultTimeMs, TraceId traceId) {
@@ -123,7 +120,8 @@ public class LogTraceAspect {
                     status.getMessage(),
                     resultTimeMs,
                     e.toString());
-        } else {
+        }
+        else {
             return String.format("[%s] %s%s time=%dms",
                     traceId.getId(),
                     addSpace(COMPLETE_PREFIX, traceId.getLevel()),
@@ -213,6 +211,12 @@ public class LogTraceAspect {
         logBuffer.remove();
     }
 
+    /**
+     * 필터링된 스택 트레이스를 로그로 남기는 메소드
+     * 스프링 프레임워크, 스프링 부트, 스프링 AOP, CGLIB 관련 클래스는 제외하고 남긴다.
+     * 필터링된 스택 트레이스를 로깅한다.
+     * @param e
+     */
     private void logFilteredStackTrace(Exception e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
         StringBuilder filteredTrace = new StringBuilder("Filtered stack trace:\n");
@@ -246,7 +250,6 @@ public class LogTraceAspect {
         }
         addToLogBuffer(filteredTrace.toString());
     }
-
 
     // TrackedThreadLocal 내부 클래스 정의
     private static class TrackedThreadLocal<T> {

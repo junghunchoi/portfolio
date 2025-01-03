@@ -35,9 +35,9 @@ public class GatewayserverApplication {
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()) // 헤더에 요청시간을 넣는다.
 //                                .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter()) // 레디스를 이용해 요청속도를 제한한다.
 //                                        .setKeyResolver(userKeyResolver()))
-                                .retry(retryConfig -> retryConfig.setRetries(3)
-                                        .setMethods(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.OPTIONS)
-                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
+//                                .retry(retryConfig -> retryConfig.setRetries(0) // 에러 발생시 재요청하는 로직
+//                                        .setMethods(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.OPTIONS)
+//                                        .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
                                 .circuitBreaker(config -> config.setName("boardsCircuitBreaker") // boardsCircuitBreaker라는 이름으로 서킷 브레이커를 설정한다.
                                         .setFallbackUri("forward:/contactSupport"))) // 서비스 장애시 해당 url로 포워딩한다.
                         .uri("lb://BOARD")) // board라는 서비스로 요청을 라우팅한다.
