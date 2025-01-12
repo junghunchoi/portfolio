@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     } else if (mode === 'home') {
         proxyTarget = 'http://192.168.219.106:1541';
     } else if (mode === 'prod') {
-        proxyTarget = ['http://49.175.22.52:1541', 'https://junghun.site'];
+        proxyTarget = ['http://49.175.22.52:1541', 'https://junghun.site','http://192.168.219.106:1541'];
     }
 
     return {
@@ -52,6 +52,12 @@ export default defineConfig(({ mode }) => {
                     target: proxyTarget,
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/api/, '')
+                },
+                '/board/api': {
+                    target: 'http://192.168.219.106:8072',
+                    changeOrigin: true,
+                    secure: false,
+                    ws: true,
                 }
             },
         },

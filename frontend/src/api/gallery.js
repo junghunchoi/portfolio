@@ -1,5 +1,6 @@
 import axios from '@/plugins/axios.js'
-const BASE_URL = import.meta.env.VITE_APP_BOARD_API_URL;
+import { config } from '@/config/config.js';
+const BASE_URL =  config.BOARD_API_URL// import.meta.env.VITE_APP_BOARD_API_URL;
 
 export function getGalleries(params) {
   return axios.get(`${BASE_URL}/galleries`,{params:params});

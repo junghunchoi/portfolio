@@ -17,7 +17,7 @@ public class CorsConfig {
         // 와일드카드 패턴을 좀 더 정확하게 설정
         corsConfig.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:1542",
-                "http://192.168.219.106:*",
+                "http://192.168.219.106",
                 "http://49.175.22.52:*",
                 "http://junghun.site"
         ));

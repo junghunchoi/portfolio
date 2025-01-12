@@ -53,6 +53,10 @@ export const patchData = [
                 title: '카테고리 api 추가',
                 description: ''
             },
+            {
+                title: '사용중인 도메인에서 글 작성할 수 있도록 api 수정',
+                description: '사용중인 도메인에서 글 작성할 수 있도록 api 수정'
+            },
         ]
     },
     {
