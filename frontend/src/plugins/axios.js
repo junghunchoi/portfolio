@@ -1,8 +1,10 @@
 import axios from 'axios';
 import refreshTokenInstance from "@/plugins/refreshToken.js";
+import { config } from '@/config/config.js';
 
+const BASE_URL =  config.BOARD_API_URL
 const axiosInstance = axios.create({
-    baseURL: process.env.VITE_APP_BOARD_URL,
+    baseURL: BASE_URL
 });
 
 let isRefreshingToken = false;

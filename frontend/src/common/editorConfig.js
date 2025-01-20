@@ -27,7 +27,8 @@ import {
 import axios from "axios";
 import {ref} from 'vue';
 
-const BASE_URL = process.env.VITE_APP_URL;
+import { config } from '@/config/config.js';
+const BASE_URL =  config.BOARD_API_URL
 export const uploadPath = ref('');
 
 export const editor = ClassicEditor;
@@ -125,12 +126,12 @@ class CustomUploadAdapter {
             data.append('fileType', file.type)
             data.append('fileSize', file.size)
 
-            axios.post(`${BASE_URL}/board/api/files/editor/upload`, data)
+            axios.post(`${BASE_URL}/files/editor/upload`, data)
                 .then(response => {
                     const imageUrl = response.data.resultData;
                     uploadPath.value = imageUrl
                     // URL이 상대 경로인 경우 전체 URL로 변환
-                    const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}/board/api/files/${imageUrl}`;
+                    const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}/files/${imageUrl}`;
 
                     resolve({
                         default: fullImageUrl,
