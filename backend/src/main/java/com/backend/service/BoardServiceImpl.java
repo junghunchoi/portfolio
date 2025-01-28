@@ -8,6 +8,8 @@ import com.backend.entity.Board;
 import com.backend.entity.Category;
 import com.backend.repository.board.BoardRepository;
 import com.backend.repository.CategoryRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -102,8 +104,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<Map<String, Integer>> getMainPageRecords() {
+		List<Map<String, Integer>> result = boardRepository.getMainRecords();
+		result.add(boardRepository.countPostsInLastMonth());
 
-		return boardRepository.getMainRecords();
+		return result;
 	}
 }
 

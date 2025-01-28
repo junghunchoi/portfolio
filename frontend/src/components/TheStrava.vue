@@ -108,7 +108,6 @@ onBeforeUnmount(() => {
   }
 });
 
-console.log(props.strava)
 </script>
 
 

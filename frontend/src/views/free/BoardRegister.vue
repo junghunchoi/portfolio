@@ -4,12 +4,13 @@
     <hr class="my-4"/>
     <form @submit.prevent>
       <div class="mb-3">
-        <label for="title" class="form-label">작성자</label>
+<!--        <label for="title" class="form-label">작성자</label>-->
         <input
             v-model="board.writer"
             type="text"
             class="form-control"
             id="writer"
+            hidden=""
         >
       </div>
       <div class="mb-3">
@@ -30,7 +31,6 @@
         />
       </div>
       <div class="mb-3">
-        <label class="form-label">내용</label>
         <TheEditor
             :init-editor-data="board.content"
             v-model:editorData="board.content"
@@ -86,7 +86,7 @@ const board = reactive({
   title: null,
   category: {cno: null, content: null},
   content: null,
-  writer: userName,
+  writer: '최정훈',
   boardType: 1,
   thumbnailPath: null,
 });

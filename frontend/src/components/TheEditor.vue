@@ -4,6 +4,7 @@
               v-model="editorData"
               :config="computeEditorConfig"
               :disabled="props.isDisabled"
+
     />
   </div>
 </template>
@@ -29,7 +30,20 @@ const computeEditorConfig = computed(()=>{
       : editorConfig;
 })
 
+let currentEditor = null;
 
+// const onEditorReady = (editor) => {
+//   currentEditor = editor;
+//   initializeEditor(editor);
+// };
+//
+// watch(() => props.isDisabled, (newValue) => {
+//   if (currentEditor) {
+//     setTimeout(() => {
+//       initializeEditor(currentEditor);
+//     }, 100);
+//   }
+// });
 
 watch(uploadPath, async (newPath) => {
   if (newPath) {
@@ -143,4 +157,33 @@ onMounted(() => {
   display: none !important;
 }
 
+.ck.ck-content h3.category {
+  font-family: 'Bebas Neue';
+  font-size: 20px;
+  font-weight: bold;
+  color: #d1d1d1;
+  letter-spacing: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.ck.ck-content p.info-box {
+  padding: 1.2em 2em;
+  border: 1px solid #e91e63;
+  border-left: 10px solid #e91e63;
+  border-radius: 5px;
+  margin: 1.5em;
+}
+
+.code-dark {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1em;
+}
+
+.code-bright {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1em;
+}
 </style>

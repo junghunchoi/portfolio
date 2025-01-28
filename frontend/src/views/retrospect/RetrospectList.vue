@@ -69,7 +69,7 @@ const response = reactive({
 
 const params = reactive({
   order: "regDate",
-  sort: "asc",
+  sort: "desc",
   page: 1, // 현재 페이지
   size: 9,
   type: null,

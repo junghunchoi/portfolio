@@ -84,7 +84,7 @@ const getRecordValue = (type) => {
 const activities = reactive([
   // {type: '달리기', gifUrl: '/running.gif', data: 5, unit: 'km'},
   // {type: '자전거', gifUrl: '/cycling.gif', data: 20, unit: 'km'},
-  // {type: '공부 (# 1뽀모도르 = 25분)', gifUrl: '/studying.gif', data: 3, unit: '개'},
+  {type: '포스팅(최근 한달)', gifUrl: '/post.gif', data: getRecordValue('post'), unit: '개'},
   {type: '독서', gifUrl: '/reading.gif', data: getRecordValue('독서'), unit: '권'},
 ]);
 
@@ -92,8 +92,8 @@ onMounted(async () => {
   const res = await getStravaDataForMain();
   const res2 = await getMainRecords();
   Object.assign(stravaList, res.data.resultData);
-  console.log(stravaList)
   Object.assign(mainRecords, res2.data.resultData);
+  console.log(mainRecords)
 });
 
 

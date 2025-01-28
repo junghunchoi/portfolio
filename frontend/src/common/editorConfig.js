@@ -4,7 +4,6 @@ import {
     Essentials,
     Italic,
     Paragraph,
-    Undo,
     Image,
     ImageCaption,
     ImageStyle,
@@ -20,14 +19,29 @@ import {
     BlockQuote,
     Heading,
     Highlight,
+    FontSize,
     FontColor,
-    FontBackgroundColor
+    FontBackgroundColor,
+    Code,
+    CodeBlock,
+    GeneralHtmlSupport,
+    StyleEditing,
+    Style,
+    HorizontalLine,
 } from 'ckeditor5';
 
 import axios from "axios";
 import {ref} from 'vue';
 
 import { config } from '@/config/config.js';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import java from 'highlight.js/lib/languages/java';
+// import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/vs.css';
+
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('java', java);
 const BASE_URL =  config.BOARD_API_URL
 export const uploadPath = ref('');
 
@@ -38,7 +52,6 @@ export const editorConfig = {
         Essentials,
         Italic,
         Paragraph,
-        Undo,
         SimpleUploadAdapter,
         Image,
         ImageCaption,
@@ -49,24 +62,31 @@ export const editorConfig = {
         ImageInsertUI,
         MediaEmbed,
         HtmlEmbed,
-        // 새로 추가하는 플러그인들
         Alignment,
         List,
         BlockQuote,
         Heading,
         Highlight,
+        FontSize,
         FontColor,
-        FontBackgroundColor
+        FontBackgroundColor,
+        Code,
+        CodeBlock,
+        GeneralHtmlSupport,
+        StyleEditing,
+        Style,
+        HorizontalLine
     ],
     extraPlugins: [CustomUploadAdapterPlugin],
     toolbar: {
         items: [
-            'undo', 'redo',
-            '|',
             'heading',
             '|',
-            'bold', 'italic',
+            'bold',
+            'italic',
+            'fontSize',
             '|',
+            'horizontalLine',
             'alignment',
             'bulletedList',
             'blockQuote',
@@ -75,6 +95,8 @@ export const editorConfig = {
             'fontColor',
             'fontBackgroundColor',
             '|',
+            'codeBlock',
+            'style',
             'imageUpload',
             'HtmlEmbed'
         ]
@@ -85,6 +107,17 @@ export const editorConfig = {
             {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
             {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
             {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
+        ]
+    },
+    fontSize: {
+        options: [
+            9,
+            11,
+            13,
+            'default',
+            19,
+            21,
+            29
         ]
     },
     fontColor: {
@@ -110,8 +143,39 @@ export const editorConfig = {
             width: '100%',
             height: 'auto'
         }
-    }
+    },
+    codeBlock: {
+        languages: [
+            { language: 'java', label: 'java', class: 'stylish-code stylish-code-dark' },
+            { language: 'javascript', label: 'JavaScript', class: 'stylish-code stylish-code-dark' },
+        ]
+    },
+    style: {
+        definitions: [
+            {
+              name: 'Callout',
+                element: 'pre',
+                classes: [ 'callout' ]
+            },
+            {
+                name: 'Info box',
+                element: 'p',
+                classes: [ 'info-box' ]
+            },
+            {
+                name: 'Code (Dark)',
+                element: 'p',
+                classes: ['code-dark']
+            },
+            {
+                name: 'Code (Bright)',
+                element: 'p',
+                classes: ['code-bright']
+            }
+        ]
+    },
 };
+
 
 class CustomUploadAdapter {
     constructor(loader) {
@@ -154,3 +218,30 @@ export function CustomUploadAdapterPlugin(editor) {
         return new CustomUploadAdapter(loader);
     };
 }
+
+// export function initializeEditor(editor) {
+//     editor.model.document.on('change:data', () => {
+//         setTimeout(() => {
+//             document.querySelectorAll('.ck-content pre code').forEach((block) => {
+//                 // HTML 이스케이프 처리
+//                 const content = block.innerHTML
+//                     .replace(/&/g, '&amp;')
+//                     .replace(/</g, '&lt;')
+//                     .replace(/>/g, '&gt;')
+//                     .replace(/"/g, '&quot;')
+//                     .replace(/'/g, '&#039;');
+//
+//                 block.removeAttribute('data-highlighted');
+//                 block.className = '';
+//
+//                 const language = block.closest('pre').getAttribute('data-language');
+//                 if (language) {
+//                     block.className = `language-${language}`;
+//                 }
+//
+//                 block.innerHTML = content;
+//                 hljs.highlightElement(block);
+//             });
+//         }, 0);
+//     });
+// }

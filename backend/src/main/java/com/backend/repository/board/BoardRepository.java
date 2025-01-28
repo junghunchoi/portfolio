@@ -64,4 +64,10 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch
 	@Query("SELECT new map(b.category.content as key, COUNT(b) as value) FROM Board b GROUP BY b.category.cno")
 	List<Map<String, Integer>> getMainRecords();
 
+	/**
+	 * 최근 한달 작성한 포스팅 수를 조회합니다.
+	 */
+	@Query("SELECT new map('post' as key, COUNT(b) as value) FROM Board b WHERE b.regDate >= CURRENT_DATE - 30")
+	Map<String, Integer> countPostsInLastMonth();
+
 }
