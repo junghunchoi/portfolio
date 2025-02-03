@@ -14,12 +14,6 @@
           :init-editor-data="retrospect.content"
           v-model:editorData="retrospect.content"
           class="mt-3"/>
-      <label>
-      <input type="checkbox" class="mb-2 mr-sm-2 mb-sm-0 mt-2"
-             :checked="true"
-             v-model="retrospect.isMain"
-      />
-      상단고정</label>
     </b-form>
     <button class="btn btn-primary me-auto mt-2"
             @click="modifyretrospectHandler">저장
@@ -47,10 +41,8 @@ onMounted(async () =>{
 })
 
 const modifyretrospectHandler = async () => {
-  retrospect.isMain = retrospect.isMain === true ? 1 : 0;
-
   try{
-    await updateretrospect(retrospect)
+    await updateRetrospect(retrospect)
     router.push({name: 'retrospectList'})
   }catch (e) {
     console.log(e);

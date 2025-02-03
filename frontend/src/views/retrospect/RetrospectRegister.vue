@@ -13,7 +13,6 @@
         />
       </div>
       <div class="mb-3">
-        <label  class="form-label">내용</label>
         <TheEditor
             :init-editor-data="retrospect.content"
             v-model:editorData="retrospect.content"
