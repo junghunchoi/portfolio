@@ -23,13 +23,13 @@ public class StravaService {
     private final StravaRepository stravaRepository;
     private final ModelMapper modelMapper;
 
-    public List<StravaDTO> getMainStravaList() {
+    public List<Strava> getMainStravaList() {
         Pageable pageable = PageRequest.of(0, 7); // 7개의 행만 조회
-        List<Strava> stravaList = stravaRepository.findStrava(pageable);
-
-        return stravaList.stream()
-                .map(strava -> modelMapper.map(strava, StravaDTO.class))
-                .toList();
+//        List<Strava> stravaList = stravaRepository.findStrava(pageable);
+    return stravaRepository.findStrava(pageable);
+//        return stravaList.stream()
+//                .map(strava -> modelMapper.map(strava, StravaDTO.class))
+//                .toList();
     }
 
     public List<StravaDTO> getStravaList(PageRequestDTO pageRequestDTO) {

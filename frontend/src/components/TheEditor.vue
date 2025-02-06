@@ -11,7 +11,7 @@
 
 <script setup>
 import {computed, onMounted, ref, watch} from 'vue';
-import { editor, editorConfig, uploadPath } from '@/common/editorConfig';
+import {editor, editorConfig, uploadPath} from '@/common/editorConfig';
 import 'ckeditor5/ckeditor5.css';
 
 const props = defineProps({
@@ -29,21 +29,6 @@ const computeEditorConfig = computed(()=>{
       ? { ...editorConfig, toolbar: [] }
       : editorConfig;
 })
-
-let currentEditor = null;
-
-// const onEditorReady = (editor) => {
-//   currentEditor = editor;
-//   initializeEditor(editor);
-// };
-//
-// watch(() => props.isDisabled, (newValue) => {
-//   if (currentEditor) {
-//     setTimeout(() => {
-//       initializeEditor(currentEditor);
-//     }, 100);
-//   }
-// });
 
 watch(uploadPath, async (newPath) => {
   if (newPath) {
@@ -185,5 +170,25 @@ onMounted(() => {
   background-color: #ffffff;
   color: #000000;
   padding: 1em;
+}
+
+.ck-content pre {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.ck-content pre code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+}
+
+.hljs {
+  background: transparent;
 }
 </style>

@@ -28,6 +28,7 @@ import {
     StyleEditing,
     Style,
     HorizontalLine,
+    Strikethrough,
 } from 'ckeditor5';
 
 import axios from "axios";
@@ -75,7 +76,8 @@ export const editorConfig = {
         GeneralHtmlSupport,
         StyleEditing,
         Style,
-        HorizontalLine
+        HorizontalLine,
+        Strikethrough
     ],
     extraPlugins: [CustomUploadAdapterPlugin],
     toolbar: {
@@ -85,6 +87,7 @@ export const editorConfig = {
             'bold',
             'italic',
             'fontSize',
+            'strikethrough',
             '|',
             'horizontalLine',
             'alignment',
@@ -148,7 +151,8 @@ export const editorConfig = {
         languages: [
             { language: 'java', label: 'java', class: 'stylish-code stylish-code-dark' },
             { language: 'javascript', label: 'JavaScript', class: 'stylish-code stylish-code-dark' },
-        ]
+        ],
+        indentSequence: '    '
     },
     style: {
         definitions: [
@@ -219,29 +223,3 @@ export function CustomUploadAdapterPlugin(editor) {
     };
 }
 
-// export function initializeEditor(editor) {
-//     editor.model.document.on('change:data', () => {
-//         setTimeout(() => {
-//             document.querySelectorAll('.ck-content pre code').forEach((block) => {
-//                 // HTML 이스케이프 처리
-//                 const content = block.innerHTML
-//                     .replace(/&/g, '&amp;')
-//                     .replace(/</g, '&lt;')
-//                     .replace(/>/g, '&gt;')
-//                     .replace(/"/g, '&quot;')
-//                     .replace(/'/g, '&#039;');
-//
-//                 block.removeAttribute('data-highlighted');
-//                 block.className = '';
-//
-//                 const language = block.closest('pre').getAttribute('data-language');
-//                 if (language) {
-//                     block.className = `language-${language}`;
-//                 }
-//
-//                 block.innerHTML = content;
-//                 hljs.highlightElement(block);
-//             });
-//         }, 0);
-//     });
-// }

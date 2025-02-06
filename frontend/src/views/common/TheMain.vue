@@ -26,7 +26,12 @@
         </div>
       </div>
     </section>
-    <section>
+    <section class="activity-tracker">
+      <h2>최근 포스팅</h2>
+<!--      <HorizonLayout :strava-list="stravaList"/>-->
+    </section>
+    <section class="activity-tracker">
+      <h2>최근 운동 기록</h2>
       <HorizonLayout :strava-list="stravaList"/>
     </section>
   </div>
@@ -93,7 +98,6 @@ onMounted(async () => {
   const res2 = await getMainRecords();
   Object.assign(stravaList, res.data.resultData);
   Object.assign(mainRecords, res2.data.resultData);
-  console.log(mainRecords)
 });
 
 

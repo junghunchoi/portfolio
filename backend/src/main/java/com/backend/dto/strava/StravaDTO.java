@@ -35,7 +35,7 @@ public class StravaDTO {
     @JsonProperty("max_heartrate")
     private String maxHeartrate;
 
-//    @JsonProperty("start_date_local")
+    @JsonProperty("startDateLocal")
     private LocalDateTime startDateLocal;
 
 

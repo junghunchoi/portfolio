@@ -20,7 +20,6 @@ const props = defineProps({
   summaryPolyline: String
 });
 const emit = defineEmits(['update:strava']);
-
 const mapContainer = ref(null);
 let map = null;
 
@@ -116,9 +115,9 @@ onBeforeUnmount(() => {
     <div class="card h-100 shadow-sm strava-card">
       <div ref="mapContainer" class="card-img-top" style="height: 200px;"></div>
       <div class="card-body d-flex flex-column">
-        {{createSpeedMessage(props.strava.distance, props.strava.type, props.strava.average_speed)}}
+        {{createSpeedMessage(props.strava.distance, props.strava.type, props.strava.averageSpeed)}}
         <div class="d-flex justify-content-between align-items-center mt-auto">
-          <small class="text-muted">{{ $dayjs(props.strava.start_date_local).format('YYYY.MM.DD') }}</small>
+          <small class="text-muted">{{ $dayjs(props.strava.startDateLocal).format('YYYY.MM.DD') }}</small>
         </div>
       </div>
     </div>

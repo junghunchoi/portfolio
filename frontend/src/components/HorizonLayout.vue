@@ -44,11 +44,9 @@ onMounted(() => {
     updateScrollPosition();
   }
 });
-// console.log(scrollPosition, maxScroll)
 </script>
 
 <template>
-  <h2>최근 기록</h2>
   <div class="post-list-container my-5">
     <div class="post-list-wrapper">
       <button @click="scrollLeft" class="scroll-button left" :disabled="scrollPosition <= 0">&lt;</button>

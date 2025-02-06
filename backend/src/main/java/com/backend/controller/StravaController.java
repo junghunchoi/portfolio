@@ -27,7 +27,7 @@ public class StravaController {
 
     @GetMapping("/main")
     public ResponseEntity<ResultDTO<Object>> getStravaDataForMainView() {
-        List<StravaDTO> stravaList = stravaService.getMainStravaList();
+        List<Strava> stravaList = stravaService.getMainStravaList();
 
         return ResponseEntity.ok(ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), stravaList));
     }

@@ -16,6 +16,7 @@
         <TheEditor
             :init-editor-data="retrospect.content"
             v-model:editorData="retrospect.content"
+            @imageUploaded="handleThumbNailUpload"
             :isDisabled="false"/>
       </div>
       <div class="pt-4">
@@ -54,7 +55,8 @@ const retrospect = reactive({
   content: null,
   category:{cno: 4, content: 'restrospect'},
   writer: '최정훈',
-  boardType: 3
+  boardType: 3,
+  thumbnailPath: null,
 });
 
 const goretrospectPage = () => {
@@ -70,6 +72,12 @@ const registerretrospectHandler = async () => {
 const closeModal = () => {
   show.value = false;
 }
+
+const handleThumbNailUpload = (event) => {
+  if (retrospect.thumbnailPath === null) {
+    retrospect.thumbnailPath = event;
+  }
+};
 </script>
 
 <style scoped>
