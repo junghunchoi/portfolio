@@ -8,7 +8,7 @@
 ## 아래의 링크와 계정으로 확인해주세요 :)
 
 
-## <a href="http://13.210.146.57:1542" target="_blank"> 포트폴리오 링크 <= </a>
+## <a href="http://junghun.site" target="_blank"> 포트폴리오 링크 <= </a>
 
 
 
@@ -53,15 +53,14 @@
 
 ### 인프라
 
-<img src="https://img.shields.io/badge/Amazon AWS EC2-232F3E?style=flat-square&logo=amazon-aws&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white"></br>
 <img src="https://img.shields.io/badge/Nginx-009639?style=flat-square&logo=nginx&logoColor=white"></br>
 
 ### 버전
 
-- <b>Java 14</b>
-- <b>Spring boot 2.7.14</b>
+- <b>Java 17</b>
+- <b>Spring boot 3.1.0</b>
 - <b>Vue 3 (Composition API)</b>
 - <b>MariaDB 10.11</b>
 

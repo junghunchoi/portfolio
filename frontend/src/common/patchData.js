@@ -50,13 +50,32 @@ export const patchData = [
                 description: '운동 기록, 타입, 날짜추가'
             },
             {
-                title: '카테고리 api 추가',
+                title: '메인화면에 최근 작성한 글 추가',
+                description: ''
+            },
+            {
+                title: '메인화면 css 및 디자인 수정',
+                description: ''
+            },
+            {
+                title: '무한 스크롤 추가',
                 description: ''
             },
             {
                 title: '사용중인 도메인에서 글 작성할 수 있도록 api 수정',
                 description: '사용중인 도메인에서 글 작성할 수 있도록 api 수정'
             },
+        ]
+    },
+    {
+        year: 2025,
+        month: 2,
+        features: [
+            {
+                title: '운동 기록 정보 추가',
+                description: '운동 기록, 타입, 날짜추가'
+            },
+
         ]
     },
     {
