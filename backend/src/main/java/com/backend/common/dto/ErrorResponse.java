@@ -20,11 +20,8 @@ import java.util.stream.Collectors;
  */
 @Data
 @AllArgsConstructor
-
 public class ErrorResponse {
-	@Schema(
-		description = "API path invoked by client"
-	)
+
 	private  String apiPath;
 
 
