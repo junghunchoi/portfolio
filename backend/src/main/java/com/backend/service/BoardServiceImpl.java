@@ -109,5 +109,11 @@ public class BoardServiceImpl implements BoardService {
 
 		return result;
 	}
+
+  @Override
+  public PageResponseDTO<BoardListDTO> readAllInfiniteScroll(PageRequestDTO pageRequestDTO) {
+
+    return null;
+  }
 }
 

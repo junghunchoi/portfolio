@@ -2,6 +2,7 @@ package com.backend.repository.board.search;
 
 import com.backend.dto.board.BoardListDTO;
 import com.backend.dto.board.GalleryListDTO;
+import com.backend.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,6 +22,9 @@ public interface BoardSearch {
 	 * @return 검색된 게시판 목록 페이지
 	 */
 	Page<BoardListDTO> searchBoardListWithReplyandFiles(String[] types, String keyword,
+		String order, String sort, Pageable pageable);
+
+	Page<BoardListDTO> searchInfiniteBoardList(String[] types, String keyword,
 		String order, String sort, Pageable pageable);
 
 	/**

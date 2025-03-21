@@ -60,6 +60,28 @@ public class BoardController {
 	}
 
 	/**
+	 *
+	 */
+	/**
+	 * 페이지 요청 정보를 기반으로 게시물 목록과 각 게시물의 댓글 수를 조회합니다.
+	 *
+	 * @param pageRequestDTO 페이지네이션 정보를 담은 DTO
+	 * @return 페이징 처리된 게시물 목록과 상태 코드를 포함하는 ResponseEntity 객체
+	 */
+	@Operation(summary = "게시물 목록 조회", description = "페이지 요청 정보를 기반으로 게시물 목록과 각 게시물의 댓글 수를 조회합니다.")
+	@ApiResponse(responseCode = "200", description = "성공",
+			content = @Content(schema = @Schema(implementation = PageResponseDTO.class)))
+	@Cacheable(cacheNames = "boardList")
+	@GetMapping("/infinite-scroll")
+	public ResponseEntity<ResultDTO<Object>> readAllInfiniteScroll(PageRequestDTO pageRequestDTO) {
+		PageResponseDTO<BoardListDTO> responseDTO = boardService.readAllInfiniteScroll(pageRequestDTO);
+		return ResponseEntity.ok(
+				ResultDTO.res(HttpStatus.OK, HttpStatus.OK.toString(), responseDTO));
+	}
+
+
+
+	/**
 	 * 새 게시물을 등록합니다. 요청 본문에서 BoardDTO 객체를 받아 처리하며, 유효성 검사 후 게시물을 저장합니다.
 	 *
 	 * @param boardDTO 게시물 정보를 담은 DTO

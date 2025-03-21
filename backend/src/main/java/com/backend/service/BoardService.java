@@ -27,4 +27,5 @@ public interface BoardService {
 
 	List<Map<String, Integer>> getMainPageRecords();
 
+  PageResponseDTO<BoardListDTO> readAllInfiniteScroll(PageRequestDTO pageRequestDTO);
 }

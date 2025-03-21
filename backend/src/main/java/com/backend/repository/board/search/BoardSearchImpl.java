@@ -104,7 +104,13 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         return new PageImpl<>(dtoList, pageable, count);
     }
 
-    /**
+  @Override
+  public Page<BoardListDTO> searchInfiniteBoardList(String[] types, String keyword, String order,
+      String sort, Pageable pageable) {
+    return null;
+  }
+
+  /**
      * 갤러리 목록을 검색하고 페이징 처리하여 결과를 반환합니다.
      *
      * @param types    검색할 필드 유형 배열
